@@ -1,0 +1,214 @@
+<div class="wrap">
+<div class="nav">
+	<div class="return"><a href="__URL__/index">返回上一级</a></div>
+</div>
+
+<form id="J_rigths_form" class="J_ajaxForm" action="__URL__/insert" method="post" enctype="multipart/form-data">
+<div class="J_tabs_contents">
+	<div>
+		<div class="h_a">数据录入</div>
+		<div class="table_full">
+			<table width="100%">
+				<col class="th" />
+				<col width="450" />
+				<col />
+				<tr>
+					<th>地区</th>
+					<td>
+						<select name="province" class="province">
+							<option value="">请选择</option>
+						</select>
+						<select name="city" class="city">
+							<option value="">请选择</option>
+						</select>
+						<select name="region" class="region">
+							<option value="">请选择</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>公司名</th>
+					<td><input type="text" class="input length_5" name="company_name"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>公司类型</th>
+					<td>
+						<select name="type">
+							<option value="婚礼策划">婚礼策划</option>
+							<option value="婚纱摄影">婚纱摄影</option>
+							<option value="婚宴酒店">婚宴酒店</option>
+							<option value="婚礼司仪">婚礼司仪</option>
+							<option value="婚礼影像">婚礼影像</option>
+							<option value="婚礼彩妆">婚礼彩妆</option>
+							<option value="婚礼花艺">婚礼花艺</option>
+							<option value="协会机构">协会机构</option>
+							<option value="婚礼周边">婚礼周边</option>
+							<option value="其他">其他</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>联系人</th>
+					<td><input type="text" class="input length_5" name="username"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>联系方式</th>
+					<td><input type="text" class="input length_5" name="contact"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>职称</th>
+					<td><input type="text" class="input length_5" name="job_title"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>客户关系</th>
+					<td>
+						<label><input name="relation[]" class="J_check" type="checkbox" value="嘉宾"><span>特邀嘉宾</span></label>
+						<label><input name="relation[]" class="J_check" type="checkbox" value="用户"><span>产品客户</span></label>
+						<label><input name="relation[]" class="J_check" type="checkbox" value="参赛"><span>比赛参赛</span></label>
+						<label><input name="relation[]" class="J_check" type="checkbox" value="参会"><span>峰会参会</span></label>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否OS客户</th>
+					<td>
+						<select name="is_os">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否找花网用户</th>
+					<td>
+						<select name="is_flower">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否结婚圈入驻商户</th>
+					<td>
+						<select name="is_app">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否手绘订阅商户</th>
+					<td>
+						<select name="is_rss">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否购买金熊奖作品集</th>
+					<td>
+						<select name="is_bear">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否购买手绘作品集</th>
+					<td>
+						<select name="is_shouhui">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>是否参加公开课</th>
+					<td>
+						<select name="is_class">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>地址</th>
+					<td><input type="text" class="input length_5" name="address"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>备注</th>
+					<td><textarea class="length_5" name="remark"></textarea></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+		<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
+	</div>
+</div>
+</form>
+</div>
+
+<script>
+	var region = {:json_encode($region)};
+	var COMPANY = {
+		init: function() {
+			this.region();
+		},
+		region: function(){
+			var province = '<option value="">-请选择-</option>';
+            $.each(region, function(index, val) {
+                if (val.parent_id == 0) {
+                    province += '<option value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                }
+            });
+            $('.province').html(province);
+
+            $('.province').change(function() {
+                var id = $(this).val(), city = '<option value="">-请选择-</option>';;
+                if (id > 0) {
+                    $.each(region, function(index, val) {
+                        if (val.parent_id == id) {
+                            city += '<option value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                        }
+                    });
+                }
+                $('.city').html(city);
+                $('.region').html('<option value="">-请选择-</option>');
+            });
+            $('.city').change(function() {
+                var id = $(this).val(), city = '<option value="">-请选择-</option>';;
+                if (id > 0) {
+                    $.each(region, function(index, val) {
+                        if (val.parent_id == id) {
+                            city += '<option value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                        }
+                    });
+                }
+                $('.region').html(city);
+            });
+		}
+	};
+	$(function(){
+		COMPANY.init();
+	})
+</script>

@@ -1,0 +1,32 @@
+<div class="wrap">
+<form id="J_rigths_form" class="J_ajaxForm" data-role="list" action="__URL__/update" method="post" enctype="multipart/form-data">
+<div class="table_full">
+	<div>
+		<div class="h_a">{$cate_title}</div>
+		<div class="table_full">
+			<table width="100%">
+				<col class="th" />
+				<col width="680" />
+				<col />
+				<volist name="form" id="row">
+                    <tr>
+                        <th>{$row.title}</th>
+                        <td><form:attr var="row"/></td>
+                        <td><div class="fun_tips">{$row.tips}</div></td>
+                    </tr>
+                </volist>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+		<input type="hidden" name="id" value="{$data.id}" />
+		<input type="hidden" name="cid" value="{$cid}" />
+		<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
+	</div>
+</div>
+</form>
+</div>

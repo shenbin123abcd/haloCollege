@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>系统后台 - {:C('SYSTEM_NAME')}</title>
+<link href="__PUBLIC__/Admin/Css/admin_style.css" rel="stylesheet" />
+<script>
+	//全局变量
+	var GV = {
+		JS_ROOT : "__PUBLIC__/Admin/Js/dev/", //js目录
+		JS_VERSION : "20130227",
+		URL : {
+			LOGIN : '', //后台登录地址
+			IMAGE_RES : '__PUBLIC__/Admin/Images' //图片目录
+		}
+	};
+</script><script src="__PUBLIC__/Admin/Js/dev/wind.js"></script>
+<script src="__PUBLIC__/Admin/Js/dev/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/kindeditor-min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/lang/zh_CN.js"></script>
+<link href="__PUBLIC__/Admin/Js/ThinkBox/css/ThinkBox.css" rel="stylesheet" />
+<script type="text/javascript" src="__PUBLIC__/Admin/Js/ThinkBox/jquery.ThinkBox.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/Js/jquery.form.js"></script>
+<script type="text/javascript">
+	//调用编辑器
+	var editor;
+	KindEditor.ready(function(K) {
+		getToken().then(function(token){
+			editor=$('textarea[type=editor]').size()&&K.create('textarea[type=editor]', {
+						allowFileManager : false,
+						afterBlur: function(){this.sync();},
+						uploadJson : 'http://up.qiniu.com/',
+						extraFileUploadParams : {token : token},
+						width:500,
+						height:400,
+						newlineTag: 'br',
+						items : [
+							'source', '|','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+							'insertunorderedlist', '|', 'emoticons', 'image','multiimage','baidumap', 'link','fullscreen']
+					});
+		});
+	});
+	function getToken(){
+		return $.ajax({
+			url: '__CONTROLLER__/getToken',
+			success: function(res){
+				return res;
+			}
+		})
+	}
+</script>
+<script type="text/javascript">
+$(function(){
+	//绑定附件
+	if({$Think.get.id|default=0}>0&&$('input[type=file]').size()>0){
+		var options={ url:'{:U('Attach/select')}',type:'post',dataType:'json',data:{ module:'{$_module_name_}',id:{$Think.get.id|default=0}}};
+		options.success=function(result){
+			if(result.status){
+				bindFile(result.data);
+				disableFile();
+			}
+		}
+		$.ajax(options);
+	}
+	var obj = $('input[type=file]');
+	if (obj.data('status') !== 'no') {
+		//上传附件
+		if(obj.data('type') == 'qiniu'){
+			obj.change(function(e){
+				var _this = $(this);
+				if(_this.get(0).files.length == 0){
+					return ;
+				}
+				var loading=$.ThinkBox.loading('正在提交中...',{modal:true});
+				var token = _this.data('token') ? $(this).data('token') : $('input[name=qiniu_token]').val();
+				var is_multiple = _this.attr('multiple') ? 1 : 0;
+
+				var files = _this.get(0).files;
+
+				for (var i = 0; i < files.length; i++) {
+					UPLOAD.qiniu(files[i], token,function(percent){
+
+					},function(ret){
+						loading.hide();
+						console.log(ret);
+						if (is_multiple == 0) {
+							_this.parents('form').find('input[name='+ _this.attr('name') +'_url]').size()||_this.parents('form').append('<input type="hidden" name="'+ _this.attr('name') +'_url"/>');
+							var url = _this.data('base-url') + '/' + ret.key + '?imageView/1/w/246/h/185/q/85';
+							$('input[name='+ _this.attr('name') +'_url]').val(ret.key);
+							bindFileQiniu({key: _this.attr('name'), src: url});
+						}else{
+							_this.parents('form').find('input[name=attach_id]').size()||_this.parents('form').append('<input type="hidden" name="attach_id"/>');
+							$('input[name=attach_id]').val($('input[name=attach_id]').val()+ret.id+',');
+
+							var url = _this.data('base-url') + '/' + ret.key + '?imageView/1/w/246/h/185/q/85';
+							bindFile2([{key: _this.attr('name'), src: url, id:ret.id}]);
+						}
+					},function(ret){
+						console.log(ret);
+						$.ThinkBox.error(ret);
+					});
+				}
+					
+			});
+		}else{
+			obj.change(uploadFile);
+		}
+		
+	}
+		
+});
+//上传附件
+function uploadFile(){
+	var loading=$.ThinkBox.loading('正在提交中...',{modal:true});
+	var form=$('<form style="display: none;"/>').attr('enctype','multipart/form-data').appendTo($('body'));
+	var file=$(this).clone(true);
+	$(this).after(file).appendTo(form);
+	var options={url:'__URL__/upload',type:'post',dataType:'json'};
+	options.success=function(result){
+		loading.hide();
+		$(file).val('');
+		$(form).remove();
+		$(file).parents('form').find('input[name=attach_id]').size()||$(file).parents('form').append('<input type="hidden" name="attach_id"/>');
+		if(result.status){
+			$('input[name=attach_id]').val($('input[name=attach_id]').val()+result.data.id+',');
+			bindFile({0:result.data});
+			disableFile();
+		}else{
+			$.ThinkBox.error(result.info);
+		}
+	}
+	form.ajaxSubmit(options);
+}
+//禁用上传
+function disableFile(){
+	$('input[type=file]').each(function(){
+		if($(this).next('fieldset').find('span').size()>=($(this).attr('max')||1)){
+			$(this).attr('disabled',true);
+		}else{
+			$(this).attr('disabled',false);
+		}
+	});
+}
+//绑定附件
+function bindFile(data){
+	for(var i in data){
+		var file=$('input[name='+data[i]['key']+']');
+		file.next('fieldset').size()||file.after('<fieldset><legend>附件列表：</legend></fieldset>');
+		file.next('fieldset').append('<span><a href="'+(typeof( data[i]['src'] ) == 'undefined' ? data[i]['savepath'] + data[i]['savename'] : data[i]['src'])+'" target="_blank">'+data[i]['name']+'</a><a href="__GROUP__/Attach/delete/id/'+data[i]['id']+'" onclick="deleteFile(this);return false;">移除</a></span>');
+	}
+}
+//绑定附件
+function bindFile2(data){
+	for(var i in data){
+		var file=$('input[name='+data[i]['key']+']');
+		file.next('fieldset').size()||file.after('<fieldset><legend>附件列表：</legend></fieldset>');
+		file.next('fieldset').append('<span><a href="'+ data[i]['src'] +'" target="_blank"><img src="'+ data[i]['src'] +'"><a href="__URL__/attach_del/id/'+data[i]['id']+'" onclick="if (confirm(\'确定删除吗？删除后无法恢复\')) {deleteFile(this)};return false;">移除</a></span>');
+	}
+}
+//绑定附件七牛
+function bindFileQiniu(data){
+	var file=$('input[name='+data.key+']');
+	file.next('div').size()||file.after('<div></div>');
+	file.next('div').html('<img src="'+ data['src'] +'">');
+}
+
+//删除文件
+function deleteFile(obj){
+	var loading=$.ThinkBox.loading('正在提交中...',{modal:true});
+	var options={url:$(obj).attr('href'),type:'get',dataType:'json'};
+	options.success=function(result){
+		loading.hide();
+		if(result.status){
+			$(obj).parent().remove();
+			disableFile();
+		}else{
+			$.ThinkBox.error(result.info);
+		}
+	};
+	$.ajax(options);
+}
+
+var UPLOAD = {
+	xhr: {},
+
+	//七牛普通上传
+	qiniu: function(f, token,progressCallback, successCallback, failedCallback) {
+		var formData;
+
+		this.xhr = new XMLHttpRequest();
+		this.xhr.open('POST', 'http://up.qiniu.com', true);
+
+		// 构建表单
+		formData = new FormData();
+		formData.append('token', token);
+		formData.append('file', f);
+
+		// 进度
+		this.progress(progressCallback);
+
+		// 上传
+		this.ready(successCallback, failedCallback);
+
+		this.xhr.send(formData);
+	},
+	// 本地上传
+	local: function(f, config, progressCallback, successCallback, failedCallback) {
+		var formData;
+
+		config = typeof(config) == 'string' ? JSON.parse(config) : config;
+
+		this.xhr = new XMLHttpRequest();
+		this.xhr.open('POST', config.upload_url, true);
+
+		// 构建表单
+		formData = new FormData();
+		$.each(config.data, function(index, val) {
+			formData.append(index, val);
+		});
+
+		formData.append('file', f);
+
+		// 进度
+		this.progress(progressCallback);
+
+		// 上传
+		this.ready(successCallback, failedCallback);
+
+		this.xhr.send(formData);
+	},
+	progress: function(callback) {
+		this.xhr.upload.addEventListener("progress", function(evt) {
+			if (evt.lengthComputable && typeof(callback) == 'function') {
+				var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+				callback(percentComplete);
+			}
+		}, false);
+	},
+	ready: function(successCallback, failedCallback) {
+		var xhr = this.xhr;
+		xhr.onreadystatechange = function(response) {
+
+			if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
+				var blkRet = JSON.parse(xhr.responseText);
+				if (typeof(successCallback) == 'function') {
+
+					successCallback(blkRet);
+				}
+			} else if (xhr.status != 200 && xhr.responseText && typeof(failedCallback) == 'function') {
+				failedCallback(xhr.responseText);
+			}
+		};
+	}
+};
+</script>
+</head>
+<body>

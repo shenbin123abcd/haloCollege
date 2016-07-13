@@ -87,9 +87,11 @@ class App
             $module = new $class;
             // 操作绑定到类后 固定执行run入口
             $action = 'run';
+
         } else {
             //创建控制器实例
             $module = controller(CONTROLLER_NAME, CONTROLLER_PATH);
+
         }
 
         if (!$module) {

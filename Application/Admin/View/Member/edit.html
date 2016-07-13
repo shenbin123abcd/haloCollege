@@ -1,0 +1,33 @@
+<style type="text/css">
+	body{ width:350px; }
+</style>
+<form class="J_ajaxForm" action="__URL__/update" method="post" >
+	<div class="pop_cont pop_table" style="height:auto;">
+		<table width="100%">
+			<tr>
+				<th>用户名：</th>
+				<td>
+					<input name="username" type="text" class="input length_3" value="{$data.username}">
+					<div class="tips-info">用户名只支持中文、字母、数字、下划线</div>
+				</td>
+			</tr>
+			<tr>
+				<th>新密码：</th>
+				<td><input name="password" type="text" class="input length_3"></td>
+			</tr>
+			<tr>
+				<th>确认密码：</th>
+				<td><input name="repassword" type="text" class="input length_3"></td>
+			</tr>
+			<tr>
+				<th>邮箱：</th>
+				<td><input name="email" type="text" class="input length_3" value="{$data.email}"></td>
+			</tr>
+		</table>
+	</div>
+	<div class="pop_bottom">
+		<input type="hidden" name="id" value="{$data.id}" />
+		<button type="button" class="btn fr" id="J_dialog_close">取消</button>
+		<button type="submit" class="btn btn_submit mr10 fr J_ajax_submit_btn">提交</button>
+	</div>
+</form>

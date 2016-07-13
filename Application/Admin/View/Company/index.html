@@ -1,0 +1,184 @@
+<div class="wrap J_check_wrap">
+	<!--导航-->
+	<!-- <div class="nav">
+		<ul class="cc">
+			<li class="current">
+				<a href="javascript:;">默认</a>
+			</li>
+			<li>
+				<a href="__SELF__?display=indexb">可排序</a>
+			</li>
+		</ul>
+	</div> -->
+	<!--/导航-->
+	<!--说明-->
+	<!-- <div class="h_a">说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>默认显示已付款</li>
+		</ol>
+	</div> -->
+	<!--/说明-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form method="get" action="__URL__/index">
+		<div class="search_type cc mb10">
+			<div class="ul_wrap">
+				<ul class="cc">
+					<li>
+						<label>地区：</label>
+						<select name="province" class="province">
+							<option value="">请选择</option>
+						</select>
+						<select name="city" class="city">
+							<option value="">请选择</option>
+						</select>
+						<select name="region" class="region">
+							<option value="">请选择</option>
+						</select>
+					</li>
+					<li>
+						<label>公司：</label>
+						<input name="company_name" value="{$Think.request.company_name}" type="text" class="input length_3" placeholder="公司">
+					</li>
+					<li>
+						<label>联系人：</label>
+						<input name="username" value="{$Think.request.username}" type="text" class="input length_3" placeholder="输入联系人">
+					</li>
+					<li>
+						<label>联系方式：</label>
+						<input name="contact" value="{$Think.request.contact}" type="text" class="input length_3" placeholder="输入联系方式">
+					</li>
+					<li><button class="btn mr20" type="submit">搜索</button></li>
+				</ul>
+			</div>
+		</div>
+	</form>
+	<!--/搜索-->
+	<!--操作-->
+	<div class="mb10">
+		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>新增</a>
+	</div>
+	<div class="mb10">
+		<form method="post" action="__URL__/excel" enctype="multipart/form-data">
+			<input type="file" data-status="no" name="excel">
+			<input class="btn" type="submit" value="导入EXCEL">
+		</form>
+	</div>
+	<!--列表-->
+	<form class="J_ajaxForm" action="" method="post">
+		<div class="table_list" id="J_table_list">
+			
+			<table width="100%">
+				<thead>
+					<tr>
+						<td width="25">
+							<label><input type="checkbox" class="J_check_all" data-direction="x" data-checklist="J_check_x">全选</label>
+						</td>
+						<td width="30"><b>省份</b></td>
+						<td><b>城市</b></td>
+						<td><b>公司名称</b></td>
+						<td width="52"><b>公司类型</b></td>
+						<td><b>联系人</b></td>
+						<td width="90"><b>联系方式</b></td>
+						<td width="30"><b>职称</b></td>
+						<td width="52"><b>客户关系</b></td>
+						<td width="45"><b>OS用户</b></td>
+						<td width="70"><b>找花网用户</b></td>
+						<td width="70"><b>结婚圈入驻</b></td>
+						<td width="52"><b>订阅用户</b></td>
+						<td width="70"><b>金熊奖购买</b></td>
+						<td width="70"><b>手绘册购买</b></td>
+						<td><b>地址</b></td>
+						<td width="120"><b>操作</b></td>
+					</tr>
+				</thead>
+				<tbody>
+					<volist name="list" id="vo">
+						<tr>
+							<td><input name="id[]" class="J_check" data-yid="J_check_y" data-xid="J_check_x" type="checkbox" value="{$vo.id}"></td>
+							<td>{$vo.province_title}</td>
+							<td>{$vo.city_title}</td>
+							<td>{$vo.company_name}</td>
+							<td>{$vo.type}</td>
+							<td>{$vo.username}</td>
+							<td>{$vo.contact}</td>
+							<td>{$vo.job_title}</td>
+							<td>{$vo.relation}</td>
+							<td>{$vo.is_os}</td>
+							<td>{$vo.is_flower}</td>
+							<td>{$vo.is_app}</td>
+							<td>{$vo.is_rss}</td>
+							<td>{$vo.is_bear}</td>
+							<td>{$vo.is_shouhui}</td>
+							<td>{$vo.address}</td>
+							<td><a href="__URL__/edit/id/{$vo.id}" title="编辑">[编辑]</a></td>
+						</tr>
+					</volist>
+				</tbody>
+			</table>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<div class="select_pages"><div class="pages">{$page}</div></div>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete" data-subcheck="true" data-msg="确定要删除选中的数据？">删除</button>
+			</div>
+		</div>
+	</form>
+	<!--/列表-->
+</div>
+<script>
+	var region = {:json_encode($region)}, province_id = {:intval($_GET['province'])}, city_id = {:intval($_GET['city'])}, region_id = {:intval($_GET['region'])};
+	var COMPANY = {
+		init: function() {
+			this.region();
+		},
+		region: function(){
+			var province_html = city_html = region_html = '<option value="">-请选择-</option>', province_status = city_status = region_status = '';
+            $.each(region, function(index, val) {
+                if (val.parent_id == 0) {
+                	province_status = (val.region_id == province_id) ? 'selected' : '';
+                    province_html += '<option '+ province_status +' value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                }
+                if (val.parent_id == province_id) {
+                	city_status = (val.region_id == city_id) ? 'selected' : '';
+                    city_html += '<option '+ city_status +' value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                }
+                if (val.parent_id == city_id) {
+                	region_status = (val.region_id == region_id) ? 'selected' : '';
+                    region_html += '<option '+ region_status +' value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                }
+            });
+            $('.province').html(province_html);
+            $('.city').html(city_html);
+            $('.region').html(region_html);
+
+            $('.province').change(function() {
+                var id = $(this).val(), city = '<option value="">-请选择-</option>';;
+                if (id > 0) {
+                    $.each(region, function(index, val) {
+                        if (val.parent_id == id) {
+                            city += '<option value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                        }
+                    });
+                }
+                $('.city').html(city);
+                $('.region').html('<option value="">-请选择-</option>');
+            });
+            $('.city').change(function() {
+                var id = $(this).val(), city = '<option value="">-请选择-</option>';;
+                if (id > 0) {
+                    $.each(region, function(index, val) {
+                        if (val.parent_id == id) {
+                            city += '<option value="'+ val.region_id +'">'+ val.region_name +'</option>';
+                        }
+                    });
+                }
+                $('.region').html(city);
+            });
+		}
+	};
+	$(function(){
+		COMPANY.init();
+	})
+</script>

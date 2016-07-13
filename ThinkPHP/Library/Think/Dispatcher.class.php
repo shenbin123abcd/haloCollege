@@ -291,7 +291,7 @@ class Dispatcher
                 }
             }
         }
-        if ($maps = C('URL_CONTROLLER_MAP')) {
+        if ($maps = C('URL_CONTROLLER_MAP')) {            
             if (isset($maps[strtolower($controller)])) {
                 // 记录当前别名
                 define('CONTROLLER_ALIAS', strtolower($controller));

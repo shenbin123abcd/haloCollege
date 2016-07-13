@@ -1,0 +1,129 @@
+<div class="wrap">
+	<!-- start -->
+
+	<div class="h_a">节点说明</div>
+	<div class="prompt_text">
+		<ul>
+			<li>节点为action名和操作名</li>
+			<li>节点只允许为字母或数字或下划线组合，不允许为空。</li>
+		</ul>
+	</div>
+
+	<form method="post" class="J_ajaxForm" action="__URL__/insert" data-role="list">
+		<div class="table_list">
+			<table width="100%" id="J_table_list" style="table-layout: fixed;">
+				<colgroup>
+					<col width="30">
+					<col width="380">
+					<col width="260">
+					<col width="68">
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<td></td>
+						<td>[顺序] 节点名称</td>
+						<td>节点</td>
+						<td class="tac">启用</td>
+						<td>操作</td>
+					</tr>
+				</thead>
+				<volist name="list" id="vo">
+					<tbody>
+						<tr>
+							<empty name="vo.items">
+							<td><span class="zero_icon" data-id="{$vo.id}"></span></td>
+							<else/>
+							<td><span class="J_start_icon away_icon" data-id="{$vo.id}"></span></td>
+							</empty>
+							<td>
+								<input name="data[{$vo.id}][id]" type="hidden" value="{$vo.id}">
+								<input name="data[{$vo.id}][pid]" type="hidden" value="{$vo.pid}">
+								<input name="data[{$vo.id}][sort]" type="text" class="input length_0 mr10" value="{$vo.sort}">
+								<input name="data[{$vo.id}][title]" type="text" class="input length_3 mr5" value="{$vo.title}">
+								<a style="display: none" href="" class="link_add J_addChild add_nav" data-id="{$vo.id}" data-html="tbody" data-type="nav_2">添加操作方法</a>
+							</td>
+							<td>
+								<input name="data[{$vo.id}][name]" type="text" value="{$vo.name}">
+							</td>
+							<td class="tac">
+								<input name="data[{$vo.id}][status]" type="checkbox" value="1" <eq name="vo.status" value="1">checked=""</eq> >
+							</td>
+							<td>
+								<a href="__URL__/delete/id/{$vo.id}" class="mr10 J_ajax_del">[删除]</a></td>
+						</tr>
+					</tbody>
+					<tbody id="J_table_list_{$vo.id}">
+					<volist name="vo.items" id="ivo">
+						<tr>
+							<td>&nbsp;</td>
+							<td>
+								<span class="plus_icon  plus_end_icon mr10"></span>
+								<input name="data[{$ivo.id}][id]" type="hidden" value="{$ivo.id}">
+								<input name="data[{$ivo.id}][pid]" type="hidden" value="{$ivo.pid}">
+								<input name="data[{$ivo.id}][sort]" type="text" class="input length_0 mr10" value="{$ivo.sort}" style="width:20px;">
+								<input name="data[{$ivo.id}][title]" type="text" class="input length_3 mr5" value="{$ivo.title}">
+							</td>
+							<td><input name="data[{$ivo.id}][name]" type="text" value="{$ivo.name}"></td>
+							<td class="tac"><input name="data[{$ivo.id}][status]" type="checkbox" value="1" <eq name="ivo.status" value="1">checked=""</eq>></td>
+							<td>
+								<a href="__URL__/delete/id/{$ivo.id}" class="mr10 J_ajax_del">[删除]</a>
+							</td>
+						</tr>
+					</volist>
+					</tbody>
+				</volist>
+			</table>
+			<table width="100%">
+				<tr class="ct">
+					<td colspan="5" style="padding-left: 38px;"><a
+						data-type="nav_1" data-html="tbody" href="" id="J_add_root"
+						class="link_add">添加节点</a></td>
+				</tr>
+			</table>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+			</div>
+		</div>
+	</form>
+	<!-- end -->
+
+</div>
+
+<script>
+	/*
+	 root_tr_html 为“添加节点”html
+	 child_tr_html 为“添加操作方法”html
+	 */
+	var root_tr_html = '<tr>\
+                            <td><span class="zero_icon mr10"></span></td>\
+                                        <td>\
+                                            <input name="newdata[root_][sort]" type="text" value="" class="input length_0 mr10">\
+                                            <input name="newdata[root_][title]" type="text" class="input length_3 mr5" value="">\
+                                            <a style="display: none; " href="#" class="link_add J_addChild add_nav" data-html="tbody" data-id="temp_root_" data-type="nav_2">添加操作方法</a>\
+											<input type="hidden" name="newdata[root_][tempid]" value="temp_root_"/>\
+                                        </td>\
+										<td><input name="newdata[root_][name]" type="text" value=""></td>\
+										</td>\
+                                        <td class="tac"><input name="newdata[root_][status]" type="checkbox" value="1" checked="checked"></td>\
+                                        <td>\
+                                            <a href="" class="mr5 J_newRow_del">[删除]</a>\
+                                        </td>\
+                                    </tr>', child_tr_html = '<tr>\
+						<td></td>\
+						<td><span class="plus_icon"></span>\
+							<input name="newdata[child_][sort]" type="text" value="" class="input length_0 mr10">\
+                                            <input name="newdata[child_][title]" type="text" class="input length_3 mr5" value="">\
+                                        </td>\
+										<td><input name="newdata[child_][name]" type="text" value=""></td>\
+                                        <td class="tac"><input name="newdata[child_][status]" type="checkbox" value="1" checked="checked"></td>\
+                                        <td>\
+                                            <a href="" class="mr5 J_newRow_del">[删除]</a>\
+                                            <input type="hidden" name="newdata[child_][pid]" value="id_"/>\
+                                        </td>\
+                                    </tr>';
+
+	Wind.js(GV.JS_ROOT + 'pages/admin/common/forumTree_table.js?v=' + GV.JS_VERSION);
+</script>

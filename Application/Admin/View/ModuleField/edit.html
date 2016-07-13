@@ -1,0 +1,86 @@
+<style type="text/css">
+	body{ width:350px; }
+</style>
+<form class="J_ajaxForm" action="__URL__/update" method="post" >
+	<div class="pop_cont pop_table" style="height:auto;">
+		<table width="100%">
+			<tr>
+				<th>名称：</th>
+				<td><input name="title" type="text" class="input length_3" value="{$data.title}" /></td>
+			</tr>
+			<tr>
+				<th>字段名：</th>
+				<td>
+					<input disabled type="text" class="input length_3" value="{$data.name}" />
+					<div class="tips-info">字段名不允许修改！</div>
+				</td>
+			</tr>
+			<tr>
+				<th>类型：</th>
+				<td>
+					<select disabled class="select length_2">
+						<volist name="field_type" id="vo">
+						<option value="{$vo.name}" <eq name="vo.name" value="$data['type']">selected</eq>>{$vo.title}</option>
+						</volist>
+					</select>
+					<div class="tips-info">避免数据丢失，字段类型不允许修改</div>
+				</td>
+			</tr>
+			<tr>
+				<th>长度：</th>
+				<td>
+					<input disabled type="text" class="input length_3" value="{$data.length}"/>
+					<div class="tips-info">长度不允许修改！</div>
+				</td>
+			</tr>
+			<tr>
+				<th>参数：</th>
+				<td>
+					<input name="param" type="text" class="input length_3" value="{$data.param}" />
+					<div class="tips-info">支持函数和json字符串，可用作默认值</div>
+				</td>
+			</tr>
+			<tr>
+				<th>表单长度：</th>
+				<td>
+					<select name="input_length" class="select length_2">
+						<option value="1" <eq name="data.input_length" value="1">selected</eq>>长度1</option>
+						<option value="2" <eq name="data.input_length" value="2">selected</eq>>长度2</option>
+						<option value="3" <eq name="data.input_length" value="3">selected</eq>>长度3</option>
+						<option value="4" <eq name="data.input_length" value="4">selected</eq>>长度4</option>
+						<option value="5" <eq name="data.input_length" value="5">selected</eq>>长度5</option>
+					</select>
+					<div class="tips-info">数值越大表单长度越长</div>
+				</td>
+			</tr>
+			<tr>
+				<th>是否显示：</th>
+				<td>
+					<select name="is_show" class="select length_2">
+						<option value="1" <eq name="data.is_show" value="1">selected</eq>>总是显示</option>
+						<option value="2" <eq name="data.is_show" value="2">selected</eq>>新增显示</option>
+						<option value="3" <eq name="data.is_show" value="3">selected</eq>>编辑显示</option>
+						<option value="0" <eq name="data.is_show" value="0">selected</eq>>不显示</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>排序：</th>
+				<td><input name="sort" type="text" class="input length_3" value="{$data.sort}"></td>
+			</tr>
+			<tr>
+				<th>字段说明：</th>
+				<td>
+					<textarea style="width:170px;height:36" name="tips">{$data.tips}</textarea>
+					<div class="tips-info">显示在页面字段旁边，用于对字段说明！</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="pop_bottom">
+		<input type="hidden" name="mid" value="{$data.mid}" />
+		<input type="hidden" name="id" value="{$data.id}" />
+		<button type="button" class="btn fr" id="J_dialog_close">取消</button>
+		<button type="submit" class="btn btn_submit mr10 fr J_ajax_submit_btn">提交</button>
+	</div>
+</form>

@@ -1,0 +1,70 @@
+<div class="wrap J_check_wrap">
+	<!--说明-->
+	<div class="h_a">说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>邀请码批量生成，单次最多生成500张</li>
+			<li>邀请码使用总数：<span style="color:red">{$use_total}</span></li>
+		</ol>
+	</div>
+	<!--/说明-->
+	<!--操作-->
+	<div class="mb10">
+		<a class="btn J_dialog" href="__URL__/add/cid/{$Think.get.cid}" title="新增"><span class="add"></span>新增</a>
+	</div>
+	<!--/操作-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+		<div class="search_type cc mb10">
+			<form method="get" action="__URL__/index">
+				<div class="ul_wrap">
+					<ul class="cc">
+						<li>
+							<label>邀请码：</label>
+							<input name="code" value="{$Think.request.code}" type="text" class="input length_2" placeholder="输入邀请码号">
+						</li>
+						<li>
+							<label>使用次数：</label>
+							<input name="use_num" value="{$Think.request.use_num}" type="text" class="input length_2" placeholder="输入使用次数">
+						</li>
+						<li>
+							<label>标签</label>
+							<input name="tag" value="{$Think.request.tag}" type="text" class="input length_2" placeholder="输入使用次数">
+						</li>
+						<!-- <li>
+							<label>时间：</label>
+							<input type="text" name="start_time" class="input length_2 mr5 J_date" value="{$Think.get.start_time|default=date('Y-m-d',time()-86400)}">
+							<span class="mr5">至</span>
+							<input type="text" name="end_time" class="input length_2 J_date" value="{$Think.get.end_time|default=date('Y-m-d')}">
+						</li> -->
+						<li>
+							<label>状态：</label>
+							<select name="status" class="select_2">
+								<option value="">状态</option>
+								<option value="1" <eq name="Think.request.status" value="1">selected="selected"</eq>>启用</option>
+								<option value="0" <eq name="Think.request.status" value="0">selected="selected"</eq>>禁用</option>
+							</select>
+						</li>
+						<li><button class="btn mr20" type="submit">搜索</button></li>
+					</ul>
+				</div>
+			</form>
+		</div>
+	<!--/搜索-->
+	<!--列表-->
+	<form class="J_ajaxForm" action="" method="post">
+		<div class="table_list">
+			<list:list box="id" name="list" show="{field:id,title:ID,width:60}{field:code,title:邀请码,width:120,url:__GROUP__/SchoolAccount/index/code/$code}{field:total_num,title:总次数,width:120}{field:use_num,title:使用次数,width:60}{field:tag,title:标签,width:60}{field:status,title:状态,func:get_status,width:60}"/>
+			<div class="p10"></div>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<div class="select_pages"><div class="pages">{$page}</div></div>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete" data-subcheck="true" data-msg="确定要删除选中的数据？">删除</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/forbid">禁用</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/resume">恢复</button>
+			</div>
+		</div>
+	</form>
+	<!--/列表-->
+</div>

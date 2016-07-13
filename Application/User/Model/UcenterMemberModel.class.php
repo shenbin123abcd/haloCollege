@@ -17,7 +17,7 @@ class UcenterMemberModel extends Model{
 	 * @var string
 	 */
 	protected $tablePrefix = UC_TABLE_PREFIX;
-
+	protected $tableName = 'ucenter_member';
 	/**
 	 * 数据库连接
 	 * @var string
@@ -145,7 +145,8 @@ class UcenterMemberModel extends Model{
 		}
 
 		/* 获取用户数据 */
-		$user = $this->where($map)->find();
+		//$user = $this->where($map)->find();
+		$user = M('UcenterMember')->where($map)->find();
 		if(is_array($user) && $user['status']){
 			/* 验证用户密码 */
 			if(think_ucenter_md5($password, UC_AUTH_KEY) === $user['password']){

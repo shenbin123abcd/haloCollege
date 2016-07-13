@@ -1,0 +1,59 @@
+<div class="wrap">
+<!--角色管理: 添加编辑角色  -->
+<div class="nav">
+	<div class="return"><a href="{:U('Role/index')}">返回上一级</a></div>
+</div>
+<form class="J_ajaxForm" data-role="list" action="__URL__/insert" method="post">
+<div class="h_a">添加新角色</div>
+<div class="table_full">
+	<table width="100%" class="J_check_wrap">
+		<col class="th" />
+		<col width="400" />
+		<col />
+		<tr>
+			<th>角色名称</th>
+			<td><span class="must_red">*</span>
+				<input name="name" value="" type="text" class="input input_hd length_5">
+			</td>
+			<td><div class="fun_tips"></div></td>
+		</tr>
+		<!--tr>
+			<th>从已有角色复制权限</th>
+			<td>
+				<select id="J_role_select" name="roleid"  class="select_5">
+					<option>请选择角色</option>
+					<option value="1">管理员</option>
+					<option value="2">门户管理员</option>
+					<option value="3">测试权限</option>
+				</select>
+			</td>
+			<td><div class="fun_tips"></div></td>
+		</tr-->
+		<tr>
+			<th>描述</th>
+			<td>
+				<textarea name="remark" class="length_5"></textarea>
+			</td>
+			<td><div class="fun_tips"></div></td>
+		</tr>
+		<volist name="node" id="vo">
+		<tr>
+			<th><label><input name="node" id="J_role_{$vo.id}" data-direction="x" data-checklist="J_check_{$vo.id}" type="checkbox" class="checkbox J_check_all" value="{$vo.id}"><span>{$vo.title}</span></label></th>
+			<td>
+				<ul data-name="{$vo.id}" class="three_list cc J_ul_check">
+				<volist name="vo.items" id="ivo">
+					<li><label><input name="auths[]" data-xid="J_check_{$vo.id}" class="J_check"  type="checkbox" value="{$ivo.id}"><span>{$ivo.title}</span></label></li>
+				</volist>
+				</ul>
+			</td>
+			<td><div class="fun_tips"></div></td>
+		</tr>
+		</volist>
+	</table>
+</div>
+<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+		<button type="submit" class="btn btn_submit mr10 J_ajax_submit_btn">提交</button>
+	</div>
+</div>
+</div>

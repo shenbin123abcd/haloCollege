@@ -1,0 +1,26 @@
+<style type="text/css">
+	body{ width:350px; }
+</style>
+<form class="J_ajaxForm" action="__URL__/insert" method="post" >
+	<div class="pop_cont pop_table" style="height:auto;">
+		<table width="100%">
+			<tr>
+				<th>数量：</th>
+				<td><input name="number" type="text" class="input length_3" ><div class="gray">最大500</div></td>
+			</tr>
+			<tr>
+				<th>可使用次数：</th>
+				<td><input name="total_num" type="text" class="input length_3" value="1"></td>
+			</tr>
+			<tr>
+				<th>标签：</th>
+				<td><input name="tag" type="text" class="input length_3" value=""></td>
+			</tr>
+		</table>
+	</div>
+	<div class="pop_bottom">
+		<input type="hidden" name="cid" value="{$Think.get.cid}">
+		<button type="button" class="btn fr" id="J_dialog_close">取消</button>
+		<button type="submit" class="btn btn_submit mr10 fr J_ajax_submit_btn">提交</button>
+	</div>
+</form>

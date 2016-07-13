@@ -1,84 +1,73 @@
 <?php
-// +----------------------------------------------------------------------
-// | OneThink [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2013 http://www.onethink.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
-
-namespace Admin\Controller;
-use User\Api\UserApi;
-
 /**
- * 后台首页控制器
- * @author 麦当苗儿 <zuojiazi@vip.qq.com>
+ * 公开的操作
+ * @author wtwei
+ * @version $Id$
  */
-class PublicController extends \Think\Controller {
-
+namespace Admin\Controller;
+use Think\Controller;
+class PublicController extends Controller {
     /**
-     * 后台用户登录
-     * @author 麦当苗儿 <zuojiazi@vip.qq.com>
+     * 登录
      */
-    public function login($username = null, $password = null, $verify = null){
-        if(IS_POST){
-            /* 检测验证码 TODO: */
-            if(!check_verify($verify)){
-                $this->error('验证码输入错误！');
-            }
+    public function login(){
 
-            /* 调用UC登录接口登录 */
-            $User = new UserApi;
-            $uid = $User->login($username, $password);
-            if(0 < $uid){ //UC登录成功
-                /* 登录用户 */
-                $Member = D('Member');
-                if($Member->login($uid)){ //登录用户
-                    //TODO:跳转到登录前页面
-                    $this->success('登录成功！', U('Index/index'));
-                } else {
-                    $this->error($Member->getError());
-                }
+    	if (IS_POST) {
+    		// 支持用户名、UID、邮箱登陆
+    		$username = trim($_POST['username']);
+    		$password = $_POST['password'];
 
-            } else { //登录失败
-                switch($uid) {
-                    case -1: $error = '用户不存在或被禁用！'; break; //系统级别禁用
-                    case -2: $error = '密码错误！'; break;
-                    default: $error = '未知错误！'; break; // 0-接口参数错误（调试阶段使用）
-                }
-                $this->error($error);
-            }
-        } else {
-            if(is_login()){
-                $this->redirect('Index/index');
-            }else{
-                /* 读取数据库中的配置 */
-                $config	=	S('DB_CONFIG_DATA');
-                if(!$config){
-                    $config	=	D('Config')->lists();
-                    S('DB_CONFIG_DATA',$config);
-                }
-                C($config); //添加配置
-                
-                $this->display();
-            }
-        }
+    		if (empty($username) || empty($password)) {
+    			$this->error('账号密码不允许为空！');
+    		}
+
+    		if(is_numeric($username)){
+    			$where = array('id' => $username);
+    		}elseif(strpos($username,'@')){
+    			$where = array('email' => $username);
+    		}else{
+    			$where = array('username' => $username);
+    		}
+
+    		$where['status'] = 1;
+    		$data = M('Member')->where($where)->find();
+
+    		if (!empty($data) && $data['password'] == md5($password)) {
+                $admin = M('RoleUser')->where(array('user_id'=>$data['id']))->count();				
+                $founder = D('Founder')->getFounder();
+                !$admin && !in_array($data['id'], $founder) && $this->error('您没有权限登录后台！');
+    			member_info($data);
+				
+    			$this->success('登录成功！',U('Index/index'));
+    		} else {
+    			$this->error('账号或密码错误！');
+    		}
+    		
+    	}
+    	member_info() && $this->redirect('/admin');
+		$this->display();
+	}
+
+   /**
+     * 退出登录
+     */
+	public function logout() {
+		member_info(null);
+		session(C('SAVE_ACCESS_NAME'), null);
+		$this->redirect(C('USER_AUTH_GATEWAY'));
+	}
+
+	/**
+     * 验证码
+     */
+	public function verify() {
+		import("ORG.Util.Images");
+		$length = C('VERIFY_CODE_LENGTH');
+		Images::verify($value,$length?$length : 4);
+		session('verify',$value);
+	}
+
+    public function qiniu(){
+        $this->ajaxReturn(array('iRet'=>1));
     }
-
-    /* 退出登录 */
-    public function logout(){
-        if(is_login()){
-            D('Member')->logout();
-            session('[destroy]');
-            $this->success('退出成功！', U('login'));
-        } else {
-            $this->redirect('login');
-        }
-    }
-
-    public function verify(){
-        $verify = new \Think\Verify();
-        $verify->entry(1);
-    }
-
 }

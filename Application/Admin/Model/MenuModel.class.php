@@ -1,30 +1,22 @@
 <?php
-// +----------------------------------------------------------------------
-// | OneThink [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2013 http://www.onethink.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Author: yangweijie <yangweijiester@gmail.com> <code-tech.diandian.com>
-// +----------------------------------------------------------------------
-namespace Admin\Model;
-use Think\Model;
-
 /**
- * 插件模型
- * @author yangweijie <yangweijiester@gmail.com>
+ * 菜单模型
+ * @author wtwei
+ * @version $Id$
  */
+namespace Admin\Model;
 
-class MenuModel extends Model {
-
-    protected $_validate = array(
-        array('title','require','标题必须填写'), 
-        array('url','require','链接必须填写'), 
-    );
-
-    /* 自动完成规则 */
-    protected $_auto = array(
-        array('title', 'htmlspecialchars', self::MODEL_BOTH, 'function'),
-        array('status', '1', self::MODEL_INSERT),
-    );
-
+class MenuModel extends CommonModel{
+	//自动验证
+	protected $_validate = array(
+			array('name', 'require', '导航名称不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
+			//array('name', 'unique', '名称不能重复！', self::MUST_VALIDATE, 'callback', self:: MODEL_BOTH),
+			array('id', 'require', '标识不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
+			array('id', 'unique', '标识不能重复！', self::MUST_VALIDATE, 'unique', self:: MODEL_BOTH),
+			array('id', '/^\w+$/', '标识格式错误！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
+	);
+	
+	
 }
+
+?>
