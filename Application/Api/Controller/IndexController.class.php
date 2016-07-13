@@ -9,7 +9,7 @@ class IndexController extends CommonController {
 
     public function index() {
         $this->_auth();
-        dump($this->user);
+        echo 'api';
     }
 
 }

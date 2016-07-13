@@ -20,33 +20,6 @@ return array(
 	'USER_AUTH_GATEWAY'		=>	'Public/login',		//认证网关
 	'SAVE_ACCESS_NAME'		=>	'sys_access', //权限保存唯一名称
 
-	//数据库配置
-	'DB_TYPE' => 'mysql',
-	'DB_CHARSET' => 'utf8mb4',
-	'DB_HOST' => '112.124.16.5',
-	'DB_NAME' => 'faith',
-	'DB_USER' => 'web_root',
-	'DB_PWD' => 'halo2015bear',
-	'DB_PORT' => '3306',
-	'DB_PREFIX' => 'wtw_',
-
-	'UPLOAD_PATH' => './Uploads/',
-	'PUBLIC_PATH' => './Public/',
-	// 'TMPL_PARSE_STRING' => array('__PUBLIC__'=>'/weddingee/Public'),
-	// 'APPS_PATH' => '/weddingee',
-	'LOG_RECORD' => true,
-	'LOG_LEVEL'  =>'SQL',
-
-
-	'WEB_DOMAIN' => 'http://www.hx.com',
-	//URL模式
-	'URL_MODEL' => 2,
-	'URL_CASE_INSENSITIVE'	=>	1,
-	'TMPL_TEMPLATE_SUFFIX'  => '.html',
-	'URL_HTML_SUFFIX' => 'html|json',
-	'APP_GROUP_MODE'	=>	1,
-	'APP_GROUP_LIST'	=>	'Admin',
-	'DEFAULT_GROUP'		=>	'Admin',
 	'TAGLIB_PRE_LOAD'   => 'lists,form'
 );
 ?>

@@ -7,7 +7,7 @@ return array(
 	'URL_HTML_SUFFIX' => 'html|json',
 	'APP_GROUP_MODE'	=>	1,
 	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin'),
-	'DEFAULT_MODULE'    =>    'Admin',
+	'DEFAULT_MODULE'    =>    'Home',
 
     // 应用配置
     'AUTH_KEY'	=> 'sdDjkGpskdjflj3289324w98#@$%^',
