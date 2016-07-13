@@ -21,6 +21,11 @@ return array(
         '/^v1(?:\/(\w+))(?:\/(\w+))$/i' => 'Api/:1/:2',
         // '/^(\w+)(?:\/(\w+))$/' => 'Home/:1/:2',
     ),
+	
+	'APP_SUB_DOMAIN_DEPLOY'   =>    1, // 开启子域名配置
+	'APP_SUB_DOMAIN_RULES'    =>    array(   
+		'koala-college'        => 'Admin',
+	),
 
     /* 数据库配置 */
     'DB_TYPE'   => 'mysql', // 数据库类型
