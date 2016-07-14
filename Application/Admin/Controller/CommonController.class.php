@@ -144,7 +144,7 @@ class CommonController extends Controller {
 		$model = $this->model();
 		$pk = $model->getPk();
 		$data = $model->where(array($pk=>$_GET[$pk]))->find();
-		empty($data) && $this->error('查询数据失败！');
+		empty($data) && $this->error('查询数据失败！');		
 		$this->assign('data',$data);
 		$this->display();
 	}

@@ -28,10 +28,26 @@ class SchoolWeddingController  extends CommonController {
 
     }
 
-    public function getToken(){
-        $token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://collegeapi.halobear.com/koala.php?s=/Public/qiniuUpload.html');
-        $this->ajaxReturn($token);
+    /**
+     * 默认编辑操作
+     * @see CommonAction::edit()
+     */
+    public function edit(){
+        $model = $this->model();
+        $pk = $model->getPk();
+        $data = $model->where(array($pk=>$_GET[$pk]))->find();
+        empty($data) && $this->error('查询数据失败！');
+        //$data['content'] = htmlspecialchars_decode($data['content']);
+        $categoryName = M('SchoolWeddingCategory')->where(array('id'=>$data['category_id']))->field('name')->find();
+        $where['status'] =1;
+        $category = M('SchoolWeddingCategory')->where($where)->select();
+        $this->assign('categoryName',$categoryName);
+        $this->assign('category',$category);
+        $this->assign('data',$data);
+        $this->display();
     }
+
+
 
 
 }
