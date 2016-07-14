@@ -67,7 +67,24 @@ class PublicController extends Controller {
 		session('verify',$value);
 	}
 
-    public function qiniu(){
-        $this->ajaxReturn(array('iRet'=>1));
+    
+    /**
+     * 七牛上传回调
+     */
+    public function qiniuUpload(){
+        $data['key'] = '';
+        $data['name'] = $_POST['fname'];
+        $data['size'] = $_POST['fsize'];
+        $data['module'] = $_POST['module'];
+        $data['savename'] = $_POST['key'];
+        $data['width'] = $_POST['w'];
+        $data['height'] = $_POST['h'];
+        $data['create_time'] = time();
+        $data['type'] = $_POST['filetype'];
+        $data['status'] = 1;
+        $data['record_id'] = $data['user_id'] = 0;
+
+        $id = D('Attach')->add($data);
+        $this->ajaxReturn(array('id'=>$id,'error'=>0,'url'=>'http://7xopel.com2.z0.glb.clouddn.com/' . $_POST['key']));
     }
 }

@@ -327,25 +327,8 @@ class CommonController extends Controller {
 
 	//获取上传TOKEN
 	public function getToken(){
-		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://collegeapi.halobear.com/koala.php?s=/Public/qiniuUpload.html');
+		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');
 		$this->ajaxReturn($token);
-	}
-
-	/**
-	 * 七牛上传回调
-	 */
-	public function qiniuUpload(){
-		$data['key'] = $_POST['filetype'];
-		$data['name'] = $_POST['fname'];
-		$data['size'] = $_POST['fsize'];
-		$data['module'] = $_POST['module'];
-		$data['savename'] = $_POST['key'];
-		$data['create_time'] = time();
-		$data['status'] = 1;
-
-		$id = M('Attach')->add($data);
-
-		$this->ajaxReturn(array('id'=>$id,'error'=>0,'url'=>'http://7xopel.com2.z0.glb.clouddn.com/' . $_POST['key']));
 	}
 
 }

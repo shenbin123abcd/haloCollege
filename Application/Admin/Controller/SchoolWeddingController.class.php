@@ -28,6 +28,7 @@ class SchoolWeddingController  extends CommonController {
 
     }
 
+
     /**
      * 默认编辑操作
      * @see CommonAction::edit()
@@ -46,6 +47,7 @@ class SchoolWeddingController  extends CommonController {
         $this->assign('data',$data);
         $this->display();
     }
+
 
 
 
