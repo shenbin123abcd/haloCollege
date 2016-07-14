@@ -35,11 +35,11 @@ class WeddingController extends CommonController {
         //分页
         if($page!=0){
             $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)->order("wtw_school_wedding.create_time desc")
-                ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.cover_url,from_unixtime(wtw_school_wedding.start_time,'%Y-%m-%d') as start_time")
+                ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")
                 ->page($page,$per_page)->select();
         }else{
             $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)->order("wtw_school_wedding.create_time desc")
-                ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.cover_url,from_unixtime(wtw_school_wedding.start_time,'%Y-%m-%d') as start_time")->select();
+                ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")->select();
 
         }
         if(empty($list)){
@@ -53,8 +53,6 @@ class WeddingController extends CommonController {
 
     //婚礼头条详情
     public function weddingDetail(){
-        $page = I('page') ? I('page') : 1;
-        $per_page = I('per_page') ? I('per_page') : 10000;
         $wedding_id = I('wedding_id');
         $uid = $this->user['uid'];
         if(empty($wedding_id)){
@@ -64,15 +62,98 @@ class WeddingController extends CommonController {
         $model_comment_reply = M('SchoolWeddingComment');
         $whereWedding['status']=1;
         $whereWedding['id']=$wedding_id;
-        $whereComment['status']=1;
-        $whereComment['remark_id']=$wedding_id;
-        $detail = $model_wedding->where($whereWedding)->find();
+        $detail = $model_wedding->where($whereWedding)->field('id,headline,brief,content,create_time')->find();
         //获取评论总数
         $comment_count = $model_comment_reply->where(array('remark_id'=>$wedding_id,'type'=>'comment','status'=>1))->group('remark_id')->count();
         $detail['comment_count'] = intval($comment_count);
         //获取收藏状态
         $status_favorite = M('SchoolWeddingFavorites')->where(array('uid'=>$uid,'wedding_id'=>$wedding_id))->field('status')->find();
         $detail['status_favorite'] = $status_favorite ? $status_favorite['status'] : -1;
+        $data['detail'] = $detail;
+        $this->success('success',$data);
+        
+    }
+
+    //婚礼头条评论和回复
+    public function weddingComment(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $wedding_id = I('wedding_id');
+        $uid = $this->user['uid'];
+        $model_comment_reply = M('SchoolWeddingComment');
+        $whereComment['status']=1;
+        $whereComment['remark_id']=$wedding_id;
+        $comment = $model_comment_reply->where($whereComment)->page($page,$per_page)->order('create_time desc')->select();
+        //获取点赞状态
+        $wherePraise = array();
+        foreach ($comment as $key=>$value){
+            $id_arr[] = $value['id'];
+        }
+        if(!empty($id_arr)){
+            $wherePraise['comment_id'] = array('in',$id_arr);
+        }
+        $wherePraise['uid'] = $uid;
+        $status_praise_arr = M('SchoolWeddingPraise')->where($wherePraise)->field('comment_id,status')->select();
+        if(!empty($status_praise_arr)){
+            foreach ($comment as $key=>$value){
+                $comment[$key]['status_praise'] = 0;
+                foreach ($status_praise_arr as $key_praise=>$value_praise){
+                    if($value['id']==$value_praise['comment_id']){
+                        $comment[$key]['status_praise'] = $value_praise['status'];
+                    }
+                }
+                if($value['type']=='reply'){
+                    $parent_id[] =$value['parent_id'];
+                }
+            }
+        }else{
+            foreach ($comment as $key=>$value){
+                $comment[$key]['status_praise'] = -1;
+                if($value['type']=='reply'){
+                    $parent_id[] =$value['parent_id'];
+                }
+            }
+
+        }
+        if(!empty($parent_id)){
+            $whereReply['id'] = array('in',$parent_id);
+            $whereReply['status'] =1;
+            $reply = $model_comment_reply->where($whereReply)->order('create_time desc')->select();
+            //回复和父节点回复绑定
+            foreach ($comment as $key_comment=>$value_comment){
+                foreach ($reply as $key_reply=>$value_reply){
+                    if($value_comment['parent_id']==$value_reply['id'] && $value_comment['type']=='reply'){
+                        $comment[$key_comment]['parent_reply'][]=$reply[$key_reply];
+                    }
+                }
+            }
+        }
+        $data['comment'] = array_values($comment);
+        $this->success('success',$data);
+    }
+
+   /* //婚礼头条详情
+    public function weddingDetail(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $wedding_id = I('wedding_id');
+        $uid = $this->user['uid'];
+        //if(empty($wedding_id)){
+        //    $this->error('参数错误！');
+        //}
+        //$model_wedding = M('SchoolWedding');
+        $model_comment_reply = M('SchoolWeddingComment');
+        //$whereWedding['status']=1;
+        //$whereWedding['id']=$wedding_id;
+        $whereComment['status']=1;
+        $whereComment['remark_id']=$wedding_id;
+        //$detail = $model_wedding->where($whereWedding)->find();
+        //获取评论总数
+        //$comment_count = $model_comment_reply->where(array('remark_id'=>$wedding_id,'type'=>'comment','status'=>1))->group('remark_id')->count();
+        //$detail['comment_count'] = intval($comment_count);
+        //获取收藏状态
+        //$status_favorite = M('SchoolWeddingFavorites')->where(array('uid'=>$uid,'wedding_id'=>$wedding_id))->field('status')->find();
+        //$detail['status_favorite'] = $status_favorite ? $status_favorite['status'] : -1;
         $comment = $model_comment_reply->where($whereComment)->page($page,$per_page)->order('create_time desc')->select();
         //获取点赞状态
         $wherePraise = array();
@@ -119,10 +200,10 @@ class WeddingController extends CommonController {
             }
         }
 
-        $data['detail'] = $detail;
+        //$data['detail'] = $detail;
         $data['comment'] = array_values($comment);
         $this->success('success',$data);
-    }
+    }*/
 
     //婚礼头条评论提交接口
     public function commentPost(){

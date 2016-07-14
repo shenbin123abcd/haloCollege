@@ -14,13 +14,12 @@ class SchoolWeddingController  extends CommonController {
         $this->assign('category',$category);
         $this->display();
 
-    }
-    
+    }    
     
     public function _before_insert(){
         empty($_POST['headline']) && $this->error('请填写婚礼标题！');
         empty($_POST['brief']) && $this->error('请填写婚礼简介！');
-        empty($_POST['category']) && $this->error('请选择头条分类！');
+        empty($_POST['category_id']) && $this->error('请选择头条分类！');
         empty($_POST['content']) && $this->error('请编辑头条内容！');
         $_POST['create_time']=time();
         $_POST['update_time']=time();
