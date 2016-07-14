@@ -28,10 +28,4 @@ class SchoolWeddingController  extends CommonController {
 
     }
 
-    public function getToken(){
-        $token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://collegeapi.halobear.com/koala.php?s=/Public/qiniuUpload.html');
-        $this->ajaxReturn($token);
-    }
-
-
 }
