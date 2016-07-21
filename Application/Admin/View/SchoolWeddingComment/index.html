@@ -3,19 +3,14 @@
 	<div class="h_a">说明</div>
 	<div class="prompt_text">
 		<ol>
-			<li>嘉宾管理</li>
+			<li>婚礼头条评论管理</li>
 		</ol>
 	</div>
 	<!--/说明-->
-	<!--操作-->
-	<div class="mb10">
-		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>新增</a>
-	</div>
-	<!--/操作-->
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:姓名,width:80}{field:position,title:职务,width:200}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list  box="id" name="list" show="{field:id,title:编号,width:60}{field:parent_id,title:父节点,width:100}{field:type,title:类型,width:100}{field:content,title:内容,width:300}{field:remark_id,title:头条ID,width:100}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">

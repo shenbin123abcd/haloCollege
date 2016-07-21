@@ -1149,3 +1149,31 @@ function check_category_model($info){
     $array  =   explode(',', $info['pid'] ? $cate['model_sub'] : $cate['model']);
     return in_array($info['model_id'], $array);
 }
+
+/**
+ * 生成七牛上传凭证
+ */
+function make_qiniu_token($bucket, $module, $callbackUrl, $key) {
+    $accessKey = C('QINIU_AK');
+    $secretKey = C('QINIU_SK');
+
+    $deadline = time()+1728000;
+    $saveKey = $module . '/' . ($key ? $key : '$(year)$(mon)/${day}/$(etag)$(suffix)');
+    $callbackBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=$(fname)&fsize=$(fsize)&filetype=${x:filetype}&code=${x:code}&module=' . $module;
+    $bucket = $key ? $bucket . ':' . $saveKey : $bucket;
+    $data =  array(
+        'scope'=>$bucket,
+        'deadline'=>$deadline,
+        'saveKey'=>$saveKey,
+        'callbackUrl'=>$callbackUrl,
+        'callbackBody'=>$callbackBody
+    );
+    $data = json_encode($data);
+    $find = array('+', '/');
+    $replace = array('-', '_');
+    $data = str_replace($find, $replace, base64_encode($data));
+    $sign = hash_hmac('sha1', $data, $secretKey, true);
+    $qiniu_mall_token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
+    return $qiniu_mall_token;
+}
+

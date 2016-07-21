@@ -64,6 +64,13 @@ class Page
     }
 
     /**
+     * 结果限制
+     */
+    public function limit(){
+        return $this->firstRow.','.$this->listRows;
+    }
+
+    /**
      * 生成链接URL
      * @param  integer $page 页码
      * @return string

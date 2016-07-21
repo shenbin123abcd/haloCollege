@@ -79,10 +79,10 @@ class CommonController extends Controller {
 			$order = empty($_GET['_order']) ? ' desc' : " {$_GET['_order']}";
 			import("ORG.Util.Page");
 			$listRows = C('LIST_ROWS') > 0 ? C('LIST_ROWS') : 50;
-			$page = new Page($totalRows,$listRows,$_GET);
-			//$page->limit()不存在
-			//$options=array('where'=>$where,'order'=>"`{$field}` {$order}",'limit'=>$page->limit());
-			$options=array('where'=>$where,'order'=>"`{$field}` {$order}");
+			$page       = new \Think\Page($totalRows,$listRows,$_GET);
+			//添加了3.1的$page->limit()
+			$options=array('where'=>$where,'order'=>"`{$field}` {$order}",'limit'=>$page->limit());
+			//$options=array('where'=>$where,'order'=>"`{$field}` {$order}");
 			$data = $model->select($options);
 			method_exists($this, '_join') && $this->_join($data);
 			$this->assign('list', $data);
@@ -125,12 +125,15 @@ class CommonController extends Controller {
 	 * @see CommonAction::insert()
 	 */
 	public function insert(){
-		$model = $this->model ();
+		$model = $this->model();
 		$model->setProperty('_data', $_POST);
-		if ($model->create ()) {
-			$id = $model->add ();
-			! empty ( $id ) && ! empty ( $_REQUEST ['attach_id'] ) && D ( 'Attach' )->where ( array ('id' => array ('in',trim ( $_REQUEST ['attach_id'], ',' ) ) ) )->save ( array ('record_id' => $id,'module' => CONTROLLER_NAME ) );
-			$id ? $this->success ( '新增数据成功！', cookie ( '__forward__' ) ) : $this->error ( '新增数据失败！' );
+		if ($model->create()) {
+			$id = $model->add();
+            if (!empty ($id)){
+                ! empty ($_REQUEST ['attach_id']) && D ( 'Attach' )->where ( array ('id' => array ('in',trim ( $_REQUEST ['attach_id'], ',,' ) ) ) )->save ( array ('record_id' => $id ) );//,'module' => CONTROLLER_NAME
+                ! empty ($_REQUEST ['attach_editor_id']) && D ( 'Attach' )->where ( array ('id' => array ('in',trim ( $_REQUEST ['attach_editor_id'], ',' ) ) ) )->save ( array ('record_id' => $id,'module' => CONTROLLER_NAME ) );
+            }
+            $id ? $this->success ( '新增数据成功！', cookie ( '__forward__' ) ) : $this->error ( '新增数据失败！' );
 		} else {
 			$this->error ( $model->getError () );
 		}
@@ -160,8 +163,13 @@ class CommonController extends Controller {
 			$data = $model->data();
 			$record = $model->save($data);
 			if (!empty($_POST['attach_id'])) {
+				$data = array('record_id' => $data['id']);//, 'module' => CONTROLLER_NAME
+				D('Attach')->where(array('id' => array('in', trim($_POST['attach_id'], ',,'))))->save($data);
+			}
+
+			if (!empty($_POST['attach_editor_id'])) {
 				$data = array('record_id' => $data['id'], 'module' => CONTROLLER_NAME);
-				D('Attach')->where(array('id' => array('in', trim($_POST['attach_id'], ','))))->save($data);
+				D('Attach')->where(array('id' => array('in', trim($_POST['attach_editor_id'], ','))))->save($data);
 			}
 			$record === false ? $this->error('更新数据失败！') : $this->success('更新数据成功！', cookie('__forward__'));
 		} else {
@@ -298,7 +306,7 @@ class CommonController extends Controller {
         $this->ajaxReturn($result);
     }
 
-    protected function qiniu($bucket,$dir = 'image',$callback = ''){
+    protected function qiniu($bucket,$dir = 'image',$callback = 'http://koala-college.weddingee.com/public/qiniuUploadCallback'){
         $accessKey = C('QINIU_AK');
         $secretKey = C('QINIU_SK');
 
@@ -308,7 +316,7 @@ class CommonController extends Controller {
 
         $data =  array(
             'scope'=>$bucket,
-            'deadline'=>$deadline,
+            'deadline'=>$deadline,	
             'saveKey'=>$saveKey
         );
 
@@ -327,8 +335,8 @@ class CommonController extends Controller {
 
 	//获取上传TOKEN
 	public function getToken(){
-		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');
-		$this->ajaxReturn($token);
+		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');		
+		$this->ajaxReturn($token,'JSON');
 	}
 
 }

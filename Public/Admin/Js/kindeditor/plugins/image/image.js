@@ -105,7 +105,7 @@ KindEditor.plugin('image', function(K) {
 					// insert local image
 					if (showLocal && showRemote && tabs && tabs.selectedIndex === 1 || !showRemote) {
 						if (uploadbutton.fileBox.val() == '') {
-							alert(self.lang('pleaseSelectFile'));
+                                        alert(self.lang('pleaseSelectFile'));
 							return;
 						}
 						dialog.showLoading(self.lang('uploadLoading'));
@@ -205,6 +205,14 @@ KindEditor.plugin('image', function(K) {
 						K(".ke-tabs-li", div)[0].click();
 						K(".ke-refresh-btn", div).click();
 					}
+
+                    // 记录附件编号
+                    var attach = $('input[name=attach_id]');
+                    if(attach.length){
+                        attach.val(attach.val() + ',' + data.id);
+                    }else{
+                        $('#J_rigths_form').append('<input name="attach_editor_id" type="hidden" value="'+ data.id +'">');
+                    }
 				} else {
 					alert(data.message);
 				}
