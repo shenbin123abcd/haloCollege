@@ -1,2 +1,9 @@
 .idea
 /Runtime
+/node_modules
+
+/Public/Toutiao/*
+/Application/Home/View/Toutiao/*.html
+/src/Toutiao/app/css/main.css
+/src/Toutiao/app/css/main.css.map
+/src/Toutiao/tmp
