@@ -136,14 +136,14 @@ gulp.task('build',['sass','images'], function () {
                 return `<style>${file.contents.toString('utf8').replace(/\{/g,'{ ')}</style>`
             }
         }))
-        // .pipe(plugins.htmlmin({
-        //     removeComments: true,
-        //     collapseWhitespace: true,
-        //     conservativeCollapse: true,
-        //     ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
-        //     minifyJS: false,
-        //     minifyCSS: false,
-        // }))
+        .pipe(plugins.htmlmin({
+            removeComments: true,
+            collapseWhitespace: true,
+            conservativeCollapse: true,
+            ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
+            minifyJS: false,
+            minifyCSS: false,
+        }))
         .pipe(gulp.dest('../../Application/Home/View/Toutiao'))
         // .pipe(gulp.dest('dest'))
         .pipe(htmlFilter.restore)
