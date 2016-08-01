@@ -86,6 +86,15 @@ class SchoolWeddingController  extends CommonController {
                 $imgs[$key]['url'] =$base_url.$value['url'];
             }
         }
+        $cate = $this->category;
+        foreach ($cate as $key=>$value){
+            if($value['id']==$data['category_id']){
+                $cat_arr = $cate[$key];
+                unset($cate[$key]);
+            }
+        }
+        array_unshift($cate,$cat_arr);
+        $this->category =$cate;
         $this->assign('imgs',$imgs);
         $this->assign('categoryName',$categoryName);
         $this->assign('data',$data);
