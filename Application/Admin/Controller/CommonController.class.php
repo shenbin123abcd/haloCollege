@@ -309,7 +309,7 @@ class CommonController extends Controller {
     }
 
     //生成七牛token --非编辑器
-    protected function qiniu($bucket,$dir = 'image',$callback = 'http://koala-college.weddingee.com/public/qiniuUploadCallback'){
+    protected function qiniu($bucket,$dir = 'image',$callback = 'http://http://college-koala.halobear.com/public/qiniuUploadCallback'){
         $accessKey = C('QINIU_AK');
         $secretKey = C('QINIU_SK');
 
@@ -337,7 +337,7 @@ class CommonController extends Controller {
     }
 
 	//生成七牛token --banner图片上传
-	protected function qiniuBanner($bucket,$dir = 'image',$callback = 'http://koala-college.weddingee.com/public/qiniuUploadBanner'){
+	protected function qiniuBanner($bucket,$dir = 'image',$callback = 'http://http://college-koala.halobear.com/public/qiniuUploadBanner'){
 		$accessKey = C('QINIU_AK');
 		$secretKey = C('QINIU_SK');
 
@@ -366,7 +366,7 @@ class CommonController extends Controller {
 
 	//获取上传TOKEN
 	public function getToken(){
-		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');
+		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://http://college-koala.halobear.com/public/qiniuUpload');
 		$this->ajaxReturn($token,'JSON');
 	}
 
