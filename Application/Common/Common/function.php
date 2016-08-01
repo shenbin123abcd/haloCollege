@@ -24,6 +24,7 @@ function get_avatar($uid, $size = 'middle', $is_url = 1) {
     }
 }
 
+
 /**
  * 把时间戳转换成多少分钟以前
  * @param $time
@@ -1150,10 +1151,78 @@ function check_category_model($info){
     return in_array($info['model_id'], $array);
 }
 
+function curl_get( $url, $header = array() ) {
+    
+    //初始化curl
+    $ch = curl_init();
+    //设置超时
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt( $ch, CURLOPT_HEADER, 0 );
+    if (!empty($header)) {
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
+    }
+    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
+    //运行curl，结果以json形式返回
+    $res = curl_exec( $ch );
+    curl_close( $ch );
+    $data = json_decode( $res, true );
+
+    return $data;
+}
+
+function curl_post( $url, $data, $header = array() ) {
+    //初始化curl
+    $ch = curl_init();
+    //设置超时
+    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt ($ch, CURLOPT_HTTPHEADER , $header );
+    curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+    //运行curl，结果以json形式返回
+    $res = curl_exec( $ch );
+    curl_close( $ch );
+    $data = json_decode( $res, true );
+
+    return $data;
+}
+
+function curl_put( $url, $data, $header = array() ) {
+
+    //初始化curl
+    $ch = curl_init();
+    //设置超时
+    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt ($ch, CURLOPT_HTTPHEADER , $header );
+    curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT' );
+    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+    //运行curl，结果以json形式返回
+    $res = curl_exec( $ch );
+    curl_close( $ch );
+    $data = json_decode( $res, true );
+
+    return $data;
+}
+
+
 /**
  * 生成七牛上传凭证
  */
-function make_qiniu_token($bucket, $module, $callbackUrl, $key) {
+function make_qiniu_token_headimg($bucket, $module, $callbackUrl, $key) {
     $accessKey = C('QINIU_AK');
     $secretKey = C('QINIU_SK');
 
@@ -1176,4 +1245,3 @@ function make_qiniu_token($bucket, $module, $callbackUrl, $key) {
     $qiniu_mall_token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
     return $qiniu_mall_token;
 }
-
