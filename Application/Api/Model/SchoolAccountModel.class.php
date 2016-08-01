@@ -148,20 +148,30 @@ class SchoolAccountModel extends Model {
 			$ak = '57624411e0f55ab83b000848';
 		    $key = '65115406623996afcc0a14f2e4d00c7f';
 		}
+
+		//封装用户职位信息
+		//$custom['company'] =$data['company'];
+		//$custom['position'] =$data['position'];
+		//$custom['truename'] =$data['truename'];
+		//$custom_json = json_encode($custom);
+
+
 		$temp = array(
 			'user_info'=>array(
 				'name'=>$data['username'],
 				'icon_url'=>$data['avatar'],
 				),
 			'source_uid'=> (string)$data['id'],
-			'source'=>'self_account'
+			'source'=>'self_account',
 		);
-		
+
 		$data = json_encode($temp);
+
 		// 加密
 		$data = pack("N",strlen($data)).$data;
 		$string = encrypt($data, $key);
 		$encrypted_data = base64_encode($string);
+
 
 
 		$url = 'https://rest.wsq.umeng.com/0/get_access_token?ak=' . $ak;

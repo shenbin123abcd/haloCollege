@@ -4,7 +4,8 @@
  * @author wtwei
  * @version $Id$
  */
-namespace Admin\Controller;
+namespace Api\Controller;
+use Think\Controller;
 class ApiController extends ApiBaseController {
 
 	/**
@@ -212,10 +213,11 @@ class ApiController extends ApiBaseController {
 
 	// 登录
 	public function login(){
-		
+
 		$phone = I('phone');
 		$password = I('password');
 		$model = D('SchoolAccount');
+
 		// 本地登录
 		/*$user = M('SchoolAccount')->where(array('phone'=>$phone))->field('id,username,phone, password')->find();
 
@@ -224,20 +226,30 @@ class ApiController extends ApiBaseController {
 		}else{*/
 		// 账号中心登录
 		$result = $model->login($phone, $password);
+
 		if($result['iRet'] == 1){
 			// 产生用户标识
 	        $user = $result['data'];
 	        unset($user['company'], $user['store'], $user['token']);
 	        $user['avatar'] = get_avatar($user['id']);
-	        
-	        $token = jwt_encode($user);
+
+            //获取用户职位信息给友盟
+			$whereUser['uid'] = $user['id'];
+			$userInfo = D('Userinfo')->where($whereUser)->field('company,position,truename')->find();
+			$user['company'] = $userInfo['company'];
+			$user['position'] = $userInfo['position'];
+			$user['truename'] = $userInfo['truename'];
+
+
 	        $key = get_avatar($user['id'], 'middle', 0);
-	        $avatar_token = make_qiniu_token('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
+	        $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
 
 	        $model->where(array('id'=>$user['id']))->save(array('last_time'=>time(),'login_ip'=>get_client_ip()));
 
 	        // 微社区token
 	        $wsq = $model->getMicroToken($user);
+			$user['wsq'] = $wsq;
+			$token = jwt_encode($user);
 			$this->success('登录成功',array('token'=>$token, 'wsq'=>$wsq, 'avatar_token'=>$avatar_token, 'avatar_token_key'=>'avatar/'.$key, 'user'=>$user));
 		}else{
 			$this->error('账号或密码错误');
@@ -266,7 +278,7 @@ class ApiController extends ApiBaseController {
 		        $user = array('id'=>$result['data'],'username'=>I('username'),'phone'=>I('phone'));
 		        $token = jwt_encode($user);
 		        $key = get_avatar($user['id'], 'middle', 0);
-		        $avatar_token = make_qiniu_token('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
+		        $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
 
 				$this->success('注册成功', array('token'=>$token,'avatar_token'=>$avatar_token, 'avatar_token_key'=>'avatar/'.$key, 'user'=>$user));
 			}else{

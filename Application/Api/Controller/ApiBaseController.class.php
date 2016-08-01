@@ -4,7 +4,8 @@
  * @author wtwei
  * @version $Id$
  */
-namespace Admin\Controller;
+namespace Api\Controller;
+use Think\Controller;
 class ApiBaseController extends Controller {
 	/**
 	 * 初始化操作

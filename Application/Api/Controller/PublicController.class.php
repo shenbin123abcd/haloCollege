@@ -4,11 +4,11 @@
  * @author wtwei
  * @version $Id$
  */
-namespace Admin\Controller;
+namespace Api\Controller;
 
 use Think\Controller;
 
-class PublicController extends Controller {
+class PublicController extends CommonController {
 
     /**
      * 七牛上传回调 --非编辑器
@@ -29,6 +29,23 @@ class PublicController extends Controller {
         $id = M('Attach')->add($data);
 
         $this->ajaxReturn(array('id'=>$id,'w'=>$_POST['w'],'h'=>$_POST['h'],'key'=>$_POST['key'],'fsize'=>$_POST['fsize']));
+    }
+
+    //获取用户信息
+    public function getUserInfo(){
+        $uid = $_POST['uid'];
+        if(empty($uid)){
+            $this->error('参数错误！');
+        }
+        $uid_arr = json_decode($uid);
+        $where['uid'] =array('in',$uid_arr) ;
+        $where['status'] =1;
+        $userInfo = M('Userinfo')->where($where)->select();
+        if(empty($userInfo)){
+            $this->error('用户信息不存在！');
+        }
+        $data['userInfo']=$userInfo;
+        $this->success('success',$data);
     }
 
 
