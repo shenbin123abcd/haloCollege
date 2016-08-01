@@ -31,7 +31,9 @@ class PublicController extends CommonController {
         $this->ajaxReturn(array('id'=>$id,'w'=>$_POST['w'],'h'=>$_POST['h'],'key'=>$_POST['key'],'fsize'=>$_POST['fsize']));
     }
 
-    //获取用户信息
+    /**
+     * 获取用户信息（视视评论列表用到）
+    */
     public function getUserInfo(){
         $uid = $_POST['uid'];
         if(empty($uid)){

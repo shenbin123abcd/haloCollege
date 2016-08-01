@@ -13,7 +13,9 @@ class UserInfoController extends CommonController{
     protected $module_auth = 0;
     protected $action_auth = array('userInfoInsert','getUserInfo');
 
-    //用户信息添加
+    /**
+     * 用户信息添加
+    */
     public function userInfoInsert(){
         $model = D('Userinfo');
         $uid = $this->user['uid'];
@@ -96,7 +98,9 @@ class UserInfoController extends CommonController{
         }
     }
 
-    // 获取个人信息
+    /**
+     * 获取个人信息
+    */
     public function getUserInfo(){
         $uid = $this->user['uid'];
         $where['uid'] = $uid;

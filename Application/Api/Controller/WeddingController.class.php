@@ -15,14 +15,19 @@ class WeddingController extends CommonController {
     protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','favorite','cancelFavorite','cancelPraise'
     ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
 
-    //头条分类
+    /**
+     * 头条分类获取
+    */
     public function category(){
         $category = M('SchoolWeddingCategory')->where("status=1")->field('id,name')->select();
         $data['category'] = !empty($category) ? array_values($category) : (object)$category;
         $this->success('success',$data);
     }
 
-    //婚礼头条列表
+
+    /**
+     * 婚礼头条列表
+    */
     public function weddingList(){
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
@@ -61,7 +66,9 @@ class WeddingController extends CommonController {
     }
 
 
-    //婚礼头条详情
+    /**
+     * 婚礼头条详情
+    */
     public function weddingDetail(){
         $wedding_id = I('wedding_id');
         $uid = $this->user['uid'];
@@ -91,7 +98,9 @@ class WeddingController extends CommonController {
         
     }
 
-    //婚礼头条评论和回复
+    /**
+     * 婚礼头条评论和回复列表
+    */
     public function weddingComment(){
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
@@ -189,7 +198,9 @@ class WeddingController extends CommonController {
     }
 
 
-    //婚礼头条评论提交接口
+   /**
+    * 婚礼头条评论提交接口
+   */
     public function commentPost(){
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('wedding_id');
@@ -215,7 +226,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    //婚礼头条回复接口（对评论或回复进行回复）
+    /**
+     * 婚礼头条回复接口
+    */
     public function reply(){
         $model = D('SchoolWeddingComment');
         $parent_id = I('parent_id');
@@ -229,7 +242,9 @@ class WeddingController extends CommonController {
         $this->success('success',$data);
     }
 
-    //婚礼头条回复提交接口
+    /**
+     * 婚礼头条回复提交接口
+    */
     public function replyPost(){
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
@@ -256,7 +271,9 @@ class WeddingController extends CommonController {
 
     }
 
-    //用户举报
+    /**
+     * 用户举报
+    */
     public function reportUser(){
         $data['comment_id'] = I('comment_id');
         $data['uid_be'] = I('uid_be');
@@ -306,7 +323,9 @@ class WeddingController extends CommonController {
     }
 
 
-    //用户点赞
+    /**
+     * 用户点赞
+    */
     public function praise(){
         $data['comment_id'] = I('comment_id');
         $data['uid'] = $this->user['uid'];
@@ -347,7 +366,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    //取消点赞
+    /**
+     * 取消点赞
+    */
     public function cancelPraise(){
         $comment_id = I('comment_id');
         $uid = $this->user['uid'];
@@ -373,13 +394,14 @@ class WeddingController extends CommonController {
     }
 
 
-    //头条收藏
+   /**
+    * 头条收藏
+   */
     public function favorite(){
         $model = M('SchoolWeddingFavorites');
         $data['wedding_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
         $data['wsq_id'] = $this->user['wsq']->uid;
-        dump($this->user);exit;
         $data['username'] = $this->user['username'];
         $data['headimg'] = $this->user['avatar'];
         $data['create_time'] = time();
@@ -413,7 +435,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    //取消收藏
+    /**
+     * 取消收藏
+    */
     public function cancelFavorite(){
         $model = M('SchoolWeddingFavorites');
         $wedding_id = I('wedding_id');
@@ -439,7 +463,9 @@ class WeddingController extends CommonController {
 
     }
 
-    //评论详情
+    /**
+     * 评论详情
+    */
     public function commentDetail(){
         $comment_id = I('comment_id');
         if(empty($comment_id)){
@@ -454,8 +480,10 @@ class WeddingController extends CommonController {
         $this->success('success',$data);
     }
 
-    //点赞详情
-        public function praiseDetail(){
+    /**
+     * 点赞详情
+    */
+    public function praiseDetail(){
         $comment_id = I('comment_id');
         if(empty($comment_id)){
             $this->error('参数错误！');
@@ -473,7 +501,9 @@ class WeddingController extends CommonController {
     }
 
 
-    //我的——评论
+    /**
+     * 我的——评论
+    */
     public function myComments(){
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
@@ -584,7 +614,9 @@ class WeddingController extends CommonController {
         $this->success('success',$data);
     }
 
-     //我的--删除评论
+    /**
+     * 我的——删除评论
+    */
     public function myCommentDelete(){
         $comment_id = I('comment_id');
         $where['id'] = $comment_id;
@@ -609,7 +641,9 @@ class WeddingController extends CommonController {
         }
     }
 
-     //我的--收藏
+    /**
+     * 我的——收藏
+    */
     public function myFavorites(){
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
@@ -647,7 +681,9 @@ class WeddingController extends CommonController {
 
     }
 
-     //我的——删除收藏
+    /**
+     * 我的——删除收藏
+    */
     public function myFavoritesDelete(){
         $wedding_id = I('wedding_id');
         $uid = $this->user['uid'];
@@ -674,7 +710,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    //发布活动
+    /**
+     * 发布活动
+    */
     public function actionPublish(){
         $model = D('SchoolWeddingAction');
         $uid = $this->user['uid'];
@@ -698,7 +736,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    //我的消息--回复
+    /**
+     * 我的消息——回复
+    */
     public function myReply(){
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
@@ -735,8 +775,10 @@ class WeddingController extends CommonController {
         $this->success('success',$data);
     }
 
-    //我的消息-回复-删除
-        public function myReplyDelete(){
+    /**
+     * 我的消息——删除我的回复
+    */
+    public function myReplyDelete(){
         $model = M('SchoolWeddingComment');
         $reply_id = I('reply_id');
         if(empty($reply_id)){
@@ -760,7 +802,9 @@ class WeddingController extends CommonController {
         }
     }
 
-    // 公司搜索
+    /**
+     * 公司搜索
+    */
     public function getCompanyList(){
         $name = I('company');
         $region_1 = I('province');
@@ -796,7 +840,9 @@ class WeddingController extends CommonController {
         return $result;
     }
 
-    //获取头条图片
+    /**
+     * 获取头条图片
+    */
     public function get_imgs($wedding_id=array(),$remark=''){
         if($remark=='cover'){
             $where['module'] = "SchoolWeddingCover";
