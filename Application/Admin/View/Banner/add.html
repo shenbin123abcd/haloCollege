@@ -15,30 +15,24 @@
                         <col />
                         <tr>
                             <th>标题</th>
-                            <td><input type="text" class="input length_5" name="headline"></td>
+                            <td><input type="text" class="input length_5" name="title"></td>
                         </tr>
                         <tr>
-                            <th>封面</th>
-                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.clouddn.com"  multiple="multiple" key="cover" name="cover"></td>
+                            <th>图片</th>
+                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.clouddn.com"  multiple="multiple" key="banner" name="banner"></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <th>简介</th>
-                            <td><input type="text" class="input length_5" name="brief"></td>
+                            <th>描述</th>
+                            <td><input type="text" class="input length_5" name="desc"></td>
                         </tr>
                         <tr>
-                            <th>分类</th>
-                            <td>
-                                <select name="category_id" id="category_id">
-                                    <volist name="category" id="vo">
-                                        <option value="{$vo.id}">{$vo.name}</option>
-                                    </volist>
-                                </select>
-                            </td>
+                            <th>类型</th>
+                            <td><input type="text" class="input length_5" name="type"></td>
                         </tr>
                         <tr>
-                            <th>内容</th>
-                            <td><textarea name="content" id="content" type="editor"></textarea></td>
+                            <th>社区ID</th>
+                            <td><input type="text" class="input length_5" name="community_id"></td>
                         </tr>
 
                     </table>

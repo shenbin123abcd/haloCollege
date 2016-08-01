@@ -32,7 +32,14 @@ class SchoolWeddingController  extends CommonController {
         $category = M('SchoolWeddingCategory')->where("status=1")->field('id,name')->select();
         $this->assign('category',$category);
         $this->token = $this->qiniu('crmpub','SchoolWeddingCover');
+        
 
+    }
+
+    public function _before_update(){
+        $pattern = "/(<img.*?)(src=.*?\/?>)/";
+        $string = preg_replace($pattern,"$1style='width:100%;display:block;'$2",$_POST['content']);
+        $_POST['content'] = $string;
     }
     
     public function _before_insert(){
@@ -40,6 +47,9 @@ class SchoolWeddingController  extends CommonController {
         empty($_POST['brief']) && $this->error('请填写婚礼简介！');
         empty($_POST['category_id']) && $this->error('请选择头条分类！');
         empty($_POST['content']) && $this->error('请编辑头条内容！');
+        $pattern = "/(<img.*?)(src=.*?\/?>)/";
+        $string = preg_replace($pattern,"$1style='width:100%;display:block;'$2",$_POST['content']);
+        $_POST['content'] = $string;
         $_POST['create_time']=time();
         $_POST['update_time']=time();
         $_POST['status']=1;
@@ -62,7 +72,7 @@ class SchoolWeddingController  extends CommonController {
      * 默认编辑操作
      * @see CommonAction::edit()
      */
-    public function edit(){
+    public function edit(){        
         $base_url = 'http://7xopel.com2.z0.glb.clouddn.com/';
         $model = $this->model();
         $pk = $model->getPk();
@@ -101,8 +111,6 @@ class SchoolWeddingController  extends CommonController {
         if($result!==false){
             $this->success('图片移除成功！');
         }
-
-
 }
 
 

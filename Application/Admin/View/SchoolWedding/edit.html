@@ -53,6 +53,7 @@
                         <tr>
                             <th>内容<p style="color: red">（删除图片时请将下面列表中的图片和编辑器中对应的图片同时删除！）</p></th>
                             <td><textarea name="content" id="content" type="editor" >{$data['content']}</textarea></td>
+
                         </tr>
 
                     </table>
@@ -63,7 +64,7 @@
                 <div class="btn_wrap_pd">
                     <input type="hidden" name="qiniu_token" value="{$token}">
                     <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
-                </div>
+                </div><br><br>
             </div>
         </div>
     </form>

@@ -151,7 +151,9 @@ class CommonController extends Controller {
 		$this->assign('data',$data);
 		$this->display();
 	}
-	
+
+
+
 	/**
 	 * 默认更新操作
 	 * @see CommonAction::update()
@@ -306,6 +308,7 @@ class CommonController extends Controller {
         $this->ajaxReturn($result);
     }
 
+    //生成七牛token --非编辑器
     protected function qiniu($bucket,$dir = 'image',$callback = 'http://koala-college.weddingee.com/public/qiniuUploadCallback'){
         $accessKey = C('QINIU_AK');
         $secretKey = C('QINIU_SK');
@@ -333,9 +336,37 @@ class CommonController extends Controller {
         return $token;
     }
 
+	//生成七牛token --banner图片上传
+	protected function qiniuBanner($bucket,$dir = 'image',$callback = 'http://koala-college.weddingee.com/public/qiniuUploadBanner'){
+		$accessKey = C('QINIU_AK');
+		$secretKey = C('QINIU_SK');
+
+		$deadline = time()+1728000;
+		$saveKey = $dir . '/$(etag)$(suffix)';
+		$callbackBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=$(fname)&fsize=$(fsize)&filetype=${x:filetype}&video=${x:video}&module=' . $dir;
+
+		$data =  array(
+			'scope'=>$bucket,
+			'deadline'=>$deadline,
+			'saveKey'=>$saveKey
+		);
+
+		if ($callback) {
+			$data['callbackUrl'] = $callback;
+			$data['callbackBody'] = $callbackBody;
+		}
+		$data = json_encode($data);
+		$find = array('+', '/');
+		$replace = array('-', '_');
+		$data = str_replace($find, $replace, base64_encode($data));
+		$sign = hash_hmac('sha1', $data, $secretKey, true);
+		$token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
+		return $token;
+	}
+
 	//获取上传TOKEN
 	public function getToken(){
-		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');		
+		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://koala-college.weddingee.com/public/qiniuUpload');
 		$this->ajaxReturn($token,'JSON');
 	}
 
