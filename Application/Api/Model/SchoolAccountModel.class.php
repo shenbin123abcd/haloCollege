@@ -141,13 +141,24 @@ class SchoolAccountModel extends Model {
 	 */
 	public function getMicroToken($data){
 		$ua = $_SERVER['HTTP_USER_AGENT'];
-		if(strpos($ua, 'iPhone') || strpos($ua, 'iPad')){
-			$ak = '57624435e0f55ab83b000868';
-		    $key = 'f1040c987c3ca653985b4c486e560b67';
+		if(APP_DEBUG==true){
+			if(strpos($ua, 'iPhone') || strpos($ua, 'iPad')){
+				$ak = '57624435e0f55ab83b000868';
+				$key = 'f1040c987c3ca653985b4c486e560b67';
+			}else{
+				$ak = '57624411e0f55ab83b000848';
+				$key = '65115406623996afcc0a14f2e4d00c7f';
+			}
 		}else{
-			$ak = '57624411e0f55ab83b000848';
-		    $key = '65115406623996afcc0a14f2e4d00c7f';
+			if(strpos($ua, 'iPhone') || strpos($ua, 'iPad')){
+				$ak = '56f113a167e58efb84002cad';
+				$key = '4f41ebcae227fb2155bb2f26b47291e0';
+			}else{
+				$ak = '56eb5e70e0f55a0a56001071';
+				$key = 'cc00425db7f281c9110d618855b4ba67';
+			}
 		}
+
 
 		//封装用户职位信息
 		//$custom['company'] =$data['company'];
