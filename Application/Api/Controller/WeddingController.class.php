@@ -96,6 +96,7 @@ class WeddingController extends CommonController {
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
         $source['visit_ip'] = get_client_ip();
+        $source['uid'] =$uid;
         $this->countVisits($source);
         $this->success('success',$data);
         
@@ -868,6 +869,7 @@ class WeddingController extends CommonController {
     public function countVisits($source=array()){
         $data['wedding_id'] = $source['wedding_id'];
         $data['visit_ip'] = $source['visit_ip'];
+        $data['uid'] =$source['uid'];
         $data['create_time'] =time();
         $data['update_time'] =time();
         $data['status'] =1;
