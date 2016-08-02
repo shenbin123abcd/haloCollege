@@ -1496,7 +1496,8 @@ _extend(KNode, {
 				var box = node.getBoundingClientRect(),
 					pos = _getScrollPos(self.doc);
 				x = box.left + pos.x;
-				y = box.top + pos.y;
+				y = (parseInt(box.top) < 0 ? 0 : box.top) +pos.y;
+				 // y = box.top + pos.y;
 			} else {
 				while (node) {
 					x += node.offsetLeft;

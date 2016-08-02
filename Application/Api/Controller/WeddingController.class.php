@@ -94,6 +94,9 @@ class WeddingController extends CommonController {
         $imgs_url = $this->get_imgs($wedding[]=$wedding_id,'detail');
         $detail['imgs'] = $imgs_url ? $imgs_url : array();
         $data['detail'] = $detail;
+        $source['wedding_id'] = $wedding_id;
+        $source['visit_ip'] = get_client_ip();
+        $this->countVisits($source);
         $this->success('success',$data);
         
     }
@@ -859,6 +862,17 @@ class WeddingController extends CommonController {
         return $imgs_url;
     }
 
+    /**
+     * 头条访问量统计
+     */
+    public function countVisits($source=array()){
+        $data['wedding_id'] = $source['wedding_id'];
+        $data['visit_ip'] = $source['visit_ip'];
+        $data['create_time'] =time();
+        $data['update_time'] =time();
+        $data['status'] =1;
+        M('SchoolWeddingVisits')->add($data);
+    }
     
 
 
