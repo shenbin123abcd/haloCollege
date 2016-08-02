@@ -139,6 +139,19 @@ class SchoolWeddingController  extends CommonController {
         }
 
     }
+    
+    /**
+     * 头条访问统计
+    */
+    
+    public function visits(){
+        $model = M('WeddingVisitcount');
+        $where['wtw_wedding_visitcount.status'] =1;
+        $count = $model->join('left join wtw_school_wedding on wtw_school_wedding.id=wtw_wedding_visitcount.wedding_id')
+                       ->field('wtw_wedding_visitcount.*,wtw_school_wedding.headline')->where($where)->select();
+        $this->assign('list',$count);
+        $this->display('visits');
+    }
 
 
 

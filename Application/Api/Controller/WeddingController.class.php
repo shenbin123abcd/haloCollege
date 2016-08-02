@@ -66,6 +66,8 @@ class WeddingController extends CommonController {
     }
 
 
+
+
     /**
      * 婚礼头条详情
     */
@@ -77,9 +79,9 @@ class WeddingController extends CommonController {
         }
         $model_wedding = M('SchoolWedding');
         $model_comment_reply = M('SchoolWeddingComment');
-        $whereWedding['status']=1;
-        $whereWedding['id']=$wedding_id;
-        $detail = $model_wedding->where($whereWedding)->field('id,headline,brief,content,create_time')->find();
+        $whereWedding['wtw_school_wedding.status']=1;
+        $whereWedding['wtw_school_wedding.id']=$wedding_id;
+        $detail = $model_wedding->join('left join wtw_school_wedding_category on wtw_school_wedding_category.id=wtw_school_wedding.category_id')->where($whereWedding)->field('wtw_school_wedding.id,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.content,wtw_school_wedding.create_time,wtw_school_wedding_category.name as category')->find();
         //内容解析
         if(!empty($detail['content'])){
             $detail['content'] = htmlspecialchars_decode($detail['content']);
@@ -864,16 +866,34 @@ class WeddingController extends CommonController {
     }
 
     /**
-     * 头条访问量统计
+     * 头条访问量统计及访问记录
      */
     public function countVisits($source=array()){
+        $model_visits = M('SchoolWeddingVisits');
+        $model_visitcount = M('WeddingVisitcount');
         $data['wedding_id'] = $source['wedding_id'];
         $data['visit_ip'] = $source['visit_ip'];
-        $data['uid'] =$source['uid'];
+        $data['uid'] =$source['uid'] ? $source['uid'] : 0;
         $data['create_time'] =time();
         $data['update_time'] =time();
         $data['status'] =1;
-        M('SchoolWeddingVisits')->add($data);
+        $model_visits->add($data);
+        $where['wedding_id'] = $source['wedding_id'];
+        $where['status'] =1;
+        $count = $model_visitcount->where($where)->find();
+        if(!empty($count)){
+            $count['count']+=1;
+            $count['update_time'] =time();
+            $model_visitcount->save($count);
+        }else{
+            $count['count'] =0;
+            $count['wedding_id'] = $source['wedding_id'];
+            $count['count']+=1;
+            $count['create_time'] =time();
+            $count['update_time'] =time();
+            $count['status'] =1;
+            $model_visitcount->add($count);
+        }
     }
     
 
