@@ -42,6 +42,11 @@ class WeddingController extends CommonController {
             ->order("wtw_school_wedding.create_time desc")
             ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")
             ->page($page, $per_page)->select();
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+        }
         if (empty($list)) {
             $this->success('内容为空！', (object)$list);
         }
@@ -86,6 +91,9 @@ class WeddingController extends CommonController {
             ->where($whereWedding)
             ->field('wtw_school_wedding.id,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.content,wtw_school_wedding.create_time,wtw_school_wedding_category.name as category')
             ->find();
+        //&amp替换为&
+        $str = preg_replace('/&amp;/','&',$detail['headline']);
+        $detail['headline'] = $str;
         //内容解析
         if (!empty($detail['content'])) {
             $detail['content'] = htmlspecialchars_decode($detail['content']);
@@ -837,9 +845,9 @@ class WeddingController extends CommonController {
         } else {
             $list = array();
         }
-        $list['list'] = array_values($list);
-        $list['company'] = $name;
-        $result['iRet'] == 1 ? $this->success('success', $list) : $this->error($result['info']);
+        $company_list['company'] = $name;
+        $company_list['list'] = array_values($list);
+        $result['iRet'] == 1 ? $this->success('success', $company_list) : $this->error($result['info']);
     }
 
 
