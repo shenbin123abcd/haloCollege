@@ -20,10 +20,8 @@ class CommonController extends Controller {
             header('Access-Control-Allow-Headers:x-requested-with,content-type,Authorization');
             header("Access-Control-Allow-Credentials: true");
         }
-
         // 兼容jsonp
         $_GET['callback'] && $_POST = $_GET;
-
         $this->_auth();
     }
 

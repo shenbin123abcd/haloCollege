@@ -16,7 +16,7 @@ class UserInfoController extends CommonController{
     /**
      * 用户信息添加
     */
-    public function userInfoInsert(){
+    public function userInfoInsert() {
         $model = D('Userinfo');
         $uid = $this->user['uid'];
         $wsq_id = $this->user['wsq']->uid;
@@ -25,7 +25,7 @@ class UserInfoController extends CommonController{
         $where['uid'] = $uid;
         $where['status'] = 1;
         $info = $model->where($where)->find();
-        if(!empty($info)){
+        if (!empty($info)) {
             $info['truename'] = I('truename');
             $info['sex'] = I('sex');
             $info['wechat'] = I('wechat');
@@ -45,19 +45,20 @@ class UserInfoController extends CommonController{
             $info['position'] = I('position');
             $info['brief'] = I('brief');
             $info['update_time'] = time();
-            if($model->create($info)){
+            if ($model->create($info)) {
                 $result = $model->save($info);
-                if($result!==false){
-                    $result =$model->getMicroToken($info,$access_token,$wsq_name);
-                    if($result['id']){
+                if ($result !== false) {
+                    $this->success('个人信息保存成功！');
+                    $result = $model->getMicroToken($info, $access_token, $wsq_name);
+                    if ($result['id']) {
                         $this->success('个人信息保存成功！');
-                    }else{
+                    } else {
                         $this->error('个人信息保存失败！');
                     }
-                }else{
+                } else {
                     $this->error('个人信息保存失败！');
                 }
-            }else{
+            } else {
                 $this->error($model->getError());
             }
         }
@@ -81,19 +82,20 @@ class UserInfoController extends CommonController{
         $data['province_title'] = $province_title['region_name'];
         $data['city_title'] = $city_title['region_name'];
         $data['region_title'] = $region_title['region_name'];
-        if($model->create($data)){
+        if ($model->create($data)) {
             $id = $model->add();
-            if($id){
-                $result =$model->getMicroToken($data,$access_token,$wsq_name);
-                if($result['id']){
+            if ($id) {
+                $this->success('用户信息添加成功！');
+                $result = $model->getMicroToken($data, $access_token, $wsq_name);
+                if ($result['id']) {
                     $this->success('用户信息添加成功！');
-                }else{
+                } else {
                     $this->error('用户信息添加失败！');
                 }
-            }else{
+            } else {
                 $this->error('用户信息添加失败！');
             }
-        }else{
+        } else {
             $this->error($model->getError());
         }
     }
