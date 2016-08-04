@@ -343,48 +343,48 @@ function send_msg( $to, $datas, $tempId = 1, $appId='8a48b551488d07a80148a59dbb9
 }
 
 
-function curl_get( $url, $header = array() ) {
-    //初始化curl
-    $ch = curl_init();
-    //设置超时
-    curl_setopt( $ch, CURLOPT_URL, $url );
-    curl_setopt( $ch, CURLOPT_HEADER, 0 );
-    if (!empty($header)) {
-        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
-    }
-    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
-    //运行curl，结果以json形式返回
-    $res = curl_exec( $ch );
-    curl_close( $ch );
-    $data = json_decode( $res, true );
+//function curl_get( $url, $header = array() ) {
+//    //初始化curl
+//    $ch = curl_init();
+//    //设置超时
+//    curl_setopt( $ch, CURLOPT_URL, $url );
+//    curl_setopt( $ch, CURLOPT_HEADER, 0 );
+//    if (!empty($header)) {
+//        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
+//    }
+//    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
+//    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
+//    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+//    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
+//    //运行curl，结果以json形式返回
+//    $res = curl_exec( $ch );
+//    curl_close( $ch );
+//    $data = json_decode( $res, true );
+//
+//    return $data;
+//}
 
-    return $data;
-}
-
-function curl_post( $url, $data, $header = array() ) {
-    //初始化curl
-    $ch = curl_init();
-    //设置超时
-    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
-    curl_setopt( $ch, CURLOPT_URL, $url );
-    curl_setopt ($ch, CURLOPT_HTTPHEADER , $header );
-    curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
-    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-    curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-
-    //运行curl，结果以json形式返回
-    $res = curl_exec( $ch );
-    curl_close( $ch );
-    $data = json_decode( $res, true );
-
-    return $data;
-}
+//function curl_post( $url, $data, $header = array() ) {
+//    //初始化curl
+//    $ch = curl_init();
+//    //设置超时
+//    curl_setopt( $ch, CURLOP_TIMEOUT, 30 );
+//    curl_setopt( $ch, CURLOPT_URL, $url );
+//    curl_setopt ($ch, CURLOPT_HTTPHEADER , $header );
+//    curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+//    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+//    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+//    curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+//    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+//    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+//
+//    //运行curl，结果以json形式返回
+//    $res = curl_exec( $ch );
+//    curl_close( $ch );
+//    $data = json_decode( $res, true );
+//
+//    return $data;
+//}
 
 function curl_request($url,$data,$method='PUT'){
     $ch = curl_init(); //初始化CURL句柄
@@ -591,7 +591,7 @@ function to_tree($data, $pid = 0, $type = true) {
 /**
  * 生成七牛上传凭证
  */
-function make_qiniu_token($bucket, $module, $callbackUrl, $key) {
+function make_token($bucket, $module, $callbackUrl, $key) {
     $accessKey = C('QINIU_AK');
     $secretKey = C('QINIU_SK');
 
@@ -616,5 +616,29 @@ function make_qiniu_token($bucket, $module, $callbackUrl, $key) {
 }
 
 
+//生成七牛token --编辑器
+function make_qiniu_token($bucket, $module, $returnUrl, $key) {
+    $accessKey = C('QINIU_AK');
+    $secretKey = C('QINIU_SK');
+
+    $deadline = time()+1728000;
+    $saveKey = 'College/' . $module . '/' . ($key ? $key : '$(year)$(mon)/${day}/$(etag)$(suffix)');
+    $returnBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=$(fname)&fsize=$(fsize)&filetype=${x:filetype}&code=${x:code}&module=' . $module;
+    $bucket = $key ? $bucket . ':' . $saveKey : $bucket;
+    $data =  array(
+        'scope'=>$bucket,
+        'deadline'=>$deadline,
+        'saveKey'=>$saveKey,
+        'returnUrl'=>$returnUrl,
+        'returnBody'=>$returnBody
+    );
+    $data = json_encode($data);
+    $find = array('+', '/');
+    $replace = array('-', '_');
+    $data = str_replace($find, $replace, base64_encode($data));
+    $sign = hash_hmac('sha1', $data, $secretKey, true);
+    $qiniu_mall_token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
+    return $qiniu_mall_token;
+}
 
 ?>

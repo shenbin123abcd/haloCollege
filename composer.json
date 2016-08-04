@@ -14,5 +14,8 @@
     "require": {
         "php": ">=5.3.0"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require":{
+        "jpush/jpush": "v3.3.9"
+    }
 }

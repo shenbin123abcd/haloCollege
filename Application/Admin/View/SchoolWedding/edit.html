@@ -1,13 +1,14 @@
+
 <!--日历css/-->
 <div class="wrap">
     <div class="nav">
         <div class="return"><a href="__URL__/index/pid/{$Think.get.pid}">返回上一级</a></div>
     </div>
 
-    <form id="J_rigths_form" class="J_ajaxForm" action="__URL__/insert" method="post" enctype="multipart/form-data">
+    <form id="J_rigths_form" class="J_ajaxForm" action="__URL__/update" method="post" enctype="multipart/form-data">
         <div class="J_tabs_contents">
             <div>
-                <div class="h_a">新增</div>
+                <div class="h_a">编辑</div>
                 <div class="table_full">
                     <table width="100%">
                         <col class="th" />
@@ -15,11 +16,26 @@
                         <col />
                         <tr>
                             <th>标题</th>
-                            <td><input type="text" class="input length_5" name="headline"></td>
+                            <td><input type="text" class="input length_5" name="headline" value="{$data['headline']}">
+                                <input type="text" name="id" value="{$data['id']}" style="display: none">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>封面</th>
+                            <td>
+                                <input type="file" data-type="qiniu"  multiple="multiple" data-base-url="http://7xopel.com2.z0.glb.clouddn.com" key="cover" name="cover">
+                                <fieldset>
+                                    <legend>附件列表：</legend>
+                                    <volist name="attach" id="vo">
+                                        <span><a href="{$vo.src}" target="_blank"><img src="{$vo.src}" style="width: 300px;height: 300px"><a href="__URL__/attach_delete?id={$vo.id}" onclick="if (confirm('确定移除吗？')) {deleteFile(this)};return false;">移除</a></span>
+                                    </volist>
+                                </fieldset>
+                            </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>简介</th>
-                            <td><input type="text" class="input length_5" name="brief"></td>
+                            <td><input type="text" class="input length_5" name="brief" value="{$data['brief']}"></td>
                         </tr>
                         <tr>
                             <th>分类</th>
@@ -29,11 +45,16 @@
                                         <option value="{$vo.id}">{$vo.name}</option>
                                     </volist>
                                 </select>
+                                <input type="text" class="input length_5" name="old_category" value="{$categoryName['name']}" disabled>
+
                             </td>
+
                         </tr>
                         <tr>
-                            <th>内容</th>
-                            <td><textarea name="content" id="content" type="editor"></textarea></td>
+                            <th>内容<p style="color: red">（删除图片时请将下面列表中的图片和编辑器中对应的图片同时删除！）</p></th>
+                            <td><p style="color: red">上传图片名不能有汉字，否则上传不成功！请重命名为字母、数字或其组合，再上传！</p>
+                                <textarea name="content" id="content" type="editor" >{$data['content']}</textarea></td>
+
                         </tr>
 
                     </table>
@@ -44,10 +65,71 @@
                 <div class="btn_wrap_pd">
                     <input type="hidden" name="qiniu_token" value="{$token}">
                     <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
-                </div>
+                </div><br><br>
             </div>
         </div>
     </form>
+    <table width="100%">
+        <col class="th" />
+        <col width="30%" />
+        <col />
+        <tr>
+            <td>
+                <tr>
+                    <th></th>
+                    <th>编号</th>
+                    <th>文件名</th>
+                     <th>url</th>
+                </tr>
+                <volist name="imgs" id="vo">
+                    <tr>
+                        <td><input type="radio" value="{$vo['id']}" name="radio_img"></td>
+                        <td name="attach_id">{$vo['id']}</td>
+                        <td name="name">{$vo['name']}</td>
+                        <td name="url"><img src="{$vo['url']}" style="width: 200px;height: 100px" ></td>
+                    </tr>
+                </volist>
+            </td>
+        </tr>
+    </table>
+    <div class="btn_wrap">
+        <div class="panel panel-default" name="dialog_delete" id="dialog_delete" style="width:250px; height:100px;display: none;background-color: silver" >
+            <p style="text-align: center">您确定要删除列表中这张图片吗?</p>
+            <p style="text-align: center">确定删除成功后，请在编辑器中手动删除对应的图片</p><br>
+            <div class="panel-footer" style="text-align: right" >
+                <a href="__URL__/deleteImg?attach_id={$vo['id']}&wedding_id={$data['id']}" id="true_img">确定</a>
+                <button name="cancel_delete" id="cancel_delete">取消</button>
+            </div>
+        </div>
+        <div class="btn_wrap_pd">
+            <button class="btn J_ajax_submit_btn" id="delete_img" type="button" >删除</button><p style="display: none;color: red;" id="tips">请选中一项数据！</p>
+            <input type="text" id="wedding_id" value="{$data['id']}" style="display: none">
+        </div>
+
+    </div>
 </div>
+<!--图片删除-->
+<script>
+    $('#delete_img').click(function(){
+        var radio= $("input[name='radio_img']:checked");
 
+        if(radio.val()){
+            var attach_id = radio.val();
+            var wedding_id = $('#wedding_id').val();
+            var param = '__URL__/deleteImg?attach_id='+attach_id+'&wedding_id='+wedding_id;
+            $('#true_img').attr('href',param);
+            $('#dialog_delete').show();
+            $('#tips').hide();
+        }else {
+            $('#tips').show();
+        }
 
+    })
+    $('input:radio[name="radio_img"]:checked').val();
+    $('#cancel_delete').click(function(){
+        $('#dialog_delete').hide();
+        var radio= $("input[name='radio_img']:checked");
+        radio.attr('checked',false);
+    })
+</script>
+<!--/图片删除-->

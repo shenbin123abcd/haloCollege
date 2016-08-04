@@ -17,7 +17,8 @@
 	};
 </script><script src="__PUBLIC__/Admin/Js/dev/wind.js"></script>
 <script src="__PUBLIC__/Admin/Js/dev/jquery.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/kindeditor-min.js"></script>
+<!--<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/kindeditor-min.js"></script>-->
+	<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/kindeditor.js"></script>
 <script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/lang/zh_CN.js"></script>
 <link href="__PUBLIC__/Admin/Js/ThinkBox/css/ThinkBox.css" rel="stylesheet" />
 <script type="text/javascript" src="__PUBLIC__/Admin/Js/ThinkBox/jquery.ThinkBox.js"></script>
@@ -38,12 +39,14 @@
 						items : [
 							'source', '|','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
 							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-							'insertunorderedlist', '|', 'emoticons', 'image','multiimage','baidumap', 'link','fullscreen']
+							'insertunorderedlist', '|', 'emoticons', 'image','baidumap', 'link','fullscreen']
 					});
 		});
 	});
 	function getToken(){
 		return $.ajax({
+			type:'GET',
+			datatype:'json',
 			url: '__CONTROLLER__/getToken',
 			success: function(res){
 				return res;
@@ -54,16 +57,16 @@
 <script type="text/javascript">
 $(function(){
 	//绑定附件
-	if({$Think.get.id|default=0}>0&&$('input[type=file]').size()>0){
-		var options={ url:'{:U('Attach/select')}',type:'post',dataType:'json',data:{ module:'{$_module_name_}',id:{$Think.get.id|default=0}}};
-		options.success=function(result){
-			if(result.status){
-				bindFile(result.data);
-				disableFile();
-			}
-		}
-		$.ajax(options);
-	}
+//	if({$Think.get.id|default=0}>0&&$('input[type=file]').size()>0){
+//		var options={ url:'{:U('Attach/select')}',type:'post',dataType:'json',data:{ module:'{$_module_name_}',id:{$Think.get.id|default=0}}};
+//		options.success=function(result){
+//			if(result.status){
+//				bindFile(result.data);
+//				disableFile();
+//			}
+//		}
+//		$.ajax(options);
+//	}
 	var obj = $('input[type=file]');
 	if (obj.data('status') !== 'no') {
 		//上传附件
@@ -249,6 +252,7 @@ var UPLOAD = {
 					successCallback(blkRet);
 				}
 			} else if (xhr.status != 200 && xhr.responseText && typeof(failedCallback) == 'function') {
+
 				failedCallback(xhr.responseText);
 			}
 		};

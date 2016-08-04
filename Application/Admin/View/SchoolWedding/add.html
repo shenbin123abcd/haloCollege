@@ -18,6 +18,11 @@
                             <td><input type="text" class="input length_5" name="headline"></td>
                         </tr>
                         <tr>
+                            <th>封面</th>
+                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.clouddn.com"  multiple="multiple" key="cover" name="cover"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <th>简介</th>
                             <td><input type="text" class="input length_5" name="brief"></td>
                         </tr>
@@ -33,7 +38,8 @@
                         </tr>
                         <tr>
                             <th>内容</th>
-                            <td><textarea name="content" id="content" type="editor"></textarea></td>
+                            <td><p style="color: red">上传图片名不能有汉字，否则上传不成功！请重命名为字母、数字或其组合，再上传！</p>
+                                <textarea name="content" id="content" type="editor"></textarea></td>
                         </tr>
 
                     </table>
@@ -43,11 +49,13 @@
             <div class="btn_wrap">
                 <div class="btn_wrap_pd">
                     <input type="hidden" name="qiniu_token" value="{$token}">
+
                     <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
 
 

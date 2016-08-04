@@ -22,6 +22,7 @@ class AttachController extends CommonController {
 
     //附件查询
     public function select() {
+
         $where = array('record_id' => $_REQUEST['id'],'module'=>$_REQUEST['module'],'status'=>1);
         $data = D('Attach')->field('id,name,key,concat(savepath,savename) as src')->where($where)->order('id desc')->select();
         foreach ($data as $key => $value) {
