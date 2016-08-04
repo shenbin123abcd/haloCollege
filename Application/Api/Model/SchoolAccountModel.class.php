@@ -160,7 +160,7 @@ class SchoolAccountModel extends Model {
 		}
 
 
-		//封装用户职位信息
+		//封装用户信息
 		//$custom['company'] =$data['company'];
 		//$custom['position'] =$data['position'];
 		//$custom['truename'] =$data['truename'];
