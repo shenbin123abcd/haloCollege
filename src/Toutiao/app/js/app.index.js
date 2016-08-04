@@ -10,8 +10,9 @@
 		var deferred=$.Deferred();
 		$.ajax({
             method: "GET",
-            url: "/v1/wedding/weddingDetail",
+            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingDetail",
             data: data,
+			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
                 if(res.iRet==1){
                     deferred.resolve(res.data.detail);
@@ -30,8 +31,9 @@
 		var deferred=$.Deferred();
 		$.ajax({
             method: "GET",
-            url: "/v1/wedding/weddingComment",
+            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingComment",
             data: data,
+			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
                 if(res.iRet==1){
                     deferred.resolve(res.data);
@@ -49,9 +51,10 @@
 	function renderContent(){
 		var id=window.location.href.split('=')[1];
 		contentService({
-			wedding_id:id || 86
+			wedding_id:id || 1
 		}).then(function(res){
 			//console.log(res);
+			res.create_time=parseInt(res.create_time)*1000;
 			var Y=getdate(res.create_time).Y;
 			var M=getdate(res.create_time).M;
 			var D=getdate(res.create_time).D;
@@ -91,13 +94,14 @@
 		commentService({
 			page:1,
 			per_page:15,
-			wedding_id:id || 86
+			wedding_id:id || 1
 		}).then(function(res){
 			console.log(res);
 			var htmlStr='';
 			var htmlAll='';
 			res.comment.forEach(function(n,i){
-				var momentDate=getdate(n.create_time).momentDate
+				n.create_time=parseInt(n.create_time)*1000;
+				var momentDate=getdate(n.create_time).momentDate;
 				if(!n.parent_reply){
 					htmlStr=`
 						<div class="item">
@@ -110,8 +114,8 @@
 							</div>
 							<div class="comment-bottom f-13 clearfix">
 								<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
-								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:1px;"></span>回复</div>
-								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>点赞</div>
+								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
+								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 							</div>
 						</div>
 					</div>
@@ -119,6 +123,7 @@
 				}else{
 					var htmlComment='';
 					n.parent_reply.forEach(function(n2,i2){
+						n2.create_time=parseInt(n2.create_time)*1000;
 						var M=getdate(n2.create_time).M;
 						var D=getdate(n2.create_time).D;
 						htmlComment+=`
@@ -144,8 +149,8 @@
 						${htmlComment}
 						<div class="comment-bottom f-13 clearfix">
 							<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
-							<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:1px;"></span>回复</div>
-							<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>点赞</div>
+							<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
+							<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 						</div>
 					</div>
 					`;
@@ -168,12 +173,13 @@
 		commentService({
 			page:1,
 			per_page:15,
-			wedding_id:id || 86
+			wedding_id:id || 1
 		}).then(function(res){
 			console.log(res);
 			var htmlStr='';
 			var htmlAll='';
 			res.comment.forEach(function(n,i){
+				n.create_time=parseInt(n.create_time)*1000;
 				var momentDate=getdate(n.create_time).momentDate;
 				if(n.type=="comment"){
 					htmlStr+=`
@@ -188,8 +194,8 @@
 							<div class="comment-replay"></div>		
 							<div class="comment-bottom f-13 clearfix">
 								<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
-								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:1px;"></span>回复</div>
-								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>点赞</div>
+								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
+								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 							</div>
 						</div>
 					`;
@@ -197,9 +203,21 @@
 			});
 			$("#comment-list").empty().html(htmlStr);
 			res.comment.forEach(function(n2,i2){
+				n.create_time=parseInt(n.create_time)*1000;
 				var momentDate=getdate(n.create_time).momentDate;
 				if(n2.type=="reply"){
-
+					htmlStr+=`
+						<div class="comment-replay">
+							<div class="dialog-content">
+								<div class="content-top clearfix">
+									<div class="name f-13">${n2.username}</div>
+									<div class="date f-13">${M}-${D}</div>
+								</div>
+								<div class="content f-13">${n2.content}</div>
+								<img src="images/arrow.png" alt="" class="img">
+							</div>
+						</div>
+					`;
 				}
 			})
 		},function(error){
@@ -219,7 +237,7 @@
 	}
 	
 	function getdate(n){
-		var date=new Date(parseInt(n)/1000);
+		var date=new Date(parseInt(n));
 		var Y=changeDateStyle(date.getFullYear());
 		var M=changeDateStyle(date.getMonth()+1);
 		var D=changeDateStyle(date.getDate());

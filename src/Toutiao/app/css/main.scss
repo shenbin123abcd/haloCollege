@@ -5,11 +5,10 @@
 @import 'lib/bootstrap-sass/assets/stylesheets/bootstrap/variables';
 @import 'lib/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
 html{
-	background: #F9F9Fb;
+	background: #f9f9fb;
 	height:100%;
-
-	background-image: url(../images/arrow.png);
 }
+
 
 body{
 	font-size: 14px;
@@ -110,6 +109,7 @@ body{
 				.text{
 					color:#666;
 					margin-top: 8px;
+					word-wrap:break-word;
 				}
 			}
 		}
@@ -121,10 +121,13 @@ body{
 			background:#f4f4f4;
 			padding:13px;
 			position: relative;
+			.ios &{
+				border:0.5px solid #cccccc;
+			}
 			.img{
 				position:absolute;
 				width:11px;
-				top:-8px;
+				top:-7px;
 				left:20px;
 			}
 			.content-top{
