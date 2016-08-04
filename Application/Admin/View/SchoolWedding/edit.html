@@ -54,7 +54,10 @@
                             <th>内容<p style="color: red">（删除图片时请将下面列表中的图片和编辑器中对应的图片同时删除！）</p></th>
                             <td><p style="color: red">上传图片名不能有汉字，否则上传不成功！请重命名为字母、数字或其组合，再上传！</p>
                                 <textarea name="content" id="content" type="editor" >{$data['content']}</textarea></td>
-
+                        </tr>
+                        <tr>
+                            <th>分享页地址</th>
+                            <td><input type="text" class="input length_5" name="share_url" value="{$data['share_url']}"></td>
                         </tr>
 
                     </table>

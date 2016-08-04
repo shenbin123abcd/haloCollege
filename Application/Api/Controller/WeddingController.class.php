@@ -13,7 +13,7 @@ use Think\Controller;
 class WeddingController extends CommonController {
     protected $module_auth = 0;
     protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','favorite','cancelFavorite','cancelPraise'
-    ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
+    ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete','getWsqUser');
 
     /**
      * 头条分类获取
@@ -48,7 +48,9 @@ class WeddingController extends CommonController {
             $list[$key]['headline'] = $str;
         }
         if (empty($list)) {
-            $this->success('内容为空！', (object)$list);
+            $data['list'] = array();
+            $data['total'] = 0;
+            $this->success('内容为空！', $data);
         }
         //获取头条cover
         foreach ($list as $key => $value) {
@@ -89,7 +91,7 @@ class WeddingController extends CommonController {
         $whereWedding['wtw_school_wedding.id'] = $wedding_id;
         $detail = $model_wedding->join('left join wtw_school_wedding_category on wtw_school_wedding_category.id=wtw_school_wedding.category_id')
             ->where($whereWedding)
-            ->field('wtw_school_wedding.id,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.content,wtw_school_wedding.create_time,wtw_school_wedding_category.name as category')
+            ->field('wtw_school_wedding.id,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.content,wtw_school_wedding.create_time,wtw_school_wedding_category.name as category,wtw_school_wedding.share_url')
             ->find();
         //&amp替换为&
         $str = preg_replace('/&amp;/','&',$detail['headline']);
@@ -822,6 +824,22 @@ class WeddingController extends CommonController {
     }
 
     /**
+     * 获取用户信息（根据wsq_id）
+    */
+    public function getWsqUser(){
+        $wsq_id =I('wsq_id');
+        if(empty($wsq_id)){
+            $this->error('参数错误！');
+        }
+        $where['wsq_id'] = $wsq_id;
+        $where['status'] =1;
+        $user = M('Userinfo')->where($where)->field('wsq_id,truename,company,position')->find();
+        $data['user'] = $user;
+        $this->success('success',$data);
+    }
+
+
+    /**
      * 公司搜索
     */
     public function getCompanyList() {
@@ -906,6 +924,8 @@ class WeddingController extends CommonController {
             $model_visitcount->add($count);
         }
     }
+
+
     
 
 
