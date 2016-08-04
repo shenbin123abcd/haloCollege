@@ -56,11 +56,21 @@
 <!-- build:js js/main.js -->
 <script src="js/app.js"></script>
 <script src="js/app.index.js"></script>
+<script src="js/app.wechat.js"></script>
 
 <!-- endbuild -->
 <!-- endinject -->
 
 <script>
+    window.appData={
+        //code:{$code},
+        share : {
+            title: '2016年度人物评选',
+            content: '「{$data.name}」'+'正在角逐中国婚礼策划最高奖—2016金熊奖，期待你的支持！',
+            link: window.location.href,
+            logo: '{$data.logo}' || 'http://7ktq5x.com1.z0.glb.clouddn.com/vote_wechat_work.png'
+        }
+    };
     $(function(){
         app.index.init();
     })
