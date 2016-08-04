@@ -75,7 +75,7 @@
 			
 			
 			$("#toutiao-header").empty().html(headingStr);
-			$("#toutiao-content").empty().text(res.content);
+			$("#toutiao-content").empty().html(res.content);
 			$("#toutiao-body-pic").empty().html(picHtml);
 			$("#toutiao-brief").empty().text(res.brief);
 			lazyLoad();

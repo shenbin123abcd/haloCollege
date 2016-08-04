@@ -11,11 +11,14 @@
 
     <link href="//cdn.bootcss.com/weui/0.4.3/style/weui.min.css" rel="stylesheet" type="text/css"/>
     <link href="//at.alicdn.com/t/font_1469070859_5379002.css" rel="stylesheet" type="text/css"/>
-    <!-- inject:main:css -->
-    <!-- build:css css/main.css -->
-    <link href="css/main.css" rel="stylesheet" type="text/css"/>
-    <!-- endbuild -->
-    <!-- endinject -->
+    <literal>
+        <!-- inject:main:css -->
+        <!-- build:css css/main.css -->
+        <link href="css/main.css" rel="stylesheet" type="text/css"/>
+        <!-- endbuild -->
+        <!-- endinject -->
+    </literal>
+
 </head>
 <body>
 <div class='toutiao-header' id="toutiao-header">
@@ -60,20 +63,22 @@
 
 <!-- endbuild -->
 <!-- endinject -->
+<literal>
+    <script>
+        window.appData={
+            //code:{$code},
+            share : {
+                title: '2016年度人物评选',
+                content: '「{$data.name}」'+'正在角逐中国婚礼策划最高奖—2016金熊奖，期待你的支持！',
+                link: window.location.href,
+                logo: '{$data.logo}' || 'http://7ktq5x.com1.z0.glb.clouddn.com/vote_wechat_work.png'
+            }
+        };
+        $(function(){
+            app.index.init();
+        })
+    </script>
+</literal>
 
-<script>
-    window.appData={
-        //code:{$code},
-        share : {
-            title: '2016年度人物评选',
-            content: '「{$data.name}」'+'正在角逐中国婚礼策划最高奖—2016金熊奖，期待你的支持！',
-            link: window.location.href,
-            logo: '{$data.logo}' || 'http://7ktq5x.com1.z0.glb.clouddn.com/vote_wechat_work.png'
-        }
-    };
-    $(function(){
-        app.index.init();
-    })
-</script>
 </body>
 </html>

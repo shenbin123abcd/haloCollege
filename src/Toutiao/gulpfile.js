@@ -125,7 +125,7 @@ gulp.task('build',['sass','images'], function () {
             transform: function (filePath, file) {
                 // console.log(file.contents)
                 // return file contents as string
-                return `<script>${file.contents.toString('utf8').replace(/\{/g,'{ ')}</script>`
+                return `<script>${file.contents.toString('utf8').replace(/\\/g,'\\')}</script>`
             }
         }))
         .pipe(plugins.inject(gulp.src(['./tmp/css/main.css']), {
@@ -133,17 +133,17 @@ gulp.task('build',['sass','images'], function () {
             transform: function (filePath, file) {
                 // console.log(file.contents)
                 // return file contents as string
-                return `<style>${file.contents.toString('utf8').replace(/\{/g,'{ ')}</style>`
+                return `<style>${file.contents.toString('utf8').replace(/\\/g,'\\')}</style>`
             }
         }))
-        .pipe(plugins.htmlmin({
-            removeComments: true,
-            collapseWhitespace: true,
-            conservativeCollapse: true,
-            ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
-            minifyJS: false,
-            minifyCSS: false,
-        }))
+        //.pipe(plugins.htmlmin({
+        //    removeComments: true,
+        //    collapseWhitespace: true,
+        //    conservativeCollapse: true,
+        //    ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
+        //    minifyJS: false,
+        //    minifyCSS: false,
+        //}))
         .pipe(gulp.dest('../../Application/Home/View/Toutiao'))
         // .pipe(gulp.dest('dest'))
         .pipe(htmlFilter.restore)
