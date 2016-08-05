@@ -129,6 +129,7 @@ class WeddingController extends CommonController {
         $model_comment_reply = M('SchoolWeddingComment');
         $whereComment['wtw_school_wedding_comment.status'] = 1;
         $whereComment['wtw_school_wedding_comment.remark_id'] = $wedding_id;
+        $whereComment['wtw_userinfo.status'] =1;
         $comment = $model_comment_reply->where($whereComment)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
             ->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
             ->select();
