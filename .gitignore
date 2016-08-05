@@ -2,7 +2,7 @@
 /Runtime
 /node_modules
 
-/Public/Toutiao/*
+/Public/Home/Toutiao/*
 /Application/Home/View/Toutiao/*.html
 /src/Toutiao/app/css/main.css
 /src/Toutiao/app/css/main.css.map
