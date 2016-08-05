@@ -48,13 +48,8 @@ class UserInfoController extends CommonController{
             if ($model->create($info)) {
                 $result = $model->save($info);
                 if ($result !== false) {
-                    //$this->success('个人信息保存成功！');
                     $result = $model->getMicroToken($info, $access_token, $wsq_name);
-                    if ($result['id']) {
-                        $this->success('个人信息保存成功！');
-                    } else {
-                        $this->error('个人信息保存失败！');
-                    }
+                    $this->success('个人信息保存成功！',array('wsq_id'=>$result['id']));
                 } else {
                     $this->error('个人信息保存失败！');
                 }
@@ -85,13 +80,8 @@ class UserInfoController extends CommonController{
         if ($model->create($data)) {
             $id = $model->add();
             if ($id) {
-                //$this->success('用户信息添加成功！');
                 $result = $model->getMicroToken($data, $access_token, $wsq_name);
-                if ($result['id']) {
-                    $this->success('用户信息添加成功！');
-                } else {
-                    $this->error('用户信息添加失败！');
-                }
+                $this->success('用户信息添加成功！',array('wsq_id'=>$result['id']));
             } else {
                 $this->error('用户信息添加失败！');
             }
