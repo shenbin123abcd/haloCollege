@@ -15,19 +15,19 @@ gulp.task('sass', function () {
 gulp.task('haloIcon', function () {
     return gulp.src('app/css/lib/ux_*/*iconfont.*')
         .pipe(plugins.flatten())
-        .pipe(gulp.dest('../../Public/Toutiao/css'))
+        .pipe(gulp.dest('../../Public/Home/Toutiao/css'))
 });
 gulp.task('vender', function () {
     return gulp.src('app/css/lib/ux_*/*iconfont.*')
         .pipe(plugins.flatten())
-        .pipe(gulp.dest('../../Public/Toutiao/css'))
+        .pipe(gulp.dest('../../Public/Home/Toutiao/css'))
 });
 
 gulp.task('images', function () {
     return gulp.src(['app/images/**/*.{png,gif,jpg,svg，mp3,mp4}'])
     // .pipe(plugins.imagemin())
         .pipe(plugins.rev())
-        .pipe(gulp.dest('../../Public/Toutiao/images'))
+        .pipe(gulp.dest('../../Public/Home/Toutiao/images'))
         .pipe(plugins.rev.manifest())
         .pipe(gulp.dest('tmp/images'))
 });
@@ -45,7 +45,7 @@ gulp.task('build',['sass','images'], function () {
         .pipe(jsFilter)
         .pipe(plugins.revReplace({manifest: manifestJs}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: "__PUBLIC__/Toutiao",
+            defaultCDNBase: "__PUBLIC__/Home/Toutiao",
             // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
             allowRev: true,
             allowMin: true,
@@ -64,14 +64,14 @@ gulp.task('build',['sass','images'], function () {
         // .pipe(plugins.rev())
         .pipe(jsVenderFilter)
         .pipe(plugins.rev())
-        .pipe(gulp.dest('../../Public/Toutiao'))
+        .pipe(gulp.dest('../../Public/Home/Toutiao'))
         .pipe(jsVenderFilter.restore)
         .pipe(gulp.dest('./tmp'))
         .pipe(jsFilter.restore)
         .pipe(cssFilter)
         .pipe(plugins.revReplace({manifest: manifestCss}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: "__PUBLIC__/Toutiao",
+            defaultCDNBase: "__PUBLIC__/Home/Toutiao",
             // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
             allowRev: true,
             allowMin: true,
@@ -98,7 +98,7 @@ gulp.task('build',['sass','images'], function () {
         .pipe(htmlFilter)
         .pipe(plugins.revReplace({manifest: manifestHtml}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: "__PUBLIC__/Toutiao",
+            defaultCDNBase: "__PUBLIC__/Home/Toutiao",
             // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
             allowRev: true,
             allowMin: true,
@@ -136,14 +136,15 @@ gulp.task('build',['sass','images'], function () {
                 return `<style>${file.contents.toString('utf8').replace(/\\/g,'\\')}</style>`
             }
         }))
-        //.pipe(plugins.htmlmin({
-        //    removeComments: true,
-        //    collapseWhitespace: true,
-        //    conservativeCollapse: true,
-        //    ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
-        //    minifyJS: false,
-        //    minifyCSS: false,
-        //}))
+
+        .pipe(plugins.htmlmin({
+            removeComments: true,
+            collapseWhitespace: true,
+            conservativeCollapse: true,
+            ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
+            minifyJS: false,
+            minifyCSS: false,
+        }))
         .pipe(gulp.dest('../../Application/Home/View/Toutiao'))
         // .pipe(gulp.dest('dest'))
         .pipe(htmlFilter.restore)
@@ -151,7 +152,7 @@ gulp.task('build',['sass','images'], function () {
 
 
 gulp.task('clean', require('del').bind(null, [
-    '../../Public/Toutiao/*',
+    '../../Public/Home/Toutiao/*',
     '../../Application/Home/View/Toutiao/*',
 ],{force:true}));
 
