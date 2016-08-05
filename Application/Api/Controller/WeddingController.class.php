@@ -106,8 +106,8 @@ class WeddingController extends CommonController {
         //获取收藏状态
         $status_favorite = M('SchoolWeddingFavorites')->where(array('uid' => $uid, 'wedding_id' => $wedding_id))->field('status')->find();
         $detail['status_favorite'] = $status_favorite ? $status_favorite['status'] : -1;
-        //获取头条详情图片
-        $imgs_url = $this->get_imgs($wedding[] = $wedding_id, 'detail');
+        //获取分享页图片
+        $imgs_url = $this->get_imgs($wedding[] = $wedding_id, 'cover');
         $detail['imgs'] = $imgs_url ? $imgs_url : array();
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
@@ -835,6 +835,7 @@ class WeddingController extends CommonController {
         $where['status'] =1;
         $user = M('Userinfo')->where($where)->field('wsq_id,truename,company,position')->find();
         $data['user'] = $user;
+        $this->countHomepage($wsq_id);
         $this->success('success',$data);
     }
 
@@ -922,6 +923,30 @@ class WeddingController extends CommonController {
             $count['update_time'] = time();
             $count['status'] = 1;
             $model_visitcount->add($count);
+        }
+    }
+
+
+    /**
+     * 个人主页访问统计
+    */
+    public function countHomepage($wsq_id){
+        $model = M('HomepageVisitcount');
+        $where['wsq_id'] =$wsq_id;
+        $where['status'] = 1;
+        $visits = $model->where($where)->find();
+        if(empty($visits)){
+            $visits['visits_count'] =0;
+            $visits['visits_count']+=1;
+            $visits['wsq_id'] = $wsq_id;
+            $visits['create_time'] =time();
+            $visits['update_time'] =time();
+            $visits['status'] =1;
+            $model->add($visits);
+        }else{
+            $visits['visits_count']+=1;
+            $visits['update_time'] =time();
+            $model->save($visits);
         }
     }
 

@@ -10,21 +10,17 @@ namespace Admin\Model;
 
 
 class SchoolWeddingModel extends CommonModel{
-    //根据id获取头条的封面和附件地址
-    /*public function _after_insert($data, $options) {
-        $record_id = $data['id'];
-        $whereCover['record_id'] = $record_id;
-        $whereCover['module'] = 'SchoolWeddingCover';
-        $whereCover['status'] = 1;
-        $cover = M('Attach')->where($whereCover)->field('savename')->select();
-        dump($cover);exit;
-        $cover = array_values($cover);
-
-        $wedding = $this->where(array('id'=>$record_id,'status'=>1))->find();
-
-        $wedding['cover'] = json_encode($cover);
-        $this->save($wedding);
-    }*/
+    //添加分享页地址
+    public function _after_insert($data, $options) {
+        $model = M('SchoolWedding');
+        $where['id'] = $data['id'];
+        $url = 'http://college-api.halobear.com/toutiao/detail?wedding_id=';
+        $weddinge_id = $data['id'];
+        $share_url = $url.$weddinge_id;
+        $wedding = $model->where($where)->find();
+        $wedding['share_url'] = $share_url;
+        $model->save($wedding);
+    }
 
     /**
      * 提取html中图片地址
