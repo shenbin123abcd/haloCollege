@@ -127,12 +127,27 @@ class WeddingController extends CommonController {
         $wedding_id = I('wedding_id');
         $uid = $this->user['uid'];
         $model_comment_reply = M('SchoolWeddingComment');
-        $whereComment['wtw_school_wedding_comment.status'] = 1;
-        $whereComment['wtw_school_wedding_comment.remark_id'] = $wedding_id;
-        $whereComment['wtw_userinfo.status'] =1;
-        $comment = $model_comment_reply->where($whereComment)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
-            ->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
+        $whereComment['status'] = 1;
+        $whereComment['remark_id'] = $wedding_id;
+        $comment = $model_comment_reply->where($whereComment)
+            ->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
             ->select();
+        foreach ($comment as $key=>$value){
+            $uid_arr[] =$value['uid'];
+        }
+        if(!empty($uid_arr)){
+            $where['uid']=array('in',$uid_arr);
+            $where['status'] =1;
+            $position = M('Userinfo')->where($where)->field('uid,position')->select();
+            foreach ($comment as $key_com=>$value_com){
+                $comment[$key_com]['position'] ='';
+                foreach ($position as $key_pos=>$value_pos)
+                if($value_com['uid']==$value_pos['uid']){
+                    $comment[$key_com]['position'] = $value_pos['position'];
+                }
+            }
+
+        }
         //获取点赞状态
         $wherePraise = array();
         foreach ($comment as $key => $value) {
@@ -196,9 +211,26 @@ class WeddingController extends CommonController {
             }
         }
         if (!empty($parent_id)) {
-            $whereReply['wtw_school_wedding_comment.id'] = array('in', $parent_id);
-            $whereReply['wtw_school_wedding_comment.status'] = 1;
-            $reply = $model_comment_reply->where($whereReply)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->order('wtw_school_wedding_comment.create_time desc')->select();
+            $whereReply['id'] = array('in', $parent_id);
+            $whereReply['status'] = 1;
+            $reply = $model_comment_reply->where($whereReply)
+                ->order('wtw_school_wedding_comment.create_time desc')->select();
+            foreach ($reply as $key=>$value){
+                $uid_arr[] =$value['uid'];
+            }
+            if(!empty($uid_arr)){
+                $where['uid']=array('in',$uid_arr);
+                $where['status'] =1;
+                $position = M('Userinfo')->where($where)->field('uid,position')->select();
+                foreach ($reply as $key_rep=>$value_rep){
+                    $reply[$key_rep]['position'] ='';
+                    foreach ($position as $key_pos=>$value_pos)
+                        if($value_rep['uid']==$value_pos['uid']){
+                            $reply[$key_rep]['position'] = $value_pos['position'];
+                        }
+                }
+
+            }
             //回复和父节点回复绑定
             foreach ($comment as $key_comment => $value_comment) {
                 $comment[$key_comment]['parent_reply'] = array();
