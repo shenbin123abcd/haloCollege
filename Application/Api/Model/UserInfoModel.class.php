@@ -37,9 +37,9 @@ class UserinfoModel extends Model{
     );
 
     /**
-     * 获取微社区token
+     * 同步职位信息到微社区
      */
-    public function getMicroToken($data,$access_token,$wsq_name){
+    public function positionToMicro($data,$access_token,$wsq_name){
         $ua = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($ua, 'iPhone') || strpos($ua, 'iPad')) {
             $ak = '56f113a167e58efb84002cad';
@@ -48,7 +48,7 @@ class UserinfoModel extends Model{
             //$key = C('IOS_SECRET');
         } else {
             $ak = '56eb5e70e0f55a0a56001071';
-            $key = 'cc00425db7f281c9110d618855b4ba67';  
+            $key = 'cc00425db7f281c9110d618855b4ba67';
             //$ak = C('ANDROID_AK');
             //$key = C('ANDROID_SECRET');
         }
