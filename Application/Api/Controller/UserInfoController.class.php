@@ -20,7 +20,12 @@ class UserInfoController extends CommonController{
         $model = D('Userinfo');
         $uid = $this->user['uid'];
         $wsq_id = $this->user['wsq']->uid;
-        $wsq_name = $this->user['username'];
+        $wsq_name = I('truename');
+        $gender =0;
+        $sex = I('sex');
+        if($sex=='男'){
+            $gender =1;
+        }
         $access_token = $this->user['wsq']->access_token;
         $where['uid'] = $uid;
         $where['status'] = 1;
@@ -48,7 +53,7 @@ class UserInfoController extends CommonController{
             if ($model->create($info)) {
                 $result = $model->save($info);
                 if ($result !== false) {
-                    $result = $model->positionToMicro($info, $access_token, $wsq_name);
+                    $result = $model->positionToMicro($info, $access_token, $wsq_name,$gender);
                     $this->success('个人信息保存成功！',array('wsq_id'=>$result['id']));
                 } else {
                     $this->error('个人信息保存失败！');
@@ -80,7 +85,7 @@ class UserInfoController extends CommonController{
         if ($model->create($data)) {
             $id = $model->add();
             if ($id) {
-                $result = $model->positionToMicro($data, $access_token, $wsq_name);
+                $result = $model->positionToMicro($data, $access_token, $wsq_name,$gender);
                 $this->success('用户信息添加成功！',array('wsq_id'=>$result['id']));
             } else {
                 $this->error('用户信息添加失败！');
@@ -106,6 +111,8 @@ class UserInfoController extends CommonController{
         $this->success('success',$data);
 
     }
+    
+
 
     
 

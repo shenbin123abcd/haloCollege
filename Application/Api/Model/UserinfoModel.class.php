@@ -39,7 +39,7 @@ class UserinfoModel extends Model{
     /**
      * 同步职位信息到微社区
      */
-    public function positionToMicro($data,$access_token,$wsq_name){
+    public function positionToMicro($data,$access_token,$wsq_name,$gender){
         $ua = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($ua, 'iPhone') || strpos($ua, 'iPad')) {
             $ak = '56f113a167e58efb84002cad';
@@ -62,6 +62,7 @@ class UserinfoModel extends Model{
         $str="";
         $str.='custom='.$custom_json;
         $str.='&name='.$wsq_name;
+        $str.='&gender='.$gender;
         $url = 'https://rest.wsq.umeng.com/0/user/update?ak=' . $ak.'&access_token='.$access_token;
         $result = curl_put($url,$str);
         return $result;
