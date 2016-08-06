@@ -564,11 +564,29 @@ class WeddingController extends CommonController {
         $per_page = I('per_page') ? I('per_page') : 10000;
         $uid = $this->user['uid'];
         $model_comment_reply = M('SchoolWeddingComment');
-        $whereComment['wtw_school_wedding_comment.status'] = 1;
-        $whereComment['wtw_school_wedding_comment.uid'] = $uid;
-        $comment = $model_comment_reply->where($whereComment)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
-            ->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
+        $whereComment['status'] = 1;
+        $whereComment['uid'] = $uid;
+        $comment = $model_comment_reply->where($whereComment)
+            ->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
             ->select();
+        //获取职位
+        foreach ($comment as $key=>$value){
+            $uid_arr[] =$value['uid'];
+        }
+        if(!empty($uid_arr)){
+            $where['uid']=array('in',$uid_arr);
+            $where['status'] =1;
+            $position = M('Userinfo')->where($where)->field('uid,position')->select();
+            foreach ($comment as $key_com=>$value_com){
+                $comment[$key_com]['position'] ='';
+                foreach ($position as $key_pos=>$value_pos)
+                    if($value_com['uid']==$value_pos['uid']){
+                        $comment[$key_com]['position'] = $value_pos['position'];
+                    }
+            }
+
+        }
+
         //获取点赞状态
         $wherePraise = array();
         foreach ($comment as $key => $value) {
@@ -796,12 +814,29 @@ class WeddingController extends CommonController {
         $per_page = I('per_page') ? I('per_page') : 10000;
         $model = M('SchoolWeddingComment');
         $uid = $this->user['uid'];
-        $myWhere['wtw_school_wedding_comment.status'] = 1;
-        $myWhere['wtw_school_wedding_comment.uid'] = $uid;
-        $myWhere['wtw_school_wedding_comment.type'] = 'reply';
-        $myReply = $model->where($myWhere)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
-            ->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
+        $myWhere['status'] = 1;
+        $myWhere['uid'] = $uid;
+        $myWhere['type'] = 'reply';
+        $myReply = $model->where($myWhere)
+           ->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
             ->select();
+        //获取职位
+        foreach ($myReply as $key=>$value){
+            $uid_arr[] =$value['uid'];
+        }
+        if(!empty($uid_arr)){
+            $where['uid']=array('in',$uid_arr);
+            $where['status'] =1;
+            $position = M('Userinfo')->where($where)->field('uid,position')->select();
+            foreach ($myReply as $key_rep=>$value_rep){
+                $comment[$key_rep]['position'] ='';
+                foreach ($position as $key_pos=>$value_pos)
+                    if($value_rep['uid']==$value_pos['uid']){
+                        $myReply[$key_rep]['position'] = $value_pos['position'];
+                    }
+            }
+
+        }
         foreach ($myReply as $key => $value) {
             $parent_id_arr[] = $value['parent_id'];
         }
