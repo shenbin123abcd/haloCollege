@@ -10,7 +10,7 @@
 		var deferred=$.Deferred();
 		$.ajax({
             method: "GET",
-            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingDetail",
+            url: "http://college-api.halobear.com/v1/wedding/weddingDetail",
             data: data,
 			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
@@ -31,7 +31,7 @@
 		var deferred=$.Deferred();
 		$.ajax({
             method: "GET",
-            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingComment",
+            url: "http://college-api.halobear.com/v1/wedding/weddingComment",
             data: data,
 			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
