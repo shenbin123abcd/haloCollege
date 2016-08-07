@@ -150,6 +150,9 @@ class SchoolWeddingController extends CommonController {
         $this->assign('list', $count);
         $this->display('visits');
     }
+    
+    
+    
 
 
 }
