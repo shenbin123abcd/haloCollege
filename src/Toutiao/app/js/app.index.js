@@ -29,6 +29,7 @@
 
 	function commentService(data){
 		var deferred=$.Deferred();
+		//deferred.reject(-1);
 		$.ajax({
             method: "GET",
             url: "http://college-api.halobear.com/v1/wedding/weddingComment",
@@ -157,9 +158,9 @@
 				}
 				htmlAll+=htmlStr;
 				$("#comment-list").empty().html(htmlAll);
-				
 			})
 		},function(error){
+			$(".comment-block").hide();
 			hb.lib.weui.alert({
                 title:'温馨提示',
                 content:error,
