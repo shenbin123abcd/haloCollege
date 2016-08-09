@@ -523,13 +523,17 @@ class WeddingController extends CommonController {
         if (empty($comment_id)) {
             $this->error('参数错误！');
         }
-        $comentDetail = M('SchoolWeddingComment')->where("wtw_school_wedding_comment.id=$comment_id")
-            ->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
-            ->field('wtw_school_wedding_comment.id as comment_id,wtw_school_wedding_comment.content,wtw_school_wedding_comment.create_time,wtw_school_wedding_comment.username,wtw_school_wedding_comment.headimg,wtw_school_wedding_comment.wsq_id,wtw_userinfo.position')
+        $comentDetail = M('SchoolWeddingComment')->where("id=$comment_id")
+            ->field('id as comment_id,uid,content,create_time,username,headimg,wsq_id')
             ->find();
         if (empty($comentDetail)) {
             $this->success('暂时没有内容！', (object)$comentDetail);
         }
+        $whereUser['uid']=$comentDetail['uid'];
+        $whereUser['status']=1;
+        $user = M('Userinfo')->where($whereUser)->field('position,company')->find();
+        $comentDetail['posiiton']=$user['position'] ? $user['position'] : '';
+        $comentDetail['company']=$user['company'] ? $user['company'] : '';
         $data = $comentDetail;
         $this->success('success', $data);
     }
@@ -542,14 +546,30 @@ class WeddingController extends CommonController {
         if (empty($comment_id)) {
             $this->error('参数错误！');
         }
-        $where['wtw_school_wedding_praise.comment_id'] = $comment_id;
-        $where['wtw_school_wedding_praise.status'] = 1;
-        $praiseDetail = M('SchoolWeddingPraise')->join('left join wtw_userinfo on wtw_userinfo.uid=wtw_school_wedding_praise.uid')
-            ->where($where)->field('wtw_school_wedding_praise.uid,wtw_school_wedding_praise.username,wtw_school_wedding_praise.headimg,wtw_school_wedding_praise.wsq_id,wtw_userinfo.position,wtw_userinfo.company')
+        $where['comment_id'] = $comment_id;
+        $where['status'] = 1;
+        $praiseDetail = M('SchoolWeddingPraise')
+            ->where($where)->field('uid,username,headimg,wsq_id')
             ->select();
         if (empty($praiseDetail)) {
             $data['praiseDetail'] = array();
             $this->success('暂时没有内容！', $data);
+        }
+        foreach($praiseDetail as $key_praise=>$value_praise){
+            $uid_arr[]=$value_praise['uid'];
+        }
+        $whereUser['uid']=array('in',$uid_arr);
+        $whereUser['status']=1;
+        $user = M('Userinfo')->where($whereUser)->field('uid,position,company')->select();
+        foreach($praiseDetail as $key_pra=>$value_pra){
+            $praiseDetail[$key_pra]['position']='';
+            $praiseDetail[$key_pra]['company']='';
+            foreach($user as $key_user=>$value_user){
+                if($value_pra['uid']==$value_user['uid']){
+                    $praiseDetail[$key_pra]['position']=$value_user['position'];
+                    $praiseDetail[$key_pra]['company']=$value_user['company'];
+                }
+            }
         }
         $data['praiseDetail'] = $praiseDetail;
         $this->success('success', $data);
@@ -743,7 +763,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding_favorites.status'] = 1;
         $where['a.status'] = 1;
         $list = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
-            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->select();
+            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.create_time desc')->select();
         $total = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
             ->where($where)->field('a.id,a.headline,a.brief,a.create_time')->count();
         if (empty($list)) {
