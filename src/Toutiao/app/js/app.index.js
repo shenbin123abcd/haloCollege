@@ -3,6 +3,7 @@
 	function init(){
 		renderContent();
 		renderComment();
+		dowloadClick();
 		//getComment();
 	}
 
@@ -261,6 +262,17 @@
         });
 	}
 
+	function dowloadClick(){
+		$("#dowload-block").on('click',function(e){
+			e.preventDefault();
+			window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.halobear.weddingvideo";
+		})
+
+		$("[close-btn]").on('click',function(e){
+			e.preventDefault();
+			$("#dowload-block").remove();
+		})
+	}
 
 	return{
 		init:init
