@@ -13,7 +13,7 @@ use Think\Controller;
 class WeddingController extends CommonController {
     protected $module_auth = 0;
     protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','favorite','cancelFavorite','cancelPraise'
-    ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete','getWsqUser');
+    ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
 
     /**
      * 头条分类获取

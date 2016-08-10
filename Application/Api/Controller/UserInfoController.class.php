@@ -32,6 +32,7 @@ class UserInfoController extends CommonController{
         $info = $model->where($where)->find();
         if (!empty($info)) {
             $info['truename'] = I('truename');
+            $info['wsq_id'] = $wsq_id;
             $info['sex'] = I('sex');
             $info['wechat'] = I('wechat');
             $info['province'] = I('province');
