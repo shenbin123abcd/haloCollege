@@ -125,12 +125,15 @@ class WeddingController extends CommonController {
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $wedding_id = I('wedding_id');
+        if(empty($wedding_id)){
+            $this->error('参数错误！');
+        }
         $uid = $this->user['uid'];
         $model_comment_reply = M('SchoolWeddingComment');
         $whereComment['status'] = 1;
         $whereComment['remark_id'] = $wedding_id;
         $comment = $model_comment_reply->where($whereComment)
-            ->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
+            ->page($page, $per_page)->order('create_time desc')
             ->select();
         foreach ($comment as $key=>$value){
             $uid_arr[] =$value['uid'];
