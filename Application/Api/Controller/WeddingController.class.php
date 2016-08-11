@@ -258,7 +258,12 @@ class WeddingController extends CommonController {
         $data['parent_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
         $data['wsq_id'] = $this->user['wsq']->uid;
-        $data['username'] = $this->user['username'];
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
         $data['headimg'] = $this->user['avatar'];
         $data['content'] = I('content');
         $data['type'] = 'comment';
@@ -302,7 +307,12 @@ class WeddingController extends CommonController {
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
         $data['wsq_id'] = $this->user['wsq']->uid;
-        $data['username'] = $this->user['username'];
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
         $data['headimg'] = $this->user['avatar'];
         $data['type'] = 'reply';
         $data['remark_id'] = I('wedding_id');
@@ -382,7 +392,12 @@ class WeddingController extends CommonController {
         $data['comment_id'] = I('comment_id');
         $data['uid'] = $this->user['uid'];
         $data['wsq_id'] = $this->user['wsq']->uid;
-        $data['username'] = $this->user['username'];
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
         $data['headimg'] = $this->user['avatar'];
         $data['create_time'] = time();
         $data['update_time'] = time();
@@ -454,7 +469,12 @@ class WeddingController extends CommonController {
         $data['wedding_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
         $data['wsq_id'] = $this->user['wsq']->uid;
-        $data['username'] = $this->user['username'];
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
         $data['headimg'] = $this->user['avatar'];
         $data['create_time'] = time();
         $data['update_time'] = time();
