@@ -786,7 +786,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding_favorites.status'] = 1;
         $where['a.status'] = 1;
         $list = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
-            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.create_time desc')->select();
+            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
         $total = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
             ->where($where)->field('a.id,a.headline,a.brief,a.create_time')->count();
         if (empty($list)) {
