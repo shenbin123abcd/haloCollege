@@ -1245,3 +1245,11 @@ function make_qiniu_token_headimg($bucket, $module, $callbackUrl, $key) {
     $qiniu_mall_token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
     return $qiniu_mall_token;
 }
+
+//获取用户真实姓名
+function getTrueName($uid){
+    $where['uid'] = $uid;
+    $where['status'] =1;
+    $user = M('Userinfo')->where($where)->find();
+    return $user;
+}

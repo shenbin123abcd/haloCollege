@@ -3,6 +3,7 @@
 	function init(){
 		renderContent();
 		renderComment();
+		dowloadClick();
 		//getComment();
 	}
 
@@ -10,7 +11,7 @@
 		var deferred=$.Deferred();
 		$.ajax({
             method: "GET",
-            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingDetail",
+            url: "http://college-api.halobear.com/v1/wedding/weddingDetail",
             data: data,
 			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
@@ -29,9 +30,10 @@
 
 	function commentService(data){
 		var deferred=$.Deferred();
+		//deferred.reject(-1);
 		$.ajax({
             method: "GET",
-            url: "http://collegeapi-test.weddingee.com/v1/wedding/weddingComment",
+            url: "http://college-api.halobear.com/v1/wedding/weddingComment",
             data: data,
 			dataType:'jsonp',
             success: function(res, textStatus, errorThrown) {
@@ -96,12 +98,13 @@
 			per_page:15,
 			wedding_id:id || 1
 		}).then(function(res){
-			console.log(res);
+			//console.log(res);
 			var htmlStr='';
 			var htmlAll='';
 			res.comment.forEach(function(n,i){
 				n.create_time=parseInt(n.create_time)*1000;
 				var momentDate=getdate(n.create_time).momentDate;
+				console.log(new Date(n.create_time))
 				if(!n.parent_reply){
 					htmlStr=`
 						<div class="item">
@@ -113,7 +116,7 @@
 								</div>
 							</div>
 							<div class="comment-bottom f-13 clearfix">
-								<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
+								<div class="date">${moment(n.create_time).fromNow()}</div>
 								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
 								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 							</div>
@@ -130,7 +133,7 @@
 						<div class="dialog-content">
 							<div class="content-top clearfix">
 								<div class="name f-13">${n2.username}</div>
-								<div class="date f-13">${M}-${D}</div>
+								<div class="date f-13">${moment(n2.create_time).fromNow()}</div>
 							</div>
 							<div class="content f-13">${n2.content}</div>
 							<img src="images/arrow.png" alt="" class="img">
@@ -148,7 +151,7 @@
 						</div>
 						${htmlComment}
 						<div class="comment-bottom f-13 clearfix">
-							<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
+							<div class="date">${moment(n.create_time).fromNow()}</div>
 							<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
 							<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 						</div>
@@ -157,9 +160,9 @@
 				}
 				htmlAll+=htmlStr;
 				$("#comment-list").empty().html(htmlAll);
-				
 			})
 		},function(error){
+			$(".comment-block").hide();
 			hb.lib.weui.alert({
                 title:'温馨提示',
                 content:error,
@@ -180,6 +183,7 @@
 			var htmlAll='';
 			res.comment.forEach(function(n,i){
 				n.create_time=parseInt(n.create_time)*1000;
+				console.log(new Date(n.create_time))
 				var momentDate=getdate(n.create_time).momentDate;
 				if(n.type=="comment"){
 					htmlStr+=`
@@ -193,7 +197,7 @@
 							</div>
 							<div class="comment-replay"></div>		
 							<div class="comment-bottom f-13 clearfix">
-								<div class="date">${moment(momentDate, "YYYYMMDD").fromNow()}</div>
+								<div class="date">${moment(n.create_time).fromNow()}</div>
 								<div class="message f-13"><span class="haloIcon haloIcon-message f-18" style="position:relative;top:3px;"></span>回复</div>
 								<div class="remark f-13"><span class="haloIcon haloIcon-great f-18"></span>${n.count_praise}</div>
 							</div>
@@ -258,6 +262,17 @@
         });
 	}
 
+	function dowloadClick(){
+		$("#dowload-block").on('click',function(e){
+			e.preventDefault();
+			window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.halobear.weddingvideo";
+		})
+
+		$("[close-btn]").on('click',function(e){
+			e.preventDefault();
+			$("#dowload-block").remove();
+		})
+	}
 
 	return{
 		init:init

@@ -50,6 +50,7 @@ class UserinfoModel extends Model{
             $ak = '56eb5e70e0f55a0a56001071';
             $key = 'cc00425db7f281c9110d618855b4ba67';
             //$ak = C('ANDROID_AK');
+
             //$key = C('ANDROID_SECRET');
         }
 
