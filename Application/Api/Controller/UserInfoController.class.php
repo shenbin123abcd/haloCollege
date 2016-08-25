@@ -21,6 +21,7 @@ class UserInfoController extends CommonController{
         $uid = $this->user['uid'];
         $wsq_id = $this->user['wsq']->uid;
         $wsq_name = I('truename');
+        $phone = $this->user['phone'];
         $gender =0;
         $sex = I('sex');
         if($sex=='男'){
@@ -33,6 +34,7 @@ class UserInfoController extends CommonController{
         if (!empty($info)) {
             $info['truename'] = I('truename');
             $info['wsq_id'] = $wsq_id;
+            $info['phone'] = $phone;
             $info['sex'] = I('sex');
             $info['wechat'] = I('wechat');
             $info['province'] = I('province');
@@ -65,6 +67,7 @@ class UserInfoController extends CommonController{
         }
         $data['uid'] = $uid;
         $data['wsq_id'] = $wsq_id;
+        $data['phone'] = $phone;
         $data['truename'] = I('truename');
         $data['sex'] = I('sex');
         $data['wechat'] = I('wechat');
