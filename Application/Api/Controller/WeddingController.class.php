@@ -13,7 +13,7 @@ use Think\Controller;
 class WeddingController extends CommonController {
     protected $module_auth = 0;
     protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','weddingPraise','favorite','cancelFavorite','cancelPraise'
-    ,'weddingCancelPraise','myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
+    ,'weddingCancelPraise','myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete',);
 
     /**
      * 头条分类获取
@@ -32,6 +32,7 @@ class WeddingController extends CommonController {
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $category_id = I('category_id');
+        $uid = $this->user['uid'];
         if (empty($category_id)) {
             $this->error('参数错误！');
         }
@@ -67,12 +68,15 @@ class WeddingController extends CommonController {
                 }
             }
         }
-        //获取访问总数和点赞总数
+        //获取访问总数、点赞总数和点赞状态
         $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
         $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->select();
+        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->field('wedding_id,status')->select();
+
         foreach ($list as $key=>$value){
             $list[$key]['visitCount'] = 0;
             $list[$key]['praiseCount'] = 0;
+            $list[$key]['status_praise'] = -1;
             if(!empty($visitCount)){
                 foreach ($visitCount as $visit_key=>$visit_value){
                     if($value['id']==$visit_value['wedding_id']){
@@ -84,6 +88,13 @@ class WeddingController extends CommonController {
                 foreach ($praiseCount as $praise_key=>$praise_value){
                     if ($value['id']==$praise_value['wedding_id']){
                         $list[$key]['praiseCount'] = $praise_value['count'];
+                    }
+                }
+            }
+            if(!empty($status_praise)){
+                foreach ($status_praise as $status_key=>$status_value){
+                    if ($value['id']==$status_value['wedding_id']){
+                        $list[$key]['status_praise'] = $status_value['status'];
                     }
                 }
             }
@@ -130,12 +141,14 @@ class WeddingController extends CommonController {
         $detail['status_favorite'] = $status_favorite ? $status_favorite['status'] : -1;
         //获取分享页图片
         $imgs_url = $this->get_imgs($wedding[] = $wedding_id, 'cover');
-        //获取访问总数和点赞总数
+        //获取访问总数、点赞总数和点赞状态
         $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>$wedding_id,'status'=>1))->field('wedding_id,count')->find();
         $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>$wedding_id,'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->find();
+        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>$wedding_id,'uid'=>$uid))->field('wedding_id,status')->find();
         $detail['imgs'] = $imgs_url ? $imgs_url : array();
         $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count']) : 0;
         $detail['praiseCount'] = $praiseCount['count'] ? intval($praiseCount['count']) : 0;
+        $detail['status_praise'] = $status_praise ? intval($status_praise['status']) : -1;
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
         $source['visit_ip'] = get_client_ip();
