@@ -73,31 +73,36 @@ class JWT
         }
         $tks = explode('.', $jwt);
         if (count($tks) != 3) {
-            throw_exception('Wrong number of segments');
+            return array('iRet'=>0, 'info'=>'Wrong number of segments');
         }
         list($headb64, $bodyb64, $cryptob64) = $tks;
         if (null === ($header = JWT::jsonDecode(JWT::urlsafeB64Decode($headb64)))) {
-            throw_exception('Invalid header encoding');
+            return array('iRet'=>0, 'info'=>'Invalid header encoding');
         }
         if (null === $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64))) {
-            throw_exception('Invalid claims encoding');
+            // throw_exception('Invalid claims encoding');
+            return array('iRet'=>0, 'info'=>'Invalid claims encoding');
         }
         $sig = JWT::urlsafeB64Decode($cryptob64);
         
         if (empty($header->alg)) {
-            throw_exception('Empty algorithm');
+            // throw_exception('Empty algorithm');
+            return array('iRet'=>0, 'info'=>'Empty algorithm');
         }
         if (empty(self::$supported_algs[$header->alg])) {
-            throw_exception('Algorithm not supported');
+            // throw_exception('Algorithm not supported');
+            return array('iRet'=>0, 'info'=>'Algorithm not supported');
         }
         if (!is_array($allowed_algs) || !in_array($header->alg, $allowed_algs)) {
-            throw_exception('Algorithm not allowed');
+            // throw_exception('Algorithm not allowed');
+            return array('iRet'=>0, 'info'=>'Algorithm not allowed');
         }
         if (is_array($key) || $key instanceof \ArrayAccess) {
             if (isset($header->kid)) {
                 $key = $key[$header->kid];
             } else {
-                throw_exception('"kid" empty, unable to lookup correct key');
+                // throw_exception('"kid" empty, unable to lookup correct key');
+                return array('iRet'=>0, 'info'=>'"kid" empty, unable to lookup correct key');
             }
         }
 
@@ -125,7 +130,8 @@ class JWT
 
         // Check if this token has expired.
         if (isset($payload->exp) && (time() - self::$leeway) >= $payload->exp) {
-            throw_exception('Expired token');
+            // throw_exception('Expired token');
+            return array('iRet'=>0, 'info'=>'Expired token');
         }
 
         return $payload;
