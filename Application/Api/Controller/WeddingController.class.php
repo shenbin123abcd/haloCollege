@@ -12,8 +12,8 @@ use Think\Controller;
 
 class WeddingController extends CommonController {
     protected $module_auth = 0;
-    protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','favorite','cancelFavorite','cancelPraise'
-    ,'myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
+    protected $action_auth = array('commentPost','replyPost','reply','reportUser','praise','weddingPraise','favorite','cancelFavorite','cancelPraise'
+    ,'weddingCancelPraise','myCommentDelete','myComments','myFavorites','myFavoritesDelete','actionPublish','myReply','myReplyDelete');
 
     /**
      * 头条分类获取
@@ -67,6 +67,28 @@ class WeddingController extends CommonController {
                 }
             }
         }
+        //获取访问总数和点赞总数
+        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
+        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->select();
+        foreach ($list as $key=>$value){
+            $list[$key]['visitCount'] = 0;
+            $list[$key]['praiseCount'] = 0;
+            if(!empty($visitCount)){
+                foreach ($visitCount as $visit_key=>$visit_value){
+                    if($value['id']==$visit_value['wedding_id']){
+                        $list[$key]['visitCount'] = $visit_value['count'];
+                    }
+                }
+            }
+            if (!empty($praiseCount)){
+                foreach ($praiseCount as $praise_key=>$praise_value){
+                    if ($value['id']==$praise_value['wedding_id']){
+                        $list[$key]['praiseCount'] = $praise_value['count'];
+                    }
+                }
+            }
+        }
+
         $total = $model->where($where)->count();
         $data['list'] = array_values($list);
         $data['total'] = intval($total);
@@ -108,7 +130,12 @@ class WeddingController extends CommonController {
         $detail['status_favorite'] = $status_favorite ? $status_favorite['status'] : -1;
         //获取分享页图片
         $imgs_url = $this->get_imgs($wedding[] = $wedding_id, 'cover');
+        //获取访问总数和点赞总数
+        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>$wedding_id,'status'=>1))->field('wedding_id,count')->find();
+        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>$wedding_id,'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->find();
         $detail['imgs'] = $imgs_url ? $imgs_url : array();
+        $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count']) : 0;
+        $detail['praiseCount'] = $praiseCount['count'] ? intval($praiseCount['count']) : 0;
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
         $source['visit_ip'] = get_client_ip();
@@ -389,7 +416,7 @@ class WeddingController extends CommonController {
 
 
     /**
-     * 用户点赞
+     * 头条评论点赞
     */
     public function praise() {
         $data['comment_id'] = I('comment_id');
@@ -437,7 +464,7 @@ class WeddingController extends CommonController {
     }
 
     /**
-     * 取消点赞
+     * 评论取消取消点赞
     */
     public function cancelPraise() {
         $comment_id = I('comment_id');
@@ -882,33 +909,41 @@ class WeddingController extends CommonController {
         $myReply = $model->where($myWhere)
            ->page($page, $per_page)->order('wtw_school_wedding_comment.create_time desc')
             ->select();
+        if(empty($myReply)){
+            $data['myReply'] = array();
+            $this->success('内容为空！', $data);
+        }
+        $user = $user = M('Userinfo')->where("uid=$uid and status=1")->find();
+
+        foreach ($myReply as $key => $value) {
+            $parent_id_arr[] = $value['parent_id'];
+            if(empty($user)){
+                $myReply[$key]['position']= '';
+            }else{
+                $myReply[$key]['position']= $user['position'];
+            }
+        }
+
+        $parentWhere['id'] = array('in', $parent_id_arr);
+        $parentReply = $model->where($parentWhere)->select();
         //获取职位
-        foreach ($myReply as $key=>$value){
+        foreach ($parentReply as $key=>$value){
             $uid_arr[] =$value['uid'];
         }
         if(!empty($uid_arr)){
             $where['uid']=array('in',$uid_arr);
             $where['status'] =1;
             $position = M('Userinfo')->where($where)->field('uid,position')->select();
-            foreach ($myReply as $key_rep=>$value_rep){
-                $comment[$key_rep]['position'] ='';
+            foreach ($parentReply as $key_rep=>$value_rep){
+                $parentReply[$key_rep]['position'] ='';
                 foreach ($position as $key_pos=>$value_pos)
                     if($value_rep['uid']==$value_pos['uid']){
-                        $myReply[$key_rep]['position'] = $value_pos['position'];
+                        $parentReply[$key_rep]['position'] = $value_pos['position'];
                     }
             }
 
         }
-        foreach ($myReply as $key => $value) {
-            $parent_id_arr[] = $value['parent_id'];
-        }
-        if (empty($parent_id_arr)) {
-            $data['myReply'] = array();
-            $this->success('内容为空！', $data);
-        }
-        $parentWhere['wtw_school_wedding_comment.id'] = array('in', $parent_id_arr);
-        $parentReply = $model->where($parentWhere)->join('left join wtw_userinfo on wtw_school_wedding_comment.uid=wtw_userinfo.uid')
-            ->field('wtw_school_wedding_comment.*,wtw_userinfo.position')->select();
+
         //我的回复和父节点绑定
         foreach ($myReply as $key_reply => $value_reply) {
             foreach ($parentReply as $key_parent => $value_parent) {
@@ -922,6 +957,69 @@ class WeddingController extends CommonController {
                 }
             }
         }
+        $data['myReply'] = array_values($myReply);
+        $this->success('success', $data);
+    }
+
+    public function myReply1(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $model = M('SchoolWeddingComment');
+        $uid = $this->user['uid'];
+        $Where['uid'] = $uid;
+        $user = M('Userinfo')->where("uid=$uid and status=1")->find();
+        $Reply = $model->where($Where)->select();
+        if(empty($Reply)){
+            $data['myReply'] = array();
+            $this->success('内容为空！', $data);
+        }
+        //获取我的评论或回复的id，并添加职位
+        foreach ($Reply as $key=>$value){
+            $Reply_id[] = $value['id'];
+            $Reply[$key]['position']= $user['position'];
+        }
+        $myWhere['parent_id'] = array('in',$Reply_id);
+        $myWhere['status'] =1;
+        $myWhere['type']='reply';
+        $myReply = $model->where($myWhere)->page($page, $per_page)->order('create_time desc')->select();
+        if(empty($myReply)){
+            $data['myReply'] = array();
+            $this->success('内容为空！', $data);
+        }
+
+        //获取职位
+        foreach ($myReply as $key=>$value){
+            $uid_arr[] =$value['uid'];
+        }
+        if(!empty($uid_arr)){
+            $where['uid']=array('in',$uid_arr);
+            $where['status'] =1;
+            $position = M('Userinfo')->where($where)->field('uid,position')->select();
+            foreach ($myReply as $key_rep=>$value_rep){
+                $myReply[$key_rep]['position'] ='';
+                foreach ($position as $key_pos=>$value_pos)
+                    if($value_rep['uid']==$value_pos['uid']){
+                        $myReply[$key_rep]['position'] = $value_pos['position'];
+                    }
+            }
+
+        }
+
+        //我的回复和父节点绑定
+        foreach ($myReply as $key_reply => $value_reply) {
+            foreach ($Reply as $key_parent => $value_parent) {
+                if ($value_reply['parent_id'] == $value_parent['id']) {
+                    if ($value_parent['status'] == 1) {
+                        $myReply[$key_reply]['parent'] = $Reply[$key_parent];
+                    } else {
+                        $myReply[$key_reply]['parent'] = (object)array();
+                    }
+
+                }
+            }
+        }
+
+
         $data['myReply'] = array_values($myReply);
         $this->success('success', $data);
     }
@@ -950,6 +1048,81 @@ class WeddingController extends CommonController {
             $this->success('删除成功！');
         } else {
             $this->error('删除失败！');
+        }
+    }
+
+    /**
+     * 头条点赞
+     */
+    public function weddingPraise() {
+        $data['wedding_id'] = I('wedding_id');
+        $data['uid'] = $this->user['uid'];
+        $data['wsq_id'] = $this->user['wsq']->uid;
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
+        $data['headimg'] = $this->user['avatar'];
+        $data['create_time'] = time();
+        $data['update_time'] = time();
+        $data['status'] = 1;
+        $comment = D('SchoolWedding')->where(array('id' => $data['wedding_id']))->find();
+        if (empty($comment)) {
+            $this->error('参数错误！');
+        }
+        $model = M('SchoolWeddingWeddingpraise');
+        $where['uid'] = $data['uid'];
+        $where['wedding_id'] = $data['wedding_id'];
+        //$where['status'] =1;
+        $praise = $model->where($where)->find();
+        if (!empty($praise)) {
+            if ($praise[status] == 1) {
+                $this->error('您已经对该条内容点赞过了！');
+            } else {
+                $praise['status'] = 1;
+                $praise['update_time'] = time();
+                $result = $model->save($praise);
+                if ($result !== false) {
+                    $this->success('点赞成功！');
+                } else {
+                    $this->error('点赞失败！');
+                }
+            }
+        }
+        $id = $model->add($data);
+        if ($id) {
+            $this->success('点赞成功！');
+        } else {
+            $this->error('点赞失败！');
+        }
+    }
+
+    /**
+     * 头条取消点赞
+     */
+    public function weddingCancelPraise() {
+        $comment_id = I('wedding_id');
+        $uid = $this->user['uid'];
+        if (empty($comment_id)) {
+            $this->error('参数错误！');
+        }
+        $model = M('SchoolWeddingWeddingpraise');
+        $where['uid'] = $uid;
+        $where['wedding_id'] = $comment_id;
+        $where['status'] = 1;
+        $praise = $model->where($where)->find();
+        if (empty($praise)) {
+            $this->error('您不曾对该内容点赞过！');
+        }
+        $praise['update_time'] = time();
+        $praise['status'] = 0;
+        $result = $model->save($praise);
+        if ($result !== false) {
+            $this->success('取消点赞成功！');
+        } else {
+            $this->error('取消点赞失败！');
         }
     }
 
@@ -1079,6 +1252,8 @@ class WeddingController extends CommonController {
             $model->save($visits);
         }
     }
+
+
 
 
     
