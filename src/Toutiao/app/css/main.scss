@@ -9,7 +9,6 @@ html{
 	height:100%;
 }
 
-
 body{
 	font-size: 14px;
 	margin:0;
@@ -54,6 +53,9 @@ body{
 	color:#666;
 	background:#fff;
 	padding-bottom: 29px;
+	p{
+		margin:15px 0;
+	}
 	.pic-block{
 		width:100%;
 		margin-top: 20px;
@@ -224,6 +226,7 @@ body{
 		right: 0;
 		top: 0;
 		color:#fff;
+		text-align: center;
 	}
 	.btn-primary{
 		position: absolute;
