@@ -19,6 +19,7 @@ class UserInfoController extends CommonController{
     public function userInfoInsert() {
         $model = D('Userinfo');
         $uid = $this->user['uid'];
+        $headimg = $this->user['avatar'];
         $wsq_id = $this->user['wsq']->uid;
         $wsq_name = I('truename');
         $phone = $this->user['phone'];
@@ -52,6 +53,7 @@ class UserInfoController extends CommonController{
             $info['company'] = I('company');
             $info['position'] = I('position');
             $info['brief'] = I('brief');
+            $info['headimg'] =$headimg;
             $info['update_time'] = time();
             if ($model->create($info)) {
                 $result = $model->save($info);
@@ -77,6 +79,7 @@ class UserInfoController extends CommonController{
         $data['company'] = I('company');
         $data['position'] = I('position');
         $data['brief'] = I('brief');
+        $data['headimg'] =$headimg;
         $province = $data['province'];
         $city = $data['city'];
         $region = $data['region'];

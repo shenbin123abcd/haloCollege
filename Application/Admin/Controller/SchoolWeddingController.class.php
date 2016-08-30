@@ -11,6 +11,7 @@ namespace Admin\Controller;
 class SchoolWeddingController extends CommonController {
 
     public function index() {
+        
         $this->_list($this->model());
         $list = $this->list;
         $categorys = M('SchoolWeddingCategory')->where("status=1")->select();
@@ -22,6 +23,7 @@ class SchoolWeddingController extends CommonController {
                 }
             }
         }
+        $this->categorys = $categorys;
         $this->list = $list;
         cookie('__forward__', $_SERVER ['REQUEST_URI']);
         $this->display($_GET['display'] ? $_GET['display'] : 'index');

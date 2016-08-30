@@ -7,6 +7,23 @@
 		</ol>
 	</div>
 	<!--/说明-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form action="__URL__/index" method="get">
+		<div class="search_type cc mb10">
+			<label>标题：</label>
+			<input name="headline" type="text" class="input length_2 mr10" value="{$Think.get.headline}"/>
+			<label>分类：</label>
+			<select class="cate" name="category_id">
+				<option value="">请选择</option>
+				<volist name="categorys" id="vo">
+					<option value="{$vo.id}">{$vo.name}</option>
+				</volist>
+			</select>
+			<button type="submit" class="btn">搜索</button>
+		</div>
+	</form>
+	<!--/搜索-->
 
 	<!--操作-->
 	<div class="mb10">
@@ -16,7 +33,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list  box="id" name="list" show="{field:id,title:编号,width:60}{field:headline,title:标题,width:200}{field:brief,title:简介,width:300}{field:category_name,title:分类,width:200}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,order:desc,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list  box="id" name="list" show="{field:id,title:编号,width:60}{field:headline,title:标题,width:200}{field:brief,title:简介,width:300}{field:category_name,title:分类,width:200}{field:sort,title:排序,width:200}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,order:desc,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">

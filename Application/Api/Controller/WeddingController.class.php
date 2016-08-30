@@ -40,7 +40,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding.status'] = 1;
         $where['wtw_school_wedding.category_id'] = $category_id;
         $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
-            ->order("wtw_school_wedding.create_time desc")
+            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
             ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")
             ->page($page, $per_page)->select();
         //&amp转换为&
@@ -72,8 +72,7 @@ class WeddingController extends CommonController {
         $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
         $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->select();
         $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->field('wedding_id,status')->select();
-        $comment_count = M('schoolWeddingComment')->where(array('parent_id'=>array('in',$wedding_id),'status'=>1,))->group('parent_id')->field('parent_id as wedding_id,count(id) as count')->select();
-
+        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
         foreach ($list as $key=>$value){
             $list[$key]['visitCount'] = 0;
             $list[$key]['praiseCount'] = 0;
@@ -159,7 +158,7 @@ class WeddingController extends CommonController {
         $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>$wedding_id,'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->find();
         $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>$wedding_id,'uid'=>$uid))->field('wedding_id,status')->find();
         $detail['imgs'] = $imgs_url ? $imgs_url : array();
-        $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count']) : 0;
+        $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count'])+1: 0;
         $detail['praiseCount'] = $praiseCount['count'] ? intval($praiseCount['count']) : 0;
         $detail['status_praise'] = $status_praise ? intval($status_praise['status']) : -1;
         $data['detail'] = $detail;
@@ -359,6 +358,7 @@ class WeddingController extends CommonController {
      * 婚礼头条回复提交接口
     */
     public function replyPost() {
+        $object_push = A('Push');
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
@@ -379,7 +379,10 @@ class WeddingController extends CommonController {
         if ($model->create($data)) {
             $id = $model->add();
             if ($id) {
-                $this->success('回复成功！');
+                $parent_data = $this->get_parent_data($data['parent_id']);
+                $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('username'=>$data['username'],'headimg'=>$data['headimg'],'parent_data'=>$parent_data)));
+                $msg_id = $result->data->msg_id ? $result->data->msg_id : '';
+                $this->success('回复成功！',array('msg_id'=>$msg_id));
             } else {
                 $this->error('回复失败！');
             }
@@ -388,6 +391,7 @@ class WeddingController extends CommonController {
         }
 
     }
+
 
     /**
      * 用户举报
@@ -1168,6 +1172,22 @@ class WeddingController extends CommonController {
         $this->success('success',$data);
     }
 
+    /**
+     * 获取个人主页（根据uid）
+    */
+    public function getPersonalHome(){
+        $uid =I('uid');
+        if(empty($uid)){
+            $this->error('参数错误！');
+        }
+        $where['uid'] = $uid;
+        $where['status'] =1;
+        $user = M('Userinfo')->where($where)->find();
+        $data['user'] = $user;
+        $this->count_personal_home($uid);
+        $this->success('success',$data);
+    }
+
 
     /**
      * 公司搜索
@@ -1257,7 +1277,7 @@ class WeddingController extends CommonController {
 
 
     /**
-     * 个人主页访问统计
+     * 个人主页访问统计(根据wsq_id)
     */
     public function countHomepage($wsq_id){
         $model = M('HomepageVisitcount');
@@ -1277,6 +1297,38 @@ class WeddingController extends CommonController {
             $visits['update_time'] =time();
             $model->save($visits);
         }
+    }
+
+    /**
+     * 个人主页访问统计（根据uid）
+    */
+    public function count_personal_home($uid){
+        $model = M('HomepageVisitcount');
+        $where['uid'] =$uid;
+        $where['status'] = 1;
+        $visits = $model->where($where)->find();
+        if(empty($visits)){
+            $visits['visits_count'] =0;
+            $visits['visits_count']+=1;
+            $visits['uid'] = $uid;
+            $visits['create_time'] =time();
+            $visits['update_time'] =time();
+            $visits['status'] =1;
+            $model->add($visits);
+        }else{
+            $visits['visits_count']+=1;
+            $visits['update_time'] =time();
+            $model->save($visits);
+        }
+    }
+
+    /**
+     * 获取父评论
+     */
+    public function get_parent_data($parent_id){
+        $where['id'] = $parent_id;
+        $parent_data = M('schoolWeddingComment')->where($where)->field('uid,content,username,headimg')->find();
+        return $parent_data;
     }
 
 
