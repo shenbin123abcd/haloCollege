@@ -68,14 +68,16 @@ class WeddingController extends CommonController {
                 }
             }
         }
-        //获取访问总数、点赞总数和点赞状态
+        //获取访问总数、点赞总数、点赞状态、评论总数
         $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
         $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->select();
         $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->field('wedding_id,status')->select();
+        $comment_count = M('schoolWeddingComment')->where(array('parent_id'=>array('in',$wedding_id),'status'=>1,))->group('parent_id')->field('parent_id as wedding_id,count(id) as count')->select();
 
         foreach ($list as $key=>$value){
             $list[$key]['visitCount'] = 0;
             $list[$key]['praiseCount'] = 0;
+            $list[$key]['comment_count'] = 0;
             if(empty($uid)){
                 $list[$key]['status_praise'] = -1;
             }else{
@@ -92,6 +94,13 @@ class WeddingController extends CommonController {
                 foreach ($praiseCount as $praise_key=>$praise_value){
                     if ($value['id']==$praise_value['wedding_id']){
                         $list[$key]['praiseCount'] = $praise_value['count'];
+                    }
+                }
+            }
+            if(!empty($comment_count)){
+                foreach ($comment_count as $com_key=>$com_value){
+                    if ($value['id']==$com_value['wedding_id']){
+                        $list[$key]['comment_count'] = $com_value['count'];
                     }
                 }
             }
