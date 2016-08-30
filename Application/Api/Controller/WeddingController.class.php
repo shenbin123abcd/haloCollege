@@ -76,7 +76,11 @@ class WeddingController extends CommonController {
         foreach ($list as $key=>$value){
             $list[$key]['visitCount'] = 0;
             $list[$key]['praiseCount'] = 0;
-            $list[$key]['status_praise'] = -1;
+            if(empty($uid)){
+                $list[$key]['status_praise'] = -1;
+            }else{
+                $list[$key]['status_praise'] = 0;
+            }
             if(!empty($visitCount)){
                 foreach ($visitCount as $visit_key=>$visit_value){
                     if($value['id']==$visit_value['wedding_id']){
