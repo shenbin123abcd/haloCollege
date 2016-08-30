@@ -1085,8 +1085,8 @@ class WeddingController extends CommonController {
         $data['create_time'] = time();
         $data['update_time'] = time();
         $data['status'] = 1;
-        $comment = D('SchoolWedding')->where(array('id' => $data['wedding_id']))->find();
-        if (empty($comment)) {
+        $wedding = D('SchoolWedding')->where(array('id' => $data['wedding_id']))->find();
+        if (empty($wedding)) {
             $this->error('参数错误！');
         }
         $model = M('SchoolWeddingWeddingpraise');
@@ -1120,14 +1120,14 @@ class WeddingController extends CommonController {
      * 头条取消点赞
      */
     public function weddingCancelPraise() {
-        $comment_id = I('wedding_id');
+        $wedding_id = I('wedding_id');
         $uid = $this->user['uid'];
-        if (empty($comment_id)) {
+        if (empty($wedding_id)) {
             $this->error('参数错误！');
         }
         $model = M('SchoolWeddingWeddingpraise');
         $where['uid'] = $uid;
-        $where['wedding_id'] = $comment_id;
+        $where['wedding_id'] = $wedding_id;
         $where['status'] = 1;
         $praise = $model->where($where)->find();
         if (empty($praise)) {
