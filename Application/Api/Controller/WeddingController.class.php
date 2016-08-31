@@ -623,13 +623,15 @@ class WeddingController extends CommonController {
     */
     public function praiseDetail() {
         $comment_id = I('comment_id');
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
         if (empty($comment_id)) {
             $this->error('参数错误！');
         }
         $where['comment_id'] = $comment_id;
         $where['status'] = 1;
         $praiseDetail = M('SchoolWeddingPraise')
-            ->where($where)->field('uid,username,headimg,wsq_id')
+            ->where($where)->page($page,$per_page)->field('uid,username,headimg,wsq_id')
             ->select();
         if (empty($praiseDetail)) {
             $data['praiseDetail'] = array();
