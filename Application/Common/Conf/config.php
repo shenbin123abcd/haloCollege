@@ -6,7 +6,7 @@ return array(
 	'TMPL_TEMPLATE_SUFFIX'  => '.html',
 	'URL_HTML_SUFFIX' => 'html|json',
 	'APP_GROUP_MODE'	=>	1,
-	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin'),
+	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin','Ke'),
 	'DEFAULT_MODULE'    =>    'Home',
 
     // 应用配置
@@ -25,6 +25,7 @@ return array(
 	'APP_SUB_DOMAIN_DEPLOY'   =>    1, // 开启子域名配置
 	'APP_SUB_DOMAIN_RULES'    =>    array(   
 		'koala-college'        => 'Admin',
+		'ke'        => 'Ke',
 	),
 
 
