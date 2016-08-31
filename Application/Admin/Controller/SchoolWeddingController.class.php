@@ -11,7 +11,7 @@ namespace Admin\Controller;
 class SchoolWeddingController extends CommonController {
 
     public function index() {
-        
+
         $this->_list($this->model());
         $list = $this->list;
         $categorys = M('SchoolWeddingCategory')->where("status=1")->select();
@@ -24,9 +24,30 @@ class SchoolWeddingController extends CommonController {
             }
         }
         $this->categorys = $categorys;
+        //获取访问量
+        foreach ($list as $key=>$value){
+            $wedding_id[] = $value['id'];
+        }
+        $visit_count = $this->get_visit_count($wedding_id);
+        foreach ($list as $key=>$value){
+            $list[$key]['count']=0;
+            foreach ($visit_count as $visit_key=>$visit_value){
+                if($value['id']==$visit_value['wedding_id']){
+                    $list[$key]['count']=$visit_value['count'];
+                }
+            }
+        }
         $this->list = $list;
         cookie('__forward__', $_SERVER ['REQUEST_URI']);
         $this->display($_GET['display'] ? $_GET['display'] : 'index');
+    }
+
+    //获取头条访问量
+    public function get_visit_count($wedding_id = array()){
+        $where['wedding_id'] =array('in',$wedding_id);
+        $where['status'] =1;
+        $visit_count = M('WeddingVisitcount')->where($where)->field('wedding_id,count')->select();
+        return $visit_count;
     }
 
 
