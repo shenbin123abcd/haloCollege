@@ -1,5 +1,5 @@
 <?php
-namespace Home\Controller;
+namespace Ke\Controller;
 use Think\Controller;
 class EmptyController extends Controller{
     public function index(){
@@ -7,7 +7,10 @@ class EmptyController extends Controller{
 	}
 
     public function _empty(){
-		send_http_status(404);
-		$this->ajaxReturn(array('info'=>'Not Found','error'=>404,'status'=>0));
+        if(IS_AJAX){
+            $this->ajaxReturn(array('info' => ACTION_NAME . ' Not Found', 'error' => 404, 'iRet' => 0));
+        }else{
+            $this->display('Index:index');
+        }
 	}
 }
