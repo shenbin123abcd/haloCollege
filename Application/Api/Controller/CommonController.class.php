@@ -29,8 +29,11 @@ class CommonController extends Controller {
      * 空操作
      */
     public function _empty() {
-        send_http_status(404);
-        $this->ajaxReturn(array('info' => ACTION_NAME . ' Not Found', 'error' => 404, 'iRet' => 0));
+        if(IS_AJAX){
+            $this->ajaxReturn(array('info' => ACTION_NAME . ' Not Found', 'error' => 404, 'iRet' => 0));
+        }else{
+            $this->display('Index:index');
+        }
     }
 
     /**
