@@ -1183,6 +1183,9 @@ class WeddingController extends CommonController {
         $where['uid'] = $uid;
         $where['status'] =1;
         $user = M('Userinfo')->where($where)->find();
+        if(empty($user['region_title'])){
+            $user['region_title']= "";
+        }
         $data['user'] = $user;
         $this->count_personal_home($uid);
         $this->success('success',$data);
