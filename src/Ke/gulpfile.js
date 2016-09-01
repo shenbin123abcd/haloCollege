@@ -28,7 +28,7 @@ gulp.task('sass', function () {
 });
 gulp.task('copy:css',['sass'], function () {
     return gulp.src([`${appConfig.themeSrc}/css/*.css`])
-        .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
+        .pipe(gulp.dest(`${appConfig.themeDist}/css`));
 });
 
 gulp.task('images', function () {
@@ -169,10 +169,11 @@ gulp.task('default',['clean'], function() {
     gulp.start('build');
 });
 
-gulp.task("watch:dev", ['copy:view','copy:css','webpack:dev'], function(){
+gulp.task("watch:dev", ['copy:view','copy:css'], function(){
     gulp.watch([`${appConfig.themeSrc}/css/**/*.scss`], ['copy:css']);
     gulp.watch([`${appConfig.themeSrc}/**/*.html`], ['copy:view']);
-
+    gulp.watch([`${appConfig.themeSrc}/images/**/*.*`], ['images']);
+    gulp.start('webpack:dev');
 });
 
 gulp.task("webpack:dev", function(callback) {
@@ -183,7 +184,7 @@ gulp.task("webpack:dev", function(callback) {
             // output options
         }));
         //gutil.log("[webpack]", "Gonna sit around and watch for file changes. CTRL^C to kill me");
-        callback();
+        // callback();
     });
 });
 
