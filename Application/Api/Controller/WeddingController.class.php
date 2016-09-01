@@ -358,7 +358,7 @@ class WeddingController extends CommonController {
      * 婚礼头条回复提交接口
     */
     public function replyPost() {
-        $object_push = A('Push');
+        //$object_push = A('Push');
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
@@ -379,10 +379,11 @@ class WeddingController extends CommonController {
         if ($model->create($data)) {
             $id = $model->add();
             if ($id) {
-                $parent_data = $this->get_parent_data($data['parent_id']);
+                /*$parent_data = $this->get_parent_data($data['parent_id']);
                 $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('username'=>$data['username'],'headimg'=>$data['headimg'],'parent_data'=>$parent_data)));
                 $msg_id = $result->data->msg_id ? $result->data->msg_id : '';
-                $this->success('回复成功！',array('msg_id'=>$msg_id));
+                $this->success('回复成功！',array('msg_id'=>$msg_id));*/
+                $this->success('回复成功！');
             } else {
                 $this->error('回复失败！');
             }
@@ -793,6 +794,28 @@ class WeddingController extends CommonController {
                     }
                 }
             }
+            //获取头条评论数、访问量
+            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->field('wedding_id,count')->select();
+            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
+            foreach ($wedding as $key=>$value){
+                $wedding[$key]['visit_count'] = 0;
+                $wedding[$key]['comment_count'] = 0;
+                if(!empty($visit_count)){
+                    foreach ($visit_count as $visit_key=>$visit_value){
+                        if($value['id']==$visit_value['wedding_id']){
+                            $list[$key]['visit_count'] = $visit_value['count'];
+                        }
+                    }
+                }
+                if(!empty($comment_count)){
+                    foreach ($comment_count as $com_key=>$com_value){
+                        if ($value['id']==$com_value['wedding_id']){
+                            $list[$key]['comment_count'] = $com_value['count'];
+                        }
+                    }
+                }
+            }
+
             //comment和wedding绑定
             foreach ($comment as $key_comment => $value_comment) {
                 $comment[$key_comment]['parent_wedding'] = array();
@@ -803,6 +826,11 @@ class WeddingController extends CommonController {
                 }
             }
         }
+
+
+
+
+
         $data['comment'] = array_values($comment);
         $this->success('success', $data);
     }
