@@ -7,5 +7,14 @@
 /src/Toutiao/app/css/main.css
 /src/Toutiao/app/css/main.css.map
 /src/Toutiao/tmp
+
+/Public/Ke/*
+/Application/Ke/View/Index/*.html
+/src/Ke/app/css/main.css
+/src/Ke/app/css/main.css.map
+/src/Ke/tmp
+
 /vendor
 /Application/Common/Conf
+
+

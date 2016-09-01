@@ -24,7 +24,11 @@ gulp.task('sass', function () {
         .pipe(sourcemaps.init())
         .pipe(plugins.sass({outputStyle: 'compact'}).on('error', plugins.sass.logError))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(`${appConfig.themeDist}/css`));
+        .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
+});
+gulp.task('copy:css',['sass'], function () {
+    return gulp.src([`${appConfig.themeSrc}/css/*.css`])
+        .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
 });
 
 gulp.task('images', function () {
@@ -44,7 +48,7 @@ gulp.task('build',['sass','images','webpack'], function () {
     var manifestHtml = gulp.src("tmp/images/rev-manifest.json");
     var manifestCss = gulp.src("tmp/images/rev-manifest.json");
     var manifestJs = gulp.src("tmp/images/rev-manifest.json");
-    return gulp.src('./app/index.html')
+    return gulp.src('app/index.html')
         .pipe(plugins.useref())
         .pipe(jsFilter)
         .pipe(plugins.rev())
@@ -104,20 +108,20 @@ gulp.task('build',['sass','images','webpack'], function () {
                 // 'images/**/*.{jpg,png,mp3,mp4}',
             ]
         }))
-        // .pipe(plugins.htmlmin({
-        //     removeComments: true,
-        //     collapseWhitespace: true,
-        //     conservativeCollapse: true,
-        //     ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
-        //     minifyJS: false,
-        //     minifyCSS: false,
-        // }))
+        .pipe(plugins.htmlmin({
+            removeComments: true,
+            collapseWhitespace: true,
+            conservativeCollapse: true,
+            ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
+            minifyJS: false,
+            minifyCSS: false,
+        }))
         .pipe(gulp.dest(`${appConfig.themeViewDist}`))
         // .pipe(gulp.dest('dest'))
         .pipe(htmlFilter.restore)
 });
 
-gulp.task('copy:view', function () {
+gulp.task('copy:view', ['copy:css'],function () {
     var htmlFilter = plugins.filter(`**/*.html`,{restore: true});
     return gulp
         .src([`${appConfig.themeSrc}app/**/*.html`])
@@ -165,8 +169,8 @@ gulp.task('default',['clean'], function() {
     gulp.start('build');
 });
 
-gulp.task("watch:dev", ['copy:view','copy:js','sass'], function(){
-    gulp.watch([`${appConfig.themeSrc}/css/**/*.scss`], ['sass']);
+gulp.task("watch:dev", ['copy:view','copy:css','webpack:dev'], function(){
+    gulp.watch([`${appConfig.themeSrc}/css/**/*.scss`], ['copy:css']);
     gulp.watch([`${appConfig.themeSrc}/**/*.html`], ['copy:view']);
 
 });
@@ -179,7 +183,7 @@ gulp.task("webpack:dev", function(callback) {
             // output options
         }));
         //gutil.log("[webpack]", "Gonna sit around and watch for file changes. CTRL^C to kill me");
-        //callback();
+        callback();
     });
 });
 
@@ -198,6 +202,6 @@ gulp.task("webpack", function(callback) {
             // output options
         }));
         //gutil.log("[webpack]", "Gonna sit around and watch for file changes. CTRL^C to kill me");
-        //callback();
+        callback();
     });
 });
