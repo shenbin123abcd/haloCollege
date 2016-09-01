@@ -894,7 +894,6 @@ class WeddingController extends CommonController {
                     }
                 }
             }
-
             //获取头条评论数、访问量
             $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
             $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
