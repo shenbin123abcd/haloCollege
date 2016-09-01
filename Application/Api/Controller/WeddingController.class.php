@@ -798,19 +798,19 @@ class WeddingController extends CommonController {
             $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->field('wedding_id,count')->select();
             $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
             foreach ($wedding as $key=>$value){
-                $wedding[$key]['visit_count'] = 0;
+                $wedding[$key]['visitCount'] = 0;
                 $wedding[$key]['comment_count'] = 0;
                 if(!empty($visit_count)){
                     foreach ($visit_count as $visit_key=>$visit_value){
                         if($value['id']==$visit_value['wedding_id']){
-                            $list[$key]['visit_count'] = $visit_value['count'];
+                            $wedding[$key]['visitCount'] = $visit_value['count'];
                         }
                     }
                 }
                 if(!empty($comment_count)){
                     foreach ($comment_count as $com_key=>$com_value){
                         if ($value['id']==$com_value['wedding_id']){
-                            $list[$key]['comment_count'] = $com_value['count'];
+                            $wedding[$key]['comment_count'] = $com_value['count'];
                         }
                     }
                 }
@@ -894,6 +894,29 @@ class WeddingController extends CommonController {
                     }
                 }
             }
+
+            //获取头条评论数、访问量
+            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
+            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
+            foreach ($list as $key=>$value){
+                $list[$key]['visitCount'] = 0;
+                $list[$key]['comment_count'] = 0;
+                if(!empty($visit_count)){
+                    foreach ($visit_count as $visit_key=>$visit_value){
+                        if($value['id']==$visit_value['wedding_id']){
+                            $list[$key]['visitCount'] = $visit_value['count'];
+                        }
+                    }
+                }
+                if(!empty($comment_count)){
+                    foreach ($comment_count as $com_key=>$com_value){
+                        if ($value['id']==$com_value['wedding_id']){
+                            $list[$key]['comment_count'] = $com_value['count'];
+                        }
+                    }
+                }
+            }
+
         }
         $data['list'] = array_values($list);
         $data['total'] = intval($total);
