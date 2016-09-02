@@ -1,9 +1,15 @@
-import App from './components/App'
 import Detail from './modules/detail'
-import store from './store'
+import Index from './modules/index'
 import Todos from './components/todos'
+import store from './store'
 
+var Router=ReactRouter.Router
+var Route=ReactRouter.Route
+// var hashHistory=ReactRouter.hashHistory
+var browserHistory=ReactRouter.browserHistory
+var Provider=ReactRedux.Provider
 
+let reactElement = document.getElementById('root')
 
 
 // The Reducer Function
@@ -25,19 +31,15 @@ import Todos from './components/todos'
 //  document.getElementById('root')
 //);
 
-var Router=ReactRouter.Router
-var Route=ReactRouter.Route
-var hashHistory=ReactRouter.hashHistory
-var browserHistory=ReactRouter.browserHistory
-var Provider=ReactRedux.Provider
 
 
-let reactElement = document.getElementById('root')
+
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Todos} />
+      <Route path="/" component={Index} />
+      <Route path="/todos" component={Todos} />
       <Route path="/detail" component={Detail}/>
     </Router>
   </Provider>,
