@@ -1,4 +1,4 @@
-// import Header from '../components/Index.Header'
+import Header from '../components/Index.Header'
 import List from '../components/Index.CourseList'
 import { showCourseList,getCourseList,setCurrentMonth } from '../actions'
 
@@ -20,25 +20,25 @@ import { showCourseList,getCourseList,setCurrentMonth } from '../actions'
 // );
 
 var Index = React.createClass({
+    handleNavClick(index) {
+        let {dispatch}=this.props;
+        dispatch(setCurrentMonth(index));
+    },
+    renderNav:function (item, i) {
+        return (
+            <div key={i}>
+                <a onClick={e=>{this.handleNavClick(i)}} >
+                    {item.month}
+                </a>
+            </div>
+        )
+    },
     render: function() {
-        let {courseList,items,dispatch,monthList}=this.props;
+        let {courseList,dispatch,monthList}=this.props;
         return (
             <div>
-                <div className="header-nav-wrapper">
-                    {monthList.map((item,i) =>{
-                        return (
-                            <div key={i}>
-                                <a onClick={e => {
-                                dispatch(setCurrentMonth(i));
-                                dispatch(showCourseList(item));
-                                }} >
-                                    {item.month}
-                                </a>
-                            </div>
-                        )
-                    })}
-                </div>
-                <div className="ddd">
+                <Header items={monthList} renderItem={this.renderNav} />
+                <div className="index-content-wrapper">
                     <List items={courseList} onClick={e => {
                     dispatch(getCourseList(22))
                 }}   />

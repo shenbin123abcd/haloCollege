@@ -25,7 +25,7 @@ export default (state = initState(), action) => {
                 n.active=false
             });
             newArr[action.data].active=true
-            // console.log(newArr)
+            console.log(newArr)
             return newArr;
         default:
             return state

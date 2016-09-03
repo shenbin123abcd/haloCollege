@@ -1,6 +1,6 @@
 
 const CourseList = ({items,onClick}) => (
-    <div>
+    <div >
         {
             items.map((item ,i)=>{
                 return (
