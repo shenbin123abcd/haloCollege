@@ -12,21 +12,60 @@ export function deleteTodo(index){
   }
 }
 
-export function showCourseList(data){
-  // console.log(data)
+
+export const REQUEST_COURSE = 'REQUEST_COURSE'
+export const RECEIVE_COURSE = 'RECEIVE_COURSE'
+
+function requestPosts(data) {
   return {
-    type: 'showCourseList',
+    type: REQUEST_COURSE,
     data
   }
 }
 
-export function getCourseList(data){
-  // console.log(data)
+function receiveCourse(req, res) {
+  // console.log(res)
   return {
-    type: 'getCourseList',
-    data
+    type: RECEIVE_COURSE,
+    index:req,
+    items: res.data,
+    receivedAt: '12345'
   }
 }
+
+function fetchCourse(req) {
+  return dispatch => {
+    dispatch(requestPosts(req))
+    return fetch(`/course`)
+      .then(response=>{
+         return response.json();
+      }).then(json=>{
+         return dispatch(receiveCourse(req, json))
+      });
+  }
+}
+function shouldFetchCourse(state, req) {
+  const { courseList } = state
+  const {
+      isFetching,
+      items
+  } = courseList
+
+  if (isFetching){
+    return false
+  }
+  return true
+}
+
+export function fetchCourseIfNeeded(req) {
+  return (dispatch, getState) => {
+    // console.log(shouldFetchCourse(getState(), req))
+    if (shouldFetchCourse(getState(), req)) {
+      return dispatch(fetchCourse(req))
+    }
+  }
+}
+
 
 export function setCurrentMonth(data){
   // console.log(data)
@@ -38,71 +77,3 @@ export function setCurrentMonth(data){
 
 
 
-
-
-export const REQUEST_POSTS = 'REQUEST_POSTS'
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-
-function requestPosts(data) {
-  return {
-    type: REQUEST_POSTS,
-    data
-  }
-}
-
-function receivePosts(data, json) {
-  return {
-    type: RECEIVE_POSTS,
-    data,
-    json,
-    posts: 'pppppp',
-    receivedAt: '12345'
-  }
-}
-
-function fetchPosts(reddit) {
-  // console.log(reddit)
-  return dispatch => {
-    // dispatch(requestPosts(reddit))
-    return fetch(`/course`)
-        .then(res => {
-          // console.log(res,res.json())
-          dispatch(receivePosts(reddit, res))
-        });
-        // .then(json => {
-          // console.log(json)
-          // dispatch(receivePosts(reddit, json))
-        // })
-
-    // return $.ajax(`/course`)
-    //     .then(res => console.log(res))
-    //     .then(json => {
-    //       console.log(json)
-    //         dispatch(receivePosts(reddit, json))
-    //     })
-  }
-}
-
-
-// function fetchPosts(reddit) {
-//   return dispatch => {
-//     dispatch(requestPosts(reddit))
-//     return fetch(`https://www.reddit.com/r/${reddit}.json`)
-//         .then(response => response.json())
-//         .then(json => dispatch(receivePosts(reddit, json)))
-//   }
-// }
-
-
-export function getCourseList(reddit) {
-  // console.log(reddit)
-  // return {
-  //   type: REQUEST_POSTS,
-  //   reddit
-  // }
-
-  return (dispatch, getState) => {
-    console.log(reddit,getState())
-    return dispatch(fetchPosts(reddit))
-  }
-}

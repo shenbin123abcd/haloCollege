@@ -1,19 +1,20 @@
 
 function initState() {
     let CurrentMonth=new Date().getMonth()+1;
-    let state=[]
+    let monthList=[]
     for(let i=0;i<5;i++){
-        state.push({
+        monthList.push({
             month:`${CurrentMonth+i}`
         });
         if(i==0){
-            state[i].active=true
+            monthList[i].active=true
         }
-        if(state[i].month>12){
-            state[i].month=state[i].month-12
+        if(monthList[i].month>12){
+            monthList[i].month=monthList[i].month-12
         }
     }
-    return state;
+
+    return monthList;
 }
 
 export default (state = initState(), action) => {
@@ -23,9 +24,10 @@ export default (state = initState(), action) => {
             let newArr=[].concat(state);
             newArr.forEach(n=>{
                 n.active=false
+                if(n.month==action.data.month){
+                    n.active=true
+                }
             });
-            newArr[action.data].active=true
-            console.log(newArr)
             return newArr;
         default:
             return state
