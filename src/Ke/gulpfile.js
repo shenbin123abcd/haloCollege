@@ -27,7 +27,7 @@ gulp.task('sass', function () {
         .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
 });
 gulp.task('copy:css',['sass'], function () {
-    return gulp.src([`${appConfig.themeSrc}/css/*.css`])
+    return gulp.src([`${appConfig.themeSrc}/css/**/*.{css,map}`])
         .pipe(gulp.dest(`${appConfig.themeDist}/css`));
 });
 

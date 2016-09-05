@@ -2,6 +2,7 @@ import App from './components/App'
 import Detail from './modules/detail'
 import store from './store'
 import Todos from './components/todos'
+import User from './modules/User'
 
 
 
@@ -39,6 +40,7 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path="/" component={Todos} />
       <Route path="/detail" component={Detail}/>
+      <Route path="/user" component={User}/>
     </Router>
   </Provider>,
     reactElement
