@@ -6,6 +6,7 @@ import fetchCourseDetailIfNeeded from '../actions/detail'
 
 var Detail= React.createClass({
   componentDidMount() {
+      document.title='幻熊课堂详情';
      const { dispatch } = this.props
      dispatch(fetchCourseDetailIfNeeded(22))
   },
