@@ -1,3 +1,10 @@
+import reducers from './reducers/index'
 
-import todos from './reducers/todos'
-export default Redux.createStore(todos)
+var thunkMiddleware =ReduxThunk.default
+
+
+export default Redux.createStore(
+    reducers,
+    undefined,
+    Redux.applyMiddleware(thunkMiddleware)
+)

@@ -62,9 +62,10 @@ const Todos2 = React.createClass({
 });
 
 
-function mapStateToProps(todos) {
+function mapStateToProps(state) {
+    // console.log(todos)
     return {
-        todos
+        todos:state.todos
     }
 }
 
