@@ -6,6 +6,14 @@ import { fetchCourseIfNeeded,setCurrentMonth } from '../actions'
 
 
 var Index = React.createClass({
+    componentDidMount() {
+        document.title='幻熊课堂';
+        $("html").addClass('html-index')
+        $("body").addClass('body-index')
+        const { dispatch,route } = this.props
+
+        dispatch(fetchCourseIfNeeded())
+    },
     handleNavClick(item) {
         let {dispatch,monthList}=this.props;
         // console.log(item,monthList.filter(n=>n.active)[0])
@@ -30,18 +38,13 @@ var Index = React.createClass({
             <CourseItem item={item}  key={i} handleCourseClick={e=>{this.handleCourseClick()}} />
         )
     },
-    componentDidMount() {
-        const { dispatch } = this.props
-        dispatch(fetchCourseIfNeeded())
-    },
+
     render: function() {
         let {items,isFetching,monthList}=this.props;
         return (
             <div>
                 <Header items={monthList} renderItem={this.renderNav} />
-                <div className="index-content-wrapper" >
-                    <Course items={items} isFetching={isFetching} renderItem={this.renderCourse} />
-                </div>
+                <Course items={items} isFetching={isFetching} renderItem={this.renderCourse} />
             </div>
         );
     }

@@ -13,12 +13,14 @@ var Provider=ReactRedux.Provider
 
 let reactElement = document.getElementById('root')
 
+
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Index} />
-      <Route path="/detail" component={Detail}/>
-      <Route path="/user" component={User}/>
+      <Route path="/" component={Index}    />
+      <Route path="/detail" component={Detail}      />
+      <Route path="/user" component={User}    />
     </Router>
   </Provider>,
     reactElement

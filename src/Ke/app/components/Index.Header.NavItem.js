@@ -9,7 +9,7 @@ const NavItem = ({item,handleNavClick}) => {
 
     <div className={itemClass} >
         <a className="link" onClick={handleNavClick} >
-            {item.month}
+            {item.month}月
         </a>
     </div>
 )}
