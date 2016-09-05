@@ -5,6 +5,7 @@ import fetchCourseDetailIfNeeded from '../actions/detail'
 
 
 var Detail= React.createClass({
+
   componentDidMount() {
       document.title='幻熊课堂详情';
      const { dispatch } = this.props
@@ -57,7 +58,7 @@ var Detail= React.createClass({
             return(
                 <div className="detail-page">
                     <DetailTop></DetailTop>
-                    <DeatilMiddle></DeatilMiddle>
+                    <DetailMiddle></DetailMiddle>
                     <ClassDesc classData={classData}></ClassDesc>
                     <TeacherDesc></TeacherDesc>
                     <DetailContent></DetailContent>
@@ -104,7 +105,7 @@ var DetailTop=React.createClass({
   }
 })
 
-var DeatilMiddle=React.createClass({
+var DetailMiddle=React.createClass({
   render(){
     return (
       <div className="deatil-middle">

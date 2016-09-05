@@ -41,8 +41,8 @@ function shouldFetchCourseDetail(state) {
     return true
 }
 
-export default function fetchCourseDetailIfNeeded(req) {
-    return (dispatch, getState) => {
+export default function(req) {
+    return (dispatch, getState ) => {
         if (shouldFetchCourseDetail(getState())) {
             return dispatch(fetchCourseDetail(req))
         }
