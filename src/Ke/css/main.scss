@@ -56,6 +56,10 @@ body{
 .f-20{
   font-size:20px;
 }
+
+.body-index{
+  background-color: #f6f6f6;
+}
 .index-header-nav-wrapper{
   height: 0.90rem;
   background-color: #fffbfa;
@@ -106,7 +110,15 @@ body{
 
 }
 .index-course-wrapper{
+  padding: 0.25rem 0.2rem 0.5rem;
+  .item{
+    .img-box{
+      .img{
+        width: 100%;
+      }
+    }
 
+  }
 }
 
 .detail-page{

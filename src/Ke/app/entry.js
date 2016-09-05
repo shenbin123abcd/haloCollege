@@ -14,13 +14,45 @@ var Provider=ReactRedux.Provider
 let reactElement = document.getElementById('root')
 
 
+let bodyClass=''
+let htmlClass=''
+
+
+const onUpdateRoute = () => {
+    let path=hb.location.url('path')
+    // console.log(path,path.indexOf('/user')>-1)
+    switch (true){
+        case path=='':
+            htmlClass=`html-index`
+            bodyClass=`body-index`
+            break;
+        case path.indexOf('/detail')>-1:
+            htmlClass=`html-detail`
+            bodyClass=`body-detail`
+            break;
+        case path.indexOf('/user')>-1:
+            htmlClass=`html-user`
+            bodyClass=`body-user`
+            break;
+        default:
+            htmlClass=`html`
+            bodyClass=`body`
+    }
+    $('html').addClass(htmlClass)
+    $('body').addClass(bodyClass)
+}
+const onLeaveRoute = () => {
+    $('html').removeClass(htmlClass)
+    $('body').removeClass(bodyClass)
+}
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/" component={Index}    />
-      <Route path="/detail" component={Detail}      />
-      <Route path="/user" component={User}    />
+    <Router history={browserHistory} onUpdate={onUpdateRoute}>
+      <Route path="/" component={Index}  onLeave={onLeaveRoute}  />
+      <Route path="/detail" component={Detail}    onLeave={onLeaveRoute}  />
+      <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement
