@@ -8,8 +8,6 @@ import { fetchCourseIfNeeded,setCurrentMonth } from '../actions'
 var Index = React.createClass({
     componentDidMount() {
         document.title='幻熊课堂';
-        $("html").addClass('html-index')
-        $("body").addClass('body-index')
         const { dispatch,route } = this.props
 
         dispatch(fetchCourseIfNeeded())
