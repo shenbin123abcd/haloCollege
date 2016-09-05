@@ -3,7 +3,7 @@ import Detail from './modules/detail'
 import store from './store'
 import Todos from './components/todos'
 import User from './modules/User'
-
+import Index from './modules/index'
 
 
 
@@ -38,7 +38,7 @@ let reactElement = document.getElementById('root')
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Todos} />
+      <Route path="/" component={Index} />
       <Route path="/detail" component={Detail}/>
       <Route path="/user" component={User}/>
     </Router>

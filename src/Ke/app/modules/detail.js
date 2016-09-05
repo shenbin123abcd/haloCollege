@@ -5,9 +5,6 @@ import BottomBtn from '../components/detail.bottom'
 
 export default React.createClass({
   getDefaultProps:function(){
-    $.ajax('course').then(function (res) {
-        console.log(res)
-    })
     return {
         price:'¥2000/人',
         position:'上海总部',
