@@ -12,10 +12,11 @@
     //font-size: 32px;
   }
 }
-
 .haloIcon-spin {
+  display: inline-block;
   animation: haloIcon-spin 2s infinite linear;
 }
 .haloIcon-pulse {
+  display: inline-block;
   animation: haloIcon-spin 1s infinite steps(8);
 }

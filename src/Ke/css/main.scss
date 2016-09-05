@@ -2,6 +2,7 @@
 @import "hbVariables";
 @import "hbReset";
 @import "hbAnimated";
+$ff_SimHei: Arial,Verdana,Tahoma,'Hiragino Sans GB',SimHei,SimSun,sans-serif;
 body{
   font-size: 14px;
   line-height: 1.5;
@@ -56,17 +57,58 @@ body{
   font-size:20px;
 }
 .index-header-nav-wrapper{
-  .item{
-    .link{
-    }
-    &.active{
+  height: 0.90rem;
+  background-color: #fffbfa;
+  box-shadow: 0 2px 5px rgba(255,107,83,.06);
+  display: flex;
+  align-items: center;
+  .nav-box{
+    display: flex;
+    width: 6.4rem;
+    padding: 0 0.33rem;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    .item{
+      font-size: 0.3rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-bottom: 0.04rem solid transparent;
       .link{
-        color: #000000;
+        text-decoration: none;
+        color: rgba($mainColor,0.5);
       }
+      &.active{
+        border-bottom-color: $mainColor;
+        .link{
+          color: $mainColor;
+        }
+      }
+    }
+  }
+  .bar-box{
+    height: 0.5rem;
+    width: 1px;
+    transform: scale(0.5,1);
+    background-color: rgba($mainColor,0.5);
+  }
+  .user-box{
+    color: $mainColor;
+    margin-left: 0.32rem;
+
+    .haloIcon{
+      text-decoration: none;
+      color:inherit;
+      font-size: 20px;
     }
   }
 
 }
+.index-course-wrapper{
+
+}
+
 .detail-page{
   background: #f6f6f6;
   margin-bottom:50px;

@@ -9,7 +9,7 @@ const Course = ({isFetching,items, renderItem}) => {
 
 
     if (isFetching||isNull) {
-        return <div>loading</div>
+        return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
     }
 
     if (isEmpty) {
@@ -17,7 +17,7 @@ const Course = ({isFetching,items, renderItem}) => {
     }
 
     return (
-        <div>
+        <div className="index-course-wrapper">
             {items.map(renderItem)}
         </div>
     )}
