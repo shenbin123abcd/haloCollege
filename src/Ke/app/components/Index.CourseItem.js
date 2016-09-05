@@ -6,7 +6,7 @@ const CourseItem = ({item}) => (
         </div>
         <div className="content-box">
             <div className="des-box cf">
-                <div className="des-inner">
+                <div className="des-inner-1">
                     <div className="title">
                         云南站 |{item.title}
                     </div>
@@ -14,8 +14,23 @@ const CourseItem = ({item}) => (
                         09月16日 · 上海
                     </div>
                 </div>
+                <div className="des-inner-2">
+                    <div className="price">
+                        ¥2000/人
+                    </div>
+                    <div className="available">
+                        名额仅剩:14
+                    </div>
+                </div>
             </div>
-
+            <div className="line-box"></div>
+            <div className="info-box cf">
+                <img className="img" src={require('../images/sample-head.png')} alt=""/>
+                <img className="img" src={require('../images/sample-head.png')} alt=""/>
+                <img className="img" src={require('../images/sample-head.png')} alt=""/>
+                <img className="img" src={require('../images/sample-head.png')} alt=""/>
+                <img className="img" src={require('../images/sample-head.png')} alt=""/>
+            </div>
         </div>
 
     </div>
