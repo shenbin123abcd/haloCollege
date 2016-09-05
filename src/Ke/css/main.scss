@@ -55,7 +55,18 @@ body{
 .f-20{
   font-size:20px;
 }
+.index-header-nav-wrapper{
+  .item{
+    .link{
+    }
+    &.active{
+      .link{
+        color: #000000;
+      }
+    }
+  }
 
+}
 .detail-page{
   background: #f6f6f6;
   margin-bottom:50px;
