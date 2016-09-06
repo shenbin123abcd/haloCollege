@@ -6,20 +6,29 @@ import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps} from '../actions
 var User= React.createClass({
   componentDidMount() {
      document.title='我的个人中心';
-     let { dispatch} = this.props;
+     let { dispatch,data} = this.props;
      dispatch(fetchUserItemsIfNeeded(22));
-  },
 
+  },
+    componentWillReceiveProps(a) {
+        console.log(1,a)
+        let { dispatch,data} = this.props;
+    //dispatch(showOpenClass(data));
+},
+    componentDidUpdate(a) {
+        console.log(2,a)
+        let { dispatch,data} = this.props;
+        //dispatch(showOpenClass(data));
+    },
   handleClick(e){
     const {dispatch , data }=this.props;
-      console.log(data)
     let type=$(e.target).data('type');
     $(".top-tab .tab-item").removeClass('active');
     $(e.target).addClass('active');
-    if(type=='public'){
-        dispatch(showOpenClass())
+    if(type=='open'){
+        dispatch(showOpenClass(data))
     }else{
-        dispatch(showTrainingCamps())
+        dispatch(showTrainingCamps(data))
     }
   },
 
@@ -40,8 +49,8 @@ var User= React.createClass({
         }else{
             return(
                 <div>
-                    <Header data={userClass} handleClick={_this.handleClick}></Header>
-                    <UserList data={userClass}></UserList>
+                    <Header data={data} handleClick={_this.handleClick}></Header>
+                    <UserList data={data}></UserList>
                 </div>
             )
         }
@@ -78,10 +87,11 @@ const Header=(data)=>{
 }
 
 const UserList=(data)=>{
+
    return(
         <div className="content-list">
             {
-                data.data.class.map((n,i)=>{
+                data.data.map((n,i)=>{
                     return(
                         <div className="content-item" key={i}>
                             <div className="avatar">
@@ -112,6 +122,8 @@ const UserList=(data)=>{
 function mapStateToProps(state) {
     const { userItems,userClass} = state
     const {data}=userItems;
+    //let dataArr1=action.data.filter(n=>n.type=='public')
+    //let dataArr2=action.data.filter(n=>n.type!='public')
     return {
         data,
         userClass
