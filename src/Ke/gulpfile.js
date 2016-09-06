@@ -26,6 +26,8 @@ gulp.task('sass', function () {
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
 });
+
+
 gulp.task('copy:css',['sass'], function () {
     return gulp.src([`${appConfig.themeSrc}/css/**/*.{css,map}`])
         .pipe(gulp.dest(`${appConfig.themeDist}/css`));
@@ -62,13 +64,20 @@ gulp.task('copy:js', function () {
 
 
 gulp.task('images', function () {
-    return gulp.src([`${appConfig.themeSrc}/images/**/*.{png,gif,jpg,svg，mp3,mp4}`])
+    return gulp.src([`${appConfig.themeSrc}/images/**/*.{png,gif,jpg,svg,mp3,mp4}`])
     // .pipe(plugins.imagemin())
         .pipe(plugins.rev())
         .pipe(gulp.dest(`${appConfig.themeDist}/images`))
         .pipe(plugins.rev.manifest())
         .pipe(gulp.dest('tmp/images'))
 });
+gulp.task('images:dev', function () {
+    return gulp.src([`${appConfig.themeSrc}/images/**/*.{png,gif,jpg,svg,mp3,mp4}`])
+    // .pipe(plugins.imagemin())
+        .pipe(gulp.dest(`${appConfig.themeDist}/images`))
+});
+
+
 gulp.task('fakedata', function (cb) {
     exec('node fakedata/fakeapi.js', function (err, stdout, stderr) {
         console.log(stdout);
@@ -206,11 +215,11 @@ gulp.task('default',['clean'], function() {
     gulp.start('build');
 });
 
-gulp.task("watch:dev", ['copy:view','copy:css','copy:js'], function(){
+gulp.task("watch:dev", ['copy:view','copy:css','copy:js','images:dev'], function(){
     gulp.watch([`${appConfig.themeSrc}/css/**/*.scss`], ['copy:css']);
     gulp.watch([`${appConfig.themeSrc}/js/**/*.js`], ['copy:js']);
     gulp.watch([`${appConfig.themeSrc}/**/*.html`], ['copy:view']);
-    gulp.watch([`${appConfig.themeSrc}/images/**/*.*`], ['images']);
+    gulp.watch([`${appConfig.themeSrc}/images/**/*.*`], ['images:dev']);
     gulp.start('webpack:dev');
 });
 
