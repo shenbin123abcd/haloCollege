@@ -1,7 +1,3 @@
-
-export default React.createClass({
-  render() {
-    return <div>user</div>
-  }
-})
+import User from '../containers/User'
+export default User
 

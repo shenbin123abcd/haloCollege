@@ -511,6 +511,95 @@ body{
     }
   }
 }
+.html-user{
+  background: #f6f6f6;
+  height:100%;
+  .user-page-top{
+    width:100%;
+    position:relative;
+    img{
+      width:100%;
+    }
+    .top-content{
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform: translate(-50%,-50%);
+      margin-top:-23px;
+      .avatar{
+        width:65px;
+        height:65px;
+        border-radius: 50%;
+        background: #fff;
+        margin:auto;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 8px 15px rgba(255,63,8,.35);
+        img{
+          width:62px;
+          height:62px;
+          border-radius: 50%;
+          overflow: hidden;
+          position: absolute;
+          top:50%;
+          left:50%;
+          transform: translate(-50%,-50%);
+        }
+      }
+      .content{
+        text-align: center;
+        color:#fff;
+        margin-top:13px;
+      }
+    }
+    .tab-wrapper{
+      margin:0 15px;
+    }
+    .top-tab{
+      width:100%;
+      display:flex;
+      margin-top:-29px;
+      border-radius: 6px;
+      box-shadow: 0 2px 7px rgba(254,90,64,.1);
+      position: relative;
+      .tab-item{
+        flex:0 0 50%;
+        background: #fff;
+        text-align: center;
+        height:58px;
+        line-height: 58px;
+        color:#aaaaaa;
+        &.active{
+          color:#fe5a40;
+        }
+        &:first-child{
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+        }
+        &:last-child{
+          border-top-right-radius: 6px;
+          border-bottom-right-radius: 6px;
+        }
+      }
+      .tab-tip{
+        width:1px;
+        height:35%;
+        background:#d7d7d7;
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+  }
+  .content-list{
+    margin:15px;
+    margin-bottom:0;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 -2px 7px rgba(254,90,64,.1);
+  }
+}
 
 
 
