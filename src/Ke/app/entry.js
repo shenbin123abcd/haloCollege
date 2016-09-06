@@ -1,44 +1,65 @@
-import App from './components/App'
 import Detail from './modules/detail'
+import store from './store'
+import User from './modules/User'
+import Index from './modules/index'
+import Seatinfo from './modules/seatinfo'
+import Selectseat from './modules/selectseat'
 
-
-
-
-
-// The Reducer Function
-var userReducer = function(state = [], action) {
-  if (action.type === 'ADD_USER') {
-    var newState = state.concat([action.user]);
-    return newState;
-  }
-  return state;
-};
-
-
-// Create a store by passing in the reducer
-var store = Redux.createStore(userReducer);
-
-
-//ReactDOM.render(
-//  <App />,
-//  document.getElementById('root')
-//);
 
 var Router=ReactRouter.Router
 var Route=ReactRouter.Route
-var hashHistory=ReactRouter.hashHistory
 var browserHistory=ReactRouter.browserHistory
 var Provider=ReactRedux.Provider
 
 
+
+let reactElement = document.getElementById('root')
+
+
+let bodyClass=''
+let htmlClass=''
+
+
+const onUpdateRoute = () => {
+    let path=hb.location.url('path')
+    // console.log(path,path.indexOf('/user')>-1)
+    switch (true){
+        case path=='':
+            htmlClass=`html-index`
+            bodyClass=`body-index`
+            break;
+        case path.indexOf('/detail')>-1:
+            htmlClass=`html-detail`
+            bodyClass=`body-detail`
+            break;
+        case path.indexOf('/user')>-1:
+            htmlClass=`html-user`
+            bodyClass=`body-user`
+            break;
+        default:
+            htmlClass=`html`
+            bodyClass=`body`
+    }
+    $('html').addClass(htmlClass)
+    $('body').addClass(bodyClass)
+}
+const onLeaveRoute = () => {
+    $('html').removeClass(htmlClass)
+    $('body').removeClass(bodyClass)
+}
+
+
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/" component={App} />
-      <Route path="/detail" component={Detail}/>
+    <Router history={browserHistory} onUpdate={onUpdateRoute}>
+        <Route path="/" component={Index}  onLeave={onLeaveRoute}  />
+        <Route path="/detail/:id" component={Detail}    onLeave={onLeaveRoute}  />
+        <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
+        <Route path="/seatinfo/:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
+        <Route path="/selectseat/:id" component={Selectseat}    onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
-  document.getElementById('root')
+    reactElement
 );
 
 
