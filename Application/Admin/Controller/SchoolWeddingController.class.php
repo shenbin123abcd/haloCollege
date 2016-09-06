@@ -9,44 +9,27 @@
 namespace Admin\Controller;
 
 class SchoolWeddingController extends CommonController {
+    public function _join(&$data){
+        $categorys = M('SchoolWeddingCategory')->where("status=1")->getField('id, name');
+        foreach ($data as $key => $value) {
+            $data[$key]['category_name'] = $categorys[$value['category_id']];
 
-    public function index() {
-
-        $this->_list($this->model());
-        $list = $this->list;
-        $categorys = M('SchoolWeddingCategory')->where("status=1")->select();
-        foreach ($list as $key => $value) {
-            foreach ($categorys as $key_cat => $value_cat) {
-                if ($value['category_id'] == $value_cat['id']) {
-                    $list[$key]['category_name'] = $value_cat['name'];
-
-                }
-            }
-        }
-        $this->categorys = $categorys;
-        //获取访问量
-        foreach ($list as $key=>$value){
+            //编号
             $wedding_id[] = $value['id'];
         }
+        $this->assign('categorys', $categorys);
+
         $visit_count = $this->get_visit_count($wedding_id);
-        foreach ($list as $key=>$value){
-            $list[$key]['count']=0;
-            foreach ($visit_count as $visit_key=>$visit_value){
-                if($value['id']==$visit_value['wedding_id']){
-                    $list[$key]['count']=$visit_value['count'];
-                }
-            }
+        foreach ($data as $key=>$value){
+            $data[$key]['count']=isset($visit_count[$value['id']]) ? $visit_count[$value['id']] : 0;
         }
-        $this->list = $list;
-        cookie('__forward__', $_SERVER ['REQUEST_URI']);
-        $this->display($_GET['display'] ? $_GET['display'] : 'index');
     }
 
     //获取头条访问量
     public function get_visit_count($wedding_id = array()){
         $where['wedding_id'] =array('in',$wedding_id);
         $where['status'] =1;
-        $visit_count = M('WeddingVisitcount')->where($where)->field('wedding_id,count')->select();
+        $visit_count = M('WeddingVisitcount')->where($where)->getField('wedding_id,count');
         return $visit_count;
     }
 

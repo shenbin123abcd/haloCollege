@@ -1,21 +1,19 @@
 import {
-    RECEIVE_USER_ITEMS, REQUEST_USER_ITEMS
+    SHOW_OPEN_CLASS, SHOW_TRAINING_CAMPS
 } from '../actions/user'
 
 
 export default (state = {
-    isFetching: false,
-    data: []
+    class:[],
 }, action) => {
     switch(action.type) {
-        case REQUEST_USER_ITEMS:
+        case SHOW_OPEN_CLASS:
             return Object.assign({}, state, {
-                isFetching: true,
+                class: action.data,
             })
-        case RECEIVE_USER_ITEMS:
+        case SHOW_TRAINING_CAMPS:
             return Object.assign({}, state, {
-                isFetching: false,
-                data:action.data
+                class: action.data,
             })
         default:
             return state
