@@ -51,7 +51,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
       <Route path="/" component={Index}  onLeave={onLeaveRoute}  />
-      <Route path="/detail" component={Detail}    onLeave={onLeaveRoute}  />
+      <Route path="/detail/:id" component={Detail}    onLeave={onLeaveRoute}  />
       <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,

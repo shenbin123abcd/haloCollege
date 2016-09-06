@@ -1,3 +1,4 @@
+let Link=ReactRouter.Link
 const CourseItem = ({item}) => (
     <div className="item">
         <div className="img-box">
@@ -24,13 +25,19 @@ const CourseItem = ({item}) => (
                 </div>
             </div>
             <div className="line-box"></div>
-            <div className="info-box cf">
-                <img className="img" src={require('../images/sample-head.png')} alt=""/>
-                <img className="img" src={require('../images/sample-head.png')} alt=""/>
-                <img className="img" src={require('../images/sample-head.png')} alt=""/>
-                <img className="img" src={require('../images/sample-head.png')} alt=""/>
-                <img className="img" src={require('../images/sample-head.png')} alt=""/>
-            </div>
+            <Link to="/detail/10" className="info-box">
+                <div className="avatar-box">
+                    <img className="img" src={require('../images/sample-head.png')} />
+                    <img className="img" src={require('../images/sample-head.png')} />
+                    <img className="img" src={require('../images/sample-head.png')} />
+                    <img className="img" src={require('../images/sample-head.png')} />
+                    <img className="img" src={require('../images/sample-head.png')} />
+                </div>
+                <div className="more-box">
+                    课程详情 &gt;
+                </div>
+                
+            </Link>
         </div>
 
     </div>
