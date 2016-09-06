@@ -18,7 +18,7 @@ class SchoolVideoController extends CommonController {
 			$guests_id[] = $value['guests_id'];
 
 		}
-
+	
 		$guests = M('SchoolGuests')->where(array('id'=>array('in',$guests_id)))->order('title ASC')->getField('id,title');
 
 		foreach ($data as $key => $value) {
@@ -34,15 +34,16 @@ class SchoolVideoController extends CommonController {
 		$this->_before_add();
 	}
 	
-	public function _before_edit(){
+	public function _before_edit(){		
 		$this->_before_add();
 	}
 	
 	public function _before_add(){
 		$this->token = $this->qiniu('crmpub', 'college/cover/');
 		$this->gudests = M('SchoolGuests')->where(array('status'=>1))->select();
-		$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
-		$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
+		$this->category = M('SchoolCate')->where(array('type'=>1))->select();
+		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
+		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
 	}
 	
 	public function _before_insert(){
@@ -50,16 +51,41 @@ class SchoolVideoController extends CommonController {
 		$this->_before_update();
 		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
 		empty($_POST['guests_id']) && $this->error('嘉宾不存在');
+		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
+		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
+		$_POST['create_time'] = time();
+		$_POST['update_time'] = time();
+		$_POST['status'] =1;
+	}
+
+	//获取视频分类名称
+	public function get_cate_name($str_cate_id){
+		$str_name = "";
+		if (!empty($str_cate_id)){
+			$arr_cate_id = explode(',',$str_cate_id);
+			$where['id'] =array('in',$arr_cate_id);
+			$arr_name =M('SchoolCate')->where($where)->select();
+			foreach ($arr_name as $key=>$value){
+				$arr_cate_name[] = $value['title'];
+			}
+			$str_name = implode(',',$arr_cate_name);
+		}
+
+		return $str_name;
 	}
 
 	public function _before_update(){
 		!$this->_checkVideo($_POST['url']) && $this->error('视频不存在，请检查');
-		(empty($_POST['cate1']) || empty($_POST['cate2'])) && $this->error('请选择分类');
+		//(empty($_POST['cate1']) || empty($_POST['cate2'])) && $this->error('请选择分类');
 		empty($_POST['guests_id']) && $this->error('请选择嘉宾');
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);
-		$_POST['cate3'] = empty($_POST['cate3']) ? '' : implode(',', $_POST['cate3']);
+		$_POST['category'] = empty($_POST['category']) ? '' : implode(',', $_POST['category']);
+		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
+		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
+		$_POST['update_time'] =time();
+		//$_POST['cate3'] = empty($_POST['cate3']) ? '' : implode(',', $_POST['cate3']);
 	}
 
 	private function _privateDownloadUrl($baseUrl, $expires = 3600){

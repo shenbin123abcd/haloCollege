@@ -43,6 +43,33 @@ class ApiController extends ApiBaseController {
     }
 
     /**
+     * 获取视频列表 （根据分类id）( V2)
+    */
+    public function getListVideo(){
+        $is_hot = intval(I('is_hot'));
+        $is_vip = intval(I('is_vip'));
+        $cate = I('cate');
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        if(empty($is_hot) && empty($is_vip) && empty($cate)){
+            $this->error('参数错误！');
+        }
+        if (!empty($is_hot) && !empty($is_vip) && !empty($cate)){
+            $this->error('参数错误！');
+        }
+        if(!empty($is_hot)){
+            $map['is_hot'] = is_int($is_hot) ? $is_hot :  $this->error('参数错误！');
+        }elseif (!empty($is_vip)){
+            $map['is_vip'] = is_int($is_vip) ?  $is_vip : $this->error('参数错误！');
+        }else{
+            $map['_string'] = 'FIND_IN_SET(' . $cate . ', category)';
+        }
+
+        $data = D('SchoolVideo')->getListByCate($map,$page,$per_page);
+        $this->success('success', $data);
+    }
+
+    /**
      * 根据类型3获取列表
      * @param  integer $cate 分类id
      * @param  integer $per_page 每页显示数量
@@ -175,8 +202,8 @@ class ApiController extends ApiBaseController {
      * @return [type]      推荐视频列表
      */
     public function videoRecommend($vid) {
-        $list = D('SchoolVideo')->getRecommend($vid);
-
+        //$list = D('SchoolVideo')->getRecommend($vid);
+        $list = D('SchoolVideo')->getRecommendList($vid);
         $this->success('success', $list);
     }
 
@@ -207,6 +234,19 @@ class ApiController extends ApiBaseController {
 
         $list = D('SchoolComment')->getList(array('vid' => $vid), $per_page);
 
+        $this->success('success', $list);
+    }
+
+    //获取视频评论列表（最新）--包含职位信息
+    public function getComments(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $vid = I('vid');
+        $vid = intval($vid);
+        if(empty($vid) || $vid < 0){
+            $this->error('参数错误');
+        }
+        $list = D('SchoolComment')->getCommentList($page,$per_page,$vid);
         $this->success('success', $list);
     }
 

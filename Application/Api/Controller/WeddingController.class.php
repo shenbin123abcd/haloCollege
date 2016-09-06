@@ -69,46 +69,18 @@ class WeddingController extends CommonController {
             }
         }
         //获取访问总数、点赞总数、点赞状态、评论总数
-        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
-        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->field('wedding_id,count(id) as count')->select();
-        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->field('wedding_id,status')->select();
-        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
+        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
+        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
+        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
+        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
         foreach ($list as $key=>$value){
-            $list[$key]['visitCount'] = 0;
-            $list[$key]['praiseCount'] = 0;
-            $list[$key]['comment_count'] = 0;
+            $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
+            $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
+            $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
             if(empty($uid)){
                 $list[$key]['status_praise'] = -1;
             }else{
-                $list[$key]['status_praise'] = 0;
-            }
-            if(!empty($visitCount)){
-                foreach ($visitCount as $visit_key=>$visit_value){
-                    if($value['id']==$visit_value['wedding_id']){
-                        $list[$key]['visitCount'] = $visit_value['count'];
-                    }
-                }
-            }
-            if (!empty($praiseCount)){
-                foreach ($praiseCount as $praise_key=>$praise_value){
-                    if ($value['id']==$praise_value['wedding_id']){
-                        $list[$key]['praiseCount'] = $praise_value['count'];
-                    }
-                }
-            }
-            if(!empty($comment_count)){
-                foreach ($comment_count as $com_key=>$com_value){
-                    if ($value['id']==$com_value['wedding_id']){
-                        $list[$key]['comment_count'] = $com_value['count'];
-                    }
-                }
-            }
-            if(!empty($status_praise)){
-                foreach ($status_praise as $status_key=>$status_value){
-                    if ($value['id']==$status_value['wedding_id']){
-                        $list[$key]['status_praise'] = $status_value['status'];
-                    }
-                }
+                $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
             }
         }
 

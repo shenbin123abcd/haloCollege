@@ -67,6 +67,43 @@ class SchoolCommentModel extends Model {
 		return array('total'=>$total, 'list'=>empty($list) ? array() : $list);
 	}
 
+	/**
+	 * 获取评论列表（最新）
+	 */
+	public function getCommentList($page,$per_page,$vid){
+		$url = 'http://college-api.halobear.com/v1/public/getUserInfo';
+		$where['status']=1;
+		$where['vid']=$vid;
+		$total = $this->where($where)->count();
+		$list = $this->where($where)->page($page,$per_page)->order('id DESC')->field('id,uid,username,content,score,create_time')->select();
+		foreach ($list as $key => $value) {
+			$list[$key]['avatar'] = get_avatar($value['uid']);
+		}
+		//获取用户职位等信息
+		foreach ($list as $key=>$value){
+			$uid_arr[] = $value['uid'];
+		}
+		$uid_arr_unique = array_unique($uid_arr);
+
+		if(!empty($uid_arr_unique)){
+			$uid = json_encode($uid_arr_unique);
+			$data =array(
+				'uid'=>$uid,
+			);
+			$result = curl_post($url,$data);
+			$userInfo = $result['data']['userInfo'];
+			foreach ($list as $key_list=>$value_list){
+				$list[$key_list]['position'] = '';
+				foreach ($userInfo as $key_userInfo=>$value_userInfo){
+					if($value_list['uid']==$value_userInfo['uid']){
+						$list[$key_list]['position'] = $value_userInfo['position'];
+					}
+				}
+			}
+		}
+		return array('total'=>$total, 'list'=>empty($list) ? array() : $list);
+	}
+
 	protected function _after_insert($data, $option){
 		// 计算评分
 		$score = $this->where(array('vid'=>$data['vid']))->avg('score');

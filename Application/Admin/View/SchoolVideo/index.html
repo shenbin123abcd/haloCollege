@@ -20,17 +20,29 @@
 					<option value="{$vo.id}" <eq name="Think.request.guests_id" value="$vo['id']">selected</eq>>{$vo.title}</option>
 				</volist>
 			</select>
-			<label>分类：</label>
-			<select class="cate" name="cate1">
+			<label>会员专享：</label>
+			<select name="is_vip">
 				<option value="">请选择</option>
-				<volist name="cate1" id="vo">
-					<option value="{$vo.id}" <eq name="Think.request.cate1" value="$vo['id']">selected</eq>>{$vo.title}</option>
-				</volist>
+				<option value="0" <eq name="Think.request.is_vip" value="0">selected</eq>>否</option>
+				<option value="1" <eq name="Think.request.is_vip" value="1">selected</eq>>是</option>
 			</select>
-			<select class="cate" name="cate2">
+			<label>推荐：</label>
+			<select name="is_recommend">
 				<option value="">请选择</option>
-				<volist name="cate2" id="vo">
-					<option value="{$vo.id}" <eq name="Think.request.cate2" value="$vo['id']">selected</eq>>{$vo.title}</option>
+				<option value="0" <eq name="Think.request.is_recommend" value="0">selected</eq>>否</option>
+				<option value="1" <eq name="Think.request.is_recommend" value="1">selected</eq>>是</option>
+			</select>
+			<label>热门：</label>
+			<select name="is_hot">
+				<option value="">请选择</option>
+				<option value="0" <eq name="Think.request.is_hot" value="0">selected</eq>>否</option>
+				<option value="1" <eq name="Think.request.is_hot" value="1">selected</eq>>是</option>
+			</select>
+			<label>分类：</label>
+			<select class="cate" name="category">
+				<option value="">请选择</option>
+				<volist name="category" id="vo">
+					<option value="{$vo.id}" <eq name="Think.request.category" value="$vo['id']">selected</eq>>{$vo.title}</option>
 				</volist>
 			</select>
 			<button type="submit" class="btn">搜索</button>
@@ -45,7 +57,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:标题,width:200}{field:url,title:播放地址,width:200}{field:guests,title:嘉宾,width:80}{field:cate3_title,title:分类,width:120}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:标题,width:200}{field:url,title:播放地址,width:200}{field:guests,title:嘉宾,width:80}{field:cate_title,title:分类,width:120}{field:is_vip,title:是否会员专享,width:60}{field:is_hot,title:是否热门,width:60}{field:is_recommend,title:是否推荐,width:60}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">
