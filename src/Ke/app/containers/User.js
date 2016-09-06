@@ -66,13 +66,33 @@ const Header=(data)=>{
 }
 
 const UserList=(data)=>{
-    console.log(data);
-    function filterArr(arr){
-        
+    //console.log(data);
+    function filterArr(n,i){
+        if(n.type=='peixun'){
+            return false
+        }
+        return true
     }
+
+    let dataArray=data.data.filter(filterArr);
+    //console.log(dataArray,data.data)
+
     return(
         <div className="content-list">
-            asd
+            {
+                dataArray.map((n,i)=>{
+                    return(
+                        <div className="content-item" key={i}>
+                            <div className="avatar">
+da
+                            </div>
+                            <div className="content">
+asd
+                            </div>
+                        </div>
+                    )
+                })
+            }
         </div>
     )
 }
