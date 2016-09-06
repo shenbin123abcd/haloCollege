@@ -8,13 +8,12 @@ var User= React.createClass({
      document.title='我的个人中心';
      let { dispatch,data} = this.props;
      dispatch(fetchUserItemsIfNeeded(22));
-
   },
     componentWillReceiveProps(a) {
         console.log(1,a)
         let { dispatch,data} = this.props;
     //dispatch(showOpenClass(data));
-},
+    },
     componentDidUpdate(a) {
         console.log(2,a)
         let { dispatch,data} = this.props;
