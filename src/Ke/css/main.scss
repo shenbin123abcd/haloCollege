@@ -207,6 +207,28 @@ body{
 
   }
 }
+.seatinfo-wrapper{
+
+}
+.selectseat-wrapper{
+
+}
+.seats-wrapper{
+  height: 8.8rem;
+  background-color: #f6f6f6;
+
+  .seat-canvas{
+    width: 3.68rem;
+    height: 0.44rem;
+    background : #edecec;
+    border-radius : 368px 0px 0px 0px  / 0px;
+  }
+  .seat-box{
+
+
+  }
+
+}
 
 .detail-page{
   background: #f6f6f6;
@@ -601,19 +623,49 @@ body{
     background: #fff;
     border-radius: 6px;
     box-shadow: 0 -2px 7px rgba(254,90,64,.1);
+    padding-bottom:20px;
     .content-item{
       display:flex;
       padding:20px 13px;
+      padding-bottom:0;
       .avatar{
         flex:0 0 38px;
         width:38px;
         height:38px;
         overflow: hidden;
         border-radius: 50%;
+        box-shadow: 0 2.5px 6px rgba(0,0,0,.12);
+        background-color: #e1e1e1;
+        img{
+          width:100%;
+        }
+      }
+      .gap{
+        flex: 0 0 12px;
+        height:100%;
       }
       .content{
         flex:1 1 auto;
-        border-bottom: 1px solid ;
+        border-bottom: 1px solid #d7d7d7;
+        padding-bottom: 16px;
+        .content-desc{
+          color:#333333;
+        }
+        .content-info{
+          color:#666666;
+          margin-top:3px;
+        }
+        .content-bottom{
+          margin-top:1px;
+          .content-seat{
+            color:#666666;
+            float:left;
+          }
+          .content-isend{
+            color:#aaaaaa;
+            float:right;
+          }
+        }
       }
     }
   }

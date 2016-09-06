@@ -21,7 +21,7 @@ export default React.createClass({
         }
         return(
             <div className="flex-bottom-btn">
-                <Link to="/selectseat/10" className="choose-seat-btn f-15">在线选座</Link>
+                <Link to="/course/selectseat/10" className="choose-seat-btn f-15">在线选座</Link>
                 <div className={renderEnterBtn()} >立即报名（{price}）</div>
             </div>
         )

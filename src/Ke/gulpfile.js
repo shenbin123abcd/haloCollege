@@ -69,7 +69,13 @@ gulp.task('images', function () {
         .pipe(plugins.rev.manifest())
         .pipe(gulp.dest('tmp/images'))
 });
-
+gulp.task('fakedata', function (cb) {
+    exec('node fakedata/fakeapi.js', function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+})
 gulp.task('build',['sass','images','webpack'], function () {
     var htmlFilter = plugins.filter('**/*.html',{restore: true});
     var jsFilter = plugins.filter('**/*.js',{restore: true});
