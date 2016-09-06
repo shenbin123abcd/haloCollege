@@ -78,7 +78,7 @@ function fetchUserItems(req){
                     type:'peixun',
                 },
             ]
-             return dispatch(receiveUserPosts(req,data));
+            dispatch(receiveUserPosts(req,data));
         })
     }
 }
