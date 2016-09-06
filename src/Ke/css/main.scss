@@ -112,10 +112,87 @@ body{
 .index-course-wrapper{
   padding: 0.25rem 0.2rem 0.5rem;
   .item{
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(255,107,83,.06);
+    margin-top: 0.28rem;
+    &:first-child{
+      margin-top: 0;
+    }
     .img-box{
+      position: relative;
       .img{
+        border-radius: 6px 6px 0 0;
         width: 100%;
       }
+      .tag{
+        position: absolute;
+        left: 0.26rem;
+        top: 0.2rem;
+        color: #ffffff;
+        font-size: 0.2rem;
+        border-radius: 10px 0;
+        text-align: center;
+        padding: 0.04rem 0.16rem;
+        &-gkk{
+          background-color: #9692ff;
+        }
+      }
+
+    }
+    .content-box{
+      padding: 0.2rem 0.25rem;
+    }
+    .des-inner-1{
+      float: left;
+      width: 5rem;
+    }
+    .des-inner-2{
+      float: right;
+      text-align: right;
+    }
+    .des-box{
+      .title{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        font-size: 0.28rem;
+        color: #333333;
+      }
+      .info{
+        font-size: 0.24rem;
+        color: #333333;
+      }
+      .price{
+        color: $mainColor;
+        font-size: 0.3rem;
+      }
+      .available{
+        color: #666;
+        font-size: 0.18rem;
+      }
+
+    }
+    .line-box{
+      height: 1px;
+      background-color: #d7d7d7;
+      transform: scale(1,0.5);
+      margin: 0.18rem 0 0.3rem;
+
+    }
+    .info-box{
+      .img{
+        border-radius:50%;
+        float: left;
+        margin-left: -0.16rem;
+        border: 1px solid #fff;
+        &:first-child{
+          margin-left: 0;
+        }
+
+      }
+
     }
 
   }
