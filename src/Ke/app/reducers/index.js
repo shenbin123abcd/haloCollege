@@ -12,6 +12,6 @@ export default Redux.combineReducers({
     monthList,
     courseDetail,
     userItems,
-    userClass
+    userClass,
     seats,
 })
