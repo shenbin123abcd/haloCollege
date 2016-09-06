@@ -32,6 +32,7 @@ class CourseModel extends CommonModel{
         array('update_time', 'time', self::MODEL_BOTH, 'function'),
         array('status', '1', self::MODEL_INSERT, 'string'),
         array('num', '0', self::MODEL_INSERT, 'string'),
+        array('month', 'getMonth', self::MODEL_BOTH, 'callback'),
     );
 
     // 检查嘉宾是否正确
@@ -46,6 +47,10 @@ class CourseModel extends CommonModel{
 
     protected function getTotal(){
         return $_POST['room_rows'] * $_POST['room_cols'];
+    }
+
+    protected function getMonth(){
+        return date('Ym', strtotime($_POST['start_date']));
     }
 
 }
