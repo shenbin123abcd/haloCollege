@@ -25,7 +25,7 @@ const CourseItem = ({item}) => (
                 </div>
             </div>
             <div className="line-box"></div>
-            <Link to="/detail/10" className="info-box">
+            <Link to="/course/detail/10" className="info-box">
                 <div className="avatar-box">
                     <img className="img" src={require('../images/sample-head.png')} />
                     <img className="img" src={require('../images/sample-head.png')} />

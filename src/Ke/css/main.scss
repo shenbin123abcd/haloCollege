@@ -207,6 +207,28 @@ body{
 
   }
 }
+.seatinfo-wrapper{
+
+}
+.selectseat-wrapper{
+
+}
+.seats-wrapper{
+  height: 8.8rem;
+  background-color: #f6f6f6;
+
+  .seat-canvas{
+    width: 3.68rem;
+    height: 0.44rem;
+    background : #edecec;
+    border-radius : 368px 0px 0px 0px  / 0px;
+  }
+  .seat-box{
+
+
+  }
+
+}
 
 .detail-page{
   background: #f6f6f6;

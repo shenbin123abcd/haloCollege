@@ -40,7 +40,7 @@ var Index = React.createClass({
     render: function() {
         let {items,isFetching,monthList}=this.props;
         return (
-            <div>
+            <div className="index-wrapper">
                 <Header items={monthList} renderItem={this.renderNav} />
                 <Course items={items} isFetching={isFetching} renderItem={this.renderCourse} />
             </div>
