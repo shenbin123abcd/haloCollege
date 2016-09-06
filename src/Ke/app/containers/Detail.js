@@ -2,7 +2,7 @@ import bgImg from '../images/detail-bg.png'
 import contentImg from '../images/content-img.png'
 import BottomBtn from '../components/detail.bottom'
 import fetchCourseDetailIfNeeded from '../actions/detail'
-
+let Link=ReactRouter.Link
 
 var Detail= React.createClass({
 
@@ -108,12 +108,12 @@ var DetailTop=React.createClass({
 var DetailMiddle=React.createClass({
   render(){
     return (
-      <div className="deatil-middle">
+      <Link to="/seatinfo/10" className="deatil-middle">
         <div className="sign-num-block clearfix">
           <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名28人</div>
           <div className="sign-num-block-right f-14">名额仅剩14个<i className="haloIcon haloIcon-right"></i></div>
         </div>
-      </div>
+      </Link>
     )
   }
 })
