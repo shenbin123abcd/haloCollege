@@ -2,6 +2,8 @@ import Detail from './modules/detail'
 import store from './store'
 import User from './modules/User'
 import Index from './modules/index'
+import Seatinfo from './modules/seatinfo'
+import Selectseat from './modules/selectseat'
 
 
 var Router=ReactRouter.Router
@@ -50,9 +52,11 @@ const onLeaveRoute = () => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
-      <Route path="/" component={Index}  onLeave={onLeaveRoute}  />
-      <Route path="/detail/:id" component={Detail}    onLeave={onLeaveRoute}  />
-      <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
+        <Route path="/" component={Index}  onLeave={onLeaveRoute}  />
+        <Route path="/detail/:id" component={Detail}    onLeave={onLeaveRoute}  />
+        <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
+        <Route path="/seatinfo/:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
+        <Route path="/selectseat/:id" component={Selectseat}    onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement

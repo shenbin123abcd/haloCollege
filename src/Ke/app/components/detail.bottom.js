@@ -1,5 +1,4 @@
-var Link=ReactRouter.Route;
-
+let Link=ReactRouter.Link
 
 export default React.createClass({
     componentDidMount(){
@@ -22,7 +21,7 @@ export default React.createClass({
         }
         return(
             <div className="flex-bottom-btn">
-                <div className="choose-seat-btn f-15">在线选座</div>
+                <Link to="/selectseat/10" className="choose-seat-btn f-15">在线选座</Link>
                 <div className={renderEnterBtn()} >立即报名（{price}）</div>
             </div>
         )
