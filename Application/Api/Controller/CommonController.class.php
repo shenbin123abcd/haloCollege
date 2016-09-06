@@ -29,11 +29,7 @@ class CommonController extends Controller {
      * 空操作
      */
     public function _empty() {
-        if(IS_AJAX){
-            $this->ajaxReturn(array('info' => ACTION_NAME . ' Not Found', 'error' => 404, 'iRet' => 0));
-        }else{
-            $this->display('Index:index');
-        }
+        $this->ajaxReturn(array('info' => ACTION_NAME . ' Not Found', 'error' => 404, 'iRet' => 0));
     }
 
     /**

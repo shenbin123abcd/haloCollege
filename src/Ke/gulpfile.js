@@ -27,9 +27,39 @@ gulp.task('sass', function () {
         .pipe(gulp.dest(`${appConfig.themeSrc}/css`));
 });
 gulp.task('copy:css',['sass'], function () {
-    return gulp.src([`${appConfig.themeSrc}/css/*.css`])
+    return gulp.src([`${appConfig.themeSrc}/css/**/*.{css,map}`])
         .pipe(gulp.dest(`${appConfig.themeDist}/css`));
 });
+
+
+gulp.task('copy:js', function () {
+    return gulp
+        .src([`${appConfig.themeSrc}/js/*.js`])
+        .pipe(plugins.cached('myjs'))
+        // .pipe(plugins.cdnizer({
+        //     defaultCDNBase: `/Public/Ke`,
+        //     //defaultCDNBase: "../",
+        //     allowRev: true,
+        //     allowMin: true,
+        //     matchers: [
+        //         /(["'`])(.+?)(["'`])/gi,
+        //     ],
+        //     fallback: false,
+        //     files: [
+        //         'images/**/*',
+        //     ]
+        // }))
+        .pipe(plugins.babel({
+            presets: ['es2015']
+        }))
+        .on('error', function(e) {
+            console.error(e);
+            this.emit('end');
+        })
+        .pipe(gulp.dest(`${appConfig.themeDist}/js`))
+        ;
+});
+
 
 gulp.task('images', function () {
     return gulp.src([`${appConfig.themeSrc}/images/**/*.{png,gif,jpg,svg，mp3,mp4}`])
@@ -149,6 +179,7 @@ gulp.task('copy:view', ['copy:css'],function () {
                 // Thi
                 // s file is on the default CDN, and will replaced with //my.cdn.host/base/js/app.js
                 'css/**/*.css',
+                'js/**/*.js',
                 //'public/images/**/*.{jpg,png,mp3,mp4}',
             ]
         }))
@@ -169,8 +200,9 @@ gulp.task('default',['clean'], function() {
     gulp.start('build');
 });
 
-gulp.task("watch:dev", ['copy:view','copy:css'], function(){
+gulp.task("watch:dev", ['copy:view','copy:css','copy:js'], function(){
     gulp.watch([`${appConfig.themeSrc}/css/**/*.scss`], ['copy:css']);
+    gulp.watch([`${appConfig.themeSrc}/js/**/*.js`], ['copy:js']);
     gulp.watch([`${appConfig.themeSrc}/**/*.html`], ['copy:view']);
     gulp.watch([`${appConfig.themeSrc}/images/**/*.*`], ['images']);
     gulp.start('webpack:dev');
