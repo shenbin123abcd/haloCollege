@@ -3,7 +3,7 @@
 	<div class="h_a">说明</div>
 	<div class="prompt_text">
 		<ol>
-			<li>婚礼头条管理</li>
+			<li>视频管理</li>
 		</ol>
 	</div>
 	<!--/说明-->
@@ -12,19 +12,31 @@
 	<form action="__URL__/index" method="get">
 		<div class="search_type cc mb10">
 			<label>标题：</label>
-			<input name="headline" type="text" class="input length_2 mr10" value="{$Think.get.headline}"/>
-			<label>分类：</label>
-			<select class="cate" name="category_id">
+			<input name="title" type="text" class="input length_2 mr10" value="{$Think.get.title}"/>
+			<label>嘉宾：</label>
+			<select name="guests_id">
 				<option value="">请选择</option>
-				<volist name="categorys" id="vo">
-					<option value="{$key}">{$vo}</option>
+				<volist name="gudests" id="vo">
+					<option value="{$vo.id}" <eq name="Think.request.guests_id" value="$vo['id']">selected</eq>>{$vo.title}</option>
+				</volist>
+			</select>
+			<label>分类：</label>
+			<select class="cate" name="cate1">
+				<option value="">请选择</option>
+				<volist name="cate1" id="vo">
+					<option value="{$vo.id}" <eq name="Think.request.cate1" value="$vo['id']">selected</eq>>{$vo.title}</option>
+				</volist>
+			</select>
+			<select class="cate" name="cate2">
+				<option value="">请选择</option>
+				<volist name="cate2" id="vo">
+					<option value="{$vo.id}" <eq name="Think.request.cate2" value="$vo['id']">selected</eq>>{$vo.title}</option>
 				</volist>
 			</select>
 			<button type="submit" class="btn">搜索</button>
 		</div>
 	</form>
 	<!--/搜索-->
-
 	<!--操作-->
 	<div class="mb10">
 		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>新增</a>
@@ -33,7 +45,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list  box="id" name="list" show="{field:id,title:编号,width:60}{field:headline,title:标题,width:200}{field:brief,title:简介,width:200}{field:category_name,title:分类,width:30}{field:count,title:访问量,width:50}{field:sort,title:排序（单击）,order:desc,width:50}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,order:desc,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:标题,width:200}{field:url,title:播放地址,width:200}{field:guests,title:嘉宾,width:80}{field:cate3_title,title:分类,width:120}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">
