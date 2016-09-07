@@ -5,7 +5,8 @@ import {
 
 export default (state = {
     isFetching: false,
-    data: []
+    data: [],
+    filter:'SHOW_OPEN'
 }, action) => {
     switch(action.type) {
         case REQUEST_USER_ITEMS:
