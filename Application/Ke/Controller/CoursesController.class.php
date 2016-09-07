@@ -109,7 +109,7 @@ class CoursesController extends CommonController {
             }
         }
 
-        $this->success($list);
+        $this->success(['list'=>$list, 'user'=>['username'=>$this->user['nickname'], 'avatar'=>$this->user['headimgurl']]]);
     }
 
 
