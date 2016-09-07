@@ -9,7 +9,7 @@ const CourseItem = ({item}) => (
             <div className="des-box cf">
                 <div className="des-inner-1">
                     <div className="title">
-                        云南站 |{item.title}
+                        {item.title}
                     </div>
                     <div className="info">
                         09月16日 · 上海

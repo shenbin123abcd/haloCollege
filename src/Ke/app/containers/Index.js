@@ -8,9 +8,9 @@ import { fetchCourseIfNeeded,setCurrentMonth } from '../actions'
 var Index = React.createClass({
     componentDidMount() {
         document.title='幻熊课堂';
-        const { dispatch,route } = this.props
-
-        dispatch(fetchCourseIfNeeded())
+        const { dispatch,monthList} = this.props
+        let item=monthList.filter(n=>n.active)[0]
+        dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
     },
     handleNavClick(item) {
         let {dispatch,monthList}=this.props;
@@ -19,7 +19,7 @@ var Index = React.createClass({
         // console.log(item===monthList.filter(n=>n.active)[0])
         if(item!=monthList.filter(n=>n.active)[0]){
             dispatch(setCurrentMonth(item));
-            dispatch(fetchCourseIfNeeded(item));
+            dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
         }
 
     },
