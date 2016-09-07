@@ -76,6 +76,7 @@ class CourseModel extends Model {
                 $data['video'][$key]['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $item['cover_url'];
             }
             $data['content'] = htmlspecialchars_decode($data['content']);
+            $data['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['cover_url'];
         }
 
         return $data ? $data : array();
