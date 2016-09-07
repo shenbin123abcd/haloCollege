@@ -13,7 +13,7 @@ function receiveData(req, res) {
     return {
         type: RECEIVE_SEAT,
         index:req,
-        items: res.data.seats,
+        items: res.data.seat,
     }
 }
 
@@ -28,6 +28,7 @@ function fetchData(req) {
             });
     }
 }
+
 function shouldFetchData(state, req) {
     const { seats } = state
     const {
