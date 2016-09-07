@@ -15,6 +15,7 @@ function receiveData(req, res) {
         type: RECEIVE_SEAT_INFO,
         index:req,
         items: res.data.seat,
+        users: res.data.user,
     }
 }
 
