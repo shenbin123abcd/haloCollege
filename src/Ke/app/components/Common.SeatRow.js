@@ -1,10 +1,22 @@
 
+import  SeatCell  from '../components/Common.SeatCell'
 
-const SeatRow = ({items,renderItem}) => {
 
+
+
+
+const SeatRow = ({items}) => {
+    
+    
     return(
-        <div  >
-           {items.map(renderItem)}
+        
+        <div className="seat-row cf" >
+            
+           {items.map((item,i)=>{
+               return (
+                   <SeatCell item={item} index={i} key={i} itemsLength={items.length} />
+               )
+           })}
         </div>
     )}
 

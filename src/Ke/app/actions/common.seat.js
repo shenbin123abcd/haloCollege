@@ -1,50 +1,8 @@
 
-export const REQUEST_SEAT = 'REQUEST_SEAT'
-export const RECEIVE_SEAT = 'RECEIVE_SEAT'
-
-function requestData(data) {
+export function initSeats(data) {
+    // console.log(data)
     return {
-        type: REQUEST_SEAT,
-        data
-    }
-}
-function receiveData(req, res) {
-    // console.log(res)
-    return {
-        type: RECEIVE_SEAT,
-        index:req,
-        items: res.data.seat,
-    }
-}
-
-function fetchData(req) {
-    return dispatch => {
-        dispatch(requestData(req))
-        return fetch(`/courses/seatInfo?course_id=1`)
-            .then(response=>{
-                return response.json();
-            }).then(json=>{
-                return dispatch(receiveData(req, json))
-            });
-    }
-}
-
-function shouldFetchData(state, req) {
-    const { seats } = state
-    const {
-        isFetching,
-    } = seats
-
-    if (isFetching){
-        return false
-    }
-    return true
-}
-
-export function fetchSeatIfNeeded(req) {
-    return (dispatch, getState) => {
-        if (shouldFetchData(getState(), req)) {
-            return dispatch(fetchData(req))
-        }
+        type: 'INIT_SEATS',
+        items: data,
     }
 }
