@@ -3,7 +3,7 @@ namespace Ke\Controller;
 
 use Org\Util\Payment;
 
-class CourseController extends CommonController {
+class CoursesController extends CommonController {
     // 课程列表
     public function index() {
         $month = intval(I('month'));
