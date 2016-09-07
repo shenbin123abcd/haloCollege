@@ -105,6 +105,10 @@ class CourseModel extends Model {
     public function getSeat($course_id){
         // 课程信息
         $course = M('Course')->where(array('id'=>$course_id))->find();
+        if (empty($course)){
+            return [];
+        }
+
         $rows = $course['room_rows'];
         $cols = $course['room_cols'];
 
