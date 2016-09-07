@@ -1,4 +1,5 @@
 let Link=ReactRouter.Link
+let Modal=ReactBootstrap.Modal;
 
 export default React.createClass({
     componentDidMount(){
@@ -11,6 +12,7 @@ export default React.createClass({
     render:function(){
         const num=this.props.numData;
         const price=this.props.priceData;
+        const handleClick=this.props.handleClick;
         let classStyle='';
         function renderEnterBtn(){
             if(num<=0){
@@ -21,8 +23,8 @@ export default React.createClass({
         }
         return(
             <div className="flex-bottom-btn">
-                <Link to="/course/selectseat/10" className="choose-seat-btn f-15">在线选座</Link>
-                <div className={renderEnterBtn()} >立即报名（{price}）</div>
+                <div to="/course/selectseat/10" className="choose-seat-btn f-15" data-type="choose-seat" onClick={handleClick}>在线选座</div>
+                <div className={renderEnterBtn()}>立即报名（￥{price} /人）</div>
             </div>
         )
     }

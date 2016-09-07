@@ -1,6 +1,6 @@
 import bgUser from '../images/bg-user.png'
 import contentImg from '../images/content-img.png'
-import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps} from '../actions/user'
+import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 
 
 var User= React.createClass({
@@ -9,25 +9,15 @@ var User= React.createClass({
      let { dispatch,data} = this.props;
      dispatch(fetchUserItemsIfNeeded(22));
   },
-    componentWillReceiveProps(a) {
-        console.log(1,a)
-        let { dispatch,data} = this.props;
-    //dispatch(showOpenClass(data));
-    },
-    componentDidUpdate(a) {
-        console.log(2,a)
-        let { dispatch,data} = this.props;
-        //dispatch(showOpenClass(data));
-    },
   handleClick(e){
     const {dispatch , data }=this.props;
     let type=$(e.target).data('type');
     $(".top-tab .tab-item").removeClass('active');
     $(e.target).addClass('active');
-    if(type=='open'){
-        dispatch(showOpenClass(data))
+    if(type=='SHOW_OPEN'){
+        dispatch(receiveUserPosts('SHOW_OPEN'))
     }else{
-        dispatch(showTrainingCamps(data))
+        dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'))
     }
   },
 
@@ -76,9 +66,9 @@ const Header=(data)=>{
             </div>
             <div className="tab-wrapper">
                 <div className="top-tab">
-                    <div className="tab-item f-15 active" data-type='open' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>公开课</div>
+                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>公开课</div>
                     <div className="tab-tip"></div>
-                    <div className="tab-item f-15" data-type='training' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>培训营</div>
+                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>培训营</div>
                 </div>
             </div>
         </div>
@@ -86,7 +76,7 @@ const Header=(data)=>{
 }
 
 const UserList=(data)=>{
-
+   //console.log(data.data)
    return(
         <div className="content-list">
             {
@@ -117,15 +107,22 @@ const UserList=(data)=>{
     )
 }
 
+const showFilter=(data,filter)=>{
+    switch(filter){
+        case "SHOW_ALL":
+            return data
+        case 'SHOW_OPEN':
+            return data.filter(n=>n.type=='public')
+        case 'SHOW_TRAINING_CAMP':
+            return data.filter(n=>n.type=='peixun')
+    }
+}
 
 function mapStateToProps(state) {
-    const { userItems,userClass} = state
+    const { userItems} = state
     const {data}=userItems;
-    //let dataArr1=action.data.filter(n=>n.type=='public')
-    //let dataArr2=action.data.filter(n=>n.type!='public')
     return {
-        data,
-        userClass
+        data:showFilter(state.userItems.data,state.userItems.filter),
     }
 
 }

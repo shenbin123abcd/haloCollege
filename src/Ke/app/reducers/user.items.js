@@ -16,7 +16,8 @@ export default (state = {
         case RECEIVE_USER_ITEMS:
             return Object.assign({}, state, {
                 isFetching: false,
-                data:action.data
+                data:action.data,
+                filter:action.filter
             })
         default:
             return state
