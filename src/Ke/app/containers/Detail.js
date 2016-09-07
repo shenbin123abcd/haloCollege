@@ -1,8 +1,9 @@
 import bgImg from '../images/detail-bg.png'
-import ModalBlock from '../components/detail.modal'
-import BottomBtn from '../components/detail.bottom'
+import BottomBtn from './Common.buttonGroup'
 import {fetchCourseDetailIfNeeded,fetchCourseStatus} from '../actions/detail'
-let Link=ReactRouter.Link
+
+let Link=ReactRouter.Link;
+var browserHistory=ReactRouter.browserHistory
 
 var Detail= React.createClass({
   componentDidMount() {
@@ -19,7 +20,24 @@ var Detail= React.createClass({
       let pathArr=hb.location.url('path').split('/');
       let id= pathArr[pathArr.length-1];
       if(btnType=="choose-seat"){
-          dispatch(fetchCourseStatus(id))
+          $.ajax({
+              url:`/courses/applyStatus?course_id=${id}`,
+              success:function(res){
+                  res.iRet=0;
+                  if(res.iRet!==1){
+
+                  }else{
+                      browserHistory.push(`/course/selectseat/${id}`)
+                  }
+              },
+              error:function(error){
+                  hb.lib.weui.alert({
+                      title:'温馨提示',
+                      content:error,
+                      btn:'确定',
+                  })
+              }
+          })
       }else if(btnType=="enroll-now"){
 
       }
@@ -57,7 +75,6 @@ var Detail= React.createClass({
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
                     <BottomBtn priceData={fetchData.price} numData={fetchData.last_num} handleClick={_this.handleClick}></BottomBtn>
-                    <ModalBlock></ModalBlock>
                 </div>
             )
         }
