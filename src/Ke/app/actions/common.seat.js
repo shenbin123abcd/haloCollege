@@ -20,7 +20,7 @@ function receiveData(req, res) {
 function fetchData(req) {
     return dispatch => {
         dispatch(requestData(req))
-        return fetch(`http://localhost:1234`)
+        return fetch(`/courses/seatInfo?course_id=1`)
             .then(response=>{
                 return response.json();
             }).then(json=>{

@@ -36,7 +36,9 @@ function receiveCourse(req, res) {
 function fetchCourse(req) {
   return dispatch => {
     dispatch(requestPosts(req))
-    return fetch(`/course`)
+    return fetch(`/courses?${$.param({
+      month: req
+    })}`)
       .then(response=>{
          return response.json();
       }).then(json=>{

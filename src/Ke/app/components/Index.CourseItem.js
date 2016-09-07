@@ -1,47 +1,72 @@
 let Link=ReactRouter.Link
-const CourseItem = ({item}) => (
-    <div className="item">
-        <div className="img-box">
-            <img className="img" src={require('../images/sample.png')} />
-            <div className="tag tag-gkk">公开课</div>
-        </div>
-        <div className="content-box">
-            <div className="des-box cf">
-                <div className="des-inner-1">
-                    <div className="title">
-                        云南站 |{item.title}
-                    </div>
-                    <div className="info">
-                        09月16日 · 上海
-                    </div>
-                </div>
-                <div className="des-inner-2">
-                    <div className="price">
-                        ¥2000/人
-                    </div>
-                    <div className="available">
-                        名额仅剩:14
-                    </div>
-                </div>
-            </div>
-            <div className="line-box"></div>
-            <Link to="/course/detail/10" className="info-box">
-                <div className="avatar-box">
-                    <img className="img" src={require('../images/sample-head.png')} />
-                    <img className="img" src={require('../images/sample-head.png')} />
-                    <img className="img" src={require('../images/sample-head.png')} />
-                    <img className="img" src={require('../images/sample-head.png')} />
-                    <img className="img" src={require('../images/sample-head.png')} />
-                </div>
-                <div className="more-box">
-                    课程详情 &gt;
-                </div>
-                
-            </Link>
-        </div>
 
-    </div>
-)
+
+const Avatar = ({items,visibleNum,totalClass}) => {
+
+    if(items.length<visibleNum){
+        return (
+            <div className="avatar-box">
+                {items.map((n,i)=><img key={i} className="img" src={`${n}?imageView2/1/w/60/h/60`}/>)}
+            </div>
+        )
+    }else{
+        let newItems=items.slice(0,visibleNum)
+        return (
+            <div className="avatar-box">
+                {newItems.map((n,i)=><img key={i} className="img" src={`${n}?imageView2/1/w/60/h/60`}/>)}
+                <div className={totalClass}>+{items.length}</div>
+            </div>
+        )
+    }
+}
+
+const CourseItem = ({item}) => {
+    let tagClass = classNames({
+        'tag tag-gkk': item.cate=='公开课',
+        'tag tag-pxy': item.cate=='培训营',
+    });
+    let totalClass = classNames({
+        'total total-gkk': item.cate=='公开课',
+        'total total-pxy': item.cate=='培训营',
+    });
+    return (
+        <div className="item">
+            <div className="img-box">
+                <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
+
+                <div className={tagClass}>{item.cate}</div>
+            </div>
+            <div className="content-box">
+                <div className="des-box cf">
+                    <div className="des-inner-1">
+                        <div className="title">
+                            {item.title}
+                        </div>
+                        <div className="info">
+                            {item.start_date} · {item.city}
+                        </div>
+                    </div>
+                    <div className="des-inner-2">
+                        <div className="price">
+                            ¥{item.price}/人
+                        </div>
+                        <div className="available">
+                            名额仅剩:{item.last_num}
+                        </div>
+                    </div>
+                </div>
+                <div className="line-box"></div>
+                <Link to={`/course/detail/${item.id}`} className="info-box">
+                    <Avatar items={item.user} visibleNum={4} totalClass={totalClass} />
+                    <div className="more-box">
+                        课程详情 &gt;
+                    </div>
+                </Link>
+            </div>
+
+        </div>
+    )
+}
 
 
 export default CourseItem
