@@ -115,7 +115,7 @@ class CourseModel extends Model {
             }
         }
 
-        return $list;
+        return array_values($list);
     }
 
     /**
