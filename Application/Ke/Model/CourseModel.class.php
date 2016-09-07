@@ -72,6 +72,9 @@ class CourseModel extends Model {
             // 嘉宾
             $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id']))->field('title AS name, position, content')->find();
             $data['video'] = M('SchoolVideo')->where(array('cate1'=>2, 'guests_id'=>$data['guest_id']))->field('id, cover_url, title')->select();
+            foreach ($data['video'] as $key=>$item) {
+                $data['video'][$key] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $item['cover_url'];
+            }
             $data['content'] = htmlspecialchars_decode($data['content']);
         }
 
