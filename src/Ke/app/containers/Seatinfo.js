@@ -1,10 +1,9 @@
 import { fetchSeatInfoIfNeeded } from '../actions/seatinfo'
 import  SeatBox  from '../components/Seatinfo.SeatBox'
 import  SeatRow  from '../components/Common.SeatRow'
-
+import BottomBtn from './Common.buttonGroup'
 
 var Seatinfo = React.createClass({
-
     componentDidMount() {
         document.title='座位表';
         const { dispatch ,routeParams} = this.props
@@ -42,7 +41,7 @@ var Seatinfo = React.createClass({
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
 
-                    
+                    <BottomBtn  priceData={1000} numData={10} />
                 </div>
 
             </div>

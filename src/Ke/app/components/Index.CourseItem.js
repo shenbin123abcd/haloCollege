@@ -2,7 +2,7 @@ let Link=ReactRouter.Link
 
 
 const Avatar = ({items,visibleNum,totalClass}) => {
-
+    items=items||[];
     if(items.length<visibleNum){
         return (
             <div className="avatar-box">

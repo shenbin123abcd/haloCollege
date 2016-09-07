@@ -1,4 +1,3 @@
-import todos from './todos'
 import courseList from './index.course'
 import monthList from './index.monthList'
 import courseDetail from './detail.course'
@@ -7,7 +6,6 @@ import seats from './common.seat'
 import seatInfo from './seatinfo'
 
 export default Redux.combineReducers({
-    todos,
     courseList,
     monthList,
     courseDetail,
