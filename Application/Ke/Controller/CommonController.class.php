@@ -10,7 +10,8 @@ class CommonController extends Controller {
      * 初始化操作
      */
     public function _initialize() {
-        //$this->_getWechatUser();
+        cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
+        $this->_getWechatUser();
     }
 
     /**
