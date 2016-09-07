@@ -613,30 +613,30 @@ body{
       }
     }
   }
-  .flex-bottom-btn{
-    position:fixed;
-    bottom:0;
-    height:50px;
-    line-height: 50px;
-    display:flex;
-    width:100%;
-    text-align: center;
-    .choose-seat-btn{
-      background: #fff;
-      color:#fe5a40;
-      flex:0 0 35%;
-    }
-    .enter-btn{
+}
+.flex-bottom-btn{
+  position:fixed;
+  bottom:0;
+  height:50px;
+  line-height: 50px;
+  display:flex;
+  width:100%;
+  text-align: center;
+  .choose-seat-btn{
+    background: #fff;
+    color:#fe5a40;
+    flex:0 0 35%;
+  }
+  .enter-btn{
 
-      flex:0 0 65%;
-      &.able{
-        background: #ff654d;
-        color:#fff;
-      }
-      &.disable{
-        background: #d5d5d5;
-        color:#999999;
-      }
+    flex:0 0 65%;
+    &.able{
+      background: #ff654d;
+      color:#fff;
+    }
+    &.disable{
+      background: #d5d5d5;
+      color:#999999;
     }
   }
 }

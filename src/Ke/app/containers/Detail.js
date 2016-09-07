@@ -25,7 +25,11 @@ var Detail= React.createClass({
               success:function(res){
                   res.iRet=0;
                   if(res.iRet!==1){
-
+                    app.modal.alert({
+                        title:'温馨提示',
+                        content:'error',
+                        btn:'确定',
+                    })
                   }else{
                       browserHistory.push(`/course/selectseat/${id}`)
                   }
