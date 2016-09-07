@@ -65,6 +65,8 @@ class CourseModel extends Model {
 	public function detail($id){
         $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content')->find();
         if($data){
+            $cate = C('KE.COURSE_CATE');
+            $data['cate'] = $cate[$data['cate_id']];
             $data['start_date'] = date('Y.m.d', $data['start_date']);
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
