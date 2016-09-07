@@ -65,6 +65,10 @@ class CoursesController extends CommonController {
         $select = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
         $select && $this->error('你已经选过坐了');
 
+        // 检查座位是否已选
+        $select = M('CourseRecord')->where(array('seat_no'=>$seat_no, 'course_id'=>$course_id))->count();
+        $select && $this->error('该座位已经被选了');
+
         // 增加选座记录
         $data = array('uid'=>0, 'wechat_id'=>$this->user['id'], 'course_id'=>$course_id,'seat_no'=>$seat_no,'create_time'=>time());
         $ret = M('CourseRecord')->add($data);
