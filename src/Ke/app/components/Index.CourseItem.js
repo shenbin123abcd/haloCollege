@@ -57,7 +57,7 @@ const CourseItem = ({item}) => {
                 </div>
                 <div className="line-box"></div>
                 <Link to={`/course/detail/${item.id}`} className="info-box">
-                    <Avatar items={item.user} visibleNum={4} totalClass={totalClass} />
+                    <Avatar items={item.user} visibleNum={8} totalClass={totalClass} />
                     <div className="more-box">
                         课程详情 &gt;
                     </div>
