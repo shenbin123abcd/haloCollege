@@ -19,6 +19,7 @@ const SeatBox = ({items,renderItem,isFetching}) => {
         <div className='seatinfo-box ' data-my-drag >
             <div className="seat-canvas">投影幕布</div>
             <div className={`seat-box ${seatBoxClass}`} >
+                <div className="seat-line"></div>
                 {items.map(renderItem)}
             </div>
         </div>

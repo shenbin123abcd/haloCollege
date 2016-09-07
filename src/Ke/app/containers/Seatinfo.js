@@ -41,6 +41,8 @@ var Seatinfo = React.createClass({
                 <div className="seats-wrapper">
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
+
+                    
                 </div>
 
             </div>

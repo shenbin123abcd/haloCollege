@@ -246,7 +246,9 @@ body{
   height: 8.8rem;
   position: relative;
   overflow: hidden;
-
+  .seatinfo-box {
+    position: relative;
+  }
   @include hbReplace('.seats-wrapper','.seatinfo-wrapper .seats-wrapper'){
     background-color: #fff;
     .seat-canvas{
@@ -267,9 +269,19 @@ body{
     background:  url(../images/seat-canvas-bg.png) 0 0 no-repeat;
     background-size: contain;
   }
+  .seat-line{
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    background-image: linear-gradient(to bottom,#d7d7d7,#d7d7d7 4px,transparent,transparent 8px);
+    background-size: 1px 8px;
+    background-repeat:repeat-y;
+  }
 
   .seat-box{
-
+    position: relative;
     &-1{
       width: 6.3rem;
     }
@@ -283,9 +295,13 @@ body{
       align-items: center;
       justify-content: space-between;
       margin-top: 0.14rem;
+      &.seat-row-6{
+        margin-top: 0.4rem;
+      }
       &:first-child{
         margin-top: 0;
       }
+
     }
     .seat-cell{
       width: 8px;
