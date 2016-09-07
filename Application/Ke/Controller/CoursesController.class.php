@@ -76,6 +76,17 @@ class CoursesController extends CommonController {
         $ret ? $this->success('选座成功') : $this->error('选座失败');
     }
 
+    // 报名状态
+    public function applyStatus(){
+        $course_id = intval(I('course_id'));
+
+        empty($course_id) && $this->error('课程编号错误');
+
+        $ret = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id'=>$course_id))->count();
+
+        $this->success($ret);
+    }
+
     // 我的课程
     public function my() {
         $course_id = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1))->getField('id,course_id');
