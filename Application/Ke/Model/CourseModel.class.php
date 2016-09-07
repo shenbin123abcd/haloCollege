@@ -72,6 +72,9 @@ class CourseModel extends Model {
             // 嘉宾
             $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id']))->field('title AS name, position, content')->find();
             $data['video'] = M('SchoolVideo')->where(array('cate1'=>2, 'guests_id'=>$data['guest_id']))->field('id, cover_url, title')->select();
+            foreach ($data['video'] as $key=>$item) {
+                $data['video'][$key] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $item['cover_url'];
+            }
             $data['content'] = htmlspecialchars_decode($data['content']);
         }
 
@@ -100,19 +103,25 @@ class CourseModel extends Model {
     /**
      * 获取座位列表
      * @param  integer $course_id 课程编号
-     * @param  integer $cols 列数
-     * @param  integer $rows 行数
      * @return array         座位列表
      */
-    public function getSeat($course_id, $cols = 12, $rows = 10){
+    public function getSeat($course_id){
         // 课程信息
-        $course = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('seat_no,uid');
+        $course = M('Course')->where(array('id'=>$course_id))->find();
+        if (empty($course)){
+            return [];
+        }
+
+        $rows = $course['room_rows'];
+        $cols = $course['room_cols'];
+
+        $record = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('seat_no,uid');
 
         $list = array();
         for ($i=1; $i <= $rows; $i++) {
             for ($j=1; $j <= $cols; $j++) {
                 $seat = $i . ',' . $j;
-                $user = isset($course[$seat]) ? $course[$seat] : 0;
+                $user = isset($record[$seat]) ? $record[$seat] : 0;
                 $list[$i][] = array('seat_no'=>$seat, 'user'=>$user);
             }
         }
