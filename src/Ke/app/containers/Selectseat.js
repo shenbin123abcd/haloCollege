@@ -1,7 +1,28 @@
 import { fetchSelectSeatIfNeeded } from '../actions/selectseat'
+import { setSeatsStatus } from '../actions/common.seat'
 import  SeatRow  from '../components/Common.SeatRow'
 import  SeatBox  from '../components/Selectseat.SeatBox'
 import  CourseBox  from '../components/Selectseat.CourseBox'
+import { destroySeats } from '../actions/common.seat'
+
+
+
+
+var SeatBtn =({})=>{
+
+    return(
+        <div className="selectseat-bt-box">
+            <div>
+                系统选座
+            </div>
+            <div>
+                确认选座
+            </div>
+
+        </div>
+    )
+
+}
 
 
 var SelectSeat = React.createClass({
@@ -10,6 +31,7 @@ var SelectSeat = React.createClass({
         const { dispatch ,routeParams} = this.props
         // console.log(this.props)
         dispatch(fetchSelectSeatIfNeeded(routeParams.id))
+        dispatch(setSeatsStatus(true))
     },
     componentWillReceiveProps : function(nextProps) {
         // console.log('componentWillReceiveProps')
@@ -27,6 +49,10 @@ var SelectSeat = React.createClass({
             // console.log(dragDom)
             this.hbDrag=hb.drag(dragDom,{});
         }
+    },
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroySeats())
     },
     renderSeatRow(item, i) {
         return (
@@ -50,6 +76,7 @@ var SelectSeat = React.createClass({
                     <CourseBox data={course}  />
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
+                    <SeatBtn  />
 
                 </div>
 

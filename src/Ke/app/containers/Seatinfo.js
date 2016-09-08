@@ -4,6 +4,7 @@ import  SeatRow  from '../components/Common.SeatRow'
 import BottomBtn from './Common.buttonGroup'
 import UserBox from '../components/Seatinfo.UserBox'
 import { fetchCourseStatusIfNeeded } from '../actions/buttonGroup'
+import { destroySeats } from '../actions/common.seat'
 var Seatinfo = React.createClass({
     componentDidMount() {
         document.title='座位表';
@@ -26,6 +27,10 @@ var Seatinfo = React.createClass({
             // console.log(dragDom)
             this.hbDrag=hb.drag(dragDom,{});
         }
+    },
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroySeats())
     },
     renderSeatRow(item, i) {
         return (
