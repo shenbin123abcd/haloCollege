@@ -243,11 +243,21 @@ body{
 
 }
 .seats-wrapper{
-  height: 8.8rem;
-  position: relative;
+  //height: 8.8rem;
   overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 113px+50;
+
+
+
   .seatinfo-box {
     position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid transparent;
   }
   @include hbReplace('.seats-wrapper','.seatinfo-wrapper .seats-wrapper'){
     background-color: #fff;
@@ -333,15 +343,46 @@ body{
         width: 0.42rem;
         height: 0.42rem;
       }
-
-
     }
-
-
-
-
   }
+  .seatinfo-user-box{
+    position: fixed;
+    width: 100%;
+    height: 113px;
+    overflow: auto;
+    left: 0;
+    bottom: 50px;
+    background-image: linear-gradient(to bottom,#f6f0ef,#f6f6f6 5px);
+    padding-left: 15px;
+    padding-top: 13px;
 
+    .title{
+      font-size: 14px;
+      color: #333333;
+      .haloIcon{
+        color: #999999;
+        margin-right: 3px;
+      }
+      .text{
+
+      }
+    }
+    .avatar-box{
+      margin-top: 12px;
+      display: flex;
+      .img{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: -8px;
+        border: 1px solid #fff;
+        box-shadow: 0 3px 10px rgba(13, 5, 9, 0.14);
+        &:first-child{
+          margin-left: 0;
+        }
+      }
+    }
+  }
 }
 
 .detail-page{

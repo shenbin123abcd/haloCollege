@@ -20,14 +20,15 @@ var Seatinfo = React.createClass({
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
         // let {items,isFetching}=this.props;
-        let dragDom=$(this.refs.dragContainer).find('[data-my-drag]')
+        let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
+        var hbDrag=null;
         // console.log(prevState,dragDom)
-        if(prevState.items){
+        if(prevState.items&&!hbDrag){
             console.log(dragDom)
+            hbDrag=hb.drag(dragDom,{});
         }
     },
     renderSeatRow(item, i) {
-
         return (
             <SeatRow items={item} key={i}   />
         )
@@ -40,7 +41,7 @@ var Seatinfo = React.createClass({
                 <div className="seats-wrapper">
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
-                    <UserBox items={users} />
+                    <UserBox items={users} seats={items} />
                     <BottomBtn  priceData={1000} numData={10} />
                 </div>
 
