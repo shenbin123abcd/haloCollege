@@ -1,18 +1,22 @@
 
-const Item = ({items}) => {
+const Item = ({item}) => {
     return(
-        <div>aa</div>
+        <img className="img" src={`${item}`} />
     )}
 
 
 
-const Box = ({items}) => {
+const Box = ({items,seats}) => {
     items=items||[];
     return(
-        <div className='aaa' >
-            {
-                items.map((n,i)=><Item key={i} />)
-            }
+        <div className='seatinfo-user-box' >
+            <div className='title'><i className="haloIcon haloIcon-tag-2"></i><span className="text">已选座{seats?seats.length:''}人</span></div>
+            <div className="avatar-box cf">
+                {
+                    items.map((n,i)=><Item key={i} item={n} />)
+                }
+            </div>
+
         </div>
     )}
 
