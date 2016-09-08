@@ -88,6 +88,7 @@ gulp.task('fakedata', function (cb) {
 gulp.task('build',['sass','images','webpack'], function () {
     var htmlFilter = plugins.filter('**/*.html',{restore: true});
     var jsFilter = plugins.filter('**/*.js',{restore: true});
+    var jsAppFilter = plugins.filter(`**/hb.drag.js`,{restore: true});
     var jsVenderFilter = plugins.filter('**/vender.js',{restore: true});
     var cssFilter = plugins.filter('**/*.css',{restore: true});
     var manifestHtml = gulp.src("tmp/images/rev-manifest.json");
@@ -112,6 +113,9 @@ gulp.task('build',['sass','images','webpack'], function () {
         }))
 
         .pipe(plugins.rev())
+        .pipe(plugins.babel({
+            presets: ['es2015']
+        }))
         .pipe(gulp.dest(`${appConfig.themeDist}`))
         .pipe(jsFilter.restore)
         .pipe(cssFilter)
