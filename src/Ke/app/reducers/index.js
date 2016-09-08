@@ -4,6 +4,7 @@ import courseDetail from './detail.course'
 import userItems from './user.items'
 import seats from './common.seat'
 import seatInfo from './seatinfo'
+import courseStatus from './button.status'
 import selectSeat from './selectseat'
 
 export default Redux.combineReducers({
@@ -13,5 +14,4 @@ export default Redux.combineReducers({
     userItems,
     seats,
     seatInfo,
-    selectSeat,
 })

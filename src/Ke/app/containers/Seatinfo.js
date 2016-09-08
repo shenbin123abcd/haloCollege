@@ -3,13 +3,14 @@ import  SeatBox  from '../components/Seatinfo.SeatBox'
 import  SeatRow  from '../components/Common.SeatRow'
 import BottomBtn from './Common.buttonGroup'
 import UserBox from '../components/Seatinfo.UserBox'
-
+import { fetchCourseStatusIfNeeded } from '../actions/buttonGroup'
 var Seatinfo = React.createClass({
     componentDidMount() {
         document.title='座位表';
         const { dispatch ,routeParams} = this.props
         // console.log(this.props)
         dispatch(fetchSeatInfoIfNeeded(routeParams.id))
+        dispatch(fetchCourseStatusIfNeeded(routeParams.id));
     },
     componentWillReceiveProps : function(nextProps) {
         // console.log('componentWillReceiveProps')

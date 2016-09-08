@@ -1,16 +1,17 @@
 ;app.modal=(function(){
     "use strict";
+    var ableSeatImg='/images/able-seat.png';
+    var unableSeatImg='/images/unable-seat.png';
+
     var _alert=function(settings={
-        pic:'able-seat',
+        pic:'unable-seat',
         content:'提示内容',
         btn:'确定',
     }){
         var deferred = $.Deferred();
         var pic='';
-        var ableSeatImg='/images/able-seat.png';
-        var unableSeatImg='/images/unable-seat.png'
-        if(settings.pic=='able-seat'){
-            pic=ableSeatImg
+        if(settings.pic=='unable-seat'){
+            pic=unableSeatImg
         }
         var alertHtmlStr=`
                 <div class="modal-alert-block">
@@ -18,13 +19,12 @@
                     <div class="modal-block-dialog" style="display: none;" >
                         <div class='modal-dialog-body'>
                             <div class='modal-dialog-pic'><img src="${pic}" alt="" /></div>
-                            <div class="modal-dialog-text">${settings.content}</div>
+                            <div class="modal-dialog-text f-15">${settings.content}</div>
                         </div>
-                        <div class='modal-dialog-footer'>
-                            ${settings.btn}
+                        <div class='modal-dialog-footer f-15'>
+                            <div class="modal-dialog-alert">${settings.btn}</div>
                         </div>
                     </div>
-
                 </div>`;
             var $alertHtml=$(alertHtmlStr);
             $("body").append($alertHtml);
@@ -37,48 +37,41 @@
             return deferred.promise();
         };
 
-        var _confirm=function(options){
+        var _confirm=function(settings={
+            pic:'able-seat',
+            content:'提示内容',
+            leftBtn:'取消',
+            rightBtn:'确定'
+        }){
             var deferred = $.Deferred();
-            var defaults = {
-                title:'提示',
-                content:'提示内容',
-                rightBtn:'确定',
-                leftBtn:'取消',
-            };
-
-            if(typeof options=="string"){
-                defaults = $.extend(defaults,{
-                    content:options
-                });
-            }else{
-
+            var pic='';
+            if(settings.pic=='able-seat'){
+                pic=ableSeatImg
             }
-
-            var settings = $.extend( {},defaults, options );
-            var confirmHtmlStr=`
-                    <div class="weui_dialog_confirm">
-                    <div class="weui_mask"></div>
-                    <div class="weui_dialog">
-                    <div class="weui_dialog_hd"><strong class="weui_dialog_title">${settings.title}</strong></div>
-                    <div class="weui_dialog_bd">${settings.content}</div>
-                    <div class="weui_dialog_ft">
-                    <a href="javascript:;" class="weui_btn_dialog default">${settings.leftBtn}</a>
-                    <a href="javascript:;" class="weui_btn_dialog primary">${settings.rightBtn}</a>
+            var confirmHtmlStr= `
+                <div class="modal-confirm-block">
+                    <div class="modal-block-mask"></div>
+                    <div class="modal-block-dialog" style="display: none;" >
+                        <div class='modal-dialog-body'>
+                            <div class='modal-dialog-pic'><img src="${pic}" alt="" /></div>
+                            <div class="modal-dialog-text f-15">${settings.content}</div>
+                        </div>
+                        <div class='modal-dialog-footer f-15 confirm'>
+                            <a href="javascript:;" class="modal-btn-dialog cancel">${settings.leftBtn}</a>
+                            <a href="javascript:;" class="modal-btn-dialog ensure">${settings.rightBtn}</a>
+                        </div>
                     </div>
-                    </div>
-                    </div>
-                    `;
-
-
+                </div>
+            `;
             var $confirmHtml=$(confirmHtmlStr);
             $("body").append($confirmHtml);
-            $confirmHtml.find(".weui_dialog").fadeIn(200);
-            var $confirmBt=$confirmHtml.find(".weui_btn_dialog.primary");
+            $confirmHtml.find(".modal-block-dialog").fadeIn(200);
+            var $confirmBt=$confirmHtml.find(".modal-btn-dialog.ensure");
             $confirmBt.on('click',function(){
                 $confirmHtml.remove();
                 deferred.resolve(true);
             });
-            var $cancelBt=$confirmHtml.find(".weui_btn_dialog.default");
+            var $cancelBt=$confirmHtml.find(".modal-btn-dialog.cancel");
             $cancelBt.on('click',function(){
                 $confirmHtml.remove();
                 deferred.reject(false);
