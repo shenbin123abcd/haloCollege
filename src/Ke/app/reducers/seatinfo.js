@@ -6,18 +6,18 @@ import {
 
 export default (state = {
     isFetching: false,
-    // items: null,
+    items: null,
 }, action) => {
     switch(action.type) {
         case REQUEST_SEAT_INFO:
             return Object.assign({}, state, {
                 isFetching: true,
-                // items: null,
+                items: null,
             })
         case RECEIVE_SEAT_INFO:
             return Object.assign({}, state, {
                 isFetching: false,
-                // items: action.items,
+                items: action.users,
             })
         default:
             return state
