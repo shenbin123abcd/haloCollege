@@ -97,7 +97,7 @@ gulp.task('build',['sass','images','webpack'], function () {
         .pipe(plugins.useref())
         .pipe(jsFilter)
         .pipe(plugins.cdnizer({
-            defaultCDNBase: `${appConfig.themeDist}`,
+            defaultCDNBase: `/Public/Ke`,
             //defaultCDNBase: "../",
             allowRev: true,
             allowMin: true,
