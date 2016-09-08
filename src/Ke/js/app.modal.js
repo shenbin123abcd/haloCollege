@@ -1,43 +1,35 @@
 ;app.modal=(function(){
     "use strict";
-        var _alert=function(options){
-            var deferred = $.Deferred();
-            var defaults = {
-                title:'提示',
-                content:'提示内容',
-                btn:'确定',
-            };
+    var _alert=function(settings={
+        pic:'able-seat',
+        content:'提示内容',
+        btn:'确定',
+    }){
+        var deferred = $.Deferred();
+        var pic='';
+        var ableSeatImg='/images/able-seat.png';
+        var unableSeatImg='/images/unable-seat.png'
+        if(settings.pic=='able-seat'){
+            pic=ableSeatImg
+        }
+        var alertHtmlStr=`
+                <div class="modal-alert-block">
+                    <div class="modal-block-mask"></div>
+                    <div class="modal-block-dialog" style="display: none;" >
+                        <div class='modal-dialog-body'>
+                            <div class='modal-dialog-pic'><img src="${pic}" alt="" /></div>
+                            <div class="modal-dialog-text">${settings.content}</div>
+                        </div>
+                        <div class='modal-dialog-footer'>
+                            ${settings.btn}
+                        </div>
+                    </div>
 
-            if(typeof options=="string"){
-                defaults = $.extend(defaults,{
-                    content:options
-                });
-            }else{
-
-            }
-
-            var settings = $.extend( {},defaults, options );
-
-            var alertHtmlStr='' +
-                '<div class="weui_dialog_alert" >'+
-                '<div class="weui_mask"></div>'+
-                '<div class="weui_dialog" style="display: none;" >'+
-                '<div class="weui_dialog_hd"><strong class="weui_dialog_title">'+
-                settings.title+
-                '</strong></div>' +
-                '<div class="weui_dialog_bd">'+
-                settings.content +
-                '</div>' +
-                '<div class="weui_dialog_ft">' +
-                '<a href="javascript:;" class="weui_btn_dialog primary">'+settings.btn +'</a>' +
-                '</div>' +
-                ' </div>' +
-                ' </div>' +
-                '';
+                </div>`;
             var $alertHtml=$(alertHtmlStr);
             $("body").append($alertHtml);
-            $alertHtml.find(".weui_dialog").fadeIn(200);
-            var $confirmBt=$alertHtml.find(".weui_btn_dialog");
+            $alertHtml.find(".modal-block-dialog").fadeIn(200);
+            var $confirmBt=$alertHtml.find(".modal-dialog-footer");
             $confirmBt.on('click',function(){
                 $alertHtml.remove();
                 deferred.resolve(true);
@@ -132,31 +124,10 @@
             }
         }());
 
-        var toast=function(msg){
-            var toastHtmlStr='' +
-                '<div class="weui_msg_toast" >' +
-                '<div class="weui_mask_transparent"></div>' +
-                '<div class="weui_toast">' +
-                '<i class="weui_icon_toast"></i>' +
-                '<p class="weui_toast_content">'+msg+'</p>' +
-                '</div>' +
-                '</div>' +
-                '';
-            var $toastHtml=$(toastHtmlStr);
-            $("body").append($toastHtml);
-            var $weui_toast=$toastHtml.find(".weui_toast");
-            $weui_toast.fadeIn(200);
-            var hideToast=function(){
-                $toastHtml.fadeOut(400).remove();
-            };
-            setTimeout(hideToast,600);
-        };
-
         return{
             alert:_alert,
             confirm:_confirm,
             loading:loading,
-            toast:toast,
         };
 }());
 

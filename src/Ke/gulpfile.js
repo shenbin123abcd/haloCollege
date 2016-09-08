@@ -96,6 +96,7 @@ gulp.task('build',['sass','images','webpack'], function () {
     return gulp.src('app/index.html')
         .pipe(plugins.useref())
         .pipe(jsFilter)
+        .pipe(plugins.revReplace({manifest: manifestJs}))
         .pipe(plugins.cdnizer({
             defaultCDNBase: `/Public/Ke`,
             //defaultCDNBase: "../",
@@ -109,6 +110,7 @@ gulp.task('build',['sass','images','webpack'], function () {
                 '/images/**/*',
             ]
         }))
+
         .pipe(plugins.rev())
         .pipe(gulp.dest(`${appConfig.themeDist}`))
         .pipe(jsFilter.restore)

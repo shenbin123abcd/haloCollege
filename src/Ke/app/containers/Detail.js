@@ -54,7 +54,7 @@ var Detail= React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <div>loading</div>
+            return <div className="data-loading"><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
         }else if(isEmpty){
             return <div>no data</div>
         }else{
