@@ -22,6 +22,7 @@ var SelectSeat = React.createClass({
         // console.log(prevState,prevProps)
         // let {items,isFetching}=this.props;
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
+        // console.log(dragDom,prevState.items)
         if(prevState.items&&!this.hbDrag){
             // console.log(dragDom)
             this.hbDrag=hb.drag(dragDom,{});
@@ -33,12 +34,20 @@ var SelectSeat = React.createClass({
         )
     },
     render() {
-        let {items,isFetching,users}=this.props;
+        let {items,isFetching,course}=this.props;
+
+        if(!items){
+            var isNull=true
+        }
+
+        if (isFetching||isNull) {
+            return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
+        }
 
         return (
             <div ref="dragContainer" className="selectseat-wrapper">
                 <div className="seats-wrapper">
-                    <CourseBox data={users}  />
+                    <CourseBox data={course}  />
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
 
@@ -51,14 +60,16 @@ var SelectSeat = React.createClass({
 
 // export default Index
 function mapStateToProps(state) {
-    const { seats,seatInfo } = state
+    const { seats,selectSeat } = state
     const {
         isFetching,
-    } = seatInfo
+        course,
+    } = selectSeat
     const {
         items
     } = seats
     return{
+        course,
         isFetching,
         items,
     }

@@ -251,9 +251,7 @@ body{
   right: 0;
   bottom: 0;
 
-
-
-  .seatinfo-box {
+  .seatinfo-box,.selectseat-box{
     position: relative;
     width: 100%;
     height: 100%;
@@ -291,7 +289,7 @@ body{
     position: absolute;
     left: 50%;
     top: 0px;
-    background-image: linear-gradient(to bottom,#d7d7d7,#d7d7d7 4px,transparent,transparent 8px);
+    background-image: linear-gradient(to bottom,#d7d7d7,#d7d7d7 4px,transparent 4px,transparent 8px);
     background-size: 1px 8px;
     background-repeat:repeat-y;
   }
@@ -385,6 +383,76 @@ body{
         box-shadow: 0 3px 10px rgba(13, 5, 9, 0.14);
         &:first-child{
           margin-left: 0;
+        }
+      }
+    }
+  }
+  .selectseat-course-box{
+    position: fixed;
+    width: 100%;
+    height: 2.3rem;
+    top: 0;
+    left: 0;
+    padding: 0 0.3rem;
+    padding-top: 0.3rem;
+    .course-inner{
+      display: flex;
+      align-items: center;
+      .img{
+        width: 0.74rem;
+        height: 0.74rem;
+        border-radius: 50%;
+        box-shadow: 0 3px 5px rgba(0,0,0,.04);
+        margin-right: 0.2rem;
+      }
+      .title{
+        color: #333333;
+        font-size: 0.28rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 5.9rem;
+      }
+      .info{
+        color: #666666;
+        font-size: 0.24rem;
+      }
+
+    }
+    .line{
+      height: 1px;
+      background: #d7d7d7;
+      transform: scale(1,0.5);
+      margin-top: 0.35rem;
+      margin-bottom: 0.30rem;
+    }
+    .guide-inner{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #666666;
+      .lab{
+        display: flex;
+        align-items: center;
+        font-size: 0.24rem;
+        line-height: 1;
+        &-booked{
+          margin: 0 0.5rem;
+        }
+      }
+      .dot{
+        width: 0.2rem;
+        height: 0.2rem;
+        border-radius: 50%;
+        margin-right: 0.1rem;
+        &-available{
+          background-color: #e6e6e6;
+        }
+        &-booked{
+          background-color: $mainColor;
+        }
+        &-selected{
+          background-color: #f9c767;
         }
       }
     }

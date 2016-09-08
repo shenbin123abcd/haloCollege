@@ -34,7 +34,13 @@ var Seatinfo = React.createClass({
     },
     render() {
         let {items,isFetching,users}=this.props;
+        if(!items){
+            var isNull=true
+        }
 
+        if (isFetching||isNull) {
+            return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
+        }
         return (
             <div ref="dragContainer" className="seatinfo-wrapper">
                 <div className="seats-wrapper">
