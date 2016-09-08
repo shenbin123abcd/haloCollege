@@ -3,22 +3,38 @@ import { setSeatsStatus } from '../actions/common.seat'
 import  SeatRow  from '../components/Common.SeatRow'
 import  SeatBox  from '../components/Selectseat.SeatBox'
 import  CourseBox  from '../components/Selectseat.CourseBox'
-import { destroySeats } from '../actions/common.seat'
+import { destroySeats,selectRandomSeat } from '../actions/common.seat'
 
 
 
 
-var SeatBtn =({})=>{
+var SeatBtn =({selectedItem,selectRandomSeat})=>{
+    selectedItem=selectedItem||{}
+    
+
+    let renderLeftBt=()=>{
+        if(selectedItem.seat_no){
+            return(
+                <div className="bt-box-1">
+                     {selectedItem.seat_no}
+                </div>
+            )
+        }else{
+            return(
+                <div onClick={selectRandomSeat}  className="bt-box-1">
+                    系统选座
+                </div>
+            )
+        }
+    }
+
 
     return(
         <div className="selectseat-bt-box">
-            <div>
-                系统选座
-            </div>
-            <div>
+            {renderLeftBt()}
+            <button className="bt-box-2">
                 确认选座
-            </div>
-
+            </button>
         </div>
     )
 
@@ -59,8 +75,14 @@ var SelectSeat = React.createClass({
             <SeatRow items={item} key={i}   />
         )
     },
+    selectRandomSeat(){
+
+        // console.log(this.props)
+        const {dispatch} = this.props
+        dispatch(selectRandomSeat());
+    },
     render() {
-        let {items,isFetching,course}=this.props;
+        let {items,isFetching,course,selectedItem}=this.props;
 
         if(!items){
             var isNull=true
@@ -76,7 +98,7 @@ var SelectSeat = React.createClass({
                     <CourseBox data={course}  />
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
-                    <SeatBtn  />
+                    <SeatBtn selectedItem={selectedItem} selectRandomSeat={this.selectRandomSeat} />
 
                 </div>
 
@@ -93,12 +115,14 @@ function mapStateToProps(state) {
         course,
     } = selectSeat
     const {
-        items
+        items,
+        selectedItem,
     } = seats
     return{
         course,
         isFetching,
         items,
+        selectedItem,
     }
 }
 

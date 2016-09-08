@@ -28,3 +28,11 @@ export function selectSeat(seat) {
         selectedItem: seat,
     }
 }
+
+export function selectRandomSeat(seat) {
+    // console.log(seat)
+    return {
+        type: 'SELECT_RANDOM_SEAT',
+    }
+}
+

@@ -18,10 +18,14 @@ var SeatCell= React.createClass({
 
     },
     render(){
-        let {item,index,itemsLength}=this.props;
+        let {item,index,itemsLength,selectedItem}=this.props;
+        selectedItem=selectedItem||{}
+        let seatBoxClassBooked = classNames({
+            'booked': item.user!=0,
+        });
 
         let seatBoxClassSelected = classNames({
-            'selected': item.user!=0,
+            'selected': item.seat_no==selectedItem.seat_no,
         });
         let seatBoxMiddle = classNames({
             'middle-1': Math.floor(itemsLength/2)==index+1,
@@ -33,7 +37,7 @@ var SeatCell= React.createClass({
             'seat-cell-6': itemsLength==6,
         });
         return(
-            <div className={`seat-cell ${seatBoxClassSelected} ${seatBoxMiddle} ${seatBoxSize}`}
+            <div className={`seat-cell ${seatBoxClassSelected} ${seatBoxClassBooked} ${seatBoxMiddle} ${seatBoxSize}`}
                  onClick={e=>this.handleClick(item)}
             ></div>
         )
@@ -44,9 +48,10 @@ var SeatCell= React.createClass({
 function mapStateToProps(state) {
     // console.log(state)
     const { seats } = state
-    const { clickable } = seats
+    const { clickable,selectedItem } = seats
     return{
         clickable,
+        selectedItem,
     }
 }
 

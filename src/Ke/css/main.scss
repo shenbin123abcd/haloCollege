@@ -333,9 +333,13 @@ body{
       &.middle-2{
         margin-left: 0.28rem;
       }
-      &.selected{
+      &.booked{
         background-color: #ff654d;
         box-shadow: 0 3px 4px rgba(215,37,9,.26);
+      }
+      &.selected{
+        background-color: #f9c767;
+        box-shadow: 0 0 0px 3px #f7e9ce;
       }
       &.seat-cell-20{
 
@@ -346,6 +350,12 @@ body{
       &.seat-cell-6{
         width: 0.42rem;
         height: 0.42rem;
+        &.selected{
+          box-shadow: 0 0 0px 5px #f7e9ce;
+        }
+        &.booked{
+          box-shadow: 0 5px 6px rgba(215,37,9,.26);
+        }
       }
     }
   }
@@ -463,6 +473,24 @@ body{
     height: 1rem;
     bottom: 0;
     left: 0;
+    display: flex;
+    .bt-box-1{
+      width: 2.8rem;
+      background-color: #ffffff;
+      color: $mainColor;
+      font-size: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bt-box-2{
+      width: 4.7rem;
+      background-color: #d5d5d5;
+      padding: 0;
+      border: none;
+      color: #999999;
+      font-size: 0.3rem;
+    }
   }
 }
 
