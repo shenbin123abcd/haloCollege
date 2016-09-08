@@ -9,11 +9,9 @@ var browserHistory=ReactRouter.browserHistory
 var Detail= React.createClass({
   componentDidMount() {
      document.title='幻熊课堂详情';
-     const { dispatch } = this.props
-     let pathArr=hb.location.url('path').split('/');
-     let id= pathArr[pathArr.length-1];
-     dispatch(fetchCourseDetailIfNeeded(id));
-      //dispatch(fetchCourseStatusIfNeeded(id));
+     const { dispatch,routeParams } = this.props
+     dispatch(fetchCourseDetailIfNeeded(routeParams.id));
+      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
   },
 
   render() {
@@ -102,7 +100,7 @@ var DetailMiddle=React.createClass({
   render(){
     const data=this.props.middleData;
     return (
-      <Link to="/course/seatinfo/10" className="deatil-middle">
+      <Link to={`/course/seatinfo/${data.id}`} className="deatil-middle">
         <div className="sign-num-block clearfix">
           <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
           <div className="sign-num-block-right f-14">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>

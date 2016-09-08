@@ -5,10 +5,9 @@ import { fetchCourseStatusIfNeeded } from '../actions/buttonGroup'
 
 var CommonButtonGroup= React.createClass({
     componentDidMount(){
-        const { dispatch }=this.props;
-        let pathArr=hb.location.url('path').split('/');
-        let id= pathArr[pathArr.length-1];
-        dispatch(fetchCourseStatusIfNeeded(id))
+        const { dispatch ,routeParams}=this.props;
+
+        //dispatch(fetchCourseStatusIfNeeded(routeParams.id))
     },
     handleClick(e){
         let btnType=$(e.target).data('type');
