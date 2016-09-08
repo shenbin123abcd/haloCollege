@@ -249,7 +249,7 @@ body{
   top: 0;
   left: 0;
   right: 0;
-  bottom: 113px+50;
+  bottom: 0;
 
 
 
@@ -261,12 +261,18 @@ body{
   }
   @include hbReplace('.seats-wrapper','.seatinfo-wrapper .seats-wrapper'){
     background-color: #fff;
+    top: 0;
+    bottom: 113px+50;
+
+
     .seat-canvas{
       margin-top: 0.7rem;
     }
   }
   @include hbReplace('.seats-wrapper','.selectseat-wrapper .seats-wrapper'){
     background-color: #f6f6f6;
+    top: 2.3rem;
+    bottom: 1rem;
   }
   .seat-canvas{
     width: 3.68rem;
