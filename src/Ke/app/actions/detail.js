@@ -28,18 +28,6 @@ function fetchCourseDetail(req) {
     }
 }
 
-export function fetchCourseStatus(id){
-    return dispatch => {
-        dispatch(requestDetailPosts(id))
-        return fetch(`/courses/applyStatus?course_id=${id}`)
-            /*.then(response=>{
-                return response.json();
-            }).then(res=>{
-                console.log(res)
-            });*/
-    }
-}
-
 function shouldFetchCourseDetail(state) {
     const { courseDetail } = state
     if (courseDetail.isFetching){
@@ -55,3 +43,4 @@ export function fetchCourseDetailIfNeeded(req) {
         }
     }
 }
+

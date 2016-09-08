@@ -1,6 +1,7 @@
 import bgImg from '../images/detail-bg.png'
 import BottomBtn from './Common.buttonGroup'
-import {fetchCourseDetailIfNeeded,fetchCourseStatus} from '../actions/detail'
+import {fetchCourseDetailIfNeeded} from '../actions/detail'
+import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory
@@ -11,36 +12,8 @@ var Detail= React.createClass({
      const { dispatch } = this.props
      let pathArr=hb.location.url('path').split('/');
      let id= pathArr[pathArr.length-1];
-     dispatch(fetchCourseDetailIfNeeded(id))
-  },
-
-  handleClick(e){
-      const { dispatch }=this.props;
-      let btnType=$(e.target).data('type');
-      let pathArr=hb.location.url('path').split('/');
-      let id= pathArr[pathArr.length-1];
-      if(btnType=="choose-seat"){
-          $.ajax({
-              url:`/courses/applyStatus?course_id=${id}`,
-              success:function(res){
-                  res.iRet=0;
-                  if(res.iRet!==1){
-                        app.modal.alert()
-                  }else{
-                      browserHistory.push(`/course/selectseat/${id}`)
-                  }
-              },
-              error:function(error){
-                  hb.lib.weui.alert({
-                      title:'温馨提示',
-                      content:error,
-                      btn:'确定',
-                  })
-              }
-          })
-      }else if(btnType=="enroll-now"){
-
-      }
+     dispatch(fetchCourseDetailIfNeeded(id));
+      //dispatch(fetchCourseStatusIfNeeded(id));
   },
 
   render() {
@@ -74,7 +47,7 @@ var Detail= React.createClass({
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
-                    <BottomBtn priceData={fetchData.price} numData={fetchData.last_num} handleClick={_this.handleClick}></BottomBtn>
+                    <BottomBtn priceData={fetchData.price} numData={fetchData.last_num}></BottomBtn>
                 </div>
             )
         }
@@ -282,6 +255,7 @@ var InterviewBlock=React.createClass({
 function mapStateToProps(state) {
     const { courseDetail } = state
     return courseDetail
+
 }
 
 export default ReactRedux.connect(mapStateToProps)(Detail)

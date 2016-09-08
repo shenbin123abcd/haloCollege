@@ -792,6 +792,9 @@ body{
 }
 
 /*modal*/
+.modal-alert-block{
+
+}
 .modal-block-mask{
   position: fixed;
   z-index: 1000;
@@ -804,7 +807,7 @@ body{
 .modal-block-dialog{
   position: fixed;
   z-index: 5000;
-  width: 85%;
+  width: 72%;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%,-50%);
@@ -820,13 +823,58 @@ body{
   color: #888;
   word-wrap: break-word;
   word-break: break-all;
+  .modal-dialog-text{
+    color:#333333;
+  }
+  .modal-dialog-pic{
+    margin:35px 0;
+    margin-bottom:30px;
+    img{
+      width:111px;
+      margin:auto;
+    }
+  }
 }
 .modal-dialog-footer{
-  position: relative;
-  line-height: 42px;
-  margin-top: 20px;
-  font-size: 17px;
-  text-align: center;
+  .modal-dialog-alert{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 40px;
+    font-size: 17px;
+    text-align: center;
+    border-top:1px solid #d7d7d7;
+    color:#fe5a40;
+  }
+  &.confirm{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    border-top:1px solid #d7d7d7;
+    .modal-btn-dialog{
+      position: relative;
+      display: block;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      color: #3cc51f;
+      text-decoration: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      &.cancel{
+        color:#aaaaaa;
+      }
+      &.ensure{
+        color:#fe5a40;
+      }
+
+    }
+  }
+
+
 }
 
 
