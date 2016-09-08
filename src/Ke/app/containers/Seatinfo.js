@@ -8,7 +8,6 @@ var Seatinfo = React.createClass({
     componentDidMount() {
         document.title='座位表';
         const { dispatch ,routeParams} = this.props
-        // console.log(this.props)
         dispatch(fetchSeatInfoIfNeeded(routeParams.id))
         dispatch(fetchCourseStatusIfNeeded(routeParams.id));
     },
@@ -17,16 +16,15 @@ var Seatinfo = React.createClass({
         // console.log('componentWillReceiveProps')
         // console.log(nextProps)
     },
+    hbDrag:null,
     componentDidUpdate  : function(prevState,prevProps){
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
         // let {items,isFetching}=this.props;
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
-        var hbDrag=null;
-        // console.log(prevState,dragDom)
-        if(prevState.items&&!hbDrag){
-            console.log(dragDom)
-            hbDrag=hb.drag(dragDom,{});
+        if(prevState.items&&!this.hbDrag){
+            // console.log(dragDom)
+            this.hbDrag=hb.drag(dragDom,{});
         }
     },
     renderSeatRow(item, i) {

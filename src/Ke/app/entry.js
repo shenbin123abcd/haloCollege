@@ -4,7 +4,7 @@ import User from './modules/User'
 import Index from './modules/index'
 import Seatinfo from './modules/seatinfo'
 import Selectseat from './modules/selectseat'
-
+import { destroySeats } from './actions/common.seat'
 
 var Router=ReactRouter.Router
 var Route=ReactRouter.Route
@@ -43,7 +43,8 @@ const onUpdateRoute = () => {
     $('html').addClass(htmlClass)
     $('body').addClass(bodyClass)
 }
-const onLeaveRoute = () => {
+const onLeaveRoute = (prevState) => {
+    store.dispatch(destroySeats())
     $('html').removeClass(htmlClass)
     $('body').removeClass(bodyClass)
 }

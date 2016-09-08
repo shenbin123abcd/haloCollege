@@ -6,3 +6,10 @@ export function initSeats(data) {
         items: data,
     }
 }
+export function destroySeats() {
+    // console.log(data)
+    return {
+        type: 'DESTROY_SEATS',
+        items: null,
+    }
+}
