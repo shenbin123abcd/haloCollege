@@ -14,4 +14,6 @@ export default Redux.combineReducers({
     userItems,
     seats,
     seatInfo,
+    courseStatus,
+    selectSeat,
 })
