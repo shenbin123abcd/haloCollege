@@ -39,7 +39,7 @@ gulp.task('copy:js', function () {
         .src([`${appConfig.themeSrc}/js/*.js`])
         .pipe(plugins.cached('myjs'))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: `${appConfig.themeDist}`,
+            defaultCDNBase: `/Public/Ke`,
             //defaultCDNBase: "../",
             allowRev: true,
             allowMin: true,
