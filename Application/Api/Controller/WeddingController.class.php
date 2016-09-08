@@ -162,18 +162,11 @@ class WeddingController extends CommonController {
         foreach ($comment as $key=>$value){
             $uid_arr[] =$value['uid'];
         }
-        if(!empty($uid_arr)){
-            $where['uid']=array('in',$uid_arr);
-            $where['status'] =1;
-            $position = M('Userinfo')->where($where)->field('uid,position')->select();
-            foreach ($comment as $key_com=>$value_com){
-                $comment[$key_com]['position'] ='';
-                foreach ($position as $key_pos=>$value_pos)
-                if($value_com['uid']==$value_pos['uid']){
-                    $comment[$key_com]['position'] = $value_pos['position'];
-                }
-            }
-
+        //获取用户职位信息
+        $position_arr = $this->get_position($uid_arr);
+        foreach ($comment as $key_com=>$value_com){
+            $position = $position_arr[$value_com['uid']];
+            $comment[$key_com]['position'] = $position['position'] ? $position['position'] : '';
         }
         //获取点赞状态
         $wherePraise = array();
@@ -186,26 +179,12 @@ class WeddingController extends CommonController {
         }
         $wherePraise['comment_id'] = array('in', $id_arr);
         $wherePraise['uid'] = $uid;
-        $status_praise_arr = M('SchoolWeddingPraise')->where($wherePraise)->field('comment_id,status')->select();
+        $status_praise_arr = M('SchoolWeddingPraise')->where($wherePraise)->getField('comment_id,status');
         unset($wherePraise['uid']);
         $wherePraise['status'] = 1;
         //获取点赞数
-        $praise_count = M('SchoolWeddingPraise')->where($wherePraise)->group('comment_id')->field('comment_id,count(id ) as count_praise')->select();
-        //点赞状态绑定
-        if (!empty($status_praise_arr)) {
-            foreach ($comment as $key => $value) {
-                $comment[$key]['status_praise'] = 0;
-                foreach ($status_praise_arr as $key_praise => $value_praise) {
-                    if ($value['id'] == $value_praise['comment_id']) {
-                        $comment[$key]['status_praise'] = intval($value_praise['status']);
-                    }
-                }
-                if ($value['type'] == 'reply') {
-                    $parent_id[] = $value['parent_id'];
-                }
-            }
-        } else {
-            //登录和非登录情况
+        $praise_count = M('SchoolWeddingPraise')->where($wherePraise)->group('comment_id')->getField('comment_id,count(id ) as count_praise');
+        //点赞状态绑定(登录和非登录情况)
             if (empty($uid)) {
                 foreach ($comment as $key => $value) {
                     $comment[$key]['status_praise'] = -1;
@@ -215,28 +194,18 @@ class WeddingController extends CommonController {
                 }
             } else {
                 foreach ($comment as $key => $value) {
-                    $comment[$key]['status_praise'] = 0;
+                    $comment[$key]['status_praise'] = $status_praise_arr[$value['id']] ? $status_praise_arr[$value['id']] : 0;
                     if ($value['type'] == 'reply') {
                         $parent_id[] = $value['parent_id'];
                     }
                 }
             }
-        }
+
         //点赞数绑定
-        if (!empty($praise_count)) {
             foreach ($comment as $key => $value) {
-                $comment[$key]['count_praise'] = 0;
-                foreach ($praise_count as $key_praise_count => $value_praise_count) {
-                    if ($value['id'] == $value_praise_count['comment_id']) {
-                        $comment[$key]['count_praise'] = intval($value_praise_count['count_praise']);
-                    }
-                }
+                $comment[$key]['count_praise'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
             }
-        } else {
-            foreach ($comment as $key => $value) {
-                $comment[$key]['count_praise'] = 0;
-            }
-        }
+        $parent_id = array_unique($parent_id);
         if (!empty($parent_id)) {
             $whereReply['id'] = array('in', $parent_id);
             $whereReply['status'] = 1;
@@ -245,18 +214,11 @@ class WeddingController extends CommonController {
             foreach ($reply as $key=>$value){
                 $uid_arr[] =$value['uid'];
             }
-            if(!empty($uid_arr)){
-                $where['uid']=array('in',$uid_arr);
-                $where['status'] =1;
-                $position = M('Userinfo')->where($where)->field('uid,position')->select();
-                foreach ($reply as $key_rep=>$value_rep){
-                    $reply[$key_rep]['position'] ='';
-                    foreach ($position as $key_pos=>$value_pos)
-                        if($value_rep['uid']==$value_pos['uid']){
-                            $reply[$key_rep]['position'] = $value_pos['position'];
-                        }
-                }
-
+            //获取用户职位信息
+            $position_arr = $this->get_position($uid_arr);
+            foreach ($reply as $key_rep=>$value_rep){
+                $position = $position_arr[$value_rep['uid']];
+                $reply[$key_rep]['position'] = $position['position'] ? $position['position'] : '';
             }
             //回复和父节点回复绑定
             foreach ($comment as $key_comment => $value_comment) {
@@ -613,18 +575,12 @@ class WeddingController extends CommonController {
         foreach($praiseDetail as $key_praise=>$value_praise){
             $uid_arr[]=$value_praise['uid'];
         }
-        $whereUser['uid']=array('in',$uid_arr);
-        $whereUser['status']=1;
-        $user = M('Userinfo')->where($whereUser)->field('uid,position,company')->select();
-        foreach($praiseDetail as $key_pra=>$value_pra){
-            $praiseDetail[$key_pra]['position']='';
-            $praiseDetail[$key_pra]['company']='';
-            foreach($user as $key_user=>$value_user){
-                if($value_pra['uid']==$value_user['uid']){
-                    $praiseDetail[$key_pra]['position']=$value_user['position'];
-                    $praiseDetail[$key_pra]['company']=$value_user['company'];
-                }
-            }
+        //获取用户职位信息
+        $user = $this->get_position($uid_arr);
+        foreach ($praiseDetail as $key_pra=>$value_pra){
+            $user_arr = $user[$value_pra['uid']];
+            $praiseDetail[$key_pra]['position']= $user_arr['position'] ? $user_arr['position'] : '';
+            $praiseDetail[$key_pra]['company']= $user_arr['company'] ? $user_arr['company'] : '';
         }
         $data['praiseDetail'] = $praiseDetail;
         $this->success('success', $data);
@@ -649,20 +605,12 @@ class WeddingController extends CommonController {
         foreach ($comment as $key=>$value){
             $uid_arr[] =$value['uid'];
         }
-        if(!empty($uid_arr)){
-            $where['uid']=array('in',$uid_arr);
-            $where['status'] =1;
-            $position = M('Userinfo')->where($where)->field('uid,position')->select();
-            foreach ($comment as $key_com=>$value_com){
-                $comment[$key_com]['position'] ='';
-                foreach ($position as $key_pos=>$value_pos)
-                    if($value_com['uid']==$value_pos['uid']){
-                        $comment[$key_com]['position'] = $value_pos['position'];
-                    }
-            }
-
+        //获取用户职位信息
+        $position_arr = $this->get_position($uid_arr);
+        foreach ($comment as $key_com=>$value_com){
+            $position = $position_arr[$value_com['uid']];
+            $comment[$key_com]['position'] = $position['position'] ? $position['position'] : '';
         }
-
         //获取点赞状态
         $wherePraise = array();
         foreach ($comment as $key => $value) {
@@ -672,38 +620,27 @@ class WeddingController extends CommonController {
             $data['comment'] = array();
             $this->success('success', $data);
         }
+
         $wherePraise['comment_id'] = array('in', $id_arr);
         $wherePraise['uid'] = $uid;
-        $status_praise_arr = M('SchoolWeddingPraise')->where($wherePraise)->field('comment_id,status')->select();
+        $status_praise_arr = M('SchoolWeddingPraise')->where($wherePraise)->getField('comment_id,status');
         unset($wherePraise['uid']);
         $wherePraise['status'] = 1;
         //获取点赞数
-        $praise_count = M('SchoolWeddingPraise')->where($wherePraise)->group('comment_id')->field('comment_id,count(id ) as count_praise')->select();
+        $praise_count = M('SchoolWeddingPraise')->where($wherePraise)->group('comment_id')->getField('comment_id,count(id ) as count_praise');
         //点赞状态绑定
-        foreach ($comment as $key => $value) {
-            $comment[$key]['status_praise'] = 0;
-            if (!empty($status_praise_arr)) {
-                foreach ($status_praise_arr as $key_praise => $value_praise) {
-                    if ($value['id'] == $value_praise['comment_id']) {
-                        $comment[$key]['status_praise'] = intval($value_praise['status']);
-                    }
-                }
+        if(!empty($uid)){
+            foreach ($comment as $key => $value) {
+                $comment[$key]['status_praise'] = $status_praise_arr[$value['id']] ? $status_praise_arr[$value['id']] : 0;
+            }
+        }else{
+            foreach ($comment as $key => $value) {
+                $comment[$key]['status_praise'] = -1;
             }
         }
         //点赞数绑定
-        if (!empty($praise_count)) {
-            foreach ($comment as $key => $value) {
-                $comment[$key]['count_praise'] = 0;
-                foreach ($praise_count as $key_praise_count => $value_praise_count) {
-                    if ($value['id'] == $value_praise_count['comment_id']) {
-                        $comment[$key]['count_praise'] = intval($value_praise_count['count_praise']);
-                    }
-                }
-            }
-        } else {
-            foreach ($comment as $key => $value) {
-                $comment[$key]['count_praise'] = 0;
-            }
+        foreach ($comment as $key => $value) {
+            $comment[$key]['count_praise'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
         }
         foreach ($comment as $key => $value) {
             if ($value['type'] == 'reply') {
@@ -722,20 +659,12 @@ class WeddingController extends CommonController {
             foreach ($reply as $key=>$value){
                 $uid_arr[] =$value['uid'];
             }
-            if(!empty($uid_arr)){
-                $where['uid']=array('in',$uid_arr);
-                $where['status'] =1;
-                $position = M('Userinfo')->where($where)->field('uid,position')->select();
-                foreach ($reply as $key_rep=>$value_rep){
-                    $reply[$key_rep]['position'] ='';
-                    foreach ($position as $key_pos=>$value_pos)
-                        if($value_rep['uid']==$value_pos['uid']){
-                            $reply[$key_rep]['position'] = $value_pos['position'];
-                        }
-                }
-
+            //获取用户职位信息
+            $position_arr = $this->get_position($uid_arr);
+            foreach ($reply as $key_rep=>$value_rep){
+                $position = $position_arr[$value_com['uid']];
+                $reply[$key_rep]['position'] = $position['position'] ? $position['position'] : '';
             }
-
             //回复和父节点回复绑定
             foreach ($comment as $key_comment => $value_comment) {
                 $comment[$key_comment]['parent_reply'] = array();
@@ -767,27 +696,13 @@ class WeddingController extends CommonController {
                 }
             }
             //获取头条评论数、访问量
-            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->field('wedding_id,count')->select();
-            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
+            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->getField('wedding_id,count');
+            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
             foreach ($wedding as $key=>$value){
-                $wedding[$key]['visitCount'] = 0;
-                $wedding[$key]['comment_count'] = 0;
-                if(!empty($visit_count)){
-                    foreach ($visit_count as $visit_key=>$visit_value){
-                        if($value['id']==$visit_value['wedding_id']){
-                            $wedding[$key]['visitCount'] = $visit_value['count'];
-                        }
-                    }
-                }
-                if(!empty($comment_count)){
-                    foreach ($comment_count as $com_key=>$com_value){
-                        if ($value['id']==$com_value['wedding_id']){
-                            $wedding[$key]['comment_count'] = $com_value['count'];
-                        }
-                    }
-                }
-            }
+                $wedding[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
+                $wedding[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
 
+            }
             //comment和wedding绑定
             foreach ($comment as $key_comment => $value_comment) {
                 $comment[$key_comment]['parent_wedding'] = array();
@@ -798,10 +713,6 @@ class WeddingController extends CommonController {
                 }
             }
         }
-
-
-
-
 
         $data['comment'] = array_values($comment);
         $this->success('success', $data);
@@ -867,25 +778,12 @@ class WeddingController extends CommonController {
                 }
             }
             //获取头条评论数、访问量
-            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->field('wedding_id,count')->select();
-            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->field('remark_id as wedding_id,count(id) as count')->select();
+            $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
+            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
             foreach ($list as $key=>$value){
-                $list[$key]['visitCount'] = 0;
-                $list[$key]['comment_count'] = 0;
-                if(!empty($visit_count)){
-                    foreach ($visit_count as $visit_key=>$visit_value){
-                        if($value['id']==$visit_value['wedding_id']){
-                            $list[$key]['visitCount'] = $visit_value['count'];
-                        }
-                    }
-                }
-                if(!empty($comment_count)){
-                    foreach ($comment_count as $com_key=>$com_value){
-                        if ($value['id']==$com_value['wedding_id']){
-                            $list[$key]['comment_count'] = $com_value['count'];
-                        }
-                    }
-                }
+                $list[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
+                $list[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
+
             }
 
         }
@@ -984,20 +882,12 @@ class WeddingController extends CommonController {
         foreach ($parentReply as $key=>$value){
             $uid_arr[] =$value['uid'];
         }
-        if(!empty($uid_arr)){
-            $where['uid']=array('in',$uid_arr);
-            $where['status'] =1;
-            $position = M('Userinfo')->where($where)->field('uid,position')->select();
-            foreach ($parentReply as $key_rep=>$value_rep){
-                $parentReply[$key_rep]['position'] ='';
-                foreach ($position as $key_pos=>$value_pos)
-                    if($value_rep['uid']==$value_pos['uid']){
-                        $parentReply[$key_rep]['position'] = $value_pos['position'];
-                    }
-            }
-
+        //获取用户职位信息
+        $position_arr = $this->get_position($uid_arr);
+        foreach ($parentReply as $key_rep=>$value_rep){
+            $position = $position_arr[$value_rep['uid']];
+            $parentReply[$key_rep]['position'] = $position['position'] ? $position['position'] : 0;
         }
-
         //我的回复和父节点绑定
         foreach ($myReply as $key_reply => $value_reply) {
             foreach ($parentReply as $key_parent => $value_parent) {
@@ -1045,20 +935,12 @@ class WeddingController extends CommonController {
         foreach ($myReply as $key=>$value){
             $uid_arr[] =$value['uid'];
         }
-        if(!empty($uid_arr)){
-            $where['uid']=array('in',$uid_arr);
-            $where['status'] =1;
-            $position = M('Userinfo')->where($where)->field('uid,position')->select();
-            foreach ($myReply as $key_rep=>$value_rep){
-                $myReply[$key_rep]['position'] ='';
-                foreach ($position as $key_pos=>$value_pos)
-                    if($value_rep['uid']==$value_pos['uid']){
-                        $myReply[$key_rep]['position'] = $value_pos['position'];
-                    }
-            }
-
+        //获取用户职位信息
+        $position_arr = $this->get_position($uid_arr);
+        foreach ($myReply as $key_rep=>$value_rep){
+            $position = $position_arr[$value_rep['uid']];
+            $myReply[$key_rep]['position'] = $position['position'] ? $position['position'] : '';
         }
-
         //我的回复和父节点绑定
         foreach ($myReply as $key_reply => $value_reply) {
             foreach ($Reply as $key_parent => $value_parent) {
@@ -1356,6 +1238,23 @@ class WeddingController extends CommonController {
         $where['id'] = $parent_id;
         $parent_data = M('schoolWeddingComment')->where($where)->field('uid,content,username,headimg')->find();
         return $parent_data;
+    }
+
+
+    /**
+     * 获取用户职位信息
+    */
+    public function get_position($uid_arr=array()){
+        if(empty($uid_arr)){
+            $position =  array();
+        }else{
+            $uid_arr = array_unique($uid_arr);
+            $where['uid']=array('in',$uid_arr);
+            $where['status'] =1;
+            $position = M('Userinfo')->where($where)->getField('uid,position,company');
+        }
+        return $position;
+
     }
 
 
