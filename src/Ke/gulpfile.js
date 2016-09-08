@@ -38,19 +38,19 @@ gulp.task('copy:js', function () {
     return gulp
         .src([`${appConfig.themeSrc}/js/*.js`])
         .pipe(plugins.cached('myjs'))
-        // .pipe(plugins.cdnizer({
-        //     defaultCDNBase: `/Public/Ke`,
-        //     //defaultCDNBase: "../",
-        //     allowRev: true,
-        //     allowMin: true,
-        //     matchers: [
-        //         /(["'`])(.+?)(["'`])/gi,
-        //     ],
-        //     fallback: false,
-        //     files: [
-        //         'images/**/*',
-        //     ]
-        // }))
+        .pipe(plugins.cdnizer({
+            defaultCDNBase: `${appConfig.themeDist}`,
+            //defaultCDNBase: "../",
+            allowRev: true,
+            allowMin: true,
+            matchers: [
+                /(["'`])(.+?)(["'`])/gi,
+            ],
+            fallback: false,
+            files: [
+                '/images/**/*',
+            ]
+        }))
         .pipe(plugins.babel({
             presets: ['es2015']
         }))
@@ -96,6 +96,19 @@ gulp.task('build',['sass','images','webpack'], function () {
     return gulp.src('app/index.html')
         .pipe(plugins.useref())
         .pipe(jsFilter)
+        .pipe(plugins.cdnizer({
+            defaultCDNBase: `${appConfig.themeDist}`,
+            //defaultCDNBase: "../",
+            allowRev: true,
+            allowMin: true,
+            matchers: [
+                /(["'`])(.+?)(["'`])/gi,
+            ],
+            fallback: false,
+            files: [
+                '/images/**/*',
+            ]
+        }))
         .pipe(plugins.rev())
         .pipe(gulp.dest(`${appConfig.themeDist}`))
         .pipe(jsFilter.restore)
