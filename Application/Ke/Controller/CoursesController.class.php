@@ -80,9 +80,22 @@ class CoursesController extends CommonController {
     public function applyStatus(){
         $course_id = intval(I('course_id'));
 
-        empty($course_id) && $this->error('课程编号错误');
+        $course = M('Course')->where(array('id'=>$course_id, 'status'=>1))->find();
+        empty($course) && $this->error('课程编号错误');
 
-        $ret = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id'=>$course_id))->count();
+        if ($course['step'] == 0){
+            // 是否预约
+            $model = M('CourseReserve');
+            $reserve = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+            $ret = $reserve ? 2 : 1;
+        }else{
+            $order = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id'=>$course_id))->count();
+            $ret = $order ? 4 : 3;
+
+            if ($course['start_date'] < time()){
+                $ret = 5;
+            }
+        }
 
         $this->success($ret);
     }
@@ -111,6 +124,7 @@ class CoursesController extends CommonController {
                 $list[$key]['avatar_url'] = $guests[$value['guest_id']]['avatar'];
                 $list[$key]['seat_no'] = $record[$value['id']];
                 $list[$key]['start_day'] = $value['start_date'] > time() ? ceil(($value['start_date'] - time()) / 86400) : 0;
+
                 if ($value['day'] > 1) {
                     $end_date = $value['start_date'] + $value['day'] * 86400;
                     $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
@@ -121,6 +135,27 @@ class CoursesController extends CommonController {
         }
 
         $this->success(['list'=>$list, 'user'=>['username'=>$this->user['nickname'], 'avatar'=>$this->user['headimgurl']]]);
+    }
+
+    // 预约课程
+    public function reserve(){
+        $course_id = intval(I('course_id'));
+        $phone = trim(I('phone'));
+        $name = trim(I('name'));
+
+        !is_mobile($phone) && $this->error('手机号格式错误');
+        empty($name) && $this->error('请填写称呼');
+
+        $course = M('Course')->where(array('id'=>$course_id))->count();
+        empty($course) && $this->error('课程不存在');
+
+        // 是否预约
+        $model = M('CourseReserve');
+        $reserve = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+        $reserve && $this->error('你已经预约过该课程了');
+
+        $data = array('course_id'=>$course_id,'name'=>$name,'phone'=>$phone, 'wechat_id'=>$this->user['id'], 'create_time'=>time());
+        $model->add($data);
     }
 
 
