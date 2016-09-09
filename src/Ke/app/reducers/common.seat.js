@@ -3,6 +3,9 @@ export default (state = {
     items: null,
     clickable: false,
     selectedItem: null,
+    isBooking: false,
+    isBookSuccess: false,
+    isBookFailure: false,
 }, action) => {
     // console.log(action)
     switch(action.type) {
@@ -21,6 +24,8 @@ export default (state = {
         case 'SELECT_SEAT':
             return Object.assign({}, state, {
                 selectedItem: action.selectedItem,
+                isBookSuccess: false,
+                isBookFailure: false,
             })
         case 'SELECT_RANDOM_SEAT':
             // console.log(state.items)
@@ -35,6 +40,24 @@ export default (state = {
             var num=hb.util.getRandomInt(0,aSeatArr.length);
             return Object.assign({}, state, {
                 selectedItem: aSeatArr[num],
+            })
+        case 'BOOK_SEAT_REQUEST':
+            return Object.assign({}, state, {
+                isBooking: true,
+                isBookSuccess: false,
+                isBookFailure: false,
+            })
+        case 'BOOK_SEAT_SUCCESS':
+            return Object.assign({}, state, {
+                isBooking: false,
+                info:action.info,
+                isBookSuccess:true,
+            })
+        case 'BOOK_SEAT_FAILURE':
+            return Object.assign({}, state, {
+                isBooking: false,
+                info:action.info,
+                isBookFailure:true,
             })
         default:
             return state

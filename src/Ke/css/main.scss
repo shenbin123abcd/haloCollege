@@ -59,7 +59,13 @@ body{
 .f-20{
   font-size:20px;
 }
-
+.page-loading-wrapper{
+  padding: 30px;
+  text-align: center;
+  .haloIcon{
+    font-size: 36px;
+  }
+}
 .body-index{
   background-color: #f6f6f6;
 }
@@ -482,14 +488,53 @@ body{
       display: flex;
       align-items: center;
       justify-content: center;
+      .done-text{
+        font-size: 0.22rem;
+        color: #666666;
+        margin-right: 4px;
+      }
+      .done-tag{
+        //font-size: 0.11rem*2;
+        //color: #333333;
+        //width: 1.38rem*2;
+        //border-radius: 4px*2;
+        //height: 0.48*2rem;
+        //border: 1px solid #d7d7d7;
+        //transform: scale(0.5);
+        font-size: 0.22rem;
+        color: #333333;
+        width: 1.38rem;
+        height: 0.48rem;
+        line-height: 0.48rem;
+        text-align: center;
+        position: relative;
+        &:before{
+          content: '';
+          width: 200%;
+          height: 200%;
+          border: 1px solid #d7d7d7;
+          transform: scale(0.5);
+          transform-origin: 0 0;
+          position: absolute;
+          left: 0;
+          top: 0;
+          border-radius: 4px;
+        }
+
+
+      }
     }
     .bt-box-2{
       width: 4.7rem;
-      background-color: #d5d5d5;
+      background-color: $mainColor;
       padding: 0;
       border: none;
-      color: #999999;
+      color: #ffffff;
       font-size: 0.3rem;
+      &[disabled]{
+        background-color: #d5d5d5;
+        color: #999999;
+      }
     }
   }
 }

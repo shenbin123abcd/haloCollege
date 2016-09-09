@@ -1,22 +1,26 @@
 import { fetchSelectSeatIfNeeded } from '../actions/selectseat'
 import { setSeatsStatus } from '../actions/common.seat'
 import  SeatRow  from '../components/Common.SeatRow'
+import  PageLoading  from '../components/Common.Pageloading'
 import  SeatBox  from '../components/Selectseat.SeatBox'
 import  CourseBox  from '../components/Selectseat.CourseBox'
-import { destroySeats,selectRandomSeat } from '../actions/common.seat'
+import { destroySeats,selectRandomSeat ,bookSeatIfNeeded} from '../actions/common.seat'
+var browserHistory=ReactRouter.browserHistory
 
 
 
-
-var SeatBtn =({selectedItem,selectRandomSeat})=>{
+var SeatBtn =({selectedItem,selectRandomSeat,bookSeat})=>{
     selectedItem=selectedItem||{}
-    
+
 
     let renderLeftBt=()=>{
+
         if(selectedItem.seat_no){
+            let seat_no_arr=selectedItem.seat_no.split(',')
             return(
                 <div className="bt-box-1">
-                     {selectedItem.seat_no}
+                    <span className="done-text">已选</span>
+                    <span className="done-tag">{seat_no_arr[0]}排{seat_no_arr[1]}座</span>
                 </div>
             )
         }else{
@@ -28,11 +32,18 @@ var SeatBtn =({selectedItem,selectRandomSeat})=>{
         }
     }
 
+    let itemClass = classNames({
+        'active': selectedItem.seat_no,
+    });
+
 
     return(
-        <div className="selectseat-bt-box">
+        <div className="selectseat-bt-box" >
             {renderLeftBt()}
-            <button className="bt-box-2">
+            <button className={`bt-box-2 ${itemClass}`}
+                    disabled={!selectedItem.seat_no}
+                    onClick={bookSeat}
+            >
                 确认选座
             </button>
         </div>
@@ -55,16 +66,31 @@ var SelectSeat = React.createClass({
         // console.log(nextProps)
     },
     hbDrag:null,
-    componentDidUpdate  : function(prevState,prevProps){
+    componentDidUpdate  : function(prevState){
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
-        // let {items,isFetching}=this.props;
+        let {isBooking,isBookSuccess,isBookFailure,info}=this.props;
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
-        // console.log(dragDom,prevState.items)
+        // console.log(prevState,this.props)
         if(prevState.items&&!this.hbDrag){
             // console.log(dragDom)
             this.hbDrag=hb.drag(dragDom,{});
         }
+        if(isBooking){
+            // console.log(dragDom)
+            hb.lib.weui.loading.show()
+        }else{
+            hb.lib.weui.loading.hide()
+        }
+
+        if(isBookFailure){
+            hb.lib.weui.alert(info)
+        }
+
+        if(isBookSuccess){
+            hb.lib.weui.alert(info).then(res=>browserHistory.push('/user'))
+        }
+
     },
     componentWillUnmount(){
         const { dispatch ,routeParams} = this.props
@@ -81,6 +107,14 @@ var SelectSeat = React.createClass({
         const {dispatch} = this.props
         dispatch(selectRandomSeat());
     },
+    bookSeat(){
+        // console.log(this.props)
+        const {dispatch,selectedItem ,routeParams} = this.props
+        dispatch(bookSeatIfNeeded({
+            seat_no:selectedItem.seat_no,
+            course_id:routeParams.id
+        }));
+    },
     render() {
         let {items,isFetching,course,selectedItem}=this.props;
 
@@ -89,7 +123,7 @@ var SelectSeat = React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
+            return <PageLoading />
         }
 
         return (
@@ -98,7 +132,7 @@ var SelectSeat = React.createClass({
                     <CourseBox data={course}  />
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
-                    <SeatBtn selectedItem={selectedItem} selectRandomSeat={this.selectRandomSeat} />
+                    <SeatBtn selectedItem={selectedItem} selectRandomSeat={this.selectRandomSeat} bookSeat={this.bookSeat} />
 
                 </div>
 
@@ -117,12 +151,20 @@ function mapStateToProps(state) {
     const {
         items,
         selectedItem,
+        isBooking,
+        info,
+        isBookSuccess,
+        isBookFailure,
     } = seats
     return{
         course,
         isFetching,
         items,
         selectedItem,
+        isBooking,
+        info,
+        isBookSuccess,
+        isBookFailure,
     }
 }
 

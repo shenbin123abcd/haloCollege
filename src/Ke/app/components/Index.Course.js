@@ -1,4 +1,4 @@
-
+import  PageLoading  from './Common.Pageloading'
 const Course = ({isFetching,items, renderItem}) => {
 
     if(!items){
@@ -9,7 +9,7 @@ const Course = ({isFetching,items, renderItem}) => {
 
 
     if (isFetching||isNull) {
-        return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
+        return <PageLoading />
     }
 
     if (isEmpty) {
