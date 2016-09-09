@@ -68,9 +68,40 @@ body{
 }
 .body-index{
   background-color: #f6f6f6;
+  padding-top: 0.9rem;
+}
+.index-no-data-wrapper{
+  padding-top: 2.4rem;
+  text-align: center;
+  .bg-ico{
+    background: url(../images/index-no-data.png) 0 0 no-repeat;
+    width: 1.85rem;
+    height: 1.69rem;
+    background-size: contain;
+    margin: 0 auto;
+
+  }
+  .main-msg{
+    color: #fe9988;
+    font-size: 0.3rem;
+    margin-top: 0.5rem;
+  }
+  .second-msg{
+    margin-top: 0.15rem;
+    color: #999999;
+    font-size: 0.26rem;
+
+  }
+
+
 }
 .index-header-nav-wrapper{
   height: 0.90rem;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
   background-color: #fffbfa;
   box-shadow: 0 2px 5px rgba(255,107,83,.06);
   display: flex;
