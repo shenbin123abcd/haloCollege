@@ -23,7 +23,13 @@ class CourseModel extends Model {
                 $list[$key]['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $value['cover_url'];
                 $list[$key]['cate'] = $cate[$value['cate_id']];
                 $list[$key]['last_num'] = $value['total'] - $value['num'];
-                $list[$key]['start_date'] = date('m月d日', $value['start_date']);
+
+                if ($this->getStep($value['id'])){
+                    $list[$key]['start_date'] = date('m月d日', $value['start_date']);
+                }else{
+                    $list[$key]['start_date'] = date('m月', $value['start_date']);
+                }
+
                 $list[$key]['user'] = array();
 
                 $course_id[] = $value['id'];
@@ -67,7 +73,13 @@ class CourseModel extends Model {
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
-            $data['start_date'] = date('Y.m.d', $data['start_date']);
+
+            if ($this->getStep($id)){
+                $data['start_date'] = date('Y.m.d', $data['start_date']);
+            }else{
+                $data['start_date'] = date('Y.m', $data['start_date']);
+            }
+
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
             $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id']))->field('title AS name, position, content')->find();
@@ -138,12 +150,17 @@ class CourseModel extends Model {
     public function getInfo($course_id){
         $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,start_date,price,total,num,place,day')->find();
         if($data){
-            if ($data['day'] > 1){
-                $end_date = $data['start_date'] + $data['day'] * 86400;
-                $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
+            if ($this->getStep($course_id)){
+                if ($data['day'] > 1){
+                    $end_date = $data['start_date'] + $data['day'] * 86400;
+                    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
+                }else{
+                    $data['start_date'] = date('m月d', $data['start_date']);
+                }
             }else{
-                $data['start_date'] = date('m月d', $data['start_date']);
+                $data['start_date'] = date('m月', $data['start_date']);
             }
+
 
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
@@ -152,6 +169,15 @@ class CourseModel extends Model {
         }
 
         return $data ? $data : array();
+    }
+
+    /**
+     * 获取课程阶段 0预约 1报名
+     * @param $course_id
+     * @return mixed
+     */
+    public function getStep($course_id){
+        return $this->where(array('id'=>$course_id))->getField('step');
     }
 }
 
