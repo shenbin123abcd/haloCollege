@@ -20,10 +20,8 @@ export function receiveStatusPosts(id,res,showModal){
 function fetchCourseStatus(id){
     return dispatch => {
         dispatch(requestStatusPosts(id))
-        return fetch(`/courses/applyStatus?course_id=${id}`)
-            .then(response=>{
-                return response.json();
-            }).then(res=>{
+        return app.ajax(`/courses/applyStatus?course_id=${id}`)
+            .then(res=>{
                 dispatch(receiveStatusPosts(id,res.data,false))
             });
     }

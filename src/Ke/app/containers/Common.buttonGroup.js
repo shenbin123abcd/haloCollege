@@ -53,10 +53,10 @@ var CommonButtonGroup= React.createClass({
         if(data.name==''){
             hb.lib.weui.alert('请填写姓名');
             return false;
-        }/*else if(!haloValidation.checkPhone(data.phone)){
+        }else if(!hb.validation.checkPhone(data.phone)){
             hb.lib.weui.alert('请填写正确的手机号码');
             return false;
-        }*/else if(data.phone==''){
+        }else if(data.phone==''){
             hb.lib.weui.alert('请填写手机号码');
             return false;
         }
