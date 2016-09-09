@@ -19,6 +19,8 @@ export default (state = {
             })
         case 'DESTROY_SEATS':
             return Object.assign({}, state, {
+                clickable: false,
+                selectedItem: null,
                 items: null,
             })
         case 'SELECT_SEAT':
