@@ -39,7 +39,7 @@ var Seatinfo = React.createClass({
         )
     },
     render() {
-        let {items,isFetching,users}=this.props;
+        let {items,isFetching,users,routeParams}=this.props;
         if(!items){
             var isNull=true
         }
@@ -53,7 +53,7 @@ var Seatinfo = React.createClass({
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
                     <UserBox items={users} seats={items} />
-                    <BottomBtn  priceData={1000} numData={10} />
+                    <BottomBtn  priceData={1000} idData={routeParams.id} />
                 </div>
 
             </div>

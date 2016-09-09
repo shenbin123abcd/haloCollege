@@ -8,22 +8,21 @@ function requestStatusPosts(res){
     }
 }
 
-function receiveStatusPosts(id,res){
+export function receiveStatusPosts(id,res,showModal){
     return{
         type:RECEIVE_COURSE_STATUS,
         id,
-        res
+        res,
+        showModal
     }
 }
 
 function fetchCourseStatus(id){
     return dispatch => {
         dispatch(requestStatusPosts(id))
-        return fetch(`/courses/applyStatus?course_id=${id}`)
-            .then(response=>{
-                return response.json();
-            }).then(res=>{
-                dispatch(receiveStatusPosts(id,res))
+        return app.ajax(`/courses/applyStatus?course_id=${id}`)
+            .then(res=>{
+                dispatch(receiveStatusPosts(id,res.data,false))
             });
     }
 }

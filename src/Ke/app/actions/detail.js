@@ -19,10 +19,8 @@ function receiveDetailPosts(req,data){
 function fetchCourseDetail(req) {
     return dispatch => {
         dispatch(requestDetailPosts(req))
-        return fetch(`/courses/detail?id=${req}`)
-            .then(response=>{
-                return response.json();
-            }).then(res=>{
+        return app.ajax(`/courses/detail?id=${req}`)
+            .then(res=>{
                 return dispatch(receiveDetailPosts(req,res))
             });
     }

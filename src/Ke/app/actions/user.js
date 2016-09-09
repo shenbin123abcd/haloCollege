@@ -23,51 +23,13 @@ export function receiveUserPosts(filter="SHOW_OPEN"){
 function fetchUserItems(req){
     return dispatch=>{
         dispatch(requestUserPosts(req))
-
-        return fetch(`/courses`,{
+        return app.ajax(`/courses/my`,{
             method:"POST",
             body:JSON.stringify({
                 id:req
             })
-        }).then(res=>{
-            return res.json()
         }).then(data=>{
-            data=[
-                {
-                    name:'蔡上',
-                    title:'adas',
-                    date:'2016.09.16',
-                    position:'上海',
-                    seat:'3排2座',
-                    type:'public',
-                },
-                {
-                    name:'蔡上2',
-                    title:'adas2',
-                    date:'2016.09.16',
-                    position:'上海',
-                    seat:'3排2座',
-                    type:'public',
-                },
-                {
-                    name:'蔡上3',
-                    title:'adas3',
-                    date:'2016.09.16',
-                    position:'上海',
-                    seat:'3排2座',
-                    type:'public',
-                },
-                {
-                    name:'蔡上3',
-                    title:'adas3',
-                    date:'2016.09.16',
-                    position:'上海',
-                    seat:'3排2座',
-                    type:'peixun',
-                },
-            ];
-
-            receiveDate=data
+            receiveDate=data.data
             dispatch(receiveUserPosts());
         })
     }

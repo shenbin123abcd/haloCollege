@@ -1,39 +1,90 @@
 import ButtonGroup from '../components/Common.buttonGroup'
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory;
-import { fetchCourseStatusIfNeeded } from '../actions/buttonGroup'
+import { fetchCourseStatusIfNeeded,receiveStatusPosts } from '../actions/buttonGroup'
 
 var CommonButtonGroup= React.createClass({
-    componentDidMount(){
-        const { dispatch ,routeParams}=this.props;
-
-        //dispatch(fetchCourseStatusIfNeeded(routeParams.id))
-    },
     handleClick(e){
+        const { dispatch ,idData}=this.props;
         let btnType=$(e.target).data('type');
-        let pathArr=hb.location.url('path').split('/');
-        let id= pathArr[pathArr.length-1];
-        if(btnType=="choose-seat"){
+        let id= idData;
+        let name='';
+        if(btnType=="disable-choose-seat"){
             app.modal.alert({
-                pic:'unable-seat',
+                pic:'disable-choose-seat',
                 content:'不要着急，请先报名课程哦!',
                 btn:'我知道了',
             })
         }else if(btnType=="enroll-now"){
-            /*app.modal.confirm({
-             pic:'able-seat',
-             content:'报名成功，是否前去选座？',
-             leftBtn:'稍等片刻',
-             rightBtn:'前去选座'
-             }).then(()=>browserHistory.push(`/course/selectseat/${id}`))*/
+            let data={
+                course_id: id,
+            };
+            name='course'+id;
+            app.pay.callPay(name).callpay({
+                data:data,
+                onSuccess:function (res) {
+                    dispatch(receiveStatusPosts(id,4,false));
+                    app.modal.confirm({
+                        pic:'able-seat',
+                        content:'报名成功，是否前去选座？',
+                        leftBtn:'稍等片刻',
+                        rightBtn:'前去选座'
+                    }).then(function(){
+                        browserHistory.push(`/course/selectseat/${id}`);
+                    },function(){
+
+                    })
+                },
+                onFail:function (res) {
+                    hb.lib.weui.alert(res);
+                },
+            });
+        }else if(btnType=='appointment-now'){
+
         }
+    },
+    handleSubmit(e){
+        const { dispatch,idData }=this.props;
+        let data={
+            course_id:idData,
+            phone:e.phone,
+            name:e.name,
+        }
+        if(data.name==''){
+            hb.lib.weui.alert('请填写姓名');
+            return false;
+        }else if(!hb.validation.checkPhone(data.phone)){
+            hb.lib.weui.alert('请填写正确的手机号码');
+            return false;
+        }else if(data.phone==''){
+            hb.lib.weui.alert('请填写手机号码');
+            return false;
+        }
+        $.ajax({
+            url:'http://ke.hx.com/courses/reserve',
+            type:'POST',
+            data:data,
+            success:function(res){
+                console.log(res);
+                dispatch(receiveStatusPosts(idData,2,false))
+            },
+            error:function(error){
+                hb.lib.weui.alert(error);
+            }
+        })
+
+    },
+    handleOpen(){
+        const { dispatch,idData }=this.props;
+        dispatch(receiveStatusPosts(idData,1,true))
     },
     render(){
         let priceData=this.props.priceData;
         let numData=this.props.numData;
-        let {res,isFetching,dipatch}=this.props;
+        let idData=this.props.idData;
+        let {res,isFetching,dipatch,showModal}=this.props;
         return(
-            <ButtonGroup priceData={priceData} numData={numData} status={res} handleClick={this.handleClick}></ButtonGroup>
+            <ButtonGroup priceData={priceData} idData={idData} status={res} showModal={showModal} handleClick={this.handleClick} handleSubmit={this.handleSubmit} handleOpen={this.handleOpen}></ButtonGroup>
         )
 
     }
