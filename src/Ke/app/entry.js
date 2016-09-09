@@ -43,7 +43,7 @@ const onUpdateRoute = () => {
     $('html').addClass(htmlClass)
     $('body').addClass(bodyClass)
 }
-const onLeaveRoute = () => {
+const onLeaveRoute = (prevState) => {
     $('html').removeClass(htmlClass)
     $('body').removeClass(bodyClass)
 }

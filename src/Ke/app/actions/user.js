@@ -3,32 +3,20 @@ export const RECEIVE_USER_ITEMS='RECEIVE_USER_ITEMS'
 export const SHOW_OPEN_CLASS='SHOW_OPEN_CLASS'
 export const SHOW_TRAINING_CAMPS='SHOW_TRANING_CAMPS'
 
+var receiveDate='';
+
 function requestUserPosts(data){
     return{
         type:REQUEST_USER_ITEMS,
-        data
-    }
-}
-
-function receiveUserPosts(req,data){
-    return{
-        type:RECEIVE_USER_ITEMS,
-        req,
         data,
     }
 }
 
-export function showOpenClass(data){
+export function receiveUserPosts(filter="SHOW_OPEN"){
     return{
-        type:SHOW_OPEN_CLASS,
-        data
-    }
-}
-
-export function showTrainingCamps(data){
-    return{
-        type:SHOW_TRAINING_CAMPS,
-        data
+        type:RECEIVE_USER_ITEMS,
+        data:receiveDate,
+        filter
     }
 }
 
@@ -36,7 +24,7 @@ function fetchUserItems(req){
     return dispatch=>{
         dispatch(requestUserPosts(req))
 
-        return fetch(`/course`,{
+        return fetch(`/courses`,{
             method:"POST",
             body:JSON.stringify({
                 id:req
@@ -77,8 +65,10 @@ function fetchUserItems(req){
                     seat:'3排2座',
                     type:'peixun',
                 },
-            ]
-            dispatch(receiveUserPosts(req,data));
+            ];
+
+            receiveDate=data
+            dispatch(receiveUserPosts());
         })
     }
 }

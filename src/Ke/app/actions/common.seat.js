@@ -1,50 +1,38 @@
 
-export const REQUEST_SEAT = 'REQUEST_SEAT'
-export const RECEIVE_SEAT = 'RECEIVE_SEAT'
-
-function requestData(data) {
+export function initSeats(data) {
+    // console.log(data)
     return {
-        type: REQUEST_SEAT,
-        data
+        type: 'INIT_SEATS',
+        items: data,
     }
 }
-function receiveData(req, res) {
-    // console.log(res)
+export function setSeatsStatus(clickable=false) {
+    // console.log(data)
     return {
-        type: RECEIVE_SEAT,
-        index:req,
-        items: res.data.seat,
+        type: 'SET_SEATS_STATUS',
+        clickable: clickable,
+    }
+}
+export function destroySeats() {
+    // console.log(data)
+    return {
+        type: 'DESTROY_SEATS',
+        items: null,
     }
 }
 
-function fetchData(req) {
-    return dispatch => {
-        dispatch(requestData(req))
-        return fetch(`/courses/seatInfo?course_id=1`)
-            .then(response=>{
-                return response.json();
-            }).then(json=>{
-                return dispatch(receiveData(req, json))
-            });
+export function selectSeat(seat) {
+    // console.log(seat)
+    return {
+        type: 'SELECT_SEAT',
+        selectedItem: seat,
     }
 }
 
-function shouldFetchData(state, req) {
-    const { seats } = state
-    const {
-        isFetching,
-    } = seats
-
-    if (isFetching){
-        return false
-    }
-    return true
-}
-
-export function fetchSeatIfNeeded(req) {
-    return (dispatch, getState) => {
-        if (shouldFetchData(getState(), req)) {
-            return dispatch(fetchData(req))
-        }
+export function selectRandomSeat(seat) {
+    // console.log(seat)
+    return {
+        type: 'SELECT_RANDOM_SEAT',
     }
 }
+

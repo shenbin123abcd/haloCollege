@@ -1,27 +1,26 @@
 import {
-    RECEIVE_USER_ITEMS, REQUEST_USER_ITEMS
-} from '../actions/user'
+    REQUEST_SEAT_INFO, RECEIVE_SEAT_INFO
+} from '../actions/seatinfo'
+
 
 
 export default (state = {
     isFetching: false,
-    data: [],
-    filter:'SHOW_OPEN'
+    items: null,
 }, action) => {
     switch(action.type) {
-        case REQUEST_USER_ITEMS:
+        case REQUEST_SEAT_INFO:
             return Object.assign({}, state, {
                 isFetching: true,
+                items: null,
             })
-        case RECEIVE_USER_ITEMS:
+        case RECEIVE_SEAT_INFO:
             return Object.assign({}, state, {
                 isFetching: false,
-                data:action.data,
-                filter:action.filter
+                items: action.users,
             })
         default:
             return state
     }
 }
-
 

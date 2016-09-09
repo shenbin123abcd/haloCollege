@@ -1,27 +1,26 @@
 import {
-    RECEIVE_USER_ITEMS, REQUEST_USER_ITEMS
-} from '../actions/user'
+    REQUEST_SELECT_SEAT, RECEIVE_SELECT_SEAT
+} from '../actions/selectseat'
+
 
 
 export default (state = {
     isFetching: false,
-    data: [],
-    filter:'SHOW_OPEN'
+    course: null,
 }, action) => {
     switch(action.type) {
-        case REQUEST_USER_ITEMS:
+        case REQUEST_SELECT_SEAT:
             return Object.assign({}, state, {
                 isFetching: true,
+                course: null,
             })
-        case RECEIVE_USER_ITEMS:
+        case RECEIVE_SELECT_SEAT:
             return Object.assign({}, state, {
                 isFetching: false,
-                data:action.data,
-                filter:action.filter
+                course: action.course,
             })
         default:
             return state
     }
 }
-
 

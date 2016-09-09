@@ -1,0 +1,3 @@
+;window.app=(function(){
+    return {};
+}());

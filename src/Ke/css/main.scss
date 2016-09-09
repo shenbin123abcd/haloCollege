@@ -243,25 +243,255 @@ body{
 
 }
 .seats-wrapper{
-  height: 8.8rem;
+  //height: 8.8rem;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
+  .seatinfo-box,.selectseat-box{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid transparent;
+  }
   @include hbReplace('.seats-wrapper','.seatinfo-wrapper .seats-wrapper'){
     background-color: #fff;
+    top: 0;
+    bottom: 113px+50;
+
+
+    .seat-canvas{
+      margin-top: 0.7rem;
+    }
   }
   @include hbReplace('.seats-wrapper','.selectseat-wrapper .seats-wrapper'){
     background-color: #f6f6f6;
+    top: 2.3rem;
+    bottom: 1rem;
   }
-
   .seat-canvas{
     width: 3.68rem;
     height: 0.44rem;
-    background:  url(../images/seat-canvas-bg.svg) 0 0 no-repeat;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.2rem;
+    color: #aaaaaa;
+    line-height: 0.44rem;
+    background:  url(../images/seat-canvas-bg.png) 0 0 no-repeat;
+    background-size: contain;
   }
+  .seat-line{
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    background-image: linear-gradient(to bottom,#d7d7d7,#d7d7d7 4px,transparent 4px,transparent 8px);
+    background-size: 1px 8px;
+    background-repeat:repeat-y;
+  }
+
   .seat-box{
+    position: relative;
+    &-1{
+      width: 6.3rem;
+    }
+    &-2{
+      width: 6.3rem;
+    }
+    margin: 0 auto;
+    margin-top: 0.52rem;
+    .seat-row{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.14rem;
+      &.seat-row-6{
+        margin-top: 0.4rem;
+      }
+      &:first-child{
+        margin-top: 0;
+      }
 
+    }
+    .seat-cell{
+      width: 8px;
+      height: 8px;
+      .ios &{
+        width: 0.16rem;
+        height: 0.16rem;
+      }
+      border-radius:50%;
+      background-color: #e6e6e6;
 
+      &.middle-1{
+        margin-right: 0.28rem;
+      }
+      &.middle-2{
+        margin-left: 0.28rem;
+      }
+      &.booked{
+        background-color: #ff654d;
+        box-shadow: 0 3px 4px rgba(215,37,9,.26);
+      }
+      &.selected{
+        background-color: #f9c767;
+        box-shadow: 0 0 0px 3px #f7e9ce;
+      }
+      &.seat-cell-20{
+
+      }
+      &.seat-cell-16{
+
+      }
+      &.seat-cell-6{
+        width: 0.42rem;
+        height: 0.42rem;
+        &.selected{
+          box-shadow: 0 0 0px 5px #f7e9ce;
+        }
+        &.booked{
+          box-shadow: 0 5px 6px rgba(215,37,9,.26);
+        }
+      }
+    }
   }
+  .seatinfo-user-box{
+    position: fixed;
+    width: 100%;
+    height: 113px;
+    overflow: auto;
+    left: 0;
+    bottom: 50px;
+    background-image: linear-gradient(to bottom,#f6f0ef,#f6f6f6 5px);
+    padding-left: 15px;
+    padding-top: 13px;
 
+    .title{
+      font-size: 14px;
+      color: #333333;
+      .haloIcon{
+        color: #999999;
+        margin-right: 3px;
+      }
+      .text{
+
+      }
+    }
+    .avatar-box{
+      margin-top: 12px;
+      display: flex;
+      .img{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: -8px;
+        border: 1px solid #fff;
+        box-shadow: 0 3px 10px rgba(13, 5, 9, 0.14);
+        &:first-child{
+          margin-left: 0;
+        }
+      }
+    }
+  }
+  .selectseat-course-box{
+    position: fixed;
+    width: 100%;
+    height: 2.3rem;
+    top: 0;
+    left: 0;
+    padding: 0 0.3rem;
+    padding-top: 0.3rem;
+    .course-inner{
+      display: flex;
+      align-items: center;
+      .img{
+        width: 0.74rem;
+        height: 0.74rem;
+        border-radius: 50%;
+        box-shadow: 0 3px 5px rgba(0,0,0,.04);
+        margin-right: 0.2rem;
+      }
+      .title{
+        color: #333333;
+        font-size: 0.28rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 5.9rem;
+      }
+      .info{
+        color: #666666;
+        font-size: 0.24rem;
+      }
+
+    }
+    .line{
+      height: 1px;
+      background: #d7d7d7;
+      transform: scale(1,0.5);
+      margin-top: 0.35rem;
+      margin-bottom: 0.30rem;
+    }
+    .guide-inner{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #666666;
+      .lab{
+        display: flex;
+        align-items: center;
+        font-size: 0.24rem;
+        line-height: 1;
+        &-booked{
+          margin: 0 0.5rem;
+        }
+      }
+      .dot{
+        width: 0.2rem;
+        height: 0.2rem;
+        border-radius: 50%;
+        margin-right: 0.1rem;
+        &-available{
+          background-color: #e6e6e6;
+        }
+        &-booked{
+          background-color: $mainColor;
+        }
+        &-selected{
+          background-color: #f9c767;
+        }
+      }
+    }
+  }
+  .selectseat-bt-box{
+    position: fixed;
+    width: 100%;
+    height: 1rem;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    .bt-box-1{
+      width: 2.8rem;
+      background-color: #ffffff;
+      color: $mainColor;
+      font-size: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bt-box-2{
+      width: 4.7rem;
+      background-color: #d5d5d5;
+      padding: 0;
+      border: none;
+      color: #999999;
+      font-size: 0.3rem;
+    }
+  }
 }
 
 .detail-page{
@@ -311,11 +541,17 @@ body{
         width: 42px;
         height: 17px;
         border-radius: 5px 0;
-        background-color: #16c2af;
-        box-shadow: 0 3px 4px rgba(0,130,116,.24);
         color:#fff;
         text-align: center;
         margin-top:5px;
+        &.open{
+          background-color: #9692ff;
+          box-shadow: 0 3px 4px rgba(150,146,255,.24);
+        }
+        &.training-camp{
+          box-shadow: 0 3px 4px rgba(0,130,116,.24);
+          background-color: #16c2af;
+        }
       }
     }
   }
@@ -543,30 +779,30 @@ body{
       }
     }
   }
-  .flex-bottom-btn{
-    position:fixed;
-    bottom:0;
-    height:50px;
-    line-height: 50px;
-    display:flex;
-    width:100%;
-    text-align: center;
-    .choose-seat-btn{
-      background: #fff;
-      color:#fe5a40;
-      flex:0 0 35%;
-    }
-    .enter-btn{
+}
+.flex-bottom-btn{
+  position:fixed;
+  bottom:0;
+  height:50px;
+  line-height: 50px;
+  display:flex;
+  width:100%;
+  text-align: center;
+  .choose-seat-btn{
+    background: #fff;
+    color:#fe5a40;
+    flex:0 0 35%;
+  }
+  .enter-btn{
 
-      flex:0 0 65%;
-      &.able{
-        background: #ff654d;
-        color:#fff;
-      }
-      &.disable{
-        background: #d5d5d5;
-        color:#999999;
-      }
+    flex:0 0 65%;
+    &.able{
+      background: #ff654d;
+      color:#fff;
+    }
+    &.disable{
+      background: #d5d5d5;
+      color:#999999;
     }
   }
 }
@@ -703,6 +939,92 @@ body{
       }
     }
   }
+}
+
+/*modal*/
+.modal-alert-block{
+
+}
+.modal-block-mask{
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,.6);
+}
+.modal-block-dialog{
+  position: fixed;
+  z-index: 5000;
+  width: 72%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  background-color: #fafafc;
+  text-align: center;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.modal-dialog-body{
+  padding: 0 20px;
+  font-size: 15px;
+  color: #888;
+  word-wrap: break-word;
+  word-break: break-all;
+  .modal-dialog-text{
+    color:#333333;
+  }
+  .modal-dialog-pic{
+    margin:35px 0;
+    margin-bottom:30px;
+    img{
+      width:111px;
+      margin:auto;
+    }
+  }
+}
+.modal-dialog-footer{
+  .modal-dialog-alert{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 40px;
+    font-size: 17px;
+    text-align: center;
+    border-top:1px solid #d7d7d7;
+    color:#fe5a40;
+  }
+  &.confirm{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    border-top:1px solid #d7d7d7;
+    .modal-btn-dialog{
+      position: relative;
+      display: block;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      color: #3cc51f;
+      text-decoration: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      &.cancel{
+        color:#aaaaaa;
+      }
+      &.ensure{
+        color:#fe5a40;
+      }
+
+    }
+  }
+
+
 }
 
 

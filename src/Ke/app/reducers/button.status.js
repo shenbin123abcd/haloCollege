@@ -1,27 +1,23 @@
 import {
-    RECEIVE_USER_ITEMS, REQUEST_USER_ITEMS
-} from '../actions/user'
+    REQUEST_COURSE_STATUS, RECEIVE_COURSE_STATUS,
+} from '../actions/buttonGroup'
 
 
 export default (state = {
     isFetching: false,
-    data: [],
-    filter:'SHOW_OPEN'
+    res: null
 }, action) => {
     switch(action.type) {
-        case REQUEST_USER_ITEMS:
+        case REQUEST_COURSE_STATUS:
             return Object.assign({}, state, {
                 isFetching: true,
             })
-        case RECEIVE_USER_ITEMS:
+        case RECEIVE_COURSE_STATUS:
             return Object.assign({}, state, {
                 isFetching: false,
-                data:action.data,
-                filter:action.filter
+                res: 1,
             })
         default:
             return state
     }
 }
-
-
