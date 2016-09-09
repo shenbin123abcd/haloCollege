@@ -1,6 +1,7 @@
 import bgUser from '../images/bg-user.png'
 import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
+import PageLoading  from '../components/Common.Pageloading'
 
 
 var User= React.createClass({
@@ -32,7 +33,7 @@ var User= React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <div>loading</div>
+            return <PageLoading/>
         }else if(isEmpty){
             return (
                 <div className="height-wrapper">
