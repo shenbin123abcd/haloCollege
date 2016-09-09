@@ -76,9 +76,11 @@ var DetailTop=React.createClass({
       <div className="detail-top">
         <div className="detail-bg">
           <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/375/h/190`} alt=""/>
-          <div className="sign-block">
-            <div className="sign-person f-9">西米 报名了！</div>
-          </div>
+            {/*
+             <div className="sign-block">
+             <div className="sign-person f-9">西米 报名了！</div>
+             </div>
+            */}
           <div className="teacher-desc">
             <div className="name f-17">{data.guest.name}</div>
             <div className="position f-13">{data.guest.position}</div>
