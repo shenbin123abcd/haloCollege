@@ -26,7 +26,7 @@ class PayController extends CommonController {
 
         // 创建订单
         $order = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>0))->find();
-        if (!empty($order) && $order['exp_time'] > time()) {
+        if (!empty($order) && $order['exp_time'] > time() && !empty($order['sign'])) {
             $this->success(unserialize($order['sign']));
         }else{
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
@@ -55,10 +55,11 @@ class PayController extends CommonController {
 
             $sign = $pay->sign(['subject'=>$body, 'body'=>$body, 'order_no'=>$order['order_no'], 'amount'=>$order['price'], 'openid'=>$this->user['openid']]);
 
-            if ($sign['iRet']){
+            if ($sign['iRet'] && $sign['data']){
                 $model->where(array('id'=>$order_id))->setField('sign', serialize($sign['data']));
                 $this->success($sign['data']);
             }else{
+                $model->where(array('id'=>$order_id))->delete();
                 $this->error($sign['info']);
             }
         }

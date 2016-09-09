@@ -4,6 +4,7 @@ import  SeatRow  from '../components/Common.SeatRow'
 import BottomBtn from './Common.buttonGroup'
 import UserBox from '../components/Seatinfo.UserBox'
 import { fetchCourseStatusIfNeeded } from '../actions/buttonGroup'
+import  PageLoading  from '../components/Common.Pageloading'
 import { destroySeats } from '../actions/common.seat'
 var Seatinfo = React.createClass({
     componentDidMount() {
@@ -44,7 +45,7 @@ var Seatinfo = React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
+            return <PageLoading />
         }
         return (
             <div ref="dragContainer" className="seatinfo-wrapper">

@@ -24,15 +24,24 @@ function receiveData(req, res) {
 function fetchData(req) {
     return dispatch => {
         dispatch(requestData(req))
-        return fetch(`/courses/seatInfo?${$.param({
-            course_id: req
-        })}`)
-        .then(response=>{
-            return response.json();
-        }).then(json=>{
-            dispatch(initSeats(json.data.seat))
-            return dispatch(receiveData(req, json))
+        return app.ajax('/courses/seatInfo',{
+            data:{
+                course_id: req
+            }
+        }).then(res=> {
+            dispatch(initSeats(res.data.seat))
+            return dispatch(receiveData(req, res))
         });
+
+        // return fetch(`/courses/seatInfo?${$.param({
+        //     course_id: req
+        // })}`)
+        // .then(response=>{
+        //     return response.json();
+        // }).then(json=>{
+        //     dispatch(initSeats(json.data.seat))
+        //     return dispatch(receiveData(req, json))
+        // });
     }
 }
 
