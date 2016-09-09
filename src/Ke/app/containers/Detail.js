@@ -1,4 +1,3 @@
-import bgImg from '../images/detail-bg.png'
 import playBtn from '../images/play-btn.png'
 import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'

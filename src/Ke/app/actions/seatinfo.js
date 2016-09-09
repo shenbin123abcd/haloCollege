@@ -16,6 +16,7 @@ function receiveData(req, res) {
         index:req,
         items: res.data.seat,
         users: res.data.user,
+        course: res.data.course,
     }
 }
 

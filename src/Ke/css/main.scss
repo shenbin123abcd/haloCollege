@@ -84,6 +84,11 @@ body{
 .body-index{
   background-color: #f6f6f6;
   padding-top: 0.9rem;
+  #MEIQIA-PANEL-HOLDER,
+  #MEIQIA-BTN-HOLDER,
+  #MEIQIA-INVITE{
+    display: none!important;
+  }
 }
 .index-no-data-wrapper{
   padding-top: 2.4rem;

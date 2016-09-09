@@ -66,12 +66,17 @@ function receiveData(req, res) {
 function fetchData(req) {
     return dispatch => {
         dispatch(requestData(req))
-        return fetch(`/courses/selectSeat?${$.param(req)}`)
-            .then(response=>{
-                return response.json();
-            }).then(json=>{
-                return dispatch(receiveData(req, json))
-            });
+        return app.ajax('/courses/selectSeat',{
+            data:req
+        }).then(res=> {
+            return dispatch(receiveData(req, res))
+        });
+        // return fetch(`/courses/selectSeat?${$.param(req)}`)
+        //     .then(response=>{
+        //         return response.json();
+        //     }).then(json=>{
+        //         return dispatch(receiveData(req, json))
+        //     });
     }
 }
 
