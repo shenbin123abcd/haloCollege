@@ -23,16 +23,16 @@ var CommonButtonGroup= React.createClass({
             app.pay.callPay(name).callpay({
                 data:data,
                 onSuccess:function (res) {
-                    dispatch(receiveStatusPosts(id,4,false));
                     app.modal.confirm({
                         pic:'able-seat',
                         content:'报名成功，是否前去选座？',
                         leftBtn:'稍等片刻',
                         rightBtn:'前去选座'
                     }).then(function(){
+                        dispatch(receiveStatusPosts(id,4,false));
                         browserHistory.push(`/course/selectseat/${id}`);
                     },function(){
-
+                        dispatch(receiveStatusPosts(id,4,false));
                     })
                 },
                 onFail:function (res) {
