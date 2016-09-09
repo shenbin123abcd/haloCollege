@@ -6,6 +6,7 @@ import {
 export default (state = {
     isFetching: false,
     res: null,
+    showModal:false,
 }, action) => {
     switch(action.type) {
         case REQUEST_COURSE_STATUS:
@@ -16,6 +17,7 @@ export default (state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 res: action.res,
+                showModal:action.showModal,
             })
         default:
             return state
