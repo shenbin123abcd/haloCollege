@@ -141,8 +141,10 @@ class CoursesController extends CommonController {
     public function reserve(){
         $course_id = intval(I('course_id'));
         $phone = trim(I('phone'));
+        $name = trim(I('name'));
 
         !is_mobile($phone) && $this->error('手机号格式错误');
+        empty($name) && $this->error('请填写称呼');
 
         $course = M('Course')->where(array('id'=>$course_id))->count();
         empty($course) && $this->error('课程不存在');
@@ -152,7 +154,7 @@ class CoursesController extends CommonController {
         $reserve = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
         $reserve && $this->error('你已经预约过该课程了');
 
-        $data = array('course_id'=>$course_id, 'wechat_id'=>$this->user['id'], 'create_time'=>time());
+        $data = array('course_id'=>$course_id,'name'=>$name,'phone'=>$phone, 'wechat_id'=>$this->user['id'], 'create_time'=>time());
         $model->add($data);
     }
 
