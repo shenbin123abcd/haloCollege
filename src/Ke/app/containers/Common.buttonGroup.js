@@ -61,11 +61,11 @@ var CommonButtonGroup= React.createClass({
             return false;
         }
         $.ajax({
-            url:'http://ke.hx.com/courses/reserve',
+            url:'/courses/reserve',
             type:'POST',
             data:data,
             success:function(res){
-                console.log(res);
+                //console.log(res);
                 dispatch(receiveStatusPosts(idData,2,false))
             },
             error:function(error){
@@ -78,13 +78,17 @@ var CommonButtonGroup= React.createClass({
         const { dispatch,idData }=this.props;
         dispatch(receiveStatusPosts(idData,1,true))
     },
+    handleClose(){
+        const { dispatch,idData }=this.props;
+        dispatch(receiveStatusPosts(idData,1,false))
+    },
     render(){
         let priceData=this.props.priceData;
         let numData=this.props.numData;
         let idData=this.props.idData;
         let {res,isFetching,dipatch,showModal}=this.props;
         return(
-            <ButtonGroup priceData={priceData} idData={idData} status={res} showModal={showModal} handleClick={this.handleClick} handleSubmit={this.handleSubmit} handleOpen={this.handleOpen}></ButtonGroup>
+            <ButtonGroup handleClose={this.handleClose} priceData={priceData} idData={idData} status={res} showModal={showModal} handleClick={this.handleClick} handleSubmit={this.handleSubmit} handleOpen={this.handleOpen}></ButtonGroup>
         )
 
     }
