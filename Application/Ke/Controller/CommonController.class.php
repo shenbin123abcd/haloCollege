@@ -10,7 +10,7 @@ class CommonController extends Controller {
      * 初始化操作
      */
     public function _initialize() {
-        cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
+        //cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
         $this->_getWechatUser();
     }
 
@@ -24,10 +24,11 @@ class CommonController extends Controller {
 
         if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyh'))) {
             cookie('halobear', null, -86400);
+            $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']);
             if (IS_AJAX) {
-                $this->ajaxReturn(array('status'=>-1,'info'=>'No authorization token was found'));
+                $this->ajaxReturn(array('status'=>-1,'info'=>'No authorization token was found', 'data'=>$url));
             }else{
-                redirect('http://ke.halobear.com/course/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']));
+                redirect($url);
             }
         }
     }
@@ -106,7 +107,7 @@ class CommonController extends Controller {
 
     public function wechat(){
         $temp = explode('/', $_SERVER['REQUEST_URI']);
-        $cur_url = 'http://ke.halobear.com/' . $temp['1'];
+        $cur_url = 'http://ke.halobear.com/' . ($temp['1'] ? $temp['1'] : 'courses');
         $url = empty($_GET['url']) ? urlencode($cur_url) : $_GET['url'];
 
         $this->getWechatInfo($url, $cur_url);
