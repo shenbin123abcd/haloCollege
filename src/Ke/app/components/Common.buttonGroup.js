@@ -22,8 +22,8 @@ export default React.createClass({
         const handleOpen=this.props.handleOpen;
         const showModal=this.props.showModal
         const id=this.props.idData;
-        //const status=this.props.status;
-        const status=1;
+        const status=this.props.status;
+        //const status=1;
         let _this=this;
         function renderEnterBtn(){
             if(status==1){

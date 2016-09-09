@@ -22,7 +22,9 @@ body{
       }
     }
   }*/
+
 }
+
 @keyframes pulse {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -635,10 +637,17 @@ body{
     }
   }
 }
-
+.html-detail{
+  height:100%;
+  background: #f6f6f6;
+}
+.body-detail{
+  background: #f6f6f6;
+  padding-bottom: 50px;
+}
 .detail-page{
   background: #f6f6f6;
-  margin-bottom:50px;
+  //margin-bottom:50px;
   .bg-gap{
     height:15px;
     background:#f6f6f6;
@@ -1061,6 +1070,7 @@ body{
     top: 240px;
     bottom: 0;
     overflow: auto;
+    margin-top:0;
     &.no-data-block{
       text-align: center;
       padding-bottom:0;
