@@ -1305,3 +1305,12 @@ function authcode( $string, $operation = 'DECODE', $key = '', $expiry = 0 ) {
     }
 
 }
+
+/**
+ * 手机格式校验
+ * @param $phone
+ * @return int
+ */
+function is_mobile($phone){
+    return preg_match("/^1[34578]\d{9}$/",$phone);
+}

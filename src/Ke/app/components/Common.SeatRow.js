@@ -1,7 +1,5 @@
 
-import  SeatCell  from '../components/Common.SeatCell'
-
-
+import  SeatCell  from '../containers/Common.SeatCell'
 
 
 

@@ -116,6 +116,7 @@ gulp.task('build',['sass','images','webpack'], function () {
         .pipe(plugins.babel({
             presets: ['es2015']
         }))
+        .pipe(plugins.uglify())
         .pipe(gulp.dest(`${appConfig.themeDist}`))
         .pipe(jsFilter.restore)
         .pipe(cssFilter)

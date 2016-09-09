@@ -2,13 +2,7 @@
 
 const SeatBox = ({items,renderItem,isFetching}) => {
 
-    if(!items){
-        var isNull=true
-    }
-
-    if (isFetching||isNull) {
-        return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
-    }
+    
 
     let seatBoxClass = classNames({
         'seat-box-1': items.length>=10,

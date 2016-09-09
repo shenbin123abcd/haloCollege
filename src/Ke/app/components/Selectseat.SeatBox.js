@@ -2,13 +2,7 @@
 
 const SeatBox = ({items,renderItem,isFetching}) => {
 
-    if(!items){
-        var isNull=true
-    }
-
-    if (isFetching||isNull) {
-        return <div><i className="haloIcon haloIcon-spinner haloIcon-spin"></i></div>
-    }
+    
 
     let seatBoxClass = classNames({
         'seat-box-1': items.length>=10,
@@ -16,7 +10,7 @@ const SeatBox = ({items,renderItem,isFetching}) => {
     });
 
     return(
-        <div className='seatinfo-box ' data-my-drag >
+        <div className='selectseat-box ' data-my-drag >
             <div className="seat-canvas">投影幕布</div>
             <div className={`seat-box ${seatBoxClass}`} >
                 <div className="seat-line"></div>
