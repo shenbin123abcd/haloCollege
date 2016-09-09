@@ -1,4 +1,5 @@
 import bgImg from '../images/detail-bg.png'
+import playBtn from '../images/play-btn.png'
 import BottomBtn from './Common.buttonGroup'
 import {fetchCourseDetailIfNeeded} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
@@ -45,7 +46,7 @@ var Detail= React.createClass({
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
-                    <BottomBtn priceData={fetchData.price} numData={fetchData.last_num}></BottomBtn>
+                    <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
                 </div>
             )
         }
@@ -237,10 +238,13 @@ var InterviewBlock=React.createClass({
                     {
                         data.map((n,i)=>{
                             return(
-                                <div className="list-block-item" key={i}>
-                                    <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/110/h/72`} alt=""/>
+                                <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
+                                    <div className="item-cover-wrapper">
+                                        <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/110/h/72`} alt=""/>
+                                        <img className='play-btn' src={playBtn} alt=""/>
+                                    </div>
                                     <div className="item-desc f-10">{n.title}</div>
-                                </div>
+                                </a>
                             )
                         })
                     }

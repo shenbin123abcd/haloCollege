@@ -8,11 +8,11 @@ function requestStatusPosts(res){
     }
 }
 
-function receiveStatusPosts(id,res){
+export function receiveStatusPosts(id,res){
     return{
         type:RECEIVE_COURSE_STATUS,
         id,
-        res
+        res,
     }
 }
 
@@ -23,7 +23,7 @@ function fetchCourseStatus(id){
             .then(response=>{
                 return response.json();
             }).then(res=>{
-                dispatch(receiveStatusPosts(id,res))
+                dispatch(receiveStatusPosts(id,res.data))
             });
     }
 }

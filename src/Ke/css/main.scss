@@ -10,6 +10,18 @@ body{
   font-size: 14px;
   line-height: 1.5;
   background: transparent;
+  /*&.body-user{
+    height: 100%;
+    .todoapp{
+      height:100%;
+      .height-wrapper{
+        height:100%;
+      }
+      .user-page{
+        height:100%;
+      }
+    }
+  }*/
 }
 @keyframes pulse {
   from {
@@ -664,9 +676,21 @@ body{
       .list-block-item{
         flex:0 0 33.3333333%;
         padding:0 3px;
+        display: block;
+        .item-cover-wrapper{
+          position: relative;
+          display:block;
+        }
         .item-cover{
           width:100%;
           display: block;
+        }
+        .play-btn{
+          width:28px;
+          position: absolute;
+          top:50%;
+          left:50%;
+          transform: translate(-50%,-50%);
         }
         .item-desc{
           text-align: center;
@@ -709,6 +733,8 @@ body{
   .user-page-top{
     width:100%;
     position:relative;
+    height: 240px;
+    z-index: 1;
     img{
       width:100%;
     }
@@ -761,6 +787,11 @@ body{
         height:58px;
         line-height: 58px;
         color:#aaaaaa;
+        .haloIcon{
+          position:relative;
+          top:2px;
+          margin-right:2px;
+        }
         &.active{
           color:#fe5a40;
         }
@@ -791,6 +822,29 @@ body{
     border-radius: 6px;
     box-shadow: 0 -2px 7px rgba(254,90,64,.1);
     padding-bottom:20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 240px;
+    bottom: 0;
+    overflow: auto;
+    &.no-data-block{
+      text-align: center;
+      padding-bottom:0;
+      .wrapper{
+        position: relative;
+        height:100%;
+      }
+      img{
+        width:142px;
+        max-width:100%;
+        margin:auto;
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+      }
+    }
     .content-item{
       display:flex;
       padding:20px 13px;

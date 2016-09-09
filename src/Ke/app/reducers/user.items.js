@@ -5,7 +5,8 @@ import {
 
 export default (state = {
     isFetching: false,
-    data: [],
+    list: [],
+    user:{},
     filter:'SHOW_OPEN'
 }, action) => {
     switch(action.type) {
@@ -16,7 +17,8 @@ export default (state = {
         case RECEIVE_USER_ITEMS:
             return Object.assign({}, state, {
                 isFetching: false,
-                data:action.data,
+                list:action.data.list,
+                user:action.data.user,
                 filter:action.filter
             })
         default:

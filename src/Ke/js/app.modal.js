@@ -4,13 +4,13 @@
     var unableSeatImg='/images/unable-seat.png';
 
     var _alert=function(settings={
-        pic:'unable-seat',
+        pic:'disable-choose-seat',
         content:'提示内容',
         btn:'确定',
     }){
         var deferred = $.Deferred();
         var pic='';
-        if(settings.pic=='unable-seat'){
+        if(settings.pic=='disable-choose-seat'){
             pic=unableSeatImg
         }
         var alertHtmlStr=`
@@ -34,6 +34,7 @@
                 $alertHtml.remove();
                 deferred.resolve(true);
             });
+
             return deferred.promise();
         };
 

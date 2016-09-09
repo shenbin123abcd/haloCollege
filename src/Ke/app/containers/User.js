@@ -1,5 +1,5 @@
 import bgUser from '../images/bg-user.png'
-import contentImg from '../images/content-img.png'
+import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 
 
@@ -22,24 +22,34 @@ var User= React.createClass({
   },
 
   render() {
-    let {data,isFetching,dispatch,userClass}=this.props;
+    let {isFetching,list,user}=this.props;
     var _this=this;
     function renderUserPage(){
-        if(!data){
+        if(!list){
             var isNull=true
-        }else if(data.length===0){
+        }else if(list.length===0){
             var isEmpty =true
         }
 
         if (isFetching||isNull) {
             return <div>loading</div>
         }else if(isEmpty){
-            return <div>no data</div>
+            return (
+                <div className="height-wrapper">
+                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <div className='content-list no-data-block'>
+                        <div className="wrapper">
+                            <img src={userNoData} alt=""/>
+                        </div>
+                    </div>
+                </div>
+
+            )
         }else{
             return(
-                <div>
-                    <Header data={data} handleClick={_this.handleClick}></Header>
-                    <UserList data={data}></UserList>
+                <div className="height-wrapper">
+                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <UserList data={list}></UserList>
                 </div>
             )
         }
@@ -53,22 +63,23 @@ var User= React.createClass({
 })
 
 const Header=(data)=>{
+    let user=data.data;
     return(
         <div className="user-page-top">
             <img src={bgUser} alt=""/>
             <div className="top-content">
                 <div className="avatar">
-                    <img src={contentImg} alt=""/>
+                    <img src={user.avatar} alt=""/>
                 </div>
                 <div className="content f-14">
-                    成都锦玉喜堂Amy
+                    {user.username}
                 </div>
             </div>
             <div className="tab-wrapper">
                 <div className="top-tab">
-                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>公开课</div>
+                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
                     <div className="tab-tip"></div>
-                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-"></i>培训营</div>
+                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
                 </div>
             </div>
         </div>
@@ -76,27 +87,43 @@ const Header=(data)=>{
 }
 
 const UserList=(data)=>{
-   //console.log(data.data)
+    let list=data.data;
+    const year=new Date().getFullYear();
    return(
         <div className="content-list">
             {
                 data.data.map((n,i)=>{
+                    const seatRow=n.seat_no.split(',')[0];
+                    const seatLine=n.seat_no.split(',')[1];
+                    function checkIfEnd(){
+                        if(n.start_day>0){
+                            return (
+                                <div className="content-isend f-10">
+                                    距离开课还有{n.start_day}天
+                                </div>
+                            )
+                        }else{
+                            return (
+                                <div className="content-isend f-10">
+                                    已结束
+                                </div>
+                            )
+                        }
+                    }
                     return(
                         <div className="content-item" key={i}>
                             <div className="avatar">
-                                <img src={contentImg} alt=""/>
+                                <img src={n.avatar_url} alt=""/>
                             </div>
                             <div className="gap"></div>
                             <div className="content">
-                                <div className="content-desc f-14">蔡上丨约见蔡上，走进婚礼人的世界</div>
-                                <div className="content-info f-12">2016.09.16  幻熊上海总部  1天</div>
+                                <div className="content-desc f-14">{n.title}</div>
+                                <div className="content-info f-12">{n.start_date}  {n.place}  {n.day}天</div>
                                 <div className="content-bottom clearfix">
                                     <div className="content-seat f-12">
-                                        3排2座
+                                        {seatRow}排{seatLine}座
                                     </div>
-                                    <div className="content-isend f-10">
-                                        已结束
-                                    </div>
+                                    {checkIfEnd()}
                                 </div>
                             </div>
                         </div>
@@ -112,9 +139,9 @@ const showFilter=(data,filter)=>{
         case "SHOW_ALL":
             return data
         case 'SHOW_OPEN':
-            return data.filter(n=>n.type=='public')
+            return data.filter(n=>n.cate=='公开课')
         case 'SHOW_TRAINING_CAMP':
-            return data.filter(n=>n.type=='peixun')
+            return data.filter(n=>n.cate=='培训营')
     }
 }
 
@@ -122,7 +149,9 @@ function mapStateToProps(state) {
     const { userItems} = state
     const {data}=userItems;
     return {
-        data:showFilter(state.userItems.data,state.userItems.filter),
+        list:showFilter(state.userItems.list,state.userItems.filter),
+        user:state.userItems.user,
+        isFetching:state.userItems.isFetching
     }
 
 }
