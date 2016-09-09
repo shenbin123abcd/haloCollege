@@ -20,6 +20,7 @@ export default React.createClass({
         const handleClick=this.props.handleClick;
         const handleSubmit=this.props.handleSubmit;
         const handleOpen=this.props.handleOpen;
+        const handleClose=this.props.handleClose;
         const showModal=this.props.showModal
         const id=this.props.idData;
         const status=this.props.status;
@@ -32,7 +33,7 @@ export default React.createClass({
                         <div className="choose-seat-btn f-15">在线选座</div>
                         <div className='enter-btn f-15 able' data-type="appointment-now" onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
                         <div className="appointment-now-modal">
-                            <Modal show={showModal}>
+                            <Modal show={showModal} onHide={handleClose}>
                                 <Modal.Body>
                                     <div className='modal-body-content'>
                                         <div className="content-pic">
