@@ -39,7 +39,7 @@ var Seatinfo = React.createClass({
         )
     },
     render() {
-        let {items,isFetching,users,routeParams}=this.props;
+        let {items,isFetching,users,routeParams,course}=this.props;
         if(!items){
             var isNull=true
         }
@@ -53,7 +53,7 @@ var Seatinfo = React.createClass({
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
                     <UserBox items={users} seats={items} />
-                    <BottomBtn  priceData={1000} idData={routeParams.id} />
+                    <BottomBtn  priceData={course.price} idData={routeParams.id} />
                 </div>
 
             </div>
@@ -66,6 +66,7 @@ function mapStateToProps(state) {
     const { seats,seatInfo } = state
     const {
         isFetching,
+        course,
         items:users
     } = seatInfo
     const {
@@ -75,6 +76,7 @@ function mapStateToProps(state) {
         isFetching,
         items,
         users,
+        course,
     }
 }
 
