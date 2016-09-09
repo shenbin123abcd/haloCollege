@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="html-4 html-case-record">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>购买记录</title>
+    <include file="Uc:tpl_common_head" />
+</head>
+<body class="body body-case-record">
+<include file="Common:tpl_wfc_all_nav" />
+<div class="case-record-wrapper">
+    <div class="list-wrapper" id="list-wrapper">
+        <!--<div class="item-box">-->
+            <!--<div class="des">-->
+                <!--<div class="order">订单编号：20160729190924824207</div>-->
+                <!--<div class="deliver-time">预计发货：2016-08-06</div>-->
+            <!--</div>-->
+            <!--<a class="info">-->
+                <!--<div class="img-box">-->
+                    <!--<img class="img" src="https://o8cqkyc2o.qnssl.com/uploads/2016/06/13/8bd8d79f866d9497d564aa4bab31aba8.jpg?imageView2/1/w/290/h/200" alt="" class="img">-->
+                <!--</div>-->
+                <!--<div class="property-box">-->
+                    <!--<div class="name">013田园风丨托斯卡纳托斯卡纳托斯卡纳托斯卡纳托斯卡纳</div>-->
+                    <!--<div class="subtitle">有关田园小局的梦想</div>-->
+                    <!--<div class="version">-->
+                        <!--基础款-->
+                    <!--</div>-->
+                    <!--<div class="price"><span class=t">¥</span><span class="em">599.</span><span class="t">00</span></div>-->
+                <!--</div>-->
+            <!--</a>-->
+        <!--</div>-->
+    </div>
+
+
+</div>
+
+
+<include file="Uc:tpl_common_foot" />
+<script>
+    window.appData={
+        recordList : {$list},
+    };
+//    console.log(appData)
+</script>
+<literal>
+    <script>
+        $(function(){
+            app.common.init();
+            app.caseRecord.init();
+        });
+    </script>
+</literal>
+</body>
+</html>
