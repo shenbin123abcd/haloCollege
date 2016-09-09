@@ -1233,9 +1233,7 @@ body{
     }
   }
 }
-.modal{
-  z-index:4000;
-}
+
 .modal-dialog{
   height:100%;
   margin:0;
@@ -1299,8 +1297,14 @@ body{
   }
 
 }
+.modal{
+  z-index:2147483648;
+}
+.weui_dialog{
+  z-index:2147483649;
+}
 .weui_mask{
-  z-index:4000;
+  z-index:2147483648;
 }
 
 
