@@ -1314,3 +1314,17 @@ function authcode( $string, $operation = 'DECODE', $key = '', $expiry = 0 ) {
 function is_mobile($phone){
     return preg_match("/^1[34578]\d{9}$/",$phone);
 }
+
+
+/**
+ * 写入自定义 log 文件
+ */
+function write_log( $tag, $msg ) {
+    $filename = LOG_PATH .$tag. ".log";
+
+    $handler = null;
+    if ( ( $handler = fopen( $filename, 'ab+' ) ) !== false ) {
+        fwrite( $handler, date( 'r' ) . "\t$msg\n" );
+        fclose( $handler );
+    }
+}

@@ -114,18 +114,17 @@ class PayController extends CommonController {
 
         $data = $this->_createBookOrder($type, $num);
 
-        if ($data['iRet'] == 0 && $data['data']) {
-            $this->ajaxReturn(array('status'=>0, 'info'=>$data['info']));
+        $sign = $data['sign'];
+        if ($sign['iRet'] == 0 && $sign['data']) {
+            $this->error($sign['info']);
         }
-
-        $sign = $data['data'];
-
-        if(!$sign) {
-            $info = $sign['result_code'] == 'FAIL' ? $sign['err_code_des'] : '参数错误';
-            write_log('wfc2016_order_error', var_export($sign, 1));
-            $this->error($info, $sign);
+        $sign_data = $sign['data'];
+        if(!$sign_data) {
+            $info = $sign['result_code'] == 'FAIL' ? $sign_data['err_code_des'] : '参数错误';
+            write_log('wfc2016_order_error', var_export($sign_data, 1));
+            $this->error($info, $sign_data);
         }else{
-            $this->suucess(array('config'=>$sign, 'order_id'=>$data['order']['order_no']));
+            $this->success(array('config'=>$sign_data, 'order_id'=>$data['order']['order_no']));
         }
     }
 
@@ -135,7 +134,7 @@ class PayController extends CommonController {
     private function _createBookOrder($type, $num){
         $model = M('wfc2016_order_case');
         // $map = array(1=>0.01, 2=>0.02);
-        $map = array(1=>499, 2=>499);
+        $map = array(1=>499, 2=>0.01);
 
         //①、获取用户openid
         $openid = $this->user['openid'];
@@ -180,13 +179,7 @@ class PayController extends CommonController {
         $pay->setNotify('http://ke.halobear.com/pay/booknotifyn');
 
         $sign = $pay->sign(['subject'=>$order['body'], 'body'=>$order['body'], 'order_no'=>$order['order_no'], 'amount'=>$order['price'], 'openid'=>$this->user['openid']]);
-
-
-        if ($sign['iRet'] && $sign['data']){
-            $this->success($sign['data']);
-        }else{
-            $this->error($sign['info']);
-        }
+        return ['sign'=>$sign, 'order'=>$order];
     }
 
     public function booknotifyn(){
@@ -195,6 +188,7 @@ class PayController extends CommonController {
         $notify = $pay->wxmpVerify();
 
         $response = $notify->payment->handleNotify(function($notify, $successful){
+            write_log('pay_mpwx_book_send' . date('Ymd'), var_export($notify, 1));
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
             $model = M('wfc2016_order_case');
             $order = $model->where(array('order_no'=>$notify['out_trade_no']))->find();

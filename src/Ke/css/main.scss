@@ -705,6 +705,7 @@ body{
       .desc-tag{
         width: 42px;
         height: 17px;
+        line-height:17px;
         border-radius: 5px 0;
         color:#fff;
         text-align: center;
@@ -741,6 +742,8 @@ body{
       .sign-num-block-right{
         float:right;
         color:#aaaaaa;
+        position: relative;
+        right:-5px;
         .haloIcon{
           color:#aaaaaa;
           position: relative;
