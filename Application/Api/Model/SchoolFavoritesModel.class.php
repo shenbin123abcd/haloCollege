@@ -25,6 +25,7 @@ class SchoolFavoritesModel extends Model{
         $list = $this->where($map)->limit($limit)->page($page)->order('id DESC')->select();
         return array('total'=>$total, 'list'=>empty($list) ? array() : $this->_format($list));
     }
+    
 
     private function _format($list){
         foreach ($list as $key => $value) {

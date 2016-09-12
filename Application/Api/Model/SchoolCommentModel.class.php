@@ -44,6 +44,7 @@ class SchoolCommentModel extends Model {
 	protected function getUsername(){
 		return D('SchoolAccount')->username;
 	}
+	
 
 	/**
 	 * 获取列表

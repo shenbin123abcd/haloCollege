@@ -161,6 +161,7 @@ class SchoolVideoModel extends Model{
         $replace = array('-', '_');
         return str_replace($find, $replace, base64_encode($data));
     }
+    
 
     public function getRecommend($vid, $limit = 5){
         $data = $this->where(array('status'=>1, 'id'=>$vid))->field('guests_id, cate1, cate2')->find();
