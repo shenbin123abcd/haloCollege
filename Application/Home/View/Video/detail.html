@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="video-detail-html">
+<head>
+    <meta charset="utf-8">
+    <title>婚礼视频</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="幻熊，中国领先的婚嫁垂直信息化解决方案服务商。业界领先的婚礼策划系统，设计绝妙的幻熊结婚圈App，享有盛誉的中国婚礼行业高峰论坛，行业权威的中国婚礼策划金熊奖。">
+    <meta name="Keywords" content="中国婚礼行业高峰论坛,金熊奖,婚礼高峰论坛,婚礼行业,婚礼产业,婚嫁产业,婚礼论坛,婚嫁论坛,中国婚礼产业博览会,婚礼产业博览会">
+
+    <link href="//cdn.bootcss.com/weui/0.4.3/style/weui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//at.alicdn.com/t/font_1473650551_8260508.css" rel="stylesheet" type="text/css"/>
+    <literal>
+        <!-- inject:main:css -->
+        <!-- build:css css/main.css -->
+        <link href="http://10.0.1.185:19001/app/css/main.css" rel="stylesheet" type="text/css"/>
+        <!-- endbuild -->
+        <!-- endinject -->
+    </literal>
+
+</head>
+<body class="video-detail-body">
+    <div class="video-detail-block">
+        <div id="video-block"></div>
+        <div id="guest-block"></div>
+        <div class="recommend-block">
+            <div class="title f-16">为你推荐</div>
+            <div id="recommend-block"></div>
+        </div>
+    </div>
+    <div id="dowload-block">
+        <img  class="logo" src="http://10.0.1.185:19001/app/images/college-app-logo.png" alt="">
+        <div class="info">
+            <div class="title">幻熊学院</div>
+            <div class="desc">下载APP客户端，观看视频更流畅！</div>
+        </div>
+    <span class="close" close-btn>
+        <i class="haloIcon haloIcon-times">&times;</i>
+    </span>
+        <a class="btn btn-primary" href="">免费下载</a>
+    </div>
+
+
+<script src="http://7mnn4s.com1.z0.glb.clouddn.com/static/common/js/hb.modernizr.pack.min.1.0.0.js"></script>
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+<script src="//cdn.bootcss.com/moment.js/2.14.0/moment.min.js"></script>
+<script src="//cdn.bootcss.com/moment.js/2.14.0/locale/zh-cn.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+
+<!-- build:js js/vender.js -->
+<script src="http://10.0.1.185:19001/tmp/js/hb.js"></script>
+<!-- endbuild -->
+
+
+<!-- inject:main:js -->
+<!-- build:js js/main.js -->
+<script src="http://10.0.1.185:19001/tmp/js/app.js"></script>
+<script src="http://10.0.1.185:19001/tmp/js/app.index.js"></script>
+<script src="http://10.0.1.185:19001/tmp/js/app.wechat.js"></script>
+
+<!-- endbuild -->
+<!-- endinject -->
+<literal>
+    <script>
+        window.appData={
+            //code:{$code},
+            share : {
+                title: '2016年度人物评选',
+                content: '「{$data.name}」'+'正在角逐中国婚礼策划最高奖—2016金熊奖，期待你的支持！',
+                link: window.location.href,
+                logo: '{$data.logo}' || 'http://7ktq5x.com1.z0.glb.clouddn.com/vote_wechat_work.png'
+            }
+        };
+        $(function(){
+            app.index.init();
+        })
+    </script>
+</literal>
+
+</body>
+</html>
