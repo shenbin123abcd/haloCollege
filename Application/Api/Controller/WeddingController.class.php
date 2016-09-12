@@ -292,6 +292,7 @@ class WeddingController extends CommonController {
      * 婚礼头条回复提交接口
     */
     public function replyPost() {
+        //推送
         //$object_push = A('Push');
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
@@ -930,7 +931,6 @@ class WeddingController extends CommonController {
             $data['myReply'] = array();
             $this->success('内容为空！', $data);
         }
-
         //获取职位
         foreach ($myReply as $key=>$value){
             $uid_arr[] =$value['uid'];

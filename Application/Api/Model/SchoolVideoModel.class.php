@@ -67,10 +67,16 @@ class SchoolVideoModel extends Model{
     /**
      * 获取视频列表(V2)
     */
-    public function getListByCate($map=array(),$page,$per_page){
+    public function getListByCate($map=array(),$page,$per_page,$is_recommend){
         $map['status'] =1;
         $order = 'sort DESC';
-        $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title')->select();
+        if(!empty($is_recommend)){
+            $map['is_recommend'] = 1;
+            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title')->select();
+        }else{
+            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title')->select();
+        }
+        unset($map['is_recommend']);
         $total = $this->where($map)->count();
         return array('total'=>$total, 'list'=>empty($list) ? array() : $this->_format($list),'format'=>array('b'=>'!720x480','m'=>'!640x480','s'=>'!321x215','ss'=>'!240x160'));
     }
@@ -81,8 +87,9 @@ class SchoolVideoModel extends Model{
      * @return [type]     array('video'=>array(), 'guests'=>array())
      */
     public function getDetail($id, $auth = 1){
+
         // 访问数
-        $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
+       $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
         $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views')->find();
         if($data['video']){
@@ -184,7 +191,6 @@ class SchoolVideoModel extends Model{
     */
     public function getRecommendList($vid, $limit = 5){
         $data = $this->where(array('status'=>1, 'id'=>$vid))->field('guests_id,category')->find();
-
         if (empty($data)) {
             return array();
         }
@@ -211,7 +217,7 @@ class SchoolVideoModel extends Model{
 
         return $this->_format($list);
     }
-
+ 
     private function _format($list){
         foreach ($list as $key => $value) {
             $guests_id[] = $value['guests_id'];

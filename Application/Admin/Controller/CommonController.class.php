@@ -85,6 +85,7 @@ class CommonController extends Controller {
 			//$options=array('where'=>$where,'order'=>"`{$field}` {$order}");
 			$data = $model->select($options);
 			method_exists($this, '_join') && $this->_join($data);
+			method_exists($this, '_join_video') && $this->_join_video($data);
 			$this->assign('list', $data);
 			$this->assign('page', $page->show());
 
@@ -106,7 +107,8 @@ class CommonController extends Controller {
 
 		foreach ($model->getDbFields() as $key => $val) {
 			if (isset($_REQUEST [$val]) && $_REQUEST [$val] != '' && empty($map [$val])) {
-				$map [$val] = $val == 'title' ? array('like','%'. $_REQUEST [$val] .'%') : $_REQUEST [$val];
+				$map [$val] = $val == 'title' ? array('like','%'. $_REQUEST [$val] .'%') : $_REQUEST [$val];				
+				method_exists($this, '_join_search') && $this->_join_search($map,$val);
 			}
 		}
 	}

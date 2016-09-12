@@ -6,28 +6,22 @@
  */
 namespace Admin\Controller;
 class SchoolVideoController extends CommonController {
-	public function _join(&$data){
-		$cate3 = array(
-			1 => '管理类',
-			2 => '策划类',
-			3 => '营销类',
-			4 => '主持类',
-			5 => '其它类',
-			);
-		foreach ($data as $key => $value) {
-			$guests_id[] = $value['guests_id'];
-
+	public function _join_search(&$map,&$val){
+		if($val=='category'){
+			$category = $_REQUEST [$val];
+			$map['_string'] = 'FIND_IN_SET(' . $category. ',category)';
+			unset($map[$val]);
 		}
-	
-		$guests = M('SchoolGuests')->where(array('id'=>array('in',$guests_id)))->order('title ASC')->getField('id,title');
+	}
 
-		foreach ($data as $key => $value) {
-			$data[$key]['guests'] = $guests[$value['guests_id']];
-			$temp = '';
-			foreach (explode(',', $value['cate3']) as $vo) {
-				$data[$key]['cate3_title'] .=  $cate3[$vo].' '; 
-			}
+	public function _join_video(&$data){
+		$bol =array('否','是');
+		foreach ($data as $key=>$value){
+			$data[$key]['vip'] = $bol[$value['is_vip']];
+			$data[$key]['recommend'] = $bol[$value['is_recommend']];
+			$data[$key]['hot'] = $bol[$value['is_hot']];
 		}
+
 	}
 	
 	public function _before_index(){
