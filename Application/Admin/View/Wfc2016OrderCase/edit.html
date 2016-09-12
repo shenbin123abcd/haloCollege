@@ -1,0 +1,86 @@
+<div class="wrap">
+<div class="nav">
+	<div class="return"><a href="__URL__/index">返回上一级</a></div>
+</div>
+
+<form id="J_rigths_form" class="J_ajaxForm" action="__URL__/update" method="post" enctype="multipart/form-data">
+<div class="J_tabs_contents">
+	<div>
+		<div class="h_a">编辑</div>
+		<div class="table_full">
+			<table width="100%">
+				<col class="th" />
+				<col width="400" />
+				<col />
+                <tr>
+                    <th>微信昵称</th>
+                    <td>
+                        {$auth.nickname} 
+                        <a href="{$auth.headimgurl}" target="_blank">微信头像</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>是否领取</th>
+                    <td>
+                        <select name="is_over">
+                            <option <eq name="data.is_over" value="0">selected</eq> value="0">未领取</option>
+                            <option <eq name="data.is_over" value="1">selected</eq> value="1">已领取</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>是否短信通知</th>
+                    <td>
+                        <select name="is_msg">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>快递名</th>
+                    <td>
+                        <input type="text" name="express" value="{$data.express}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>快递单号</th>
+                    <td>
+                        <input type="text" name="express_number" value="{$data.express_number}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>备注</th>
+                    <td>
+                        <input type="text" name="remark" value="{$data.remark}">
+                    </td>
+                    <td></td>
+                </tr>
+
+				<tr>
+					<th>地址</th>
+					<td>
+						{$address}
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+        <input type="hidden" name="id" value="{$data.id}">
+        <input type="hidden" name="is_sms" value="{$data.is_sms}">
+		<input type="hidden" name="phone" value="{$phone}">
+		<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
+	</div>
+</div>
+</form>
+</div>
