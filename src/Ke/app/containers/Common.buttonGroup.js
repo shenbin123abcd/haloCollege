@@ -18,6 +18,7 @@ var CommonButtonGroup= React.createClass({
         }else if(btnType=="enroll-now"){
             let data={
                 course_id: id,
+                url: '/pay/course',
             };
             name='course'+id;
             app.pay.callPay(name).callpay({

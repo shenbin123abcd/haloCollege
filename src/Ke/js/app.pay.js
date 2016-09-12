@@ -26,7 +26,7 @@
     pay.prototype.getConfig=function(){
         var _this=this;
         return $.ajax({
-            url: '/pay/course',
+            url: _this.opts.data.url,
             type: 'GET',
             dataType: 'json',
             // data: {id: hb.location.url("?id")} // 门票编号
