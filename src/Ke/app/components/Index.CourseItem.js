@@ -55,7 +55,7 @@ const CourseItem = ({item}) => {
                         </div>
                     </div>
                 </div>
-                <div className="line-box"></div>
+                
                 <div  className="info-box">
                     <Avatar items={item.user} visibleNum={8} totalClass={totalClass} />
                     <div className="more-box">
