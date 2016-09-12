@@ -40,13 +40,13 @@
         var _this = this;
         if (this.config.appId == '') {
             this.getConfig().then(function(ret){
-                if (ret.status == 1) {
+                if (ret.iRet == 1) {
                     _this.config = ret.data.config;
                     _this.order_id = ret.data.order_id;
                     _this.startPay();
-                }else if(ret.status == -1){
+                }else if(ret.iRet == -1){
                     // 未登录
-                    window.location.href='/weiTicket/wechat';
+                    window.location.href=ret.data;
                 }else{
                     hb.lib.weui.alert(ret.info);
                 }
