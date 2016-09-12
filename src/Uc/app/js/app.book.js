@@ -192,17 +192,15 @@
         //     hb.lib.weui.alert('自提和快递只能选一种，请重新选择');
         // }
 
-        hb.lib.weui.loading.show();
+        
         app.pay3.callPay(name).callpay({
             data:data,
             onSuccess:function (res) {
-                hb.lib.weui.loading.hide();
                 hb.lib.weui.alert('支付成功').then((res)=>{
                     window.location.href='/uc/caseRecord'
                 });
             },
             onFail:function (res) {
-                hb.lib.weui.loading.hide();
                 hb.lib.weui.alert(res);
             },
         });
