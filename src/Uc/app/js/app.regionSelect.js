@@ -15,7 +15,7 @@
                 data:data,
                 dataType:'json',
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
