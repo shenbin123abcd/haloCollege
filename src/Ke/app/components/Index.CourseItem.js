@@ -30,7 +30,7 @@ const CourseItem = ({item}) => {
         'total total-pxy': item.cate=='培训营',
     });
     return (
-        <Link to={`/course/detail/${item.id}`}  className="item">
+        <Link to={`/course/detail_${item.id}`}  className="item">
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
 
@@ -55,7 +55,7 @@ const CourseItem = ({item}) => {
                         </div>
                     </div>
                 </div>
-                
+
                 <div  className="info-box">
                     <Avatar items={item.user} visibleNum={8} totalClass={totalClass} />
                     <div className="more-box">
