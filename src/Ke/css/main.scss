@@ -755,7 +755,7 @@ body{
     }
   }
   .class-desc-block{
-    padding:18px;
+    padding:18px 10px;
     background: #fff;
     margin-top:15px;
     width:100%;
@@ -972,9 +972,10 @@ body{
     background: #fff;
     color:#fe5a40;
     flex:0 0 35%;
+    border-top:1px solid #d7d7d7;
   }
   .enter-btn{
-
+    border-top:1px solid #ff654d;
     flex:0 0 65%;
     &.able{
       background: #ff654d;
@@ -1091,6 +1092,9 @@ body{
     bottom: 0;
     overflow: auto;
     margin-top:0;
+    @include media('<=ip5'){
+      top:206px;
+    }
     &.no-data-block{
       text-align: center;
       padding-bottom:0;
@@ -1182,7 +1186,7 @@ body{
   border-radius: 3px;
   overflow: hidden;
   box-shadow: 0 3px 9px rgba(0,0,0,.5);
-  border: 1px solid rgba(0,0,0,.2);
+  //border: 1px solid rgba(0,0,0,.2);
 }
 .modal-dialog-body{
   padding: 0 20px;
@@ -1251,6 +1255,7 @@ body{
     top:50%;
    transform: translate(-50%,-50%);
     width:72%;
+    border:none;
     .modal-body{
       padding:0;
       .modal-body-content{
