@@ -7,11 +7,11 @@ app.common=(function(){
 
 
     function debugCookie(str) {
-        if(appConfig.debug){
+        // if(appConfig.debug){
             hb.Cookies.set('halobear',str,{ expires: 7 });
             let hbCookie=hb.Cookies.get('halobear');
             alert(hbCookie)
-        }
+        // }
     }
 
 

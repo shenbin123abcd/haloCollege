@@ -144,7 +144,7 @@
         _this.switchActive(0);
     };
 
-    numberBox.prototype.val=function(){
+    numberBox.prototype.val=function(newVal){
         var _this=this;
         var element=_this.element;
         var $element=_this.$element;
@@ -154,7 +154,20 @@
         var $numberControl = $element.find('[number-control]');
         var $numberMinus = $element.find('[number-minus]');
         var $numberAdd = $element.find('[number-add]');
-        return $numberControl.val();
+        if(newVal){
+            _this.switchActive(newVal);
+            if(newVal>=0&&newVal<=settings.max){
+                $numberControl.val(newVal)
+            }else if(newVal>settings.max){
+                $numberControl.val(settings.max);
+            }else{
+                $numberControl.val(newVal)
+            }
+            settings.onChange(newVal);
+        }else{
+            return $numberControl.val();
+        }
+
     };
 
 

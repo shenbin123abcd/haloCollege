@@ -11,7 +11,7 @@ app.service=(function(){
                 data:data,
                 dataType:'json',
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
@@ -33,7 +33,7 @@ app.service=(function(){
                 dataType:'json',
                 url:'/userinfo/getRegion',
                 success:function(res){
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
@@ -56,7 +56,7 @@ app.service=(function(){
                 url:'/userinfo/getRegion?province',
                 data:data,
                 success:function(res){
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
@@ -122,7 +122,7 @@ app.service=(function(){
                     XMLHttpRequest.setRequestHeader("Authorization",hb_Token);
                 },
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res);
                     }else{
                         deferred.reject(res.info);
@@ -246,7 +246,7 @@ app.service=(function(){
                     XMLHttpRequest.setRequestHeader("Authorization",hb_Token);
                 },
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res);
                     }else{
                         deferred.reject(res.info);
@@ -289,7 +289,7 @@ app.service=(function(){
                     XMLHttpRequest.setRequestHeader("Authorization",hb_Token);
                 },
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res);
                     }else{
                         deferred.reject(res.info);
@@ -312,7 +312,7 @@ app.service=(function(){
                 type:"GET",
                 dataType:'json',
                 success:function(res){
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
@@ -335,7 +335,7 @@ app.service=(function(){
                 type:"GET",
                 dataType:'json',
                 success:function(res){
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res.data);
                     }else{
                         deferred.reject(res.info);
@@ -383,7 +383,7 @@ app.service=(function(){
                 type:'POST',
                 dataType:"json",
                 success: function(res) {
-                    if(res.status==1){
+                    if(res.iRet==1){
                         deferred.resolve(res);
                     }else{
                         deferred.reject(res.info);
