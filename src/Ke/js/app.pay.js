@@ -46,7 +46,7 @@
                     _this.startPay();
                 }else if(ret.status == -1){
                     // 未登录
-                    window.location.href='/weiTicket/wechat';
+                    window.location.href=ret.data;
                 }else{
                     hb.lib.weui.alert(ret.info);
                 }
