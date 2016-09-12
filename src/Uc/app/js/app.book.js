@@ -5,8 +5,8 @@
     function init(){
         inputMask();
         addAddress();
-
-        setTimeout(function(){$('#product-2').click();}, 200);
+        product_2.add();
+        // setTimeout(function(){$('#product-2').click();}, 200);
     }
     function inputMask(){
         product_1=hb.numberBox('#product-1',{
