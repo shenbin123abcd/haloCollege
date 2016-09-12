@@ -18,3 +18,11 @@
 /vendor
 
 
+/Public/Home/Uc/*
+/Application/Ke/View/Uc/*.html
+/src/Uc/app/css/main.css
+/src/Uc/app/css/main.css.map
+/src/Uc/.gulp
+/src/Uc/tmp
+
+
