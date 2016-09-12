@@ -29,7 +29,7 @@ class RoleModel extends CommonModel{
 	 * @see Model::_after_insert()
 	 */
 	protected function _after_insert($data){
-		$node_id = $this->_data['auths']; //implode(',', $this->_data['auths']);
+		$node_id = $_POST['auths']; //implode(',', $this->_data['auths']);
 		if(empty($node_id)){
 			return ;
 		}

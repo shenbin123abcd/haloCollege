@@ -173,20 +173,6 @@ function file_request() {
     return I( 'upload_file_name' );
 }
 
-
-/**
- * 写入自定义 log 文件
- */
-function write_log( $tag, $msg ) {
-    $filename = LOG_PATH .$tag. ".log";
-
-    $handler = null;
-    if ( ( $handler = fopen( $filename, 'ab+' ) ) !== false ) {
-        fwrite( $handler, date( 'r' ) . "\t$msg\n" );
-        fclose( $handler );
-    }
-}
-
 /**
  * 时间友好显示
  *

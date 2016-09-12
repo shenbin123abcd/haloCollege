@@ -200,7 +200,7 @@ class ApiController extends ApiBaseController {
 
         empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
     }
-    
+
 
     /**
      * 视频详情无需登录

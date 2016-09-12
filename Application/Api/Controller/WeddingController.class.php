@@ -297,7 +297,7 @@ class WeddingController extends CommonController {
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        $data['wsq_id'] = $this->user['wsq']->uid; 
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];

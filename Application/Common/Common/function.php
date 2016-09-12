@@ -1366,3 +1366,16 @@ function send_msg( $to, $datas, $tempId = 1, $appId='8a48b551488d07a80148a59dbb9
         return array('iRet'=>$result->statusCode, 'info'=>$result->statusMsg);
     }
 }
+
+/**
+ * 写入自定义 log 文件
+ */
+function write_log( $tag, $msg ) {
+    $filename = LOG_PATH .$tag. ".log";
+
+    $handler = null;
+    if ( ( $handler = fopen( $filename, 'ab+' ) ) !== false ) {
+        fwrite( $handler, date( 'r' ) . "\t$msg\n" );
+        fclose( $handler );
+    }
+}

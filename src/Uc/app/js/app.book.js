@@ -192,7 +192,7 @@
         //     hb.lib.weui.alert('自提和快递只能选一种，请重新选择');
         // }
 
-
+        
         app.pay3.callPay(name).callpay({
             data:data,
             onSuccess:function (res) {

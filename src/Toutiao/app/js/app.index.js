@@ -65,7 +65,11 @@
 
 			headingStr=`
 				<div class="title f-19" >${res.headline}</div>
-				<div class="date f-15" >${Y}年${M}月${D}日</div>
+				<div class="date f-15" >
+					<span class="time" style="margin-right:25px;">${Y}-${M}-${D}</span>
+					<span class="browse-num" style="margin-right:25px;"><i class="haloIcon haloIcon-browse" style="margin-right:7px;"></i>${res.visitCount}</span>
+					<span class="comment-num"><i class="haloIcon haloIcon-great" style="margin-right:7px;font-size: 18px;"></i>${res.comment_count}</span>
+				</div>
 			`;
 			if(res.imgs){
 				res.imgs.forEach(function(n,i){
