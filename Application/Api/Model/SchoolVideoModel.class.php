@@ -72,9 +72,9 @@ class SchoolVideoModel extends Model{
         $order = 'sort DESC';
         if(!empty($is_recommend)){
             $map['is_recommend'] = 1;
-            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title')->select();
+            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip')->select();
         }else{
-            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title')->select();
+            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip')->select();
         }
         unset($map['is_recommend']);
         $total = $this->where($map)->count();
@@ -91,7 +91,7 @@ class SchoolVideoModel extends Model{
         // 访问数
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
-        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views')->find();
+        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
@@ -161,7 +161,7 @@ class SchoolVideoModel extends Model{
         $replace = array('-', '_');
         return str_replace($find, $replace, base64_encode($data));
     }
-    
+
 
     public function getRecommend($vid, $limit = 5){
         $data = $this->where(array('status'=>1, 'id'=>$vid))->field('guests_id, cate1, cate2')->find();

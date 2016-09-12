@@ -129,7 +129,12 @@ function get_user() {
     $cookie = cookie('halo_token');
 
     if (!empty($auth)) {
-        $data = jwt_decode(substr($auth, 7));
+        $token = substr($auth, 7);
+        $data = jwt_decode($token);
+        if ($data['iRet']){
+            $count = M('Session')->where(array('uid'=>$this->user['id'], 'token'=>md5($token)))->count();
+            $data = $count ? $data : array();
+        }
     } elseif (!empty($cookie)) {
         $data = jwt_decode($cookie);
     } else {
@@ -1315,6 +1320,52 @@ function is_mobile($phone){
     return preg_match("/^1[34578]\d{9}$/",$phone);
 }
 
+/**
+ *  send_msg('13817061546',array('78232',10),1)
+ * 发送模板短信
+ *
+ * @param to      手机号码集合,用英文逗号分开
+ * @param datas   内容数据 格式为数组 例如：array('Marry','Alon')，如不需替换请填 null
+ * @param unknown $tempId 模板Id
+ */
+function send_msg( $to, $datas, $tempId = 1, $appId='8a48b551488d07a80148a59dbb9609f2' ) {
+    // 初始化REST SDK
+    Vendor( 'Sms.CCPRestSDK' );
+
+    //主帐号
+    $accountSid= 'aaf98f89488d0aad0148a59d38880a0c';
+
+    //主帐号Token
+    $accountToken= '0af20c4166e0470cb61489bb896f9170';
+
+    //请求地址，格式如下，不需要写https://
+    //app.cloopen.com
+    $serverIP='sandboxapp.cloopen.com';
+
+    //请求端口
+    $serverPort='8883';
+
+    //REST版本号
+    $softVersion='2013-12-26';
+
+    $rest = new REST( $serverIP, $serverPort, $softVersion );
+    $rest->setAccount( $accountSid, $accountToken );
+    $rest->setAppId( $appId );
+
+    // 发送
+    $result = $rest->sendTemplateSMS( $to, $datas, $tempId );
+
+    if ( $result == NULL ) {
+        write_log( 'sendmsg_'.date( 'Ymd' ), 'result error!' );
+        return false;
+    }
+    if ( $result->statusCode!=0 ) {
+        write_log( 'sendmsg_'.date( 'Ymd' ), var_export( $result, 1 ) );
+        return array('iRet'=>$result->statusCode, 'info'=>$result->statusMsg);
+    }else {
+        return array('iRet'=>$result->statusCode, 'info'=>$result->statusMsg);
+    }
+}
 
 /**
  * 写入自定义 log 文件
