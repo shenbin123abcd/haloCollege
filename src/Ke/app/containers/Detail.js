@@ -75,7 +75,7 @@ var DetailTop=React.createClass({
     return(
       <div className="detail-top">
         <div className="detail-bg">
-          <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/375/h/190`} alt=""/>
+          <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/750/h/380`} alt=""/>
             {/*
              <div className="sign-block">
              <div className="sign-person f-9">西米 报名了！</div>
@@ -242,7 +242,7 @@ var InterviewBlock=React.createClass({
                             return(
                                 <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
                                     <div className="item-cover-wrapper">
-                                        <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/110/h/72`} alt=""/>
+                                        <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/220/h/144`} alt=""/>
                                         <img className='play-btn' src={playBtn} alt=""/>
                                     </div>
                                     <div className="item-desc f-10">{n.title}</div>

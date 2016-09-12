@@ -20,6 +20,7 @@ var CommonButtonGroup= React.createClass({
                 course_id: id,
             };
             name='course'+id;
+            //dispatch(receiveStatusPosts(id,4,false));
             app.pay.callPay(name).callpay({
                 data:data,
                 onSuccess:function (res) {
