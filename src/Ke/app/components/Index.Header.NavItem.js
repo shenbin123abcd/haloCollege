@@ -1,5 +1,5 @@
 
-
+let Link=ReactRouter.Link
 const NavItem = ({item,handleNavClick}) => {
     let itemClass = classNames({
         'item ': !item.active,
@@ -8,9 +8,9 @@ const NavItem = ({item,handleNavClick}) => {
     return(
 
     <div className={itemClass} >
-        <a className="link" onClick={handleNavClick} >
+        <Link to={`/?month=${item.year}${item.month}`} className="link" onClick={handleNavClick} >
             {item.month}月
-        </a>
+        </Link>
     </div>
 )}
 

@@ -25,6 +25,7 @@ export default (state = initState(), action) => {
     // console.log(state)
     switch(action.type) {
         case 'setCurrentMonth':
+            // console.log(action)
             let newArr=[].concat(state);
             newArr.forEach(n=>{
                 n.active=false
