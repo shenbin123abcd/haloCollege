@@ -743,7 +743,7 @@ body{
         float:right;
         color:#aaaaaa;
         position: relative;
-        right:-5px;
+        right:-8px;
         .haloIcon{
           color:#aaaaaa;
           position: relative;
@@ -792,7 +792,7 @@ body{
           top:50%;
           left:50%;
           transform:translate(-50%,-50%);
-          font-size:28px;
+          font-size:26px;
           color:#fff;
         }
         &.item1{
@@ -854,7 +854,7 @@ body{
     .desc-content{
       text-align: center;
       .content{
-        color:#999999;
+        color:#333;
         text-align: left;
         &.text-hidden{
           height:57px;
@@ -952,7 +952,7 @@ body{
           transform: translate(-50%,-50%);
         }
         .item-desc{
-          text-align: center;
+          text-align: left;
           color:#666666;
           margin-top:5px;
         }
@@ -994,6 +994,9 @@ body{
     position:relative;
     height: 240px;
     z-index: 1;
+    @include media('<=ip5'){
+        height:191px;
+    }
     img{
       width:100%;
     }
@@ -1313,6 +1316,10 @@ body{
 }
 #MEIQIA-BTN-HOLDER{
   z-index:100!important;
+}
+#MEIQIA-BTN{
+  transform:scale(.7);
+  transform-origin: right;
 }
 
 

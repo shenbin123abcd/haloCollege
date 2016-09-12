@@ -32,7 +32,7 @@ var CommonButtonGroup= React.createClass({
                         rightBtn:'前去选座'
                     }).then(function(){
                         dispatch(receiveStatusPosts(id,4,false));
-                        browserHistory.push(`/course/selectseat/${id}`);
+                        browserHistory.push(`/course/selectseat_${id}`);
                     },function(){
                         dispatch(receiveStatusPosts(id,4,false));
                     })
