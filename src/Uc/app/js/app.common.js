@@ -83,7 +83,8 @@ app.common=(function(){
             app.common.guideShare.show();
         })
     }
-    var guideShare=(function(url){
+
+    var guideShareInit=function(url){
         var imgUrl=url;
         var loadingHtmlStr=`
             <div style="position: fixed;z-index: 99999;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0,0,0,0.8);">
@@ -107,7 +108,9 @@ app.common=(function(){
             show:show,
             hide:hide
         }
-    }());
+    };
+    // var guideShare=guideShareInit()
+
 
     function renderPriceNumber(){
         var val=$("#current-sale-price").data("num");
@@ -144,9 +147,7 @@ app.common=(function(){
             preClass:'uc-s-big-num-',
             staticClass:'uc-s-big-num'
         });
-        
-        
-        
+
 
     }
 
@@ -524,7 +525,7 @@ app.common=(function(){
     return{
         init:init,
         ticketProgress:ticketProgress2,
-        guideShare:guideShare,
+        // guideShare:guideShare,
         renderPriceNumber:renderPriceNumber,
         getDiscount:getDiscount,
         buyTicket:buyTicket,

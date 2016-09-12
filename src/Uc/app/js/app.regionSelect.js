@@ -11,7 +11,7 @@
         function sendXhr(){
             $.ajax({
                 type:'GET',
-                url:'/userinfo/getRegion',
+                url:'/uc/getRegion',
                 data:data,
                 dataType:'json',
                 success: function(res) {
