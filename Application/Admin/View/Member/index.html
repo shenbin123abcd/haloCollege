@@ -39,7 +39,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<list:list box="id" name="list" show="{field:id,title:UID,width:60}{field:username,title:用户名,width:120}{field:email,title:邮箱,width:120}{field:create_time,title:注册时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:last_time,title:最后登录时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,order:desc,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id,class:J_dialog}{text:禁用,status:1,url:__URL__/forbid/id/$id}{text:恢复,status:0,url:__URL__/resume/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:UID,width:60}{field:username,title:用户名,width:120}{field:email,title:邮箱,width:120}{field:create_time,title:注册时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:last_time,title:最后登录时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,order:desc,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id,class:J_dialog}{text:禁用,status:1,url:__URL__/forbid/id/$id}{text:恢复,status:0,url:__URL__/resume/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">
