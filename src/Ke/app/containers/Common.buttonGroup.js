@@ -18,11 +18,11 @@ var CommonButtonGroup= React.createClass({
         }else if(btnType=="enroll-now"){
             let data={
                 course_id: id,
-                url: '/pay/course',
             };
             name='course'+id;
             //dispatch(receiveStatusPosts(id,4,false));
             app.pay.callPay(name).callpay({
+                url: '/pay/course',
                 data:data,
                 onSuccess:function (res) {
                     app.modal.confirm({
