@@ -40,6 +40,6 @@ class UcController extends CommonController {
             $data = M('Region')->where(array('region_id'=>$city))->field('region_id,region_name')->select();
         }
 
-        $this->success('', $data);
+        $this->success($data);
     }
 }
