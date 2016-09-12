@@ -27,7 +27,7 @@
         var _this=this;
         hb.lib.weui.loading.show();
         return $.ajax({
-            url: _this.opts.data.url,
+            url: _this.opts.url,
             type: 'GET',
             dataType: 'json',
             // data: {id: hb.location.url("?id")} // 门票编号

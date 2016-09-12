@@ -33,6 +33,7 @@ const CourseItem = ({item}) => {
         <Link to={`/course/detail_${item.id}`}  className="item">
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
+                <div className="img-over-layer" ></div>
 
                 <div className={tagClass}>{item.cate}</div>
             </div>
