@@ -227,6 +227,10 @@ class Payment {
 
             // 生成支付配置
             $config = $payment->configForJSSDKPayment($prepay_id);
+            if($config && isset($config['timestamp'])){
+                $config['timeStamp'] = $config['timestamp'];
+                unset($config['timestamp']);
+            }
         }
 
         return $config ? array('iRet'=>1, 'data'=>$config) : array('iRet'=>0, 'info'=>$result->return_msg);
