@@ -164,7 +164,7 @@ class PayController extends CommonController {
             $order['goods_url'] = 'http://ke.halobear.com/uc/book';
             $order['module'] = 'book';
             $order['num'] = $num;
-            $order['status'] = 0;
+            $order['status'] = $order['pay_time'] = 0;
 
             $model->add($order);
         }else{
