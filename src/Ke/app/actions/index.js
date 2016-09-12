@@ -36,12 +36,23 @@ function receiveCourse(req, res) {
 function fetchCourse(req) {
   return dispatch => {
     dispatch(requestPosts(req))
-    return fetch(`/course`)
-      .then(response=>{
-         return response.json();
-      }).then(json=>{
-         return dispatch(receiveCourse(req, json))
-      });
+    return app.ajax('/courses',{
+      data:{
+        month: req
+      }
+    }).then(res=> {
+      return dispatch(receiveCourse(req, res))
+    });
+    // return fetch(`/courses?${$.param({
+    //   month: req
+    // })}`)
+    //   .then(response=>{
+    //      return response.json();
+    //   }).then(json=>{
+    //      return dispatch(receiveCourse(req, json))
+    //   });
+
+
   }
 }
 function shouldFetchCourse(state, req) {
@@ -74,6 +85,5 @@ export function setCurrentMonth(data){
     data
   }
 }
-
 
 

@@ -16,6 +16,13 @@
 /src/Ke/css/main.css
 /src/Ke/css/main.css.map
 /vendor
-/Application/Common/Conf
+
+
+/Public/Home/Uc/*
+/Application/Ke/View/Uc/*.html
+/src/Uc/app/css/main.css
+/src/Uc/app/css/main.css.map
+/src/Uc/.gulp
+/src/Uc/tmp
 
 

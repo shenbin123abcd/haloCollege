@@ -8,6 +8,8 @@ return array(
 	'APP_GROUP_MODE'	=>	1,
 	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin', 'Ke'),
 	'DEFAULT_MODULE'    =>    'Home',
+	
+	'LOAD_EXT_CONFIG'=>array('KE'=>'ke', 'USER'=>'user'),
 
     // 应用配置
     'AUTH_KEY'	=> 'sdDjkGpskdjflj3289324w98#@$%^',

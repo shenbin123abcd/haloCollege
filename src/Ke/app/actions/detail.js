@@ -19,15 +19,8 @@ function receiveDetailPosts(req,data){
 function fetchCourseDetail(req) {
     return dispatch => {
         dispatch(requestDetailPosts(req))
-        return fetch(`/course`,{
-                method: 'POST',
-                body: JSON.stringify({
-                    id:req
-                })
-            })
-            .then(response=>{
-                return response.json();
-            }).then(res=>{
+        return app.ajax(`/courses/detail?id=${req}`)
+            .then(res=>{
                 return dispatch(receiveDetailPosts(req,res))
             });
     }
@@ -41,10 +34,11 @@ function shouldFetchCourseDetail(state) {
     return true
 }
 
-export default function(req) {
+export function fetchCourseDetailIfNeeded(req) {
     return (dispatch, getState ) => {
         if (shouldFetchCourseDetail(getState())) {
             return dispatch(fetchCourseDetail(req))
         }
     }
 }
+

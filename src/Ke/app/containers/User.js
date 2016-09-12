@@ -1,41 +1,62 @@
 import bgUser from '../images/bg-user.png'
-import contentImg from '../images/content-img.png'
-import fetchUserItemsIfNeeded from '../actions/user'
+import userNoData from '../images/user-no-data.png'
+import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
+import PageLoading  from '../components/Common.Pageloading'
 
 
 var User= React.createClass({
-
   componentDidMount() {
      document.title='我的个人中心';
-     const { dispatch } = this.props
-     dispatch(fetchUserItemsIfNeeded(22))
+     let { dispatch,data} = this.props;
+     dispatch(fetchUserItemsIfNeeded(22));
+  },
+  handleClick(e){
+    const {dispatch , data }=this.props;
+    let type=$(e.target).data('type');
+    $(".top-tab .tab-item").removeClass('active');
+    $(e.target).addClass('active');
+    if(type=='SHOW_OPEN'){
+        dispatch(receiveUserPosts('SHOW_OPEN'))
+    }else{
+        dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'))
+    }
   },
 
   render() {
-    let {data,isFetching,dipatch}=this.props;
+    let {isFetching,list,user}=this.props;
+    var _this=this;
     function renderUserPage(){
-        if(!data){
+        if(!list){
             var isNull=true
-        }else if(data.length===0){
+        }else if(list.length===0){
             var isEmpty =true
         }
 
         if (isFetching||isNull) {
-            return <div>loading</div>
+            return <PageLoading/>
         }else if(isEmpty){
-            return <div>no data</div>
+            return (
+                <div className="height-wrapper">
+                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <div className='content-list no-data-block'>
+                        <div className="wrapper">
+                            <img src={userNoData} alt=""/>
+                        </div>
+                    </div>
+                </div>
+
+            )
         }else{
-            let fetchData=data
             return(
-                <div>
-                    <Header data={data}></Header>
-                    <UserList data={data}></UserList>
+                <div className="height-wrapper">
+                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <UserList data={list}></UserList>
                 </div>
             )
         }
     }
     return(
-        <div className="user-page">
+        <div className="user-page" >
             {renderUserPage()}
         </div>
     )
@@ -43,22 +64,23 @@ var User= React.createClass({
 })
 
 const Header=(data)=>{
+    let user=data.data;
     return(
         <div className="user-page-top">
             <img src={bgUser} alt=""/>
             <div className="top-content">
                 <div className="avatar">
-                    <img src={contentImg} alt=""/>
+                    <img src={user.avatar} alt=""/>
                 </div>
                 <div className="content f-14">
-                    成都锦玉喜堂Amy
+                    {user.username}
                 </div>
             </div>
             <div className="tab-wrapper">
                 <div className="top-tab">
-                    <div className="tab-item f-15 active"><i className="haloIcon haloIcon-"></i>公开课</div>
+                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
                     <div className="tab-tip"></div>
-                    <div className="tab-item f-15"><i className="haloIcon haloIcon-"></i>培训营</div>
+                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
                 </div>
             </div>
         </div>
@@ -66,28 +88,44 @@ const Header=(data)=>{
 }
 
 const UserList=(data)=>{
-    //console.log(data);
-    function filterArr(n,i){
-        if(n.type=='peixun'){
-            return false
-        }
-        return true
-    }
-
-    let dataArray=data.data.filter(filterArr);
-    //console.log(dataArray,data.data)
-
-    return(
+    let list=data.data;
+    const year=new Date().getFullYear();
+   return(
         <div className="content-list">
             {
-                dataArray.map((n,i)=>{
+                data.data.map((n,i)=>{
+                    const seatRow=n.seat_no.split(',')[0];
+                    const seatLine=n.seat_no.split(',')[1];
+                    function checkIfEnd(){
+                        if(n.start_day>0){
+                            return (
+                                <div className="content-isend f-10">
+                                    距离开课还有{n.start_day}天
+                                </div>
+                            )
+                        }else{
+                            return (
+                                <div className="content-isend f-10">
+                                    已结束
+                                </div>
+                            )
+                        }
+                    }
                     return(
                         <div className="content-item" key={i}>
                             <div className="avatar">
-da
+                                <img src={n.avatar_url} alt=""/>
                             </div>
+                            <div className="gap"></div>
                             <div className="content">
-asd
+                                <div className="content-desc f-14">{n.title}</div>
+                                <div className="content-info f-12">{n.start_date}  {n.place}  {n.day}天</div>
+                                <div className="content-bottom clearfix">
+                                    <div className="content-seat f-12">
+                                        {seatRow}排{seatLine}座
+                                    </div>
+                                    {checkIfEnd()}
+                                </div>
                             </div>
                         </div>
                     )
@@ -97,10 +135,26 @@ asd
     )
 }
 
+const showFilter=(data,filter)=>{
+    switch(filter){
+        case "SHOW_ALL":
+            return data
+        case 'SHOW_OPEN':
+            return data.filter(n=>n.cate=='公开课')
+        case 'SHOW_TRAINING_CAMP':
+            return data.filter(n=>n.cate=='培训营')
+    }
+}
 
 function mapStateToProps(state) {
-    const { userItems } = state
-    return userItems
+    const { userItems} = state
+    const {data}=userItems;
+    return {
+        list:showFilter(state.userItems.list,state.userItems.filter),
+        user:state.userItems.user,
+        isFetching:state.userItems.isFetching
+    }
+
 }
 
 export default ReactRedux.connect(mapStateToProps)(User)

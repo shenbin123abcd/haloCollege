@@ -1,19 +1,23 @@
-import bgImg from '../images/detail-bg.png'
-import contentImg from '../images/content-img.png'
-import BottomBtn from '../components/detail.bottom'
-import fetchCourseDetailIfNeeded from '../actions/detail'
-let Link=ReactRouter.Link
+import playBtn from '../images/play-btn.png'
+import BottomBtn from './Common.buttonGroup'
+import PageLoading  from '../components/Common.Pageloading'
+import {fetchCourseDetailIfNeeded} from '../actions/detail'
+import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
+
+let Link=ReactRouter.Link;
+var browserHistory=ReactRouter.browserHistory
 
 var Detail= React.createClass({
-
   componentDidMount() {
-      document.title='幻熊课堂详情';
-     const { dispatch } = this.props
-     dispatch(fetchCourseDetailIfNeeded(22))
+     document.title='幻熊课堂详情';
+     const { dispatch,routeParams } = this.props
+     dispatch(fetchCourseDetailIfNeeded(routeParams.id));
+      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
   },
 
   render() {
     let {data,isFetching,dipatch}=this.props;
+    let _this=this;
     function renderDetailPage(){
         if(!data){
             var isNull=true
@@ -22,49 +26,27 @@ var Detail= React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <div>loading</div>
+            return <PageLoading />
         }else if(isEmpty){
             return <div>no data</div>
         }else{
-            let fetchData=data.data
-            //console.log(fetchData);
-            let staticData={
-                price:'¥2000/人',
-                position:'上海总部',
-                date:'2016.09.27',
-                desc:'两天课时',
-                num:2,
-                interview:[
-                    {
-                        desc:'2016幻熊婚礼人专访',
-                        cover:bgImg,
-                    },
-                    {
-                        desc:'2016幻熊婚礼人专访',
-                        cover:bgImg,
-                    },
-                    {
-                        desc:'2016幻熊婚礼人专访',
-                        cover:bgImg,
-                    }
-                ],
-            }
+            let fetchData=data.data;
             const classData={
-                price:staticData.price,
-                position:staticData.position,
-                date:staticData.date,
-                desc:staticData.desc,
+                price:fetchData.price,
+                place:fetchData.place,
+                start_date:fetchData.start_date,
+                day:fetchData.day,
             };
             return(
                 <div className="detail-page">
-                    <DetailTop></DetailTop>
-                    <DetailMiddle></DetailMiddle>
+                    <DetailTop topData={fetchData}></DetailTop>
+                    <DetailMiddle middleData={fetchData}></DetailMiddle>
                     <ClassDesc classData={classData}></ClassDesc>
-                    <TeacherDesc></TeacherDesc>
-                    <DetailContent></DetailContent>
-                    <InterviewBlock interviewData={staticData.interview}></InterviewBlock>
+                    <TeacherDesc teacherData={fetchData.guest.content}></TeacherDesc>
+                    <DetailContent contentData={fetchData}></DetailContent>
+                    <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
-                    <BottomBtn priceData={staticData.price} numData={staticData.num}></BottomBtn>
+                    <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
                 </div>
             )
         }
@@ -80,23 +62,35 @@ var Detail= React.createClass({
 
 var DetailTop=React.createClass({
   render(){
+    const data=this.props.topData;
+    let styleCss=()=>{
+         let style='';
+         if(data.cate=='公开课'){
+             style='desc-tag f-10 open'
+         }else{
+             style='desc-tag f-10 training-camp'
+         }
+         return style
+    }
     return(
       <div className="detail-top">
         <div className="detail-bg">
-          <img  className='bg-img' src={bgImg} alt=""/>
-          <div className="sign-block">
-            <div className="sign-person f-9">西米 报名了！</div>
-          </div>
+          <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/375/h/190`} alt=""/>
+            {/*
+             <div className="sign-block">
+             <div className="sign-person f-9">西米 报名了！</div>
+             </div>
+            */}
           <div className="teacher-desc">
-            <div className="name f-17">蔡上</div>
-            <div className="position f-13">蔡上作品工作室 创始人</div>
+            <div className="name f-17">{data.guest.name}</div>
+            <div className="position f-13">{data.guest.position}</div>
           </div>
         </div>
 
         <div className="detail-desc">
-          <div className="desc-content f-15">蔡上丨约见蔡上，走进婚礼人的世界</div>
-          <div className="desc-tag f-10">
-            培训营
+          <div className="desc-content f-15">{data.title}</div>
+          <div className={styleCss()}>
+              {data.cate}
           </div>
         </div>
 
@@ -107,11 +101,12 @@ var DetailTop=React.createClass({
 
 var DetailMiddle=React.createClass({
   render(){
+    const data=this.props.middleData;
     return (
-      <Link to="/seatinfo/10" className="deatil-middle">
+      <Link to={`/course/seatinfo/${data.id}`} className="deatil-middle">
         <div className="sign-num-block clearfix">
-          <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名28人</div>
-          <div className="sign-num-block-right f-14">名额仅剩14个<i className="haloIcon haloIcon-right"></i></div>
+          <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
+          <div className="sign-num-block-right f-14">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
         </div>
       </Link>
     )
@@ -120,7 +115,6 @@ var DetailMiddle=React.createClass({
 
 var ClassDesc=React.createClass({
   render(){
-
       let descList=Object.values(this.props.classData);
       let data=[
           {
@@ -151,6 +145,8 @@ var ClassDesc=React.createClass({
       data.forEach(function(n,i){
           n.desc=descList[i];
       });
+      data[0].desc='￥'+data[0].desc+'/人';
+      data[3].desc=data[3].desc+'天课时';
 
     return (
       <div className="class-desc-block">
@@ -196,6 +192,7 @@ var TeacherDesc=React.createClass({
         }
     },
     render(){
+        const data=this.props.teacherData;
         return(
             <div className="teacher-desc-block">
                 <div className="desc-title f-13">
@@ -203,12 +200,7 @@ var TeacherDesc=React.createClass({
                 </div>
                 <div className="desc-content">
                     <div className="content f-13" id="desc-content">
-                        宴会设计师/高端婚礼统筹师/蔡上作品工作室创始人
-                        蔡上是婚庆行业知名主持人兼统筹，业内人士只要谈到婚庆
-                        主持与策划，总会不时提到他的名字。蔡上的主持费用是全
-                        宴会设计师/高端婚礼统筹师/蔡上作品工作室创始人
-                        蔡上是婚庆行业知名主持人兼统筹，业内人士只要谈到婚庆
-                        主持与策划，总会不时提到他的名字。蔡上的主持费用是全
+                        {data}
                     </div>
                     <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
                 </div>
@@ -219,17 +211,17 @@ var TeacherDesc=React.createClass({
 
 var DetailContent=React.createClass({
   render(){
+    const data=this.props.contentData;
+    let renderHtml=()=>{
+        return {__html:data.content}
+    }
     return (
         <div className="content-block">
             <div className="desc-title f-13">
                 <span className="line"></span>课程介绍
             </div>
             <div className="desc-content">
-                <img className="desc-content-img" src={contentImg} alt=""/>
-                <img className="desc-content-img" src={contentImg} alt=""/>
-                <div className="desc-cintent-text">宴会设计师/高端婚礼统筹师/蔡上作品工作室创始人
-                    蔡上是婚庆行业知名主持人兼统筹，业内人士只要谈到婚庆
-                    主持与策划，总会不时提到他的名字。蔡上的主持费用是全</div>
+                <div className="desc-cintent-text" dangerouslySetInnerHTML={renderHtml()} />
             </div>
         </div>
     )
@@ -248,10 +240,13 @@ var InterviewBlock=React.createClass({
                     {
                         data.map((n,i)=>{
                             return(
-                                <div className="list-block-item" key={i}>
-                                    <img className="item-cover" src={n.cover} alt=""/>
-                                    <div className="item-desc f-10">{n.desc}</div>
-                                </div>
+                                <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
+                                    <div className="item-cover-wrapper">
+                                        <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/110/h/72`} alt=""/>
+                                        <img className='play-btn' src={playBtn} alt=""/>
+                                    </div>
+                                    <div className="item-desc f-10">{n.title}</div>
+                                </a>
                             )
                         })
                     }
@@ -264,6 +259,7 @@ var InterviewBlock=React.createClass({
 function mapStateToProps(state) {
     const { courseDetail } = state
     return courseDetail
+
 }
 
 export default ReactRedux.connect(mapStateToProps)(Detail)
