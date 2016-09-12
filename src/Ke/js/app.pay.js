@@ -25,6 +25,7 @@
 
     pay.prototype.getConfig=function(){
         var _this=this;
+        hb.lib.weui.loading.show();
         return $.ajax({
             url: _this.opts.data.url,
             type: 'GET',
@@ -40,6 +41,7 @@
         var _this = this;
         if (this.config.appId == '') {
             this.getConfig().then(function(ret){
+                hb.lib.weui.loading.hide();
                 if (ret.iRet == 1) {
                     _this.config = ret.data.config;
                     _this.order_id = ret.data.order_id;
@@ -51,6 +53,7 @@
                     hb.lib.weui.alert(ret.info);
                 }
             }, function(){
+                hb.lib.weui.loading.hide();
                 hb.lib.weui.alert('网络繁忙，请稍候再试！');
             });
         }else{
