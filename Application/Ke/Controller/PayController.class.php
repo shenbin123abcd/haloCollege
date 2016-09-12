@@ -123,9 +123,9 @@ class PayController extends CommonController {
         if(!$sign) {
             $info = $sign['result_code'] == 'FAIL' ? $sign['err_code_des'] : '参数错误';
             write_log('wfc2016_order_error', var_export($sign, 1));
-            $this->ajaxReturn(array('status'=>0, 'info'=>$info, 'error'=>$sign));
+            $this->error($info, $sign);
         }else{
-            $this->ajaxReturn(array('status'=>1, 'data'=>array('config'=>$sign, 'order_id'=>$data['order']['order_no'])));
+            $this->suucess(array('config'=>$sign, 'order_id'=>$data['order']['order_no']));
         }
     }
 
@@ -164,6 +164,7 @@ class PayController extends CommonController {
             $order['goods_url'] = 'http://ke.halobear.com/uc/book';
             $order['module'] = 'book';
             $order['num'] = $num;
+            $order['status'] = $order['pay_time'] = 0;
 
             $model->add($order);
         }else{

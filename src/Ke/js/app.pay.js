@@ -25,8 +25,9 @@
 
     pay.prototype.getConfig=function(){
         var _this=this;
+        hb.lib.weui.loading.show();
         return $.ajax({
-            url: '/pay/course',
+            url: _this.opts.data.url,
             type: 'GET',
             dataType: 'json',
             // data: {id: hb.location.url("?id")} // 门票编号
@@ -40,17 +41,19 @@
         var _this = this;
         if (this.config.appId == '') {
             this.getConfig().then(function(ret){
-                if (ret.status == 1) {
+                hb.lib.weui.loading.hide();
+                if (ret.iRet == 1) {
                     _this.config = ret.data.config;
                     _this.order_id = ret.data.order_id;
                     _this.startPay();
-                }else if(ret.status == -1){
+                }else if(ret.iRet == -1){
                     // 未登录
-                    window.location.href='/weiTicket/wechat';
+                    window.location.href=ret.data;
                 }else{
                     hb.lib.weui.alert(ret.info);
                 }
             }, function(){
+                hb.lib.weui.loading.hide();
                 hb.lib.weui.alert('网络繁忙，请稍候再试！');
             });
         }else{

@@ -106,7 +106,6 @@ class SchoolWeddingController extends CommonController {
         $this->display();
     }
 
-
     //删除图片--封面
     public function attach_delete() {
         $model = M('Attach');
