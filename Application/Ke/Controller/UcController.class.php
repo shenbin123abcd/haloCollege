@@ -31,4 +31,15 @@ class UcController extends CommonController {
 
         $this->display();
     }
+
+    // 获取地区信息
+    public function getRegion(){
+        $city = intval(I('city'));
+        $data = M('Region')->where(array('parent_id'=>$city))->field('region_id,region_name')->select();
+        if (empty($data)) {
+            $data = M('Region')->where(array('region_id'=>$city))->field('region_id,region_name')->select();
+        }
+
+        $this->success('', $data);
+    }
 }
