@@ -94,8 +94,6 @@ const UserList=(data)=>{
         <div className="content-list">
             {
                 data.data.map((n,i)=>{
-                    const seatRow=n.seat_no.split(',')[0];
-                    const seatLine=n.seat_no.split(',')[1];
                     function checkIfEnd(){
                         if(n.start_day>0){
                             return (
@@ -111,6 +109,15 @@ const UserList=(data)=>{
                             )
                         }
                     }
+                    function chooseSeat(){
+                        if(n.seat_no){
+                            let seatRow=n.seat_no.split(',')[0];
+                            let seatLine=n.seat_no.split(',')[1];
+                            return (seatRow+'排'+seatLine+'座');
+                        }else{
+                            return ('尚未选座');
+                        }
+                    }
                     return(
                         <div className="content-item" key={i}>
                             <div className="avatar">
@@ -122,7 +129,7 @@ const UserList=(data)=>{
                                 <div className="content-info f-12">{n.start_date}  {n.place}  {n.day}天</div>
                                 <div className="content-bottom clearfix">
                                     <div className="content-seat f-12">
-                                        {seatRow}排{seatLine}座
+                                        {chooseSeat()}
                                     </div>
                                     {checkIfEnd()}
                                 </div>
