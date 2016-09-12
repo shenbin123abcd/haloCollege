@@ -9,7 +9,7 @@ const Box = ({data}) => {
                 <img className="img" src={`${data.guest.avatar_url}?imageView2/1/w/74/h/74`} />
                 <div className="info-box">
                     <div className="title">{data.title}</div>
-                    <div className="info">{data.city} · {data.start_date} ·{data.day}天</div>
+                    <div className="info">{data.start_date} · {data.city} ·{data.day}天</div>
                 </div>
 
             </div>
