@@ -90,7 +90,7 @@ body{
 
 .body-index{
   background-color: #f6f6f6;
-  padding-top: 0.9rem;
+  padding-top: 45px;
   #MEIQIA-PANEL-HOLDER,
   #MEIQIA-BTN-HOLDER,
   #MEIQIA-INVITE{
@@ -123,7 +123,8 @@ body{
 
 }
 .index-header-nav-wrapper{
-  height: 0.90rem;
+  //height: 0.90rem;
+  height: 45px;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -1168,7 +1169,7 @@ body{
 }
 
 .body-user{
-  padding-top: 0.9rem;
+  padding-top: 45px;
 }
 /*modal*/
 .modal-alert-block{
