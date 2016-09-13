@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('id asc')->field('id,title,cover_url,cate_id,city,start_date,price,total,num')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('id asc')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
@@ -33,6 +33,7 @@ class CourseModel extends Model {
                 $list[$key]['user'] = array();
 
                 $course_id[] = $value['id'];
+                $guest_id[] = $value['guest_id'];
             }
 
             // 课程报名用户
@@ -56,6 +57,12 @@ class CourseModel extends Model {
                 }
             }
 
+            // 嘉宾
+            $guest = M('SchoolGuests')->where(array('id'=>array('in', $guest_id)))->getField('id,title AS name, position');
+
+            foreach ($list as $key => $value) {
+                $list[$key]['guest'] = $guest[$value['guest_id']];
+            }
         }else {
             $list = [];
         }
