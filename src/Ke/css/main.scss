@@ -1340,22 +1340,23 @@ body{
 }
 
 
-.example-enter {
+
+.transition-enter {
   opacity: 0.01;
 }
 
-.example-enter.example-enter-active {
+.transition-enter.transition-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 300ms ease-in;
 }
 
-.example-leave {
-  opacity: 1;
+.transition-leave {
+  opacity: 0;
 }
 
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 1300ms ease-in;
+.transition-leave.transition-leave-active {
+  opacity: 0;
+  transition: opacity 10ms ease-in;
 }
 
 

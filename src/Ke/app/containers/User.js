@@ -3,7 +3,7 @@ import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 import PageLoading  from '../components/Common.Pageloading'
 
-
+var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var User= React.createClass({
   componentDidMount() {
      document.title='我的个人中心';
@@ -33,7 +33,7 @@ var User= React.createClass({
         }
 
         if (isFetching||isNull) {
-            return <PageLoading/>
+            return <PageLoading key={1}/>
         }else if(isEmpty){
             return (
                 <div className="height-wrapper">
@@ -57,7 +57,9 @@ var User= React.createClass({
     }
     return(
         <div className="user-page" >
+            <CSSTransitionGroup  transitionName="transition" component="div" transitionEnterTimeout={300} transitionLeaveTimeout={10}>
             {renderUserPage()}
+            </CSSTransitionGroup>
         </div>
     )
   }
