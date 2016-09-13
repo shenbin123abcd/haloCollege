@@ -23,7 +23,7 @@ var User= React.createClass({
   },
 
   render() {
-    let {isFetching,list,user}=this.props;
+    let {isFetching,list,user,monthList,location}=this.props;
     var _this=this;
     function renderUserPage(){
         if(!list){
@@ -159,7 +159,7 @@ function mapStateToProps(state) {
     return {
         list:showFilter(state.userItems.list,state.userItems.filter),
         user:state.userItems.user,
-        isFetching:state.userItems.isFetching
+        isFetching:state.userItems.isFetching,
     }
 
 }
