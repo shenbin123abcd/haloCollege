@@ -1097,7 +1097,7 @@ body{
     position: absolute;
     left: 0;
     right: 0;
-    top: 240px;
+    top: 285px;
     bottom: 0;
     overflow: auto;
     margin-top:0;
@@ -1339,21 +1339,23 @@ body{
   transform-origin: right;
 }
 
+
 .example-enter {
-  opacity: .01;
-  transition: opacity .5s ease-in;
+  opacity: 0.01;
 }
 
 .example-enter.example-enter-active {
   opacity: 1;
+  transition: opacity 500ms ease-in;
 }
+
 .example-leave {
   opacity: 1;
-  transition: opacity .5s ease-in;
 }
 
 .example-leave.example-leave-active {
-  opacity: .01;
+  opacity: 0.01;
+  transition: opacity 1300ms ease-in;
 }
 
 

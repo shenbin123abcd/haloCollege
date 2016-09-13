@@ -53,10 +53,9 @@ var Detail= React.createClass({
     }
     return(
         <div className="detail-page">
-            <ReactCssTransitionGroup transitionName="example">
-                <div>沈斌</div>
+            <ReactCssTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={1300}>
+                {renderDetailPage()}
             </ReactCssTransitionGroup>
-            {renderDetailPage()}
         </div>
     )
   }
