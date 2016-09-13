@@ -1,6 +1,9 @@
 ;app.index=(function(){
 	'use strict';
+	var videoHeight='';
+
 	function init(){
+		checkVideoHeigt();
 		dowloadClick();
 		renderContent();
 		renderRecommend();
@@ -60,6 +63,14 @@
 		return deferred.promise();
 	}
 
+
+	function checkVideoHeigt(){
+		$(document).ready(function(){
+			var videoWidth=parseInt($(document).width());
+			videoHeight=videoWidth*0.6667;
+		})
+	}
+
 	function renderContent(){
 		var id=window.location.href.split('=')[1];
 		contentService({
@@ -70,7 +81,7 @@
 			var videoWrapperHtml='';
 			var guests=res.guests;
 			var video=res.video;
-			//console.log(video);
+			video.is_vip=0;
 			if(video.is_vip==1){
 				videoWrapperHtml=`
 					<div class="video-top-block no-access">
@@ -82,7 +93,7 @@
 				`;
 			}else{
 				videoWrapperHtml=`
-
+					<video style="background:#000000; " controls poster=${video.cover_url} controls="controls" src=${video.url} width="100%" height=${videoHeight} preload="auto"></video>
 				`;
 			};
 
@@ -91,7 +102,7 @@
 					<div class="info-title f-16">${video.title}</div>
 					<div class="info-desc clearfix">
 						<div class="desc-left f-15">${guests.name}丨${guests.position}</div>
-						<div class="desc-right f-15">播放：4359</div>
+						<div class="desc-right f-15">播放：${video.views}</div>
 					</div>
 				</div>
 				<div class="content-desc">
@@ -108,11 +119,15 @@
 			$("#guest-block").empty().html(guestHtml);
 			if($("#play-btn")){
 				$("#play-btn").on('click',function(e){
-					alert(1);
+					hb.lib.weui.alert({
+						title:'温馨提示',
+						content:'请先下载幻熊学院APP</br><a style="color:#888;" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.halobear.weddingvideo">点击下载</a>',
+						btn:'确定',
+					})
 				})
 			}
 
-		},function(){
+		},function(error){
 			hb.lib.weui.alert({
 				title:'温馨提示',
 				content:error,
@@ -128,26 +143,30 @@
 			per_page:1,
 			vid:id || 1
 		}).then(function(res){
-			console.log(res);
+			//console.log(res);
 			var recommendStr='';
 			res.forEach(function(n,i){
 				recommendStr+=`
 					<div class="recommend-item">
-						<a class="cover-block" href=''>
-							<img src='' alt="">
+						<a class="cover-block" href='http://college.halobear.com/lectureDetail/${n.id}'>
+							<img src=${n.cover_url} alt="">
 						</a>
-						<div class="desc-block">
-							<div class="title f-15">幻熊婚礼人专访</div>
-							<div class="info f-13">蔡上丨重庆蔡上工作室创始人</div>
+						<a class="desc-block" href='http://college.halobear.com/lectureDetail/${n.id}'>
+							<div class="title f-15">${n.title}</div>
+							<div class="info f-13">${n.guests.title} | ${n.guests.position}</div>
 							<div class="play-num f-13">播放 ：${n.views}</div>
-						</div>
+						</a>
 					</div>
 				`;
 			})
 			$("#recommend-block").empty().html(recommendStr);
 
 		},function(error){
-
+			hb.lib.weui.alert({
+				title:'温馨提示',
+				content:error,
+				btn:'确定',
+			})
 		})
 	}
 
