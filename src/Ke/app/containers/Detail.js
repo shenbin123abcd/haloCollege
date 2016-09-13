@@ -106,7 +106,7 @@ var DetailMiddle=React.createClass({
       <Link to={`/course/seatinfo_${data.id}`} className="deatil-middle">
         <div className="sign-num-block clearfix">
           <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
-          <div className="sign-num-block-right f-14">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
+          <div className="sign-num-block-right f-13">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
         </div>
       </Link>
     )
