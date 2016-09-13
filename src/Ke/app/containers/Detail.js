@@ -41,7 +41,7 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <ClassDesc classData={classData}></ClassDesc>
+                    <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
@@ -120,6 +120,7 @@ var DetailMiddle=React.createClass({
 var ClassDesc=React.createClass({
   render(){
       let descList=Object.values(this.props.classData);
+      let cate=this.props.cateData;
       let data=[
           {
               type:'item1',
@@ -149,8 +150,14 @@ var ClassDesc=React.createClass({
       data.forEach(function(n,i){
           n.desc=descList[i];
       });
+
       data[0].desc='￥'+data[0].desc+'/人';
-      data[3].desc=data[3].desc+'天课时';
+      if(cate=='公开课'){
+          data[3].desc=data[3].desc+'天期会';
+      }else{
+          data[3].desc=data[3].desc+'天课时';
+      }
+
 
     return (
       <div className="class-desc-block">
@@ -196,7 +203,8 @@ var TeacherDesc=React.createClass({
         }
     },
     render(){
-        const data=this.props.teacherData;
+        let data=this.props.teacherData;
+        data=data.split('\r');
         return(
             <div className="teacher-desc-block">
                 <div className="desc-title f-13">
@@ -204,7 +212,13 @@ var TeacherDesc=React.createClass({
                 </div>
                 <div className="desc-content">
                     <div className="content f-13" id="desc-content">
-                        {data}
+                        {
+                            data.map((n,i)=>{
+                                return(
+                                    <p className="desc-style">{n}</p>
+                                )
+                            })
+                        }
                     </div>
                     <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
                 </div>
