@@ -22,6 +22,9 @@ export default (state = {
                 clickable: false,
                 selectedItem: null,
                 items: null,
+                isBooking: false,
+                isBookSuccess: false,
+                isBookFailure: false,
             })
         case 'SELECT_SEAT':
             return Object.assign({}, state, {
