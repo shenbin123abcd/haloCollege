@@ -34,8 +34,13 @@ const CourseItem = ({item}) => {
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
                 <div className="img-over-layer" ></div>
-
+                <div className="guest-box">
+                    <div className="name" >{item.guest.name}</div>
+                    <div className="position" >{item.guest.position}</div>
+                </div>
+                
                 <div className={tagClass}>{item.cate}</div>
+
             </div>
             <div className="content-box">
                 <div className="des-box cf">

@@ -202,6 +202,21 @@ body{
         left: 0;
         top: 0;
         background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
+        border-radius: 6px 6px 0 0;
+      }
+      .guest-box{
+        position: absolute;
+        left: 0.26rem;
+        top: 1.3rem;
+        color: #ffffff;
+
+      }
+      .name{
+        font-size: 0.34rem;
+      }
+      .position{
+        margin-top: 0.1rem;
+        font-size: 0.26rem;
       }
       .tag{
         position: absolute;
