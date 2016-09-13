@@ -7,10 +7,11 @@ function initState() {
         monthList.push({
             month:CurrentMonth+i,
             year:CurrentYear,
+            active:false,
         });
-        if(i==0){
-            monthList[i].active=true
-        }
+        // if(i==0){
+        //     monthList[i].active=true
+        // }
         if(monthList[i].month>12){
             monthList[i].month=monthList[i].month-12
             monthList[i].year=monthList[i].year+1
@@ -34,6 +35,13 @@ export default (state = initState(), action) => {
                 }
             });
             return newArr;
+        case 'resetMonth':
+            // console.log(action)
+            let newArr2=[].concat(state);
+            newArr2.forEach(n=>{
+                n.active=false
+            });
+            return newArr2;
         default:
             return state
     }

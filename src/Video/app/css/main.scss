@@ -105,7 +105,7 @@ body{
 			display: block;
 			width: 100%;
 			height: 0;
-			padding-bottom: 52%;
+			padding-bottom: 66.6667%;
 			overflow: hidden;
 			background: #000000;
 			position: relative;
@@ -195,7 +195,7 @@ body{
 		}
 		.recommend-item{
 			display: flex;
-			align-items: center;
+			//align-items: center;
 			margin-top:10px;
 			.cover-block{
 				flex:0 0 35%;
@@ -207,6 +207,7 @@ body{
 			.desc-block{
 				flex:1 1 auto;
 				padding-left: 15px;
+				display:block;
 				.title{
 					color:#333333;
 					margin-bottom:10px;

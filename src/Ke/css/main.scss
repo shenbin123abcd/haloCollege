@@ -90,7 +90,7 @@ body{
 
 .body-index{
   background-color: #f6f6f6;
-  padding-top: 0.9rem;
+  padding-top: 45px;
   #MEIQIA-PANEL-HOLDER,
   #MEIQIA-BTN-HOLDER,
   #MEIQIA-INVITE{
@@ -123,7 +123,8 @@ body{
 
 }
 .index-header-nav-wrapper{
-  height: 0.90rem;
+  //height: 0.90rem;
+  height: 45px;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -1096,7 +1097,7 @@ body{
     position: absolute;
     left: 0;
     right: 0;
-    top: 240px;
+    top: 285px;
     bottom: 0;
     overflow: auto;
     margin-top:0;
@@ -1167,6 +1168,9 @@ body{
   }
 }
 
+.body-user{
+  padding-top: 45px;
+}
 /*modal*/
 .modal-alert-block{
 
@@ -1333,6 +1337,25 @@ body{
 #MEIQIA-BTN{
   transform:scale(.7);
   transform-origin: right;
+}
+
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 1300ms ease-in;
 }
 
 
