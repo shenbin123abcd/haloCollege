@@ -166,8 +166,8 @@ class CoursesController extends CommonController {
         $pay = new Payment('wechat');
         $pay->setNotify('http://ke.halobear.com/course/notify');
 
-        echo $sign = $pay->sign(['subject' => 'test', 'body' => 'body', 'order_no' => '121111', 'amount' => '0.01']);
+        $sign = $pay->sign(['subject' => 'test', 'body' => 'body', 'order_no' => '121111', 'amount' => '0.01']);
 
-        //$this->success($sign);
+        $this->success($sign);
     }
 }
