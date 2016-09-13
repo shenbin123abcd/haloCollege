@@ -5,7 +5,8 @@ import {fetchCourseDetailIfNeeded} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 
 let Link=ReactRouter.Link;
-var browserHistory=ReactRouter.browserHistory
+var browserHistory=ReactRouter.browserHistory;
+var ReactCssTransitionGroup=React.addons.CSSTransitionGroup;
 
 var Detail= React.createClass({
   componentDidMount() {
@@ -24,7 +25,6 @@ var Detail= React.createClass({
         }else if(data.length===0){
             var isEmpty =true
         }
-
         if (isFetching||isNull) {
             return <PageLoading />
         }else if(isEmpty){
@@ -53,6 +53,9 @@ var Detail= React.createClass({
     }
     return(
         <div className="detail-page">
+            <ReactCssTransitionGroup transitionName="example">
+                <div>沈斌</div>
+            </ReactCssTransitionGroup>
             {renderDetailPage()}
         </div>
     )
