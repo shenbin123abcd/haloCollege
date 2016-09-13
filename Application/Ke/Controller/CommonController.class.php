@@ -22,7 +22,7 @@ class CommonController extends Controller {
         $halobear = cookie('halobear');
         $this->user = $this->wcache($halobear);
 
-        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn'))) {
+        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test'))) {
             cookie('halobear', null, -86400);
             $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']);
             if (IS_AJAX) {
