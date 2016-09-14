@@ -77,6 +77,29 @@ body{
 .page-loading-wrapper{
   padding: 30px;
   text-align: center;
+  &.my-fade{
+
+    &-enter{
+      width: 100%;
+      left: 0;
+      top: 30px;
+      position: absolute;
+      &-active{
+
+      }
+    }
+    &-leave{
+      width: 100%;
+      left: 0;
+      top: 30px;
+      position: absolute;
+      &-leave{
+
+      }
+    }
+
+  }
+
   .haloIcon{
     font-size: 36px;
     color: #999;
@@ -178,8 +201,29 @@ body{
   }
 
 }
+
+
+.my-fade{
+  &-enter{
+    opacity: 0.01;
+    &-active{
+      opacity: 1;
+      transition: opacity 300ms ease-in;
+    }
+  }
+  &-leave{
+    opacity: 0;
+    &-leave{
+      opacity: 0;
+    }
+  }
+
+}
+
 .index-course-wrapper{
   padding: 0.25rem 0.2rem 0.5rem;
+
+
   .item{
     display: block;
     background-color: #ffffff;

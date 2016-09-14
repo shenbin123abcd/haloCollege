@@ -50,7 +50,7 @@ function shouldFetchCourse(state, req) {
   } = courseList
 
   if (isFetching){
-    return false
+    return true
   }
   return true
 }

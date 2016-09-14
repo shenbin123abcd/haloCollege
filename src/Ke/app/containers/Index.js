@@ -1,8 +1,7 @@
-
 import CourseItem from '../components/Index.CourseItem'
 import Course from '../components/Index.Course'
-import { fetchCourseIfNeeded,setCurrentMonth } from '../actions'
-
+// import { fetchCourseIfNeeded,setCurrentMonth } from '../actions'
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 
 var Index = React.createClass({
@@ -24,7 +23,6 @@ var Index = React.createClass({
         // }
     },
     componentWillReceiveProps : function(nextProps) {
-
 
 
         // console.log('componentWillReceiveProps',nextProps,this.props)
@@ -57,13 +55,55 @@ var Index = React.createClass({
             <CourseItem item={item}  key={i} handleCourseClick={e=>{this.handleCourseClick()}} />
         )
     },
-
+    // getInitialState: function() {
+    //     return {items2: ['hello', 'world', 'click', 'me']};
+    // },
+    // handleAdd: function() {
+    //     var newItems =
+    //         this.state.items2.concat([prompt('Enter some text')]);
+    //     this.setState({items2: newItems});
+    // },
+    // handleRemove: function(i) {
+    //     var newItems = this.state.items2.slice();
+    //     newItems.splice(i, 1);
+    //     this.setState({items2: newItems});
+    // },
     render: function() {
+        var _this=this
         let {items,isFetching,monthList,location}=this.props;
+        // var items2 = this.state.items2.map(function(item, i) {
+        //     return (
+        //         <div key={item} onClick={this.handleRemove.bind(this, i)}>
+        //             {item}
+        //         </div>
+        //     );
+        // }.bind(this));
+        // var Items3 = ()=>{
+        //     if(this.state.items2.length==4){
+        //         return (
+        //             <div >
+        //                 is
+        //             </div>
+        //         );
+        //     }else{
+        //         return (
+        //             <div >
+        //                 er
+        //             </div>
+        //         );
+        //     }
+        //
+        // };
         return (
+
+
             <div className="index-wrapper">
-                
+                {/*
+                 <button onClick={this.handleAdd}>Add Item</button>
+                 */}
                 <Course items={items} isFetching={isFetching} renderItem={this.renderCourse} />
+
+                
             </div>
         );
     }

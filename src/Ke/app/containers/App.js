@@ -1,6 +1,6 @@
 
 import CommonHeader from './Common.Header'
-
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 const App = ({ children,monthList,location,route }) => {
     // console.log(location)
@@ -9,7 +9,9 @@ const App = ({ children,monthList,location,route }) => {
 
     <div>
         <CommonHeader items={monthList} location={location}   />
-        {children}
+        {
+            children
+        }
     </div>
 )}
 
