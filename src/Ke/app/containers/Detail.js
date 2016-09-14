@@ -208,7 +208,7 @@ var TeacherDesc=React.createClass({
                 },400);
                 $("#desc-content").removeClass('text-hidden');
                 $(".teacher-desc-block").css('padding-bottom',30);
-                $("#see-more-btn").hide();
+                $("#see-more-btn").attr('id','slide-up-btn');
             })
         }
     },
@@ -216,6 +216,7 @@ var TeacherDesc=React.createClass({
         let data=this.props.teacherData;
         let ifShow=this.props.ifShow;
         if(ifShow!=1){
+            data='沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大沈斌啊实打实大'
             data=data.split('\r');
             return(
                 <div className="teacher-desc-block">
