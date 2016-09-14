@@ -135,7 +135,7 @@ class CourseModel extends Model {
         $rows = $course['room_rows'];
         $cols = $course['room_cols'];
 
-        $record = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('seat_no,uid');
+        $record = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('seat_no,wechat_id');
 
         $list = array();
         for ($i=1; $i <= $rows; $i++) {
