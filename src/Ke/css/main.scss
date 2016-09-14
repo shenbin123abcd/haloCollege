@@ -91,7 +91,7 @@ body{
       left: 0;
       top: 30px;
       position: absolute;
-      &-leave{
+      &-active{
       }
     }
   }
@@ -208,7 +208,7 @@ body{
   }
   &-leave{
     opacity: 0;
-    &-leave{
+    &-active{
       opacity: 0;
     }
   }
