@@ -7,6 +7,7 @@ var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var User= React.createClass({
   componentDidMount() {
      document.title='我的个人中心';
+      app.wechat.init();
      let { dispatch,data} = this.props;
      dispatch(fetchUserItemsIfNeeded());
   },
