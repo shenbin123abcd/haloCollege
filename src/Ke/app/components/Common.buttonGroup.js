@@ -82,7 +82,7 @@ export default React.createClass({
             }else if(status==41){
                 return  (
                     <div className="flex-bottom-btn">
-                        <Link to={`/course/selectseat_${id}`} className="choose-seat-btn f-15">已选座</Link>
+                        <div className="choose-seat-btn f-15">已选座</div>
                         <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>
                     </div>
                 )

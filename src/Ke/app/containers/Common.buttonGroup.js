@@ -31,10 +31,10 @@ var CommonButtonGroup= React.createClass({
                         leftBtn:'稍等片刻',
                         rightBtn:'前去选座'
                     }).then(function(){
-                        dispatch(receiveStatusPosts(id,4,false));
+                        dispatch(receiveStatusPosts(id,40,false));
                         browserHistory.push(`/course/selectseat_${id}`);
                     },function(){
-                        dispatch(receiveStatusPosts(id,4,false));
+                        dispatch(receiveStatusPosts(id,40,false));
                     })
                 },
                 onFail:function (res) {
