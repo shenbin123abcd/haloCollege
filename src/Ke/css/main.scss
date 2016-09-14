@@ -771,6 +771,7 @@ body{
       background: #fff;
       .desc-content{
         color:#333333;
+
       }
       .desc-tag{
         width: 42px;
@@ -807,6 +808,7 @@ body{
           color:#999999;
           position: relative;
           top:2px;
+          left:-2px;
         }
       }
       .sign-num-block-right{
@@ -818,7 +820,6 @@ body{
           color:#aaaaaa;
           position: relative;
           top:3px;
-          left:-2px;
           font-size:20px;
         }
       }
@@ -845,7 +846,7 @@ body{
           position: absolute;
           right:0;
           height:65%;
-          transform: translateY(-50%);
+          transform: translateY(-50%) scale(0.5,1);
           top:50%;
           width:1px;
           background: #d7d7d7;
@@ -926,6 +927,9 @@ body{
       .content{
         color:#333;
         text-align: left;
+        .desc-style{
+          margin:0 0 8px;
+        }
         &.text-hidden{
           height:57px;
           overflow: hidden;
@@ -975,7 +979,9 @@ body{
         margin-bottom:15px;
       }
       .desc-cintent-text{
-
+        .p1,p{
+          margin:0 0 8px;
+        }
       }
     }
   }
@@ -1042,11 +1048,31 @@ body{
     background: #fff;
     color:#fe5a40;
     flex:0 0 35%;
-    border-top:1px solid #d7d7d7;
+    position: relative;
+    //border-top: 1px solid #d7d7d7;
+    &:after{
+      position:absolute;
+      top:0;
+      width:100%;
+      content:"";
+      height:1px;
+      left:0;
+      background:#d7d7d7 ;
+    }
   }
   .enter-btn{
-    border-top:1px solid #ff654d;
+    //border-top:1px solid #ff654d;
     flex:0 0 65%;
+    position: relative;
+    &:after{
+      position:absolute;
+      top:0;
+      width:100%;
+      content:"";
+      height:1px;
+      right:0;
+      background:#ff654d;
+    }
     &.able{
       background: #ff654d;
       color:#fff;
@@ -1124,6 +1150,7 @@ body{
           position:relative;
           top:2px;
           margin-right:2px;
+          left: -2px;
         }
         &.active{
           color:#fe5a40;
