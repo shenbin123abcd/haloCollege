@@ -132,7 +132,8 @@ function get_user() {
         $token = substr($auth, 7);
         $data = jwt_decode($token);
         if ($data['iRet']){
-            $count = M('Session')->where(array('uid'=>$this->user['id'], 'token'=>md5($token)))->count();
+            $user = $data['data'];
+            $count = M('Session')->where(array('uid'=>$user['id'], 'token'=>md5($token)))->count();
             $data = $count ? $data : array();
         }
     } elseif (!empty($cookie)) {
@@ -1223,6 +1224,22 @@ function curl_put( $url, $data, $header = array() ) {
     return $data;
 }
 
+function curl_request($url,$data,$method='PUT'){
+    $ch = curl_init(); //初始化CURL句柄
+    curl_setopt($ch, CURLOPT_URL, $url); //设置请求的URL
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); //设为TRUE把curl_exec()结果转化为字串，而不是直接输出
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method); //设置请求方式
+
+    curl_setopt($ch,CURLOPT_HTTPHEADER,array(
+        'Content-Type:application/x-www-form-urlencoded;charset=UTF-8',
+        "X-HTTP-Method-Override: $method"));//设置HTTP头信息
+    !empty($data) && curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));//设置提交的字符串
+    $document = curl_exec($ch);//执行预定义的CURL
+    curl_close($ch);
+    $data = json_decode( $document, true );
+
+    return $data;
+}
 
 /**
  * 生成七牛上传凭证
@@ -1365,6 +1382,35 @@ function send_msg( $to, $datas, $tempId = 1, $appId='8a48b551488d07a80148a59dbb9
     }else {
         return array('iRet'=>$result->statusCode, 'info'=>$result->statusMsg);
     }
+}
+
+/**
+ * 发送邮件
+ *
+ * @param [type]  $address 收件人地址
+ * @param [type]  $subject 邮件主题
+ * @param [type]  $body    邮件内容
+ * @param boolean $html    是否是html
+ * @return [type]
+ */
+function sendEmail( $address, $subject, $body, $html=true ) {
+    vendor( 'PHPMailer.phpmailer' );
+    $mail = new PHPMailer(); //new一个PHPMailer对象出来
+    $mail->CharSet ='utf-8';//设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+    $mail->IsSMTP(); // 设定使用SMTP服务
+    $mail->SMTPAuth   = true;                  // 启用 SMTP 验证功能
+
+    $mail->Host       = C( 'EMAIL_HOST' );      // SMTP 服务器
+    $mail->Port       = C( 'EMAIL_PORT' );                   // SMTP服务器的端口号
+    $mail->Username   = C( 'EMAIL' );  // SMTP服务器用户名
+    $mail->Password   = C( 'EMAIL_PASS' );            // SMTP服务器密码
+    $mail->SetFrom( C( 'EMAIL' ), C( 'EMAIL_HONER' ) );//发件人信息
+    $mail->AddReplyTo( C( 'EMAIL' ), C( 'EMAIL_HONER' ) );//回复信息
+    $mail->Subject    = $subject;//邮件主题
+    $html?$mail->MsgHTML( $body ):$mail->AltBody=$body;//邮件内容
+    C( 'MALL_SSL' )&&$mail->SMTPSecure = "ssl";// 安全协议
+    $mail->AddAddress( $address, '' );//增加收件人
+    return $mail->Send();
 }
 
 /**

@@ -48,7 +48,9 @@ class PublicController extends CommonController {
         $this->success('success', $data);
     }
 
-    // 登录
+    /**
+     * 登录
+    */
     public function login() {
         $phone = I('phone');
         $password = I('password');
@@ -81,35 +83,44 @@ class PublicController extends CommonController {
 
             $model->where(array('id' => $user['id']))->save(array('last_time' => time(), 'login_ip' => get_client_ip()));
 
-            // 微社区token
-            $wsq = $model->getMicroToken($user);
-            $user['wsq'] = $wsq;
+            //// 微社区token
+            //$wsq = $model->getMicroToken($user);
+            //$user['wsq'] = $wsq;
             $token = jwt_encode($user);
+            $add_token['uid'] = $user['id'];
+            $add_token['token'] = md5($token);
+            $result =  M('Session')->where(array('uid'=>$user['id']))->delete();
+            if($result!==false){
+                $id = M('Session')->add($add_token);
+            }
             $this->success('登录成功', array('token' => $token, 'wsq' => $wsq, 'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
         } else {
             $this->error('账号或密码错误');
         }
     }
 
-    // 注册
+    /**
+     * 注册
+    */
     public function register() {
 
         // 邀请码
-        $_POST['code'] = I('invite_code');
+        //$_POST['code'] = I('invite_code');
+
         $model = D('SchoolAccount');
 
         // 账号中心注册
         if ($model->create()) {
             $result = $model->register();
+
             // Log::write(var_export($result));
-            if ($result['iRet'] == 1) {
+            if ($result['iRet'] == 1) {                
                 // 产生用户标识
                 $id = $model->add();
                 $user = array('id' => $result['data'], 'username' => I('username'), 'phone' => I('phone'));
                 $token = jwt_encode($user);
                 $key = get_avatar($user['id'], 'middle', 0);
                 $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
-
                 $this->success('注册成功', array('token' => $token, 'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
             } else {
                 $info = $result['info'];
@@ -120,12 +131,14 @@ class PublicController extends CommonController {
                 }
                 $this->error($result['info']);
             }
-        } else {
+        } else {            
             $this->error($model->getError());
         }
     }
 
-    // 忘记密码
+    /**
+     * 忘记密码
+    */
     public function forget() {
         $model = D('SchoolAccount');
 
@@ -166,7 +179,9 @@ class PublicController extends CommonController {
         }
     }
 
-    // 修改密码
+    /**
+     * 修改密码
+    */
     public function editPassword() {
         $this->_auth();
 
@@ -174,7 +189,7 @@ class PublicController extends CommonController {
 
         $password = I('password');
         $new_password = I('new_password');
-
+        
         // 验证码
         $user = M('SchoolAccount')->where(array('phone' => $phone, 'status' => 1))->field('id,username,phone')->find();
         // if($user['password'] != md5($password)){
@@ -182,8 +197,9 @@ class PublicController extends CommonController {
         // }
 
         // 账号中心修改
-        $data = array('id' => $model->id, 'password' => $password, 'new_password' => $new_password);
+        $data = array('id' => $this->user['id'], 'password' => $password, 'new_password' => $new_password);
         $ret = $model->editPassword($data);
+
         if ($ret['iRet'] == 1) {
             // 产生用户标识
             $token = jwt_encode($user);
@@ -233,7 +249,9 @@ class PublicController extends CommonController {
         }
     }
 
-    // 获取验证码
+    /**
+     * 获取验证码
+    */
     public function verify() {
 
         // 检查邀请码
@@ -277,6 +295,43 @@ class PublicController extends CommonController {
         } else {
             $this->error('网络繁忙，请稍候再试！');
         }
+    }
+
+    /**
+     * 意见反馈
+    */
+    public function feedback() {
+        $this->_auth();
+        $name = D('SchoolAccount')->username;
+        $tel = D('SchoolAccount')->phone;
+        $content = trim(I('content'));
+
+        if (empty($content)) {
+            $this->error('内容不能为空');
+        }
+        $this->_loadConfig();
+
+        $email = 'ceo@halobear.com';
+        $subject = '幻熊学院意见反馈 - ' . $name;
+        $body = '联系人：' . $name . '<br>';
+        $body .= '联系方式：' . $tel . '<br>';
+        $body .= $content . '<br>';
+        $body .= '系统信息：' . $_SERVER['HTTP_USER_AGENT'];
+        $return = sendEmail($email, $subject, $body, $html = true);
+
+        $return ? $this->success('非常感谢，您的留言提交成功！') : $this->error('网络繁忙，请稍候再试！');
+    }
+
+    /**
+     * 加载配置
+     */
+    protected function _loadConfig() {
+        $data = D('Config')->select();
+        $result = array();
+        foreach ($data as $value) {
+            $result[$value['name']] = json_decode($value['value']) ? json_decode($value['value'],true) : $value['value'];
+        }
+        C($result);
     }
 
 

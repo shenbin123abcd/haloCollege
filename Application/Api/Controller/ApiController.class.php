@@ -96,7 +96,6 @@ class ApiController extends ApiBaseController {
         $this->success('success', $list);
     }
 
-
     /**
      * 根据类型3获取列表
      * @param  integer $cate 分类id
@@ -281,7 +280,7 @@ class ApiController extends ApiBaseController {
     }
 
     /**
-     * 视频会员开通
+     * 视频会员开通（ 作废）
     */
     public function openMember(){
         $this->_auth();
@@ -291,8 +290,8 @@ class ApiController extends ApiBaseController {
         }
         $model_user = D('SchoolAccount');
         $data['uid'] = $model_user->id;
-        $data['username'] = $model_user->username;
-        $data['phone'] = $model_user->phone;
+        //$data['username'] = $model_user->username;
+        //$data['phone'] = $model_user->phone;
         switch ($type){
             case 1:
                 $cycle_time = 12*30*24*60*60;
@@ -312,9 +311,9 @@ class ApiController extends ApiBaseController {
         //判断用户是否已经开通会员(若开通继续续费)
         $member = $this->continue_member($data['uid']);
         if(!empty($member)){
-            $data['start_time'] = $member['start_time'];
+            //$data['start_time'] = $member['start_time'];
             $data['end_time'] = $member['end_time']+$cycle_time;
-            $data['type'] = trim($member['type']).','.$type;
+            //$data['type'] = trim($member['type']).','.$type;
         }else{
             $data['start_time'] = time();
             $data['type'] = $type;
@@ -333,7 +332,7 @@ class ApiController extends ApiBaseController {
     }
 
     /**
-     *会员叠加
+     *会员叠加（作废）
     */
     public function continue_member($uid){
         $where['uid'] = $uid;
@@ -352,7 +351,7 @@ class ApiController extends ApiBaseController {
     }
 
     /**
-     * 定时任务检测会员是否过期或判断用户是否开通会员
+     * 定时任务检测会员是否过期或判断用户是否开通会员（作废）
     */
     public function checkExpire(){
         $this->_auth();
@@ -376,6 +375,39 @@ class ApiController extends ApiBaseController {
         }else{
             $this->success('success',array('end_time'=>0));
         }
+    }
+
+    /**
+     * 获取会员类型
+     */
+    public function getMemberCate(){
+        $cate_id = I('cate_id');
+        if(empty($cate_id)){
+            $where['status'] =1;
+        }else{
+            $where['status'] =1;
+            $where['id'] =$cate_id;
+        }
+        $member_cate = M('SchoolMemberCate')->where($where)->select();
+        $data['list'] = $member_cate;
+        $this->success('success',$data);
+    }
+
+    /**
+     * 获取会员过期时间及开通的会员类型
+     */
+    public function getExpireDate(){
+        $this->_auth();
+        $uid = D('SchoolAccount')->id;
+        $where['uid'] = $uid;
+        $where['status'] = 1;
+        $member = M('SchoolMember')->where($where)->find();
+        $open_member = get_open_member($uid);
+
+        $data['open_member'] = $open_member[$uid] ? $open_member[$uid] : '';
+
+        $data['expire'] = $member['end_time'] ? $member['end_time'] : '';
+        $this->success('success',$data);
     }
 
     /**
@@ -442,22 +474,6 @@ class ApiController extends ApiBaseController {
     }
 
     /**
-     * 获取会员类型
-    */
-    public function getMemberCate(){
-        $cate_id = I('cate_id');
-        if(empty($cate_id)){
-            $where['status'] =1;
-        }else{
-            $where['status'] =1;
-            $where['id'] =$cate_id;
-        }
-        $member_cate = M('SchoolMemberCate')->where($where)->select();
-        $data['list'] = $member_cate;
-        $this->success('success',$data);
-    }
-
-    /**
      * 登录状态记录
     */
     public function loginRecord(){
@@ -465,46 +481,22 @@ class ApiController extends ApiBaseController {
     }
 
     /**
-     * 获取会员过期时间及开通的会员类型
-    */
-    public function getExpireDate(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
-        $where['uid'] = $uid;
-        $where['is_expire'] =0;
-        $where['status'] = 1;
-        $member = M('SchoolMember')->where($where)->find();
-        $open_member = $this->get_open_member($uid);
-        $data['open_member'] = !empty($open_member) ? $open_member : array();
-        $data['expire'] = $member['end_time'] ? $member['end_time'] : '';
-        $this->success('success',$data);
-    }
-
-    /**
      * 获取开通的会员类型
     */
     public function get_open_member($uid){
-        $members = M('SchoolMember')->where(array('uid'=>$uid))->field('uid,type,end_time')->select();
-        $cate = M('SchoolMemberCate')->where(array('status'=>1))->getField('id,title');
-        $now = time();
-        foreach ($members as $key=>$value){
-            if ($value['end_time']>$now){
-                $type_arr = explode(',',$value['type']);
-                $cate_arr[] = array_pop($type_arr);
-            }
+        $where['uid'] = $uid;
+        $where['status'] = 1;
+
+        $member = M('MemberOrder')->where($where)->field('uid,cate')->select();
+        foreach ($member as $key=>$value){
+            $member_arr[] = $value['cate'];
         }
-        //已经开通的不同类型会员的数目(目前取周期最长的会员类型)
-        $count = array_count_values($cate_arr);
-        $cate_arr = array_unique($cate_arr);
-        $min = min($cate_arr);
-        $care_arr['cate_id'] = $min;
-        $care_arr['cate_title'] = $cate[$min];
-        $care_arr['cate_count'] = $count[$min];
-        $member_arr[] = $care_arr;
-        return $member_arr;
+
     }
 
-    // 登录
+    /**
+     * 登录
+    */
     public function login() {
         $phone = I('phone');
         $password = I('password');
@@ -541,6 +533,12 @@ class ApiController extends ApiBaseController {
             $wsq = $model->getMicroToken($user);
             $user['wsq'] = $wsq;
             $token = jwt_encode($user);
+            $add_token['uid'] = $user['id'];
+            $add_token['token'] = md5($token);
+            $result =  M('Session')->where(array('uid'=>$user['id']))->delete();
+            if($result!==false){
+                $id = M('Session')->add($add_token);
+            }
             $this->success('登录成功', array('token' => $token, 'wsq' => $wsq, 'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
         } else {
             $this->error('账号或密码错误');
@@ -552,7 +550,9 @@ class ApiController extends ApiBaseController {
         $this->ajaxReturn(array('url' => C('AVATAR_URL') . $_POST['key'], 'width' => $_POST['w'], 'height' => $_POST['h']));
     }
 
-    // 注册
+    /**
+     * 注册
+    */
     public function register() {
 
         // 邀请码
@@ -586,7 +586,9 @@ class ApiController extends ApiBaseController {
         }
     }
 
-    // 忘记密码
+    /**
+     * 忘记密码
+    */
     public function forget() {
         $model = D('SchoolAccount');
 
@@ -627,7 +629,9 @@ class ApiController extends ApiBaseController {
         }
     }
 
-    // 修改密码
+    /**
+     * 修改密码
+    */
     public function editPassword() {
         $this->_auth();
 
@@ -694,7 +698,9 @@ class ApiController extends ApiBaseController {
         }
     }
 
-    // 获取验证码
+    /**
+     * 获取验证码
+    */
     public function verify() {
         // 检查邀请码
         $invite = I('invite_code');
@@ -735,7 +741,9 @@ class ApiController extends ApiBaseController {
         }
     }
 
-    // 热门标签
+    /**
+     * 热门标签
+    */
     public function hotTag() {
         $tag = array('信仰', '潘珍玉', '金熊奖', '蔡易瑾', '花艺设计');
 

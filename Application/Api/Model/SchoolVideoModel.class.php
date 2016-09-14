@@ -118,6 +118,9 @@ class SchoolVideoModel extends Model{
             // 嘉宾头像
             $data['guests']['avatar_url'] = $data['guests']['avatar_url'] ? C('IMG_URL'). $data['guests']['avatar_url'] : '';
 
+            //评论数
+            //$data[][]
+
         }else{
             $data = array();
         }
