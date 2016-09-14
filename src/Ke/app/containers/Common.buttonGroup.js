@@ -43,6 +43,18 @@ var CommonButtonGroup= React.createClass({
             });
         }else if(btnType=='appointment-now'){
 
+        }else if(btnType=='appointment-choose-seat'){
+            app.modal.alert({
+                pic:'disable-choose-seat',
+                content:'还未开课，请耐心等待哦！',
+                btn:'我知道了',
+            })
+        }else if(btnType=='disable-appointment-choose-seat'){
+            app.modal.alert({
+                pic:'disable-choose-seat',
+                content:'不要着急，请先预约课程哦！',
+                btn:'我知道了',
+            })
         }
     },
     handleSubmit(e){

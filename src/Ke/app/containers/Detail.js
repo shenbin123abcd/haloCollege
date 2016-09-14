@@ -11,6 +11,9 @@ var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Detail= React.createClass({
   componentDidMount() {
      document.title='幻熊课堂详情';
+      app.wechat.init({
+          link : window.location.href,
+      });
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
       dispatch(fetchCourseStatusIfNeeded(routeParams.id));
@@ -93,6 +96,7 @@ var DetailTop=React.createClass({
       <div className="detail-top">
         <div className="detail-bg">
           <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/750/h/380`} alt=""/>
+          <div className="img-over-layer"></div>
             {/*
              <div className="sign-block">
              <div className="sign-person f-9">西米 报名了！</div>
@@ -201,14 +205,25 @@ var TeacherDesc=React.createClass({
         }else{
             $("#desc-content").addClass('text-hidden');
             $("#see-more-btn").show();
+
             $("#see-more-btn").on('click',function(e){
                 e.preventDefault();
                 $("#desc-content").animate({
                     height:contentHeight,
                 },400);
                 $("#desc-content").removeClass('text-hidden');
-                $(".teacher-desc-block").css('padding-bottom',30);
                 $("#see-more-btn").hide();
+                $("#slide-up-btn").show();
+            })
+
+            $("#slide-up-btn").on('click',function(e){
+                e.preventDefault();
+                $("#desc-content").animate({
+                    height:57,
+                },400);
+                $("#desc-content").addClass('text-hidden');
+                $("#see-more-btn").show();
+                $("#slide-up-btn").hide();
             })
         }
     },
@@ -233,6 +248,7 @@ var TeacherDesc=React.createClass({
                             }
                         </div>
                         <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                        <div className="btn see-more-btn arrow-up" id="slide-up-btn">收起介绍<i className="haloIcon haloIcon-arrowup"></i></div>
                     </div>
                 </div>
             )

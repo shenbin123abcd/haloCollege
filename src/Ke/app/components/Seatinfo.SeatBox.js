@@ -2,7 +2,7 @@
 
 const SeatBox = ({items,renderItem,isFetching}) => {
 
-    
+
 
     let seatBoxClass = classNames({
         'seat-box-1': items.length>=10,

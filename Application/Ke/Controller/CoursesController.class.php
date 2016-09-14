@@ -163,11 +163,13 @@ class CoursesController extends CommonController {
     public function test() {
         vendor('Pay.Payment');
 
-        $pay = new Payment('wechat');
+        $pay = new Payment('alipay');
         $pay->setNotify('http://ke.halobear.com/course/notify');
 
-        $sign = $pay->sign(['subject' => 'test', 'body' => 'body', 'order_no' => '121111', 'amount' => '0.01']);
+        $sign = $pay->sign(['subject' => 'test12', 'body' => '测试', 'order_no' => '121111', 'price' => '0.02']);
 
-        $this->success($sign);
+        //$data = 'service="mobile.securitypay.pay"&_input_charset="utf-8"&notify_url="https%3A%2F%2Fapi.pingxx.com%2Fnotify%2Fcharges%2Fch_m5OyjLyLaznDyfn9WH90e5K0"&partner="2088611020356950"&out_trade_no="20160913221240344628"&subject="u3010u5e7bu718au5546u57ceu3011030u6d6au6f2bu795eu5723uff5cu5723u5149"&body="u3010u5e7bu718au5546u57ceu3011030u6d6au6f2bu795eu5723uff5cu5723u5149"&total_fee="499.00"&payment_type="1"&seller_id="2088611020356950"&it_b_pay="2016-09-14 22:12:44"&sign="sOfdpMLLjDqAqTK4%2F1gRkJCyxVNO4ceHJI6eKPWvm2LWdE0I5plE010Tc88ulD0myUugA%2B56t%2BbHwP%2BX2upWlCouPu0HuGYvB0Y1nDLXWSItIKgR26jTLQdII0zX7C6cJOO0%2B%2FcPtODp5s4CZN96fz%2BkPVaB4B3YGF%2BLMRpsJF0%3D"&sign_type="RSA"';
+
+        $this->success($sign['data']);//$sign['data']
     }
 }

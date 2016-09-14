@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c8c56efde1b7226a81c25d5ea6e02e1f",
-    "content-hash": "3df08c068f8738bf57cc643a0a016985",
+    "hash": "f7dedc574d0f6b02c02950eecdaedeed",
+    "content-hash": "68205e9b1cc59962fa3f77f393e5c770",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -573,6 +573,54 @@
                 "dependency injection"
             ],
             "time": "2015-09-11 15:11:22"
+        },
+        {
+            "name": "pingplusplus/pingpp-php",
+            "version": "2.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PingPlusPlus/pingpp-php.git",
+                "reference": "c1412aac5353ad81ed1e75a34c8e9cb36364503a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/PingPlusPlus/pingpp-php/c1412aac5353ad81ed1e75a34c8e9cb36364503a.zip",
+                "reference": "c1412aac5353ad81ed1e75a34c8e9cb36364503a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": []
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pingpp\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pingplusplus and contributors",
+                    "homepage": "https://github.com/PingPlusPlus/pingpp-php/contributors"
+                }
+            ],
+            "description": "Pingplusplus PHP Library",
+            "homepage": "https://pingxx.com/",
+            "keywords": [
+                "api",
+                "mobile payment processing",
+                "pingpp"
+            ],
+            "time": "2016-08-18 10:18:18"
         },
         {
             "name": "psr/http-message",

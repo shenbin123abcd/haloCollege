@@ -5,7 +5,6 @@
  * Date: 2016/8/31
  * Time: 17:38
  */
-
 namespace Org\Util;
 
 
@@ -38,10 +37,12 @@ class Payment {
         // 支付完成同步返回地址
         'return_url' => '',
         // 证书路径
-        'cacert' => VENDOR_PATH.'Pay/alipay/rsa_public_key_alipay.pem',
-        'private_key_path' => VENDOR_PATH.'Pay/alipay/rsa_private_key.pem',
+        'cacert' => VENDOR_PATH.'Pay/alipay/cacert.pem',
+        'alipay_public_key' => VENDOR_PATH.'Pay/alipay/key/alipay_public_key.pem',
+        'private_key_path' => VENDOR_PATH.'Pay/alipay/key/rsa_private_key.pem',
         // 支付宝商家 ID
         'partner'      => '2088611020356950',
+        'seller_id'      => '2088611020356950',
         // 支付宝商家 KEY
         'key'          => 'jcb66m7er34j4ony0r7fq0pn3eqphgld',
         // 支付宝商家注册邮箱
@@ -166,13 +167,36 @@ class Payment {
 
         $params = array(
             'out_trade_no' => $order['order_no'],
-            'subject' => $order['subject'],
+            'subject' => $order['body'],
             'body' => $order['body'],
-            'total_fee' => $order['amount'],
+            'total_fee' => $order['price'],
             '_input_charset' => 'utf-8',
-            'sign_type' => 'RSA'
+            'sign_type' => 'RSA',
+            'it_b_pay'=>date('Y-m-d H:i:s', time() + 7200)
         );
-        return $obj->buildSignedParametersForApp($params);
+
+        $config = $obj->buildSignedParametersForApp($params);
+        return $config ? array('iRet'=>1, 'data'=>$config) : array('iRet'=>0, 'info'=>'签名错误');
+    }
+
+    private function alipaySign2($order){
+        \Pingpp\Pingpp::setApiKey('sk_live_8m5yX1TerD0CaXnPGOa5yDCS');
+        \Pingpp\Pingpp::setPrivateKeyPath(VENDOR_PATH.'Pay/alipay/ping/ping_rsa_private_key.pem');
+
+        $data = array(
+            'subject' => $order['body'],
+            'body' => $order['body'],
+            'amount' => intval($order['price'] * 100), // 转成分
+            'order_no' => $order['order_no'],
+            'currency' => 'cny',
+            //'extra' => $this->_getExtra($channel),
+            'channel' => 'alipay',
+            'client_ip' => get_client_ip(),
+            'app' => array('id' => 'app_4CSWP48m1eLGC080'));
+
+        $ch = \Pingpp\Charge::create($data);
+
+        return array('iRet' => 1, 'data' => $ch['credential']['alipay']['orderInfo']);
     }
 
     private function wechatSign($order){

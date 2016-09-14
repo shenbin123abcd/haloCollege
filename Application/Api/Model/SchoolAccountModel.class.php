@@ -23,7 +23,7 @@ class SchoolAccountModel extends Model {
 			// array('city', 'require', '填写城市', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
 			// array('company', 'require', '填写公司', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
 			// array('wechat', 'require', '填写微信', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
-			array('code', 'checkCode', '邀请码错误！', self::MUST_VALIDATE, 'callback', Model:: MODEL_INSERT),
+			//array('code', 'checkCode', '邀请码错误！', self::MUST_VALIDATE, 'callback', Model:: MODEL_INSERT),
 			array('verify_code', 'checkVerifyCode', '验证码错误或已失效！', self::MUST_VALIDATE, 'callback', self:: MODEL_BOTH),
 	);
 	

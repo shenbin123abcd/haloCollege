@@ -297,7 +297,7 @@ class WeddingController extends CommonController {
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid; 
+        $data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
@@ -1089,8 +1089,10 @@ class WeddingController extends CommonController {
         $where['uid'] = $uid;
         $where['status'] =1;
         $user = M('Userinfo')->where($where)->find();
-        if(empty($user['region_title'])){
-            $user['region_title']= "";
+        if (!empty($user)){
+            if(empty($user['region_title'])){
+                $user['region_title']= "";
+            }
         }
         $data['user'] = $user;
         $this->count_personal_home($uid);
