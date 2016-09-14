@@ -93,10 +93,16 @@ class CoursesController extends CommonController {
             $order = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id'=>$course_id))->count();
             $ret = $order ? 4 : 3;
 
+            if ($ret == 4){
+                $count = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+                $ret = $count ? 41 : 40;
+            }
+            
             if ($course['start_date'] < time()){
                 $ret = 5;
             }
         }
+
 
         $this->success($ret);
     }
