@@ -23,14 +23,10 @@ export function receiveUserPosts(filter="SHOW_OPEN"){
 function fetchUserItems(req){
     return dispatch=>{
         dispatch(requestUserPosts(req))
-        return app.ajax(`/courses/my`/*,{
-            method:"POST",
-            body:JSON.stringify({
-                id:req
-            })
-        }*/).then(data=>{
+        return app.ajax(`/courses/my`)
+            .then(data=>{
             receiveDate=data.data
-            dispatch(receiveUserPosts());
+            return dispatch(receiveUserPosts());
         })
     }
 }

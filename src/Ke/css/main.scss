@@ -1045,7 +1045,7 @@ body{
     flex:0 0 35%;
     position: relative;
     //border-top: 1px solid #d7d7d7;
-    &:after{
+    &:after,&:before{
       position:absolute;
       top:0;
       width:100%;
@@ -1053,6 +1053,7 @@ body{
       height:1px;
       left:0;
       background:#d7d7d7 ;
+      transform: scale(1,0.5);
     }
   }
   .enter-btn{
@@ -1067,6 +1068,7 @@ body{
       height:1px;
       right:0;
       background:#ff654d;
+      transform: scale(1,0.5);
     }
     &.able{
       background: #ff654d;
@@ -1166,7 +1168,7 @@ body{
         position: absolute;
         top:50%;
         left:50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%) scale(0.5,1);
       }
     }
   }
@@ -1184,8 +1186,9 @@ body{
     bottom: 0;
     overflow: auto;
     margin-top:0;
+    -webkit-overflow-scrolling: touch;
     @include media('<=ip5'){
-      top:206px;
+      top:206px+45;
     }
     &.no-data-block{
       text-align: center;
@@ -1226,8 +1229,9 @@ body{
       }
       .content{
         flex:1 1 auto;
-        border-bottom: 1px solid #d7d7d7;
+        //border-bottom: 1px solid #d7d7d7;
         padding-bottom: 16px;
+        position: relative;
         .content-desc{
           color:#333333;
         }
@@ -1237,6 +1241,16 @@ body{
         }
         .content-bottom{
           margin-top:1px;
+          position: relative;
+          &:after{
+            position: absolute;
+            bottom:-34px;
+            left:0;
+            width:100%;
+            height:1px;
+            background:#d7d7d7;
+            transform: scale(1,0.5);
+          }
           .content-seat{
             color:#666666;
             float:left;

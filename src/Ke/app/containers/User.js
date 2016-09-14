@@ -8,7 +8,7 @@ var User= React.createClass({
   componentDidMount() {
      document.title='我的个人中心';
      let { dispatch,data} = this.props;
-     dispatch(fetchUserItemsIfNeeded(22));
+     dispatch(fetchUserItemsIfNeeded());
   },
   handleClick(e){
     const {dispatch , data }=this.props;
@@ -26,7 +26,7 @@ var User= React.createClass({
     let {isFetching,list,user,monthList,location}=this.props;
     var _this=this;
     function renderUserPage(){
-        if(!list){
+        if(!user && !list){
             var isNull=true
         }else if(list.length===0){
             var isEmpty =true
@@ -44,7 +44,6 @@ var User= React.createClass({
                         </div>
                     </div>
                 </div>
-
             )
         }else{
             return(

@@ -42,7 +42,7 @@ var Detail= React.createClass({
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
-                    <TeacherDesc teacherData={fetchData.guest.content}></TeacherDesc>
+                    <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
@@ -204,26 +204,32 @@ var TeacherDesc=React.createClass({
     },
     render(){
         let data=this.props.teacherData;
-        data=data.split('\r');
-        return(
-            <div className="teacher-desc-block">
-                <div className="desc-title f-13">
-                    <span className="line"></span>讲师介绍
-                </div>
-                <div className="desc-content">
-                    <div className="content f-13" id="desc-content">
-                        {
-                            data.map((n,i)=>{
-                                return(
-                                    <p className="desc-style">{n}</p>
-                                )
-                            })
-                        }
+        let ifShow=this.props.ifShow;
+        if(ifShow!=='公开课'){
+            data=data.split('\r');
+            return(
+                <div className="teacher-desc-block">
+                    <div className="desc-title f-13">
+                        <span className="line"></span>讲师介绍
                     </div>
-                    <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                    <div className="desc-content">
+                        <div className="content f-13" id="desc-content">
+                            {
+                                data.map((n,i)=>{
+                                    return(
+                                        <p className="desc-style">{n}</p>
+                                    )
+                                })
+                            }
+                        </div>
+                        <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }else{
+            return false
+        }
+
     }
 })
 
