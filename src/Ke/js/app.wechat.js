@@ -34,7 +34,7 @@ app.wechat=(function(){
         act: function() {
             var _this = this;
             $.ajax({
-                url: '/course/getWechat',
+                url: '/courses/getWechat',
                 type: 'get',
                 data: {
                     url: encodeURIComponent(window.location.href.split('#')[0])

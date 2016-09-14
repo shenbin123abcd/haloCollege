@@ -7,12 +7,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 var Index = React.createClass({
     componentDidMount() {
         document.title='幻熊课堂';
-        const { dispatch,monthList,location} = this.props;
-        app.wechat.init({
-            link : window.location.href,
-        });
-
-
+        const { dispatch,monthList,location,isFetching} = this.props;
         // console.log(location.query)
 
         // if(location.query.month){
@@ -28,8 +23,9 @@ var Index = React.createClass({
         // }
     },
     componentWillReceiveProps : function(nextProps) {
-
-
+        // const { dispatch,monthList,location,isFetching} = this.props;
+        // console.log(1,this.props.isFetching)
+        // console.log(2,nextProps.isFetching)
         // console.log('componentWillReceiveProps',nextProps,this.props)
         // const { dispatch,monthList,location} = nextProps
         // var item;
@@ -49,7 +45,14 @@ var Index = React.createClass({
 
     },
     componentDidUpdate  : function(prevState,prevProps){
+        // console.log(11,this.props.isFetching)
         // console.log('componentDidUpdate',prevState,prevProps,this.props)
+        if(this.props.isFetching){
+            app.wechat.init({
+                link : window.location.href,
+            });
+        }
+
 
     },
     handleCourseClick(index) {
