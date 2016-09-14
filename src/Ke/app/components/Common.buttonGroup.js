@@ -30,7 +30,7 @@ export default React.createClass({
             if(status==1){
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" data-type="disable-choose-seat" onClick={handleClick}>在线选座</div>
+                        <div className="choose-seat-btn f-15" data-type="disable-appointment-choose-seat" onClick={handleClick}>在线选座</div>
                         <div className='enter-btn f-15 able' data-type="appointment-now" onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
                         <div className="appointment-now-modal">
                             <Modal show={showModal} onHide={handleClose}>
@@ -61,7 +61,7 @@ export default React.createClass({
             }else if(status==2){
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15">在线选座</div>
+                        <div className="choose-seat-btn f-15" data-type="appointment-choose-seat" onClick={handleClick}>在线选座</div>
                         <div className='enter-btn f-15 able'>已预约课程（￥{price} /人）</div>
                     </div>
                 )
