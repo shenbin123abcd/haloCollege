@@ -1,9 +1,9 @@
-import Detail from './modules/detail'
+import Detail from './containers/detail'
 import store from './store'
-import User from './modules/User'
-import Index from './modules/index'
-import Seatinfo from './modules/seatinfo'
-import Selectseat from './modules/selectseat'
+import User from './containers/User'
+import Index from './containers/index'
+import Seatinfo from './containers/seatinfo'
+import Selectseat from './containers/selectseat'
 import App from './containers/App'
 
 
@@ -45,6 +45,7 @@ const onUpdateRoute = () => {
     }
     $('html').addClass(htmlClass)
     $('body').addClass(bodyClass)
+    
 }
 const onLeaveRoute = (prevState) => {
     $('html').removeClass(htmlClass)
