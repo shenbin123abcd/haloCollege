@@ -1070,16 +1070,6 @@ body{
     //border-top:1px solid #ff654d;
     flex:0 0 65%;
     position: relative;
-    &:after{
-      position:absolute;
-      top:0;
-      width:100%;
-      content:"";
-      height:1px;
-      right:0;
-      background:#ff654d;
-      transform: scale(1,0.5);
-    }
     &.able{
       background: #ff654d;
       color:#fff;

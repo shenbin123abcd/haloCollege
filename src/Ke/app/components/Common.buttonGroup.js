@@ -62,7 +62,7 @@ export default React.createClass({
                 return(
                     <div className="flex-bottom-btn">
                         <div className="choose-seat-btn f-15" data-type="appointment-choose-seat" onClick={handleClick}>在线选座</div>
-                        <div className='enter-btn f-15 able'>已预约课程（￥{price} /人）</div>
+                        <div className='enter-btn f-15 disable'>已预约课程（￥{price} /人）</div>
                     </div>
                 )
             }else if(status==3){
@@ -76,7 +76,7 @@ export default React.createClass({
                 return  (
                     <div className="flex-bottom-btn">
                         <Link to={`/course/selectseat_${id}`} className="choose-seat-btn f-15">在线选座</Link>
-                        <div className='enter-btn f-15 able'>已报名（￥{price} /人）</div>
+                        <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>
                     </div>
                 )
             }else if(status==5){
