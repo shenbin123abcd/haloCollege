@@ -42,7 +42,7 @@ var Detail= React.createClass({
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
-                    <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate}></TeacherDesc>
+                    <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
@@ -69,13 +69,26 @@ var DetailTop=React.createClass({
     const data=this.props.topData;
     let styleCss=()=>{
          let style='';
-         if(data.cate=='公开课'){
+         if(data.cate_id==1){
              style='desc-tag f-10 open'
          }else{
              style='desc-tag f-10 training-camp'
          }
          return style
     }
+
+    let renderDescHtml=()=>{
+        if(data.cate_id!=1){
+            return(
+                <div className="teacher-desc">
+                    <div className="name f-17">{data.guest.name}</div>
+                    <div className="position f-13">{data.guest.position}</div>
+                </div>
+            )
+        }
+
+    }
+
     return(
       <div className="detail-top">
         <div className="detail-bg">
@@ -85,10 +98,7 @@ var DetailTop=React.createClass({
              <div className="sign-person f-9">西米 报名了！</div>
              </div>
             */}
-          <div className="teacher-desc">
-            <div className="name f-17">{data.guest.name}</div>
-            <div className="position f-13">{data.guest.position}</div>
-          </div>
+            {renderDescHtml()}
         </div>
 
         <div className="detail-desc">
@@ -205,7 +215,7 @@ var TeacherDesc=React.createClass({
     render(){
         let data=this.props.teacherData;
         let ifShow=this.props.ifShow;
-        if(ifShow!=='公开课'){
+        if(ifShow!=1){
             data=data.split('\r');
             return(
                 <div className="teacher-desc-block">
