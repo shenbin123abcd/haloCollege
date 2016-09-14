@@ -119,7 +119,16 @@ class SchoolVideoModel extends Model{
             $data['guests']['avatar_url'] = $data['guests']['avatar_url'] ? C('IMG_URL'). $data['guests']['avatar_url'] : '';
 
             //评论数
-            //$data[][]
+            $data['video']['count_comment'] = intval(M('SchoolComment')->where(array('vid'=>$id,'status'=>1))->count());
+
+            //点赞状态
+            if($user['id']){
+                $status = M('SchoolVideoPraise')->where(array('uid'=>$user['id'],'vid'=>$id))->field('status')->find();
+                $data['video']['status_praise'] = empty($status) ? 0 : intval($status['status']);
+            }else{
+                $data['video']['status_praise'] = -1;
+            }
+
 
         }else{
             $data = array();
