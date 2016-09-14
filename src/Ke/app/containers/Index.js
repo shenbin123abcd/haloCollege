@@ -7,7 +7,12 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 var Index = React.createClass({
     componentDidMount() {
         document.title='幻熊课堂';
-        const { dispatch,monthList,location} = this.props
+        const { dispatch,monthList,location} = this.props;
+        app.wechat.init({
+            link : window.location.href,
+        });
+
+
         // console.log(location.query)
 
         // if(location.query.month){

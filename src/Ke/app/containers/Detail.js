@@ -11,6 +11,9 @@ var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Detail= React.createClass({
   componentDidMount() {
      document.title='幻熊课堂详情';
+      app.wechat.init({
+          link : window.location.href,
+      });
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
       dispatch(fetchCourseStatusIfNeeded(routeParams.id));
