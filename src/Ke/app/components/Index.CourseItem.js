@@ -20,6 +20,19 @@ const Avatar = ({items,visibleNum,totalClass}) => {
     }
 }
 
+const renderGuestBox = (item) => {
+    if(item.cate_id==2){
+        return (
+            <div className="guest-box">
+                <div className="name" >{item.guest.name}</div>
+                <div className="position" >{item.guest.position}</div>
+            </div>
+        )
+    }else{
+
+    }
+}
+
 const CourseItem = ({item}) => {
     let tagClass = classNames({
         'tag tag-gkk': item.cate=='公开课',
@@ -34,11 +47,7 @@ const CourseItem = ({item}) => {
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
                 <div className="img-over-layer" ></div>
-                <div className="guest-box">
-                    <div className="name" >{item.guest.name}</div>
-                    <div className="position" >{item.guest.position}</div>
-                </div>
-                
+                {renderGuestBox(item)}
                 <div className={tagClass}>{item.cate}</div>
 
             </div>
