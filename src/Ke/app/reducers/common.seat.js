@@ -22,6 +22,9 @@ export default (state = {
                 clickable: false,
                 selectedItem: null,
                 items: null,
+                isBooking: false,
+                isBookSuccess: false,
+                isBookFailure: false,
             })
         case 'SELECT_SEAT':
             return Object.assign({}, state, {
@@ -33,9 +36,9 @@ export default (state = {
             // console.log(state.items)
             var aSeatArr=[];
             state.items.forEach((n,i)=>{
-                n.forEach((n,i)=>{
-                    if(!n.user){
-                        aSeatArr.push(n)
+                n.forEach((n2,i2)=>{
+                    if(!n2.user){
+                        aSeatArr.push(n2)
                     }
                 });
             });

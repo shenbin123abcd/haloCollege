@@ -20,6 +20,19 @@ const Avatar = ({items,visibleNum,totalClass}) => {
     }
 }
 
+const renderGuestBox = (item) => {
+    if(item.cate_id==2){
+        return (
+            <div className="guest-box">
+                <div className="name" >{item.guest.name}</div>
+                <div className="position" >{item.guest.position}</div>
+            </div>
+        )
+    }else{
+
+    }
+}
+
 const CourseItem = ({item}) => {
     let tagClass = classNames({
         'tag tag-gkk': item.cate=='公开课',
@@ -30,11 +43,13 @@ const CourseItem = ({item}) => {
         'total total-pxy': item.cate=='培训营',
     });
     return (
-        <Link to={`/course/detail/${item.id}`}  className="item">
+        <Link to={`/course/detail_${item.id}`}  className="item">
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
-
+                <div className="img-over-layer" ></div>
+                {renderGuestBox(item)}
                 <div className={tagClass}>{item.cate}</div>
+
             </div>
             <div className="content-box">
                 <div className="des-box cf">
@@ -55,7 +70,7 @@ const CourseItem = ({item}) => {
                         </div>
                     </div>
                 </div>
-                
+
                 <div  className="info-box">
                     <Avatar items={item.user} visibleNum={8} totalClass={totalClass} />
                     <div className="more-box">

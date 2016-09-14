@@ -5,11 +5,15 @@ import {fetchCourseDetailIfNeeded} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 
 let Link=ReactRouter.Link;
-var browserHistory=ReactRouter.browserHistory
+var browserHistory=ReactRouter.browserHistory;
+var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Detail= React.createClass({
   componentDidMount() {
      document.title='幻熊课堂详情';
+      app.wechat.init({
+          link : window.location.href,
+      });
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
       dispatch(fetchCourseStatusIfNeeded(routeParams.id));
@@ -24,9 +28,8 @@ var Detail= React.createClass({
         }else if(data.length===0){
             var isEmpty =true
         }
-
         if (isFetching||isNull) {
-            return <PageLoading />
+            return <PageLoading key={1}/>
         }else if(isEmpty){
             return <div>no data</div>
         }else{
@@ -41,8 +44,8 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <ClassDesc classData={classData}></ClassDesc>
-                    <TeacherDesc teacherData={fetchData.guest.content}></TeacherDesc>
+                    <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
+                    <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap"></div>
@@ -52,9 +55,13 @@ var Detail= React.createClass({
         }
     }
     return(
-        <div className="detail-page">
+
+        <div className="detail-page-wrapper">
+            <CSSTransitionGroup  transitionName="transition" component="div" transitionEnterTimeout={300} transitionLeaveTimeout={10}>
             {renderDetailPage()}
+            </CSSTransitionGroup>
         </div>
+
     )
   }
 })
@@ -65,26 +72,37 @@ var DetailTop=React.createClass({
     const data=this.props.topData;
     let styleCss=()=>{
          let style='';
-         if(data.cate=='公开课'){
+         if(data.cate_id==1){
              style='desc-tag f-10 open'
          }else{
              style='desc-tag f-10 training-camp'
          }
          return style
     }
+
+    let renderDescHtml=()=>{
+        if(data.cate_id!=1){
+            return(
+                <div className="teacher-desc">
+                    <div className="name f-17">{data.guest.name}</div>
+                    <div className="position f-13">{data.guest.position}</div>
+                </div>
+            )
+        }
+
+    }
+
     return(
       <div className="detail-top">
         <div className="detail-bg">
           <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/750/h/380`} alt=""/>
+          <div className="img-over-layer"></div>
             {/*
              <div className="sign-block">
              <div className="sign-person f-9">西米 报名了！</div>
              </div>
             */}
-          <div className="teacher-desc">
-            <div className="name f-17">{data.guest.name}</div>
-            <div className="position f-13">{data.guest.position}</div>
-          </div>
+            {renderDescHtml()}
         </div>
 
         <div className="detail-desc">
@@ -103,10 +121,10 @@ var DetailMiddle=React.createClass({
   render(){
     const data=this.props.middleData;
     return (
-      <Link to={`/course/seatinfo/${data.id}`} className="deatil-middle">
+      <Link to={`/course/seatinfo_${data.id}`} className="deatil-middle">
         <div className="sign-num-block clearfix">
           <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
-          <div className="sign-num-block-right f-14">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
+          <div className="sign-num-block-right f-13">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
         </div>
       </Link>
     )
@@ -116,6 +134,7 @@ var DetailMiddle=React.createClass({
 var ClassDesc=React.createClass({
   render(){
       let descList=Object.values(this.props.classData);
+      let cate=this.props.cateData;
       let data=[
           {
               type:'item1',
@@ -145,8 +164,14 @@ var ClassDesc=React.createClass({
       data.forEach(function(n,i){
           n.desc=descList[i];
       });
+
       data[0].desc='￥'+data[0].desc+'/人';
-      data[3].desc=data[3].desc+'天课时';
+      if(cate=='公开课'){
+          data[3].desc=data[3].desc+'天期会';
+      }else{
+          data[3].desc=data[3].desc+'天课时';
+      }
+
 
     return (
       <div className="class-desc-block">
@@ -180,32 +205,57 @@ var TeacherDesc=React.createClass({
         }else{
             $("#desc-content").addClass('text-hidden');
             $("#see-more-btn").show();
+
             $("#see-more-btn").on('click',function(e){
                 e.preventDefault();
                 $("#desc-content").animate({
                     height:contentHeight,
                 },400);
                 $("#desc-content").removeClass('text-hidden');
-                $(".teacher-desc-block").css('padding-bottom',30);
                 $("#see-more-btn").hide();
+                $("#slide-up-btn").show();
+            })
+
+            $("#slide-up-btn").on('click',function(e){
+                e.preventDefault();
+                $("#desc-content").animate({
+                    height:57,
+                },400);
+                $("#desc-content").addClass('text-hidden');
+                $("#see-more-btn").show();
+                $("#slide-up-btn").hide();
             })
         }
     },
     render(){
-        const data=this.props.teacherData;
-        return(
-            <div className="teacher-desc-block">
-                <div className="desc-title f-13">
-                    <span className="line"></span>讲师介绍
-                </div>
-                <div className="desc-content">
-                    <div className="content f-13" id="desc-content">
-                        {data}
+        let data=this.props.teacherData;
+        let ifShow=this.props.ifShow;
+        if(ifShow!=1){
+            data=data.split('\r');
+            return(
+                <div className="teacher-desc-block">
+                    <div className="desc-title f-13">
+                        <span className="line"></span>讲师介绍
                     </div>
-                    <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                    <div className="desc-content">
+                        <div className="content f-13" id="desc-content">
+                            {
+                                data.map((n,i)=>{
+                                    return(
+                                        <p className="desc-style">{n}</p>
+                                    )
+                                })
+                            }
+                        </div>
+                        <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                        <div className="btn see-more-btn arrow-up" id="slide-up-btn">收起介绍<i className="haloIcon haloIcon-arrowup"></i></div>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }else{
+            return false
+        }
+
     }
 })
 

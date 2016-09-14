@@ -1,0 +1,125 @@
+<div class="wrap J_check_wrap">
+	<!--导航-->
+	<div class="nav">
+		<ul class="cc">
+			<li <eq name="Think.get.module" value="book"> class="current"</eq>>
+				<a href="{:U('Wfc2016OrderCase/index?module=book&status=1&type=2')}">金熊奖作品集</a>
+			</li>
+			<li <eq name="Think.get.module" value="case"> class="current"</eq>>
+				<a href="{:U('Wfc2016OrderCase/index?module=case&status=1')}">样片</a>
+			</li>
+			<li <eq name="Think.get.module" value="daoju"> class="current"</eq>>
+				<a href="{:U('Wfc2016OrderCase/index?module=daoju&status=1')}">道具节</a>
+			</li>
+		</ul>
+	</div>
+	<!--/导航-->
+	<!--说明-->
+	<div class="h_a">说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>默认显示已付款</li>
+		</ol>
+	</div>
+	<!--/说明-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form method="get" action="__URL__/index">
+		<div class="search_type cc mb10">
+			<div class="ul_wrap">
+				<ul class="cc">
+					<li>
+						<label>商户订单号：</label>
+						<input name="order_no" value="{$Think.request.order_no}" type="text" class="input length_4" placeholder="商户订单号">
+					</li>
+					<li>
+						<label>微信订单号：</label>
+						<input name="transaction_id" value="{$Think.request.transaction_id}" type="text" class="input length_4" placeholder="微信订单号">
+					</li>
+					<if condition="$_GET['module'] == 'book'">
+					<li>
+						<label>是否快递：</label>
+						<select name="type" class="select_2">
+							<option value="">请选择</option>
+							<option <eq name="Think.request.type" value="1">selected</eq> value="1">自提</option>
+							<option <eq name="Think.request.type" value="2">selected</eq> value="2">快递</option>
+						</select>
+					</li>
+					</if>
+					<li>
+						<label>支付状态：</label>
+						<select name="status" class="select_2">
+							<option value="">请选择</option>
+							<option <eq name="Think.request.status" value="0">selected</eq> value="0">未支付</option>
+							<option <eq name="Think.request.status" value="1">selected</eq> value="1">已支付</option>
+							<option <eq name="Think.request.status" value="2">selected</eq> value="2">已过期</option>
+						</select>
+					</li>
+					<li><button class="btn mr20" type="submit">搜索</button></li>
+				</ul>
+			</div>
+		</div>
+	</form>
+	<!--/搜索-->
+	<!--操作-->
+	<!--列表{field:transaction_id,title:微信订单号,width:200}{field:nickname,title:微信昵称}-->
+	<form class="J_ajaxForm" action="" method="post">
+		<div class="table_list" id="J_table_list">
+				<lists:list box="id" name="list" show="{field:order_no,title:商户订单号,order:desc,width:150}{field:body,title:商品,width:150}{field:price,title:价格,order:desc,width:60}{field:num,width:50,title:数量,order:desc}{field:name,title:姓名}{field:phone,title:手机}{field:express,title:快递名}{field:express_number,title:快递单号}{field:province_title,title:省}{field:city_title,title:市}{field:region_title,title:区}{field:address,title:地址}{field:remark,title:备注}{field:status,title:支付状态,order:desc}{field:pay_time,title:支付时间,func:date='y-m-d H#i'/###,width:120}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			
+				
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<div class="select_pages"><div class="pages">{$page}</div></div>
+				<!-- <button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete/model/order" data-subcheck="true" data-msg="确定要删除选中的数据？">删除</button> -->
+			</div>
+		</div>
+	</form>
+	<!--/列表-->
+</div>
+<script>
+	$(function(){
+		//双击编辑分类名称
+		var org_val = '';
+		$('#J_table_list').on('dblclick', '.express_num', function() {
+			var $this = $(this);
+			org_val = $.trim($this.text()); //原始分类名
+			if (org_val !== '') {
+				return;
+			}
+			$this.html('<input type="text" value="'+ $this.text() +'" data-id="'+  $this.data('id') +'" class="input mr5 J_cate_title_input" name="express_num">');
+			$this.find('input').focus();
+			// $this.remove();
+		});
+		
+		//分类名称input失焦ajax提交
+		$('#J_table_list').on('blur', '.J_cate_title_input', function() {
+			var $this = $(this),
+				restore = function() { //分类取消编辑状态
+					$this.hide().after($this.val());
+					$this.remove();
+					org_val = '';
+				};
+			
+			if (org_val !== '') {
+				restore();
+				return;
+			}
+			//判断分类名是否修改过
+			if($this.val() !== org_val) {
+				$.post("__URL__/updateExp", {id: $this.data('id'), title: $this.val() }, function(data){
+					if(data.status == 1) {
+						restore();
+					}else{
+						alert(data.info);
+					}
+				});
+			}else{
+				restore();
+			}
+			
+		});
+
+	})
+</script>

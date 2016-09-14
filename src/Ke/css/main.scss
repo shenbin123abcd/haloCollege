@@ -25,6 +25,7 @@ body{
 
 }
 
+
 @keyframes pulse {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -76,6 +77,24 @@ body{
 .page-loading-wrapper{
   padding: 30px;
   text-align: center;
+  &.my-fade,&.transition{
+    &-enter{
+      width: 100%;
+      left: 0;
+      top: 30px;
+      position: absolute;
+      &-active{
+      }
+    }
+    &-leave{
+      width: 100%;
+      left: 0;
+      top: 30px;
+      position: absolute;
+      &-active{
+      }
+    }
+  }
   .haloIcon{
     font-size: 36px;
     color: #999;
@@ -90,7 +109,7 @@ body{
 
 .body-index{
   background-color: #f6f6f6;
-  padding-top: 0.9rem;
+  padding-top: 45px;
   #MEIQIA-PANEL-HOLDER,
   #MEIQIA-BTN-HOLDER,
   #MEIQIA-INVITE{
@@ -123,9 +142,10 @@ body{
 
 }
 .index-header-nav-wrapper{
-  height: 0.90rem;
+  //height: 0.90rem;
+  height: 45px;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   left: 0;
   width: 100%;
@@ -176,8 +196,29 @@ body{
   }
 
 }
+
+
+.my-fade{
+  &-enter{
+    opacity: 0.01;
+    &-active{
+      opacity: 1;
+      transition: opacity 300ms ease-in;
+    }
+  }
+  &-leave{
+    opacity: 0;
+    &-active{
+      opacity: 0;
+    }
+  }
+
+}
+
 .index-course-wrapper{
   padding: 0.25rem 0.2rem 0.5rem;
+
+
   .item{
     display: block;
     background-color: #ffffff;
@@ -192,6 +233,29 @@ body{
       .img{
         border-radius: 6px 6px 0 0;
         width: 100%;
+      }
+      .img-over-layer{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
+        border-radius: 6px 6px 0 0;
+      }
+      .guest-box{
+        position: absolute;
+        left: 0.26rem;
+        top: 1.3rem;
+        color: #ffffff;
+
+      }
+      .name{
+        font-size: 0.34rem;
+      }
+      .position{
+        margin-top: 0.1rem;
+        font-size: 0.26rem;
       }
       .tag{
         position: absolute;
@@ -278,6 +342,7 @@ body{
       }
 
       .total{
+        margin-top: 0.22rem;
         width: 0.6rem;
         height: 0.6rem;
         float: left;
@@ -454,7 +519,7 @@ body{
       }
       &.booked{
         background-color: #ff654d;
-        box-shadow: 0 3px 4px rgba(215,37,9,.26);
+        box-shadow: 0 1px 2px rgba(215,37,9,.26);
       }
       &.selected{
         background-color: #f9c767;
@@ -473,7 +538,7 @@ body{
           box-shadow: 0 0 0px 5px #f7e9ce;
         }
         &.booked{
-          box-shadow: 0 5px 6px rgba(215,37,9,.26);
+          box-shadow: 0 2px 4px rgba(215,37,9,.26);
         }
       }
     }
@@ -674,12 +739,19 @@ body{
       img.bg-img{
         width:100%;
       }
+      .img-over-layer{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+      }
       .teacher-desc{
         position: absolute;
         top:50%;
         transform: translateY(-50%);
         color:#fff;
-        font-weight:700;
         left:15px;
       }
       .sign-block{
@@ -701,6 +773,7 @@ body{
       background: #fff;
       .desc-content{
         color:#333333;
+
       }
       .desc-tag{
         width: 42px;
@@ -737,25 +810,25 @@ body{
           color:#999999;
           position: relative;
           top:2px;
+          left:-2px;
         }
       }
       .sign-num-block-right{
         float:right;
         color:#aaaaaa;
         position: relative;
-        right:-5px;
+        right:-8px;
         .haloIcon{
           color:#aaaaaa;
           position: relative;
           top:3px;
-          left:-2px;
           font-size:20px;
         }
       }
     }
   }
   .class-desc-block{
-    padding:18px;
+    padding:18px 10px;
     background: #fff;
     margin-top:15px;
     width:100%;
@@ -775,7 +848,7 @@ body{
           position: absolute;
           right:0;
           height:65%;
-          transform: translateY(-50%);
+          transform: translateY(-50%) scale(0.5,1);
           top:50%;
           width:1px;
           background: #d7d7d7;
@@ -792,7 +865,7 @@ body{
           top:50%;
           left:50%;
           transform:translate(-50%,-50%);
-          font-size:28px;
+          font-size:26px;
           color:#fff;
         }
         &.item1{
@@ -854,8 +927,11 @@ body{
     .desc-content{
       text-align: center;
       .content{
-        color:#999999;
+        color:#333;
         text-align: left;
+        .desc-style{
+          margin:0 0 8px;
+        }
         &.text-hidden{
           height:57px;
           overflow: hidden;
@@ -869,6 +945,9 @@ body{
         font-size:12px;
         margin-top:6px;
         padding-bottom:0;
+        &.arrow-up{
+          display:none;
+        }
         .haloIcon{
           position: relative;
           top:1px;
@@ -905,7 +984,9 @@ body{
         margin-bottom:15px;
       }
       .desc-cintent-text{
-
+        .p1,p{
+          margin:0 0 8px;
+        }
       }
     }
   }
@@ -952,7 +1033,7 @@ body{
           transform: translate(-50%,-50%);
         }
         .item-desc{
-          text-align: center;
+          text-align: left;
           color:#666666;
           margin-top:5px;
         }
@@ -972,10 +1053,33 @@ body{
     background: #fff;
     color:#fe5a40;
     flex:0 0 35%;
+    position: relative;
+    //border-top: 1px solid #d7d7d7;
+    &:before{
+      position:absolute;
+      top:0;
+      width:100%;
+      content:"";
+      height:1px;
+      left:0;
+      background:#d7d7d7 ;
+      transform: scale(1,0.5);
+    }
   }
   .enter-btn{
-
+    //border-top:1px solid #ff654d;
     flex:0 0 65%;
+    position: relative;
+    &:after{
+      position:absolute;
+      top:0;
+      width:100%;
+      content:"";
+      height:1px;
+      right:0;
+      background:#ff654d;
+      transform: scale(1,0.5);
+    }
     &.able{
       background: #ff654d;
       color:#fff;
@@ -992,8 +1096,11 @@ body{
   .user-page-top{
     width:100%;
     position:relative;
-    height: 240px;
+    height: 260px;
     z-index: 1;
+    @include media('<=ip5'){
+        height:211px;
+    }
     img{
       width:100%;
     }
@@ -1050,6 +1157,7 @@ body{
           position:relative;
           top:2px;
           margin-right:2px;
+          left: -2px;
         }
         &.active{
           color:#fe5a40;
@@ -1070,7 +1178,7 @@ body{
         position: absolute;
         top:50%;
         left:50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%) scale(0.5,1);
       }
     }
   }
@@ -1084,10 +1192,14 @@ body{
     position: absolute;
     left: 0;
     right: 0;
-    top: 240px;
+    top: 305px;
     bottom: 0;
     overflow: auto;
     margin-top:0;
+    -webkit-overflow-scrolling: touch;
+    @include media('<=ip5'){
+      top:206px+65;
+    }
     &.no-data-block{
       text-align: center;
       padding-bottom:0;
@@ -1127,8 +1239,9 @@ body{
       }
       .content{
         flex:1 1 auto;
-        border-bottom: 1px solid #d7d7d7;
+        //border-bottom: 1px solid #d7d7d7;
         padding-bottom: 16px;
+        position: relative;
         .content-desc{
           color:#333333;
         }
@@ -1138,6 +1251,16 @@ body{
         }
         .content-bottom{
           margin-top:1px;
+          position: relative;
+          &:after{
+            position: absolute;
+            bottom:-34px;
+            left:0;
+            width:100%;
+            height:1px;
+            background:#d7d7d7;
+            transform: scale(1,0.5);
+          }
           .content-seat{
             color:#666666;
             float:left;
@@ -1152,6 +1275,9 @@ body{
   }
 }
 
+.body-user{
+  padding-top: 45px;
+}
 /*modal*/
 .modal-alert-block{
 
@@ -1179,7 +1305,7 @@ body{
   border-radius: 3px;
   overflow: hidden;
   box-shadow: 0 3px 9px rgba(0,0,0,.5);
-  border: 1px solid rgba(0,0,0,.2);
+  //border: 1px solid rgba(0,0,0,.2);
 }
 .modal-dialog-body{
   padding: 0 20px;
@@ -1248,6 +1374,7 @@ body{
     top:50%;
    transform: translate(-50%,-50%);
     width:72%;
+    border:none;
     .modal-body{
       padding:0;
       .modal-body-content{
@@ -1313,6 +1440,30 @@ body{
 }
 #MEIQIA-BTN-HOLDER{
   z-index:100!important;
+}
+#MEIQIA-BTN{
+  transform:scale(.7);
+  transform-origin: right;
+}
+
+
+
+.transition-enter {
+  opacity: 0.01;
+}
+
+.transition-enter.transition-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.transition-leave {
+  opacity: 0;
+}
+
+.transition-leave.transition-leave-active {
+  opacity: 0;
+  transition: opacity 10ms ease-in;
 }
 
 

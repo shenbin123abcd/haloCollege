@@ -1,15 +1,18 @@
-import Detail from './modules/detail'
+import Detail from './containers/detail'
 import store from './store'
-import User from './modules/User'
-import Index from './modules/index'
-import Seatinfo from './modules/seatinfo'
-import Selectseat from './modules/selectseat'
+import User from './containers/User'
+import Index from './containers/index'
+import Seatinfo from './containers/seatinfo'
+import Selectseat from './containers/selectseat'
+import App from './containers/App'
 
 
 var Router=ReactRouter.Router
 var Route=ReactRouter.Route
+var IndexRoute=ReactRouter.IndexRoute
 var browserHistory=ReactRouter.browserHistory
 var Provider=ReactRedux.Provider
+
 
 
 
@@ -42,6 +45,7 @@ const onUpdateRoute = () => {
     }
     $('html').addClass(htmlClass)
     $('body').addClass(bodyClass)
+    
 }
 const onLeaveRoute = (prevState) => {
     $('html').removeClass(htmlClass)
@@ -52,13 +56,13 @@ const onLeaveRoute = (prevState) => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
-        <Route path="/" component={Index}  onLeave={onLeaveRoute}  >
-            
+        <Route path="/" component={App}   >
+            <IndexRoute component={Index}  onLeave={onLeaveRoute} />
+            <Route path="user" component={User}   onLeave={onLeaveRoute}  />
         </Route>
-        <Route path="/course/detail/:id" component={Detail}    onLeave={onLeaveRoute}  />
-        <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
-        <Route path="/course/seatinfo/:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
-        <Route path="/course/selectseat/:id" component={Selectseat}    onLeave={onLeaveRoute}  />
+        <Route path="/course/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
+        <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
+        <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement

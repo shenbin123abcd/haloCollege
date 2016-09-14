@@ -9,6 +9,9 @@ import { destroySeats } from '../actions/common.seat'
 var Seatinfo = React.createClass({
     componentDidMount() {
         document.title='座位表';
+        app.wechat.init({
+            link : window.location.href,
+        });
         const { dispatch ,routeParams} = this.props
         dispatch(fetchSeatInfoIfNeeded(routeParams.id))
         dispatch(fetchCourseStatusIfNeeded(routeParams.id));
@@ -52,7 +55,7 @@ var Seatinfo = React.createClass({
                 <div className="seats-wrapper">
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
-                    <UserBox items={users} seats={items} />
+                    <UserBox items={users}  course={course} />
                     <BottomBtn  priceData={course.price} idData={routeParams.id} />
                 </div>
 

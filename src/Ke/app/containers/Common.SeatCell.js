@@ -8,7 +8,7 @@ var SeatCell= React.createClass({
         // console.log(item)
         // console.log(this.props)
         const {clickable,dispatch} = this.props
-        if(!clickable){
+        if(!clickable||item.user!=0){
             return
         }else{
             dispatch(selectSeat(item))

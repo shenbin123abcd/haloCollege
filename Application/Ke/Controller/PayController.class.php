@@ -27,12 +27,12 @@ class PayController extends CommonController {
         // 创建订单
         $order = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>0))->find();
         if (!empty($order) && $order['exp_time'] > time() && !empty($order['sign'])) {
-            $this->success(unserialize($order['sign']));
+            $this->success(array('config'=>unserialize($order['sign']), 'order_id'=>$order['order_no']));
         }else{
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
             $order = array();
         }
-
+        $course['price'] = 0.01;
         if (empty($order)){
             $body = $course['title'] . '-' . $course['city'];
             $order['wechat_id'] = $this->user['id'];
@@ -57,7 +57,7 @@ class PayController extends CommonController {
 
             if ($sign['iRet'] && $sign['data']){
                 $model->where(array('id'=>$order_id))->setField('sign', serialize($sign['data']));
-                $this->success($sign['data']);
+                $this->success(array('config'=>$sign['data'], 'order_id'=>$order['order_no']));
             }else{
                 $model->where(array('id'=>$order_id))->delete();
                 $this->error($sign['info']);
@@ -69,11 +69,12 @@ class PayController extends CommonController {
     public function notifyn(){
         vendor('Pay.Payment');
         $pay = new Payment('wxmp');
-        $notify = $pay->wxmpVerify();
+        $app = $pay->wxmpVerify();
 
-        $response = $notify->payment->handleNotify(function($notify, $successful){
+        $response = $app->payment->handleNotify(function($notify, $successful){
+            write_log('pay_mpwx_course_send' . date('Ymd'), var_export($notify, 1));
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
-            $order = M('CourseOrder')->where(array('order_no'=>$notify['out_trade_no']))->find();
+            $order = M('CourseOrder')->where(array('order_no'=>$notify['out_trade_no'], 'price'=>$notify['total_fee']/100))->find();
             if (!$order) { // 如果订单不存在
                 return 'Order not exist.';
             }
@@ -94,8 +95,8 @@ class PayController extends CommonController {
                     M('Course')->where(array('id'=>$order['course_id']))->setInc('num');
                 }
             } else { // 用户支付失败
-                write_log('pay_mpwx_error' . date('Ymd'), var_export($notify, 1));
-                write_log('pay_mpwx_error' . date('Ymd'), var_export($successful, 1));
+                write_log('pay_course_error' . date('Ymd'), var_export($notify, 1));
+                write_log('pay_course_error' . date('Ymd'), var_export($successful, 1));
             }
             return true; // 返回处理完成
         });
@@ -134,7 +135,7 @@ class PayController extends CommonController {
     private function _createBookOrder($type, $num){
         $model = M('wfc2016_order_case');
         // $map = array(1=>0.01, 2=>0.02);
-        $map = array(1=>499, 2=>0.01);
+        $map = array(1=>499, 2=>499);
 
         //①、获取用户openid
         $openid = $this->user['openid'];

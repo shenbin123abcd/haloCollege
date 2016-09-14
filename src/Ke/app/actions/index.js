@@ -1,16 +1,3 @@
-export function addTodo(todo){
-  return {
-    type: 'addTodo',
-    todo
-  }
-}
-
-export function deleteTodo(index){
-  return {
-    type: 'deleteTodo',
-    index
-  }
-}
 
 
 export const REQUEST_COURSE = 'REQUEST_COURSE'
@@ -63,7 +50,7 @@ function shouldFetchCourse(state, req) {
   } = courseList
 
   if (isFetching){
-    return false
+    return true
   }
   return true
 }
@@ -82,6 +69,15 @@ export function setCurrentMonth(data){
   // console.log(data)
   return {
     type: 'setCurrentMonth',
+    data
+  }
+}
+
+
+export function resetMonth(data){
+  // console.log(data)
+  return {
+    type: 'resetMonth',
     data
   }
 }

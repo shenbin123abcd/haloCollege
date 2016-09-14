@@ -1,14 +1,15 @@
-import bgUser from '../images/bg-user.png'
+import bgUser from '../images/bg-user.jpg'
 import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 import PageLoading  from '../components/Common.Pageloading'
 
-
+var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var User= React.createClass({
   componentDidMount() {
      document.title='我的个人中心';
+      app.wechat.init();
      let { dispatch,data} = this.props;
-     dispatch(fetchUserItemsIfNeeded(22));
+     dispatch(fetchUserItemsIfNeeded());
   },
   handleClick(e){
     const {dispatch , data }=this.props;
@@ -23,17 +24,17 @@ var User= React.createClass({
   },
 
   render() {
-    let {isFetching,list,user}=this.props;
+    let {isFetching,list,user,monthList,location}=this.props;
     var _this=this;
     function renderUserPage(){
-        if(!list){
+        if(!user && !list){
             var isNull=true
         }else if(list.length===0){
             var isEmpty =true
         }
 
         if (isFetching||isNull) {
-            return <PageLoading/>
+            return <PageLoading key={1}/>
         }else if(isEmpty){
             return (
                 <div className="height-wrapper">
@@ -44,7 +45,6 @@ var User= React.createClass({
                         </div>
                     </div>
                 </div>
-
             )
         }else{
             return(
@@ -57,7 +57,9 @@ var User= React.createClass({
     }
     return(
         <div className="user-page" >
+            <CSSTransitionGroup  transitionName="transition" component="div" transitionEnterTimeout={300} transitionLeaveTimeout={10}>
             {renderUserPage()}
+            </CSSTransitionGroup>
         </div>
     )
   }
@@ -94,8 +96,6 @@ const UserList=(data)=>{
         <div className="content-list">
             {
                 data.data.map((n,i)=>{
-                    const seatRow=n.seat_no.split(',')[0];
-                    const seatLine=n.seat_no.split(',')[1];
                     function checkIfEnd(){
                         if(n.start_day>0){
                             return (
@@ -111,6 +111,15 @@ const UserList=(data)=>{
                             )
                         }
                     }
+                    function chooseSeat(){
+                        if(n.seat_no){
+                            let seatRow=n.seat_no.split(',')[0];
+                            let seatLine=n.seat_no.split(',')[1];
+                            return (seatRow+'排'+seatLine+'座');
+                        }else{
+                            return ('尚未选座');
+                        }
+                    }
                     return(
                         <div className="content-item" key={i}>
                             <div className="avatar">
@@ -122,7 +131,7 @@ const UserList=(data)=>{
                                 <div className="content-info f-12">{n.start_date}  {n.place}  {n.day}天</div>
                                 <div className="content-bottom clearfix">
                                     <div className="content-seat f-12">
-                                        {seatRow}排{seatLine}座
+                                        {chooseSeat()}
                                     </div>
                                     {checkIfEnd()}
                                 </div>
@@ -152,7 +161,7 @@ function mapStateToProps(state) {
     return {
         list:showFilter(state.userItems.list,state.userItems.filter),
         user:state.userItems.user,
-        isFetching:state.userItems.isFetching
+        isFetching:state.userItems.isFetching,
     }
 
 }
