@@ -16,6 +16,7 @@
         "php": ">=5.5.9",
         "jpush/jpush": "v3.3.9",
         "mytharcher/alipay-php-sdk": "dev-master",
-        "overtrue/wechat": "^3.1"
+        "overtrue/wechat": "^3.1",
+        "pingplusplus/pingpp-php": "^2.1"
     }
 }
