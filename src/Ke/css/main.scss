@@ -1045,7 +1045,7 @@ body{
     flex:0 0 35%;
     position: relative;
     //border-top: 1px solid #d7d7d7;
-    &:after,&:before{
+    &:before{
       position:absolute;
       top:0;
       width:100%;
@@ -1086,10 +1086,10 @@ body{
   .user-page-top{
     width:100%;
     position:relative;
-    height: 240px;
+    height: 260px;
     z-index: 1;
     @include media('<=ip5'){
-        height:191px;
+        height:211px;
     }
     img{
       width:100%;
@@ -1182,13 +1182,13 @@ body{
     position: absolute;
     left: 0;
     right: 0;
-    top: 285px;
+    top: 305px;
     bottom: 0;
     overflow: auto;
     margin-top:0;
     -webkit-overflow-scrolling: touch;
     @include media('<=ip5'){
-      top:206px+45;
+      top:206px+65;
     }
     &.no-data-block{
       text-align: center;
