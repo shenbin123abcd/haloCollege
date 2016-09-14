@@ -55,7 +55,7 @@ var Seatinfo = React.createClass({
                 <div className="seats-wrapper">
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
-                    <UserBox items={users} seats={items} />
+                    <UserBox items={users}  course={course} />
                     <BottomBtn  priceData={course.price} idData={routeParams.id} />
                 </div>
 
