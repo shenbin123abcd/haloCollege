@@ -48,6 +48,7 @@ class ApiBaseController extends Controller {
         C($result);
     }
 
+    
     protected function _auth(){
         $user = get_user();
         if (!empty($user)) {

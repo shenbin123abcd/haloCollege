@@ -106,7 +106,6 @@ class PublicController extends CommonController {
 
         // 邀请码
         //$_POST['code'] = I('invite_code');
-
         $model = D('SchoolAccount');
 
         // 账号中心注册
