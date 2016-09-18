@@ -147,6 +147,7 @@ class SchoolVideoModel extends Model{
 
         return $url ? $this->privateDownloadUrl(C('VIDEO_URL') . $url) : '';
     }
+    
 
     public function privateDownloadUrl($baseUrl, $expires = 3600){
         $deadline = time() + $expires;
