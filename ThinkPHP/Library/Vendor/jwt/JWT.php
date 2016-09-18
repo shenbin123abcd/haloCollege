@@ -108,7 +108,8 @@ class JWT
 
         // Check the signature
         if (!JWT::verify("$headb64.$bodyb64", $sig, $key, $header->alg)) {
-            throw_exception('Signature verification failed');
+            //throw_exception('Signature verification failed');
+            return array('iRet'=>0, 'info'=>'Signature verification failed');
         }
 
         // Check if the nbf if it is defined. This is the time that the
