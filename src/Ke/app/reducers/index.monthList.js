@@ -1,6 +1,6 @@
 
 function initState() {
-    let CurrentMonth=new Date().getMonth()+1;
+    let CurrentMonth=new Date().getMonth()+1+2;
     let CurrentYear=new Date().getFullYear();
     let monthList=[]
     for(let i=0;i<5;i++){
