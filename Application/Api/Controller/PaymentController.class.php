@@ -75,6 +75,7 @@ class PaymentController extends CommonController {
     public function haloNotify(){
         $this->_checkIp();
 
+        vendor('Pay.Ping');
         $ping = new Ping();
 
         $event = $ping->verify();
@@ -118,12 +119,13 @@ class PaymentController extends CommonController {
             // 微信错误通知
             write_log('ping_notify_error', '支付完成，订单不存在|订单号：'. $data['order_no']. '；支付方式：'. $data['channel'].'；交易号：'. $data['transaction_no']);
             return false;
-        }elseif ($order['pay_status'] == 1){
+        }elseif ($order['status'] == 1){
             write_log('ping_notify_error', '支付完成，已付款完成，不能重复操作|订单号：'. $data['order_no']. '；支付方式：'. $data['channel'].'；交易号：'. $data['transaction_no']);
             return false;
         }else{
             // 修改订单状态
             $model->where(array('id'=>$order['id']))->save(array('status'=>1, 'pay_time'=>time(), 'transaction_id'=>$data['transaction_no']));
+            write_log('a', M()->_sql());
         }
 
         // 会员开通时长
@@ -146,7 +148,7 @@ class PaymentController extends CommonController {
     // 检查IP的合法性
     private function _checkIp(){
         $ip = get_client_ip();
-        $ping_ip = ['121.41.137.124','120.55.109.27','115.29.181.209','115.29.180.6','121.41.124.180','121.41.124.121','121.41.124.240','121.41.126.254'];
+        $ping_ip = ['121.41.137.124','120.55.109.27','115.29.181.209','115.29.180.6','121.41.124.180','121.41.124.121','121.41.124.240','121.41.126.254','180.153.214.180','180.173.1.204'];
         if (!in_array($ip, $ping_ip)){
             send_http_status(401);
             write_log('ping_notify_error', '支付完成，IP校验失败来源ip' . $ip);
