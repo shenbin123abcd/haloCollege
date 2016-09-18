@@ -75,70 +75,6 @@ function sendEmail( $address, $subject, $body, $html=true ) {
     return $mail->Send();
 }
 
-///**
-// * 系统加密方法
-// *
-// * @param [type]  $data   [description]
-// * @param [type]  $key    [description]
-// * @param integer $expire [description]
-// * @return [type]          [description]
-// */
-//function think_encrypt( $data, $key, $expire = 0 ) {
-//    $key = md5( $key );
-//    $data = base64_encode( $data );
-//    $x = 0;
-//    $len = strlen( $data );
-//    $l = strlen( $key );
-//    $char = '';
-//    for ( $i = 0; $i < $len; $i++ ) {
-//        if ( $x == $l )
-//            $x = 0;
-//        $char .=substr( $key, $x, 1 );
-//        $x++;
-//    }
-//    $str = sprintf( '%010d', $expire ? $expire + time() : 0 );
-//    for ( $i = 0; $i < $len; $i++ ) {
-//        $str .=chr( ord( substr( $data, $i, 1 ) ) + ( ord( substr( $char, $i, 1 ) ) ) % 256 );
-//    }
-//
-//    return str_replace( '=', '', base64_encode( $str ) );
-//}
-
-///**
-// * 系统解密方法
-// *
-// * @param string  $data 解密字符串
-// * @param string  $key  密钥
-// * @return string       原始数据
-// */
-//function think_decrypt( $data, $key ) {
-//    $key = md5( $key );
-//    $x = 0;
-//    $data = base64_decode( $data );
-//    $expire = substr( $data, 0, 10 );
-//    $data = substr( $data, 10 );
-//    if ( $expire > 0 && $expire < time() ) {
-//        return '';
-//    }
-//    $len = strlen( $data );
-//    $l = strlen( $key );
-//    $char = $str = '';
-//    for ( $i = 0; $i < $len; $i++ ) {
-//        if ( $x == $l )
-//            $x = 0;
-//        $char .=substr( $key, $x, 1 );
-//        $x++;
-//    }
-//    for ( $i = 0; $i < $len; $i++ ) {
-//        if ( ord( substr( $data, $i, 1 ) ) < ord( substr( $char, $i, 1 ) ) ) {
-//            $str .=chr( ( ord( substr( $data, $i, 1 ) ) + 256 ) - ord( substr( $char, $i, 1 ) ) );
-//        } else {
-//            $str .=chr( ord( substr( $data, $i, 1 ) ) - ord( substr( $char, $i, 1 ) ) );
-//        }
-//    }
-//    return base64_decode( $str );
-//}
-
 /**
  * 字符串截取
  *
@@ -391,51 +327,6 @@ function  mkpath( $mkpath , $mode =0777){
     return  false;
 }
 
-///**
-// * jwt加密
-// * @param  [type] $data 加密数据
-// * @return [type]       [description]
-// */
-//function jwt_encode($data = array(), $exp = 2592000){
-//    Vendor('jwt.JWT');
-//    $data['exp'] = time() + $exp;
-//    $key = C('AUTH_KEY');
-//    $token = JWT::encode($data, $key);
-//    return $token;
-//}
-
-///**
-// * jwt解密
-// * @param  [type] $token 解密数据
-// * @return [type]       [description]
-// */
-//function jwt_decode($token){
-//    Vendor('jwt.JWT');
-//    $key = C('AUTH_KEY');
-//    $decoded = '';
-//    try{
-//        $decoded = JWT::decode($token, $key, array('HS256'));
-//    }catch(Exception $e){
-//        return array('iRet'=>0, 'info'=>$e->getMessage());
-//    }
-//    return array('iRet'=>1, 'data'=>(array)$decoded);
-//}
-
-//function get_user(){
-//    $header = getallheaders();
-//    $auth = empty($header['Authorization']) ? $header['authorization'] : $header['Authorization'];
-//    $cookie = cookie('halo_token');
-//
-//    if (!empty($auth)) {
-//        $data = jwt_decode(substr($auth, 7));
-//    } elseif (!empty($cookie)) {
-//        $data = jwt_decode($cookie);
-//    } else {
-//        return array();
-//    }
-//
-//    return $data['iRet'] ? $data['data'] : array();
-//}
 /**
  * 获取状态
  * @param int $status
