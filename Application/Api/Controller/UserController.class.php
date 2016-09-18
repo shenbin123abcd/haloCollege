@@ -9,7 +9,7 @@
 namespace Api\Controller;
 
 use Think\Controller;
-class UserInfoController extends CommonController{
+class UserController extends CommonController{
     protected $module_auth = 0;
     protected $action_auth = array('userInfoInsert','getUserInfo');
 
