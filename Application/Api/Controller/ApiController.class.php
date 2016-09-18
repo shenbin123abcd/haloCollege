@@ -402,10 +402,8 @@ class ApiController extends ApiBaseController {
         $where['uid'] = $uid;
         $where['status'] = 1;
         $member = M('SchoolMember')->where($where)->find();
-        $open_member = get_open_member($uid);
-
-        $data['open_member'] = $open_member[$uid] ? $open_member[$uid] : '';
-
+        $open_member = $this->get_open_member($uid);
+        $data['open_member'] = $open_member;
         $data['expire'] = $member['end_time'] ? $member['end_time'] : '';
         $this->success('success',$data);
     }
@@ -486,11 +484,17 @@ class ApiController extends ApiBaseController {
     public function get_open_member($uid){
         $where['uid'] = $uid;
         $where['status'] = 1;
-
         $member = M('MemberOrder')->where($where)->field('uid,cate')->select();
         foreach ($member as $key=>$value){
             $member_arr[] = $value['cate'];
         }
+        $min_cocunt = array_count_values($member_arr);
+        $min_cate = min($member_arr);
+        $open_member = M('SchoolMemberCate')->where(array('id'=>$min_cate,'status'=>1))->field('id as cate_id,title as cate_title')->find();
+        if (!empty($open_member)){
+            $open_member['cate_count'] = $min_cocunt[$min_cate];
+        }
+        return $open_member;
 
     }
 
