@@ -153,7 +153,6 @@ class SchoolAccountModel extends Model {
 			$key = C('ANDROID_SECRET');
 		}
 
-
 		//封装用户信息
 		//$custom['company'] =$data['company'];
 		//$custom['position'] =$data['position'];
