@@ -72,10 +72,17 @@ export default React.createClass({
                         <div className='enter-btn f-15 able' data-type="enroll-now" onClick={handleClick}><span id="change-text">立即</span>报名（￥{price} /人）</div>
                     </div>
                 )
-            }else if(status==4){
+            }else if(status==40){
                 return  (
                     <div className="flex-bottom-btn">
                         <Link to={`/course/selectseat_${id}`} className="choose-seat-btn f-15">在线选座</Link>
+                        <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>
+                    </div>
+                )
+            }else if(status==41){
+                return  (
+                    <div className="flex-bottom-btn">
+                        <div className="choose-seat-btn f-15">已选座</div>
                         <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>
                     </div>
                 )
