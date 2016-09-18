@@ -198,17 +198,17 @@ var ClassDesc=React.createClass({
 var TeacherDesc=React.createClass({
     componentDidMount(){
         let contentHeight=$('#desc-content').outerHeight();
+        let scrollHeight=''
         if(contentHeight<=57){
             $("#desc-content").removeClass('text-hidden');
             $("#see-more-btn").hide();
         }else{
-            let scrollHeight='';
             $("#desc-content").addClass('text-hidden');
             $("#see-more-btn").show();
+
             $("#see-more-btn").on('click',function(e){
                 e.preventDefault();
                 scrollHeight=$(window).scrollTop();
-                //console.log(scrollHeight)
                 $("#desc-content").animate({
                     height:contentHeight,
                 },400);
@@ -223,7 +223,7 @@ var TeacherDesc=React.createClass({
                     height:57,
                 },400,function(){
                     setTimeout(function(){
-                        $(window).scrollTop(contentHeight);
+                        $(window).scrollTop(scrollHeight);
                     },500)
                 });
                 $("#desc-content").addClass('text-hidden');

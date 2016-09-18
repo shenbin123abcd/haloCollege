@@ -1,7 +1,8 @@
 import ButtonGroup from '../components/Common.buttonGroup'
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory;
-import { fetchCourseStatusIfNeeded,receiveStatusPosts } from '../actions/buttonGroup'
+import { fetchCourseStatusIfNeeded,receiveStatusPosts} from '../actions/buttonGroup'
+import {fetchCourseDetailIfNeeded} from '../actions/detail'
 
 var CommonButtonGroup= React.createClass({
     handleClick(e){
@@ -20,7 +21,8 @@ var CommonButtonGroup= React.createClass({
                 course_id: id,
             };
             name='course'+id;
-            //dispatch(receiveStatusPosts(id,4,false));
+            let path=hb.location.url('path');
+
             app.pay.callPay(name).callpay({
                 url: '/pay/course',
                 data:data,
@@ -31,9 +33,11 @@ var CommonButtonGroup= React.createClass({
                         leftBtn:'稍等片刻',
                         rightBtn:'前去选座'
                     }).then(function(){
-                        dispatch(receiveStatusPosts(id,40,false));
                         browserHistory.push(`/course/selectseat_${id}`);
                     },function(){
+                        if(path.indexOf('/course/detail_')>-1){
+                            dispatch(fetchCourseDetailIfNeeded(id));
+                        }
                         dispatch(receiveStatusPosts(id,40,false));
                     })
                 },
