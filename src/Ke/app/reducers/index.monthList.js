@@ -2,6 +2,14 @@
 function initState() {
     let CurrentMonth=new Date().getMonth()+1;
     let CurrentYear=new Date().getFullYear();
+    if(CurrentYear==2016){
+        if(CurrentMonth==9){
+            CurrentMonth+=2;
+        }
+        if(CurrentMonth==10){
+            CurrentMonth+=1;
+        }
+    }
     let monthList=[]
     for(let i=0;i<5;i++){
         monthList.push({

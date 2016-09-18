@@ -59,8 +59,8 @@ ReactDOM.render(
         <Route path="/" component={App}   >
             <IndexRoute component={Index}  onLeave={onLeaveRoute} />
             <Route path="user" component={User}   onLeave={onLeaveRoute}  />
+            <Route path="course/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
         </Route>
-        <Route path="/course/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
     </Router>
