@@ -251,8 +251,8 @@ var TeacherDesc=React.createClass({
                                 })
                             }
                         </div>
-                        <div className="btn see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
-                        <div className="btn see-more-btn arrow-up" id="slide-up-btn">收起介绍<i className="haloIcon haloIcon-arrowup"></i></div>
+                        <div className="btn btn-link see-more-btn" id="see-more-btn">查看更多<i className="haloIcon haloIcon-arrowdown"></i></div>
+                        <div className="btn btn-link see-more-btn arrow-up" id="slide-up-btn">收起介绍<i className="haloIcon haloIcon-arrowup"></i></div>
                     </div>
                 </div>
             )
@@ -284,29 +284,33 @@ var DetailContent=React.createClass({
 
 var InterviewBlock=React.createClass({
     render(){
-        const data=this.props.interviewData;
-        return (
-            <div className="interview-block">
-                <div className="desc-title f-13">
-                    <span className="line"></span>讲师专访
+        let data=this.props.interviewData;
+        if(data.length!=0 || data!=null ||!data ){
+            return (
+                <div className="interview-block">
+                    <div className="desc-title f-13">
+                        <span className="line"></span>讲师专访
+                    </div>
+                    <div className="desc-list-block">
+                        {
+                            data.map((n,i)=>{
+                                return(
+                                    <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
+                                        <div className="item-cover-wrapper">
+                                            <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/220/h/144`} alt=""/>
+                                            <img className='play-btn' src={playBtn} alt=""/>
+                                        </div>
+                                        <div className="item-desc f-10">{n.title}</div>
+                                    </a>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
-                <div className="desc-list-block">
-                    {
-                        data.map((n,i)=>{
-                            return(
-                                <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
-                                    <div className="item-cover-wrapper">
-                                        <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/220/h/144`} alt=""/>
-                                        <img className='play-btn' src={playBtn} alt=""/>
-                                    </div>
-                                    <div className="item-desc f-10">{n.title}</div>
-                                </a>
-                            )
-                        })
-                    }
-                </div>
-            </div>
-        )
+            )
+        }else{
+            return false;
+        }
     }
 })
 
