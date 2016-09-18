@@ -121,6 +121,9 @@ class PaymentController extends CommonController {
         }elseif ($order['pay_status'] == 1){
             write_log('ping_notify_error', '支付完成，已付款完成，不能重复操作|订单号：'. $data['order_no']. '；支付方式：'. $data['channel'].'；交易号：'. $data['transaction_no']);
             return false;
+        }else{
+            // 修改订单状态
+            $model->where(array('id'=>$order['id']))->save(array('status'=>1, 'pay_time'=>time(), 'transaction_id'=>$data['transaction_no']));
         }
 
         // 会员开通时长
