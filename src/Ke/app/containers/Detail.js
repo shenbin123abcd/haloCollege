@@ -198,14 +198,14 @@ var ClassDesc=React.createClass({
 var TeacherDesc=React.createClass({
     componentDidMount(){
         let contentHeight=$('#desc-content').outerHeight();
+        let scrollHeight=''
         if(contentHeight<=57){
             $("#desc-content").removeClass('text-hidden');
             $("#see-more-btn").hide();
-            //$(".teacher-desc-block").css('padding-bottom',30);
         }else{
-            let scrollHeight='';
             $("#desc-content").addClass('text-hidden');
             $("#see-more-btn").show();
+
             $("#see-more-btn").on('click',function(e){
                 e.preventDefault();
                 scrollHeight=$(window).scrollTop();
@@ -221,13 +221,12 @@ var TeacherDesc=React.createClass({
                 e.preventDefault();
                 $("#desc-content").animate({
                     height:57,
-                },400);
+                },400,function(){
+                    $(window).scrollTop(scrollHeight);
+                });
                 $("#desc-content").addClass('text-hidden');
                 $("#see-more-btn").show();
                 $("#slide-up-btn").hide();
-                $(window).animate({
-                    scrollTop:scrollHeight
-                },400)
             })
         }
     },
