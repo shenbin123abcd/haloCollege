@@ -27,6 +27,7 @@ var CommonButtonGroup= React.createClass({
                 url: '/pay/course',
                 data:data,
                 onSuccess:function (res) {
+                    dispatch(receiveStatusPosts(id,40,false));
                     app.modal.confirm({
                         pic:'able-seat',
                         content:'报名成功，是否前去选座？',
@@ -38,7 +39,6 @@ var CommonButtonGroup= React.createClass({
                         if(path.indexOf('/course/detail_')>-1){
                             dispatch(fetchCourseDetailIfNeeded(id));
                         }
-                        dispatch(receiveStatusPosts(id,40,false));
                     })
                 },
                 onFail:function (res) {
