@@ -110,6 +110,7 @@ class SchoolCommentModel extends Model {
 		$score = $this->where(array('vid'=>$data['vid']))->avg('score');
 		M('SchoolVideo')->where(array('id'=>$data['vid']))->setField('score', $score);
 	}
+	
 
 	// 我的评论
 	public function my($limit = 12, $is_page = 0){
