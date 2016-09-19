@@ -126,7 +126,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
     public function getSeatUser($course_id){
-        $order_list = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('wechat_id,course_id')->select();
+        $order_list = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('wechat_id,course_id');
         $user_id = array_keys($order_list);
         if (!empty($user_id)){
             $user = M('WechatAuth')->where(array('id'=>array('in', $user_id)))->getField('id,headimgurl');
