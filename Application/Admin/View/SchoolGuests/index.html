@@ -7,6 +7,16 @@
 		</ol>
 	</div>
 	<!--/说明-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form action="__URL__/index" method="get">
+		<div class="search_type cc mb10">
+			<label>姓名：</label>
+			<input name="title" type="text" class="input length_2 mr10" value="{$Think.get.title}"/>
+			<button type="submit" class="btn">搜索</button>
+		</div>
+	</form>
+	<!--/搜索-->
 	<!--操作-->
 	<div class="mb10">
 		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>新增</a>
