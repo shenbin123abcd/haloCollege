@@ -62,4 +62,16 @@ class CommonController extends Controller {
         $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
         $this->ajaxReturn(array('iRet' => 1, 'info' => $info, 'data' => $data), $type);
     }
+
+    /**
+     * 加载配置
+     */
+    protected function _loadConfig() {
+        $data = D('Config')->select();
+        $result = array();
+        foreach ($data as $value) {
+            $result[$value['name']] = json_decode($value['value']) ? json_decode($value['value'],true) : $value['value'];
+        }
+        C($result);
+    }
 }

@@ -46,34 +46,6 @@ function image_thumb( $src_file, $new_width, $new_height ) {
     }
 }
 
-/**
- * 发送邮件
- *
- * @param [type]  $address 收件人地址
- * @param [type]  $subject 邮件主题
- * @param [type]  $body    邮件内容
- * @param boolean $html    是否是html
- * @return [type]
- */
-function sendEmail( $address, $subject, $body, $html=true ) {
-    vendor( 'PHPMailer.phpmailer' );
-    $mail = new PHPMailer(); //new一个PHPMailer对象出来
-    $mail->CharSet ='utf-8';//设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
-    $mail->IsSMTP(); // 设定使用SMTP服务
-    $mail->SMTPAuth   = true;                  // 启用 SMTP 验证功能
-
-    $mail->Host       = C( 'EMAIL_HOST' );      // SMTP 服务器
-    $mail->Port       = C( 'EMAIL_PORT' );                   // SMTP服务器的端口号
-    $mail->Username   = C( 'EMAIL' );  // SMTP服务器用户名
-    $mail->Password   = C( 'EMAIL_PASS' );            // SMTP服务器密码
-    $mail->SetFrom( C( 'EMAIL' ), C( 'EMAIL_HONER' ) );//发件人信息
-    $mail->AddReplyTo( C( 'EMAIL' ), C( 'EMAIL_HONER' ) );//回复信息
-    $mail->Subject    = $subject;//邮件主题
-    $html?$mail->MsgHTML( $body ):$mail->AltBody=$body;//邮件内容
-    C( 'MALL_SSL' )&&$mail->SMTPSecure = "ssl";// 安全协议
-    $mail->AddAddress( $address, '' );//增加收件人
-    return $mail->Send();
-}
 
 /**
  * 字符串截取

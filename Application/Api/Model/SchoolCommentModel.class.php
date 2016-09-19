@@ -17,8 +17,7 @@ class SchoolCommentModel extends Model {
 		array('update_time', 'time', self::MODEL_BOTH, 'function'),
 		array('status', '1', self::MODEL_INSERT, 'string'),
 		array('ip', 'get_client_ip', self::MODEL_INSERT, 'function'),
-		array('uid', 'getUid', self::MODEL_INSERT, 'callback'),
-		array('username', 'getUsername', self::MODEL_INSERT, 'callback'),
+		
 	);
 
 	// 检查视频ID的合法性
@@ -110,7 +109,7 @@ class SchoolCommentModel extends Model {
 		$score = $this->where(array('vid'=>$data['vid']))->avg('score');
 		M('SchoolVideo')->where(array('id'=>$data['vid']))->setField('score', $score);
 	}
-	
+
 
 	// 我的评论
 	public function my($limit = 12, $is_page = 0){
@@ -124,11 +123,12 @@ class SchoolCommentModel extends Model {
 			$vid[] = $value['vid'];
 		}
 
-		$guests_id = array_unique($guests_id);
-        $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
+		//$guests_id = array_unique($guests_id);
+        //$guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
+		if (!empty($vid)){
+			$video = D('SchoolVideo')->join('wtw_school_guests AS g ON g.id = wtw_school_video.guests_id')->where(array('wtw_school_video.id'=>array('in', $vid)))->getField('wtw_school_video.id AS video_id, wtw_school_video.title AS video_title, wtw_school_video.views AS video_views, wtw_school_video.cover_url AS video_cover, wtw_school_video.times AS video_times,g.id AS guests_id,g.title AS guests_title,g.position AS guests_position,g.avatar_url AS guests_avatar');
 
-        $video = D('SchoolVideo')->join('wtw_school_guests AS g ON g.id = wtw_school_video.guests_id')->where(array('wtw_school_video.id'=>array('in', $vid)))->getField('wtw_school_video.id AS video_id, wtw_school_video.title AS video_title, wtw_school_video.views AS video_views, wtw_school_video.cover_url AS video_cover, wtw_school_video.times AS video_times,g.id AS guests_id,g.title AS guests_title,g.position AS guests_position,g.avatar_url AS guests_avatar');
-
+		}
         $temp = array();
         foreach ($list as $key => $value) {
             $video_temp = $video[$value['vid']];
