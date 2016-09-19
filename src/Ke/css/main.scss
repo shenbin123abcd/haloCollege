@@ -280,7 +280,7 @@ body{
     }
     .des-inner-1{
       float: left;
-      width: 5rem;
+      width: 5.4rem;
     }
     .des-inner-2{
       float: right;
@@ -291,8 +291,7 @@ body{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-
-        font-size: 0.28rem;
+        font-size: 0.26rem;
         color: #333333;
       }
       .info{
@@ -301,7 +300,7 @@ body{
       }
       .price{
         color: $mainColor;
-        font-size: 0.3rem;
+        font-size: 0.28rem;
       }
       .available{
         color: #666;
