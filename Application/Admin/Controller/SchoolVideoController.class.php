@@ -33,7 +33,7 @@ class SchoolVideoController extends CommonController {
 	}
 	
 	public function _before_add(){
-		$this->token = $this->qiniu('crmpub', 'college/cover/');
+		$this->token = $this->qiniu('crmpub', 'college/cover');
 		$this->gudests = M('SchoolGuests')->where(array('status'=>1))->select();
 		$this->category = M('SchoolCate')->where(array('type'=>1))->select();
 		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
@@ -42,6 +42,7 @@ class SchoolVideoController extends CommonController {
 	
 	public function _before_insert(){
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
+
 		$this->_before_update();
 		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
 		empty($_POST['guests_id']) && $this->error('嘉宾不存在');
