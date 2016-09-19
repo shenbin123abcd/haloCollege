@@ -16,7 +16,7 @@ var Detail= React.createClass({
       });
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
-      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
+     dispatch(fetchCourseStatusIfNeeded(routeParams.id));
   },
 
   render() {
@@ -44,6 +44,7 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
+                    <TelBlock></TelBlock>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
@@ -129,6 +130,20 @@ var DetailMiddle=React.createClass({
       </Link>
     )
   }
+})
+
+var TelBlock=React.createClass({
+    render(){
+        return(
+            <a className="tel-block clearfix" href="tel:123456789">
+                <div className="sign-num-block clearfix">
+                    <div className="tel-line"></div>
+                    <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-kefu f-20"></span>拨打客服电话</div>
+                    <div className="sign-num-block-right f-13"><i className="haloIcon haloIcon-right"></i></div>
+                </div>
+            </a>
+        )
+    }
 })
 
 var ClassDesc=React.createClass({

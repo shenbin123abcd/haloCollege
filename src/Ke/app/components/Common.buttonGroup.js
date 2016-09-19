@@ -11,9 +11,10 @@ export default React.createClass({
         const handleSubmit=this.props.handleSubmit;
         const handleOpen=this.props.handleOpen;
         const handleClose=this.props.handleClose;
-        const showModal=this.props.showModal
+        const showModal=this.props.showModal;
         const id=this.props.idData;
         const status=this.props.status;
+        const chooseSeat=this.props.chooseSeat;
         //const status=5;
         let _this=this;
         function renderEnterBtn(){
@@ -70,12 +71,25 @@ export default React.createClass({
                     </div>
                 )
             }else if(status==41){
+                let line='',seat='';
+                function addZero(num){
+                    let number=parseInt(num);
+                    if(number<10){
+                        return ('0'+number)
+                    }else{
+                        return number
+                    }
+                }
+                if(chooseSeat!=null){
+                    line=addZero(chooseSeat.split(',')[0]);
+                    seat=addZero(chooseSeat.split(',')[1]);
+                }
                 return  (
                     <div className="flex-bottom-btn">
                         <div className="choose-seat-btn f-15">
                             <div className="seat-choosed">
                                 <div className='f-14'>已选座</div>
-                                <div className='f-14'>03排02座</div>
+                                <div className='f-14' id="choose-seat-info">{line}排{seat}座</div>
                             </div>
                         </div>
                         <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>

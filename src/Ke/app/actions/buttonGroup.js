@@ -1,5 +1,6 @@
 export const REQUEST_COURSE_STATUS='REQUEST_COURSE_STATUS'
 export const RECEIVE_COURSE_STATUS='RECEIVE_COURSE_STATUS'
+export const RECEIVE_SEAT_INFO='RECEIVE_SEAT_INFO'
 
 function requestStatusPosts(res){
     return {
@@ -17,12 +18,27 @@ export function receiveStatusPosts(id,res,showModal){
     }
 }
 
+export function receiveChooseSeat(data){
+    return{
+        type:RECEIVE_SEAT_INFO,
+        data
+    }
+}
+
 function fetchCourseStatus(id){
     return dispatch => {
         dispatch(requestStatusPosts(id))
         return app.ajax(`/courses/applyStatus?course_id=${id}`)
             .then(res=>{
-                dispatch(receiveStatusPosts(id,res.data,false))
+                dispatch(receiveStatusPosts(id,res.data,false));
+                if(res.data==41){
+                    return app.ajax(`/courses/mySeat?course_id=${id}`)
+                        .then(res=>{
+                            dispatch(receiveChooseSeat(res.data));
+                        })
+                }else{
+                    dispatch(receiveChooseSeat(null));
+                }
             });
     }
 }

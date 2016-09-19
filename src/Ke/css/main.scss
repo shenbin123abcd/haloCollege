@@ -794,7 +794,8 @@ body{
       }
     }
   }
-  .deatil-middle{
+
+  .deatil-middle,.tel-block{
     padding:18px;
     background: #fff;
     margin-top:15px;
@@ -802,6 +803,14 @@ body{
     display: block;
     text-decoration: none;
     color: inherit;
+    .tel-line{
+      position:absolute;
+      height:1px;
+      top:0;
+      background: #d7d7d7;
+      width:90.4%;
+      transform:scale(1,.5);
+    }
     .sign-num-block{
       .sign-num-block-left{
         float:left;
@@ -826,6 +835,11 @@ body{
         }
       }
     }
+  }
+  .tel-block{
+    margin-top:0;
+    position:relative;
+    display: block;
   }
   .class-desc-block{
     padding:18px 10px;
