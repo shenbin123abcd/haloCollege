@@ -1056,6 +1056,16 @@ body{
     flex:0 0 35%;
     position: relative;
     //border-top: 1px solid #d7d7d7;
+    .seat-choosed{
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      line-height:1.5;
+    }
+    &.grey{
+      color:#999999;
+    }
     &:before{
       position:absolute;
       top:0;
@@ -1077,7 +1087,7 @@ body{
     }
     &.disable{
       background: #d5d5d5;
-      color:#999999;
+      color:#fff;
     }
   }
 }

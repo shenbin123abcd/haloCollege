@@ -5,16 +5,6 @@ import appointmentPic from '../images/appointment-pic.png'
 import { fetchCourseStatusIfNeeded,receiveStatusPosts } from '../actions/buttonGroup'
 
 export default React.createClass({
-    componentDidUpdate  : function(prevState,prevProps){
-        // console.log('componentDidUpdate')
-        // console.log(prevState,prevProps)
-        // let {items,isFetching}=this.props;
-        //let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
-        //if(prevState.items&&!this.hbDrag){
-        //    // console.log(dragDom)
-        //    this.hbDrag=hb.drag(dragDom,{});
-        //}
-    },
     render:function(){
         const price=this.props.priceData;
         const handleClick=this.props.handleClick;
@@ -24,7 +14,7 @@ export default React.createClass({
         const showModal=this.props.showModal
         const id=this.props.idData;
         const status=this.props.status;
-        //const status=1;
+        //const status=5;
         let _this=this;
         function renderEnterBtn(){
             if(status==1){
@@ -82,14 +72,19 @@ export default React.createClass({
             }else if(status==41){
                 return  (
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15">已选座</div>
+                        <div className="choose-seat-btn f-15">
+                            <div className="seat-choosed">
+                                <div className='f-14'>已选座</div>
+                                <div className='f-14'>03排02座</div>
+                            </div>
+                        </div>
                         <div className='enter-btn f-15 disable'>已报名（￥{price} /人）</div>
                     </div>
                 )
             }else if(status==5){
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15">在线选座</div>
+                        <div className="choose-seat-btn f-15 grey">选座结束</div>
                         <div className='enter-btn f-15 disable'>报名结束（￥{price} /人）</div>
                     </div>
                 )
