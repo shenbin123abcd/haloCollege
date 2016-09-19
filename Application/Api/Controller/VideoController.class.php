@@ -674,7 +674,73 @@ class VideoController extends CommonController {
         }
     }
 
+    //分类迁移
+    public function changeCate(){
+        $videos = M('SchoolVideo')->select();
+        foreach ($videos as $key=>$value){
+            $category = '';
+            if (empty($value['category'])){
+                $category.= $value['cate1'];
+                if (!empty($value['cate3'])){
+                    $cate3_arr = explode(',',$value['cate3']);
+                    foreach ($cate3_arr as $key_cate3=>$value_cate3){
+                        switch ($value_cate3){
+                            case '1':
+                                $category.=','.'5';
+                                break;
+                            case '2':
+                                $category.=','.'6';
+                                break;
+                            case '3':
+                                $category.=','.'7';
+                                break;
+                            case '4':
+                                $category.=','.'8';
+                                break;
+                            default:
 
-    
+                        }
+                    }
+
+                }
+                $videos[$key]['category'] = $category;
+                $data = $videos[$key];
+                $result = M('SchoolVideo')->save($data);
+                if ($result==false){
+                    $this->error($data);
+                }
+
+            }
+
+        }
+
+    }
+
+    //分类名称迁移
+    public function changeName(){
+        $cate = M('SchoolCate')->getField('id,title');
+        $videos = M('SchoolVideo')->select();
+        foreach ($videos as $key=>$value){
+            if(empty($value['cate_title'])){
+                if(!empty($value['category'])){
+                    $cate_arr = explode(',',$value['category']);
+                    foreach ($cate_arr as $key_cate=>$value_cate){
+                        $cate_title_arr[] = $cate[$value_cate];
+                    }
+                    $cate_title = implode(',',$cate_title_arr);
+                    unset($cate_title_arr);
+                    $videos[$key]['cate_title'] = $cate_title;
+                    $result = M('SchoolVideo')->save($videos[$key]);
+                    if ($result==false){
+                        $this->error($videos[$key]);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 
 }
