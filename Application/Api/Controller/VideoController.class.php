@@ -9,7 +9,10 @@
 namespace Api\Controller;
 
 use Think\Controller;
-class VideoController extends VideoBaseController {
+class VideoController extends CommonController {
+    protected $module_auth = 0;
+    protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
+    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise');
 
     /**
      * 根据类型获取列表
@@ -219,7 +222,6 @@ class VideoController extends VideoBaseController {
      * @return [type]     视频地址
      */
     public function getUrl($vid) {
-        $this->_auth();
         $url = D('SchoolVideo')->getUrl(intval($vid));
 
         $url ? $this->success('success', $url) : $this->error('视频不存在', $url);
@@ -244,9 +246,15 @@ class VideoController extends VideoBaseController {
         if (!IS_POST) {
             $this->error('Access denied');
         }
-        $this->_auth();
         $model = D('SchoolComment');
-
+        $_POST['uid'] = $this->user['uid'];
+        //用户名用真实姓名
+        $user = getTrueName($_POST['uid']);
+        if(!empty($user)){
+            $_POST['username'] = $user['truename'];
+        }else{
+            $_POST['username'] = $this->user['username'];
+        }
         if ($model->create()) {
             $id = $model->add();
             $id ? $this->success('评论成功！') : $this->error('评论失败！');
@@ -284,13 +292,12 @@ class VideoController extends VideoBaseController {
      * 视频会员开通（ 作废）
      */
     public function openMember(){
-        $this->_auth();
         $type = trim(I('cate'));
         if(empty($type)){
             $this->error('参数错误！');
         }
         $model_user = D('SchoolAccount');
-        $data['uid'] = $model_user->id;
+        $data['uid'] = $this->user['uid'];
         //$data['username'] = $model_user->username;
         //$data['phone'] = $model_user->phone;
         switch ($type){
@@ -355,8 +362,7 @@ class VideoController extends VideoBaseController {
      * 定时任务检测会员是否过期或判断用户是否开通会员（作废）
      */
     public function checkExpire(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
+        $uid = $this->user['uid'];
         $where['uid'] = $uid;
         $where['status'] = 1;
         $where['is_expire'] = 0;
@@ -399,15 +405,15 @@ class VideoController extends VideoBaseController {
      */
     public function getExpireDate(){
 
-        $this->_auth();        
-        $uid = D('SchoolAccount')->id;
+        $uid = $this->user['uid'];
         $where['uid'] = $uid;
         $where['status'] = 1;
         $member = M('SchoolMember')->where($where)->find();
         $open_member = $this->get_open_member($uid);
-
-        $open_member['expire'] = $member['end_time'] ? $member['end_time'] : '';
-        $data['open_member'] = $open_member;
+        if (!empty($open_member)){
+            $open_member[0]['expire'] = $member['end_time'] ? $member['end_time'] : '';
+        }
+        $data[]= $open_member[0];
         $this->success('success',$data);
     }
 
@@ -415,12 +421,11 @@ class VideoController extends VideoBaseController {
      * 记录播放
      */
     public function recordPlay(){
-        $this->_auth();
         $data['vid'] = I('vid');
         if(empty($data['vid'])){
             $this->error('参数错误！');
         }
-        $data['uid'] = D('SchoolAccount')->id;
+        $data['uid'] = $this->user['uid'];
         $data['progress'] = I('progress') ? I('progress') : '0%';
         $data['create_time'] = time();
         $data['update_time'] = time();
@@ -448,8 +453,7 @@ class VideoController extends VideoBaseController {
      * 播放记录列表
      */
     public function getRecord(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
+        $uid = $this->user['uid'];
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $where['uid'] = $uid;
@@ -493,9 +497,9 @@ class VideoController extends VideoBaseController {
         }
         $min_cocunt = array_count_values($member_arr);
         $min_cate = min($member_arr);
-        $open_member = M('SchoolMemberCate')->where(array('id'=>$min_cate,'status'=>1))->field('id as cate_id,title as cate_title')->find();
+        $open_member = M('SchoolMemberCate')->where(array('id'=>$min_cate,'status'=>1))->field('id as cate_id,title as cate_title')->select();
         if (!empty($open_member)){
-            $open_member['cate_count'] = $min_cocunt[$min_cate];
+            $open_member[0]['cate_count'] = $min_cocunt[$min_cate];
         }
         return $open_member;
 
@@ -530,47 +534,45 @@ class VideoController extends VideoBaseController {
 
     // 收藏
     public function favoritesAct() {
-        $this->_auth();
 
         $vid = intval(I('vid'));
         if (empty($vid)) {
             $this->error('参数错误');
         }
-
+        $uid = $this->user['uid'];
         $count = M('SchoolVideo')->where(array('id' => $vid, 'status' => 1))->count();
         if ($count == 0) {
             $this->error('视频不存在');
         }
 
-        D('SchoolFavorites')->act($vid);
+        D('SchoolFavorites')->act($vid,$uid);
         $this->success('操作成功');
     }
 
     // 我的收藏
     public function myFavorites() {
-        $this->_auth();
         $per_page = I('per_page');
-        $list = D('SchoolFavorites')->getList($per_page ? $per_page : 12);
+        $user = $this->user;
+        $list = D('SchoolFavorites')->getList($per_page ? $per_page : 12,$user);
         $this->success('success', $list);
     }
 
     // 取消收藏
     public function delFavorites() {
-        $this->_auth();
 
+        $uid = $this->user['uid'];
         $vids = I('vids');
         if (empty($vids)) {
             $this->error('参数错误');
         }
 
-        $ret = D('SchoolFavorites')->where(array('uid' => D('SchoolAccount')->id, 'vid' => array('in', $vids)))->delete();
+        $ret = D('SchoolFavorites')->where(array('uid' => $uid, 'vid' => array('in', $vids)))->delete();
 
         $ret ? $this->success('操作成功') : $this->error('操作失败');
     }
 
     // 我的评论
     public function myComments() {
-        $this->_auth();
         $per_page = I('per_page');
         $list = D('SchoolComment')->my($per_page ? $per_page : 12, 1);
         $this->success('success', $list);
@@ -578,14 +580,13 @@ class VideoController extends VideoBaseController {
 
     // 删除评论
     public function delComment() {
-        $this->_auth();
-
+        $uid = $this->user['uid'];
         $ids = I('id');
         if (empty($ids)) {
             $this->error('参数错误');
         }
 
-        $ret = D('SchoolComment')->where(array('uid' => D('SchoolAccount')->id, 'id' => array('in', $ids)))->delete();
+        $ret = D('SchoolComment')->where(array('uid' => $uid, 'id' => array('in', $ids)))->delete();
         $ret ? $this->success('删除成功') : $this->error('删除失败');
     }
 
@@ -601,15 +602,14 @@ class VideoController extends VideoBaseController {
      * 视频点赞
      */
     public function videoPraise(){
-        $this->_auth();
         $model = D('SchoolAccount');
         $data['vid'] = I('vid');
-        $data['uid'] = $model->id;
+        $data['uid'] = $this->user['uid'];
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
         }else{
-            $data['username'] = $model->username;
+            $data['username'] = $this->user['username'];
         }
         $data['headimg'] = get_avatar($data['uid']);
         $data['create_time'] = time();
@@ -650,10 +650,9 @@ class VideoController extends VideoBaseController {
      * 视频取消点赞
      */
     public function videoCancelPraise(){
-        $this->_auth();
         $model = D('SchoolAccount');
         $vid = I('vid');
-        $uid = $model->id;
+        $uid = $this->user['uid'];
         if (empty($vid)) {
             $this->error('参数错误！');
         }
@@ -674,5 +673,8 @@ class VideoController extends VideoBaseController {
             $this->error('取消点赞失败！');
         }
     }
+
+
+    
 
 }

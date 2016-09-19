@@ -78,7 +78,7 @@ class SchoolVideoModel extends Model{
         }
         unset($map['is_recommend']);
         $total = $this->where($map)->count();
-        return array('total'=>$total, 'list'=>empty($list) ? array() : $this->_format($list),'format'=>array('b'=>'!720x480','m'=>'!640x480','s'=>'!321x215','ss'=>'!240x160'));
+        return array('total'=>$total, 'list'=>empty($list) ? array() : $this->_format($list),'format'=>array('bb'=>'!1080x720','b'=>'!720x480','m'=>'!640x480','s'=>'!321x215','ss'=>'!240x160'));
     }
 
     /**

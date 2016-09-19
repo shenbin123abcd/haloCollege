@@ -138,7 +138,7 @@ function get_user() {
     } elseif (!empty($cookie)) {
         $data = jwt_decode($cookie);
     } else {
-        return array();
+        return array(); 
     }
 
     return $data['iRet'] ? $data['data'] : array();
