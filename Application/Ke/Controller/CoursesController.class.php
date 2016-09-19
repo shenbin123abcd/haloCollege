@@ -31,7 +31,7 @@ class CoursesController extends CommonController {
 
         $model = D('Course');
         $seat = $model->getSeat($course_id);
-        $user = $model->getUser($course_id);
+        $user = $model->getSeatUser($course_id);
         $course = $model->getInfo($course_id);
 
         $this->success(['seat' => $seat, 'user' => $user, 'course'=>$course]);

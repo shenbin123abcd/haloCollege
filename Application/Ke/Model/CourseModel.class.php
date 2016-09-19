@@ -121,6 +121,21 @@ class CourseModel extends Model {
     }
 
     /**
+     * 获取报名用户
+     * @param $course_id
+     * @return array|mixed
+     */
+    public function getSeatUser($course_id){
+        $order_list = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('wechat_id,course_id')->select();
+        $user_id = array_keys($order_list);
+        if (!empty($user_id)){
+            $user = M('WechatAuth')->where(array('id'=>array('in', $user_id)))->getField('id,headimgurl');
+            $user = array_values($user);
+        }
+        return $user;
+    }
+
+    /**
      * 获取座位列表
      * @param  integer $course_id 课程编号
      * @return array         座位列表
