@@ -31,7 +31,7 @@ class CoursesController extends CommonController {
 
         $model = D('Course');
         $seat = $model->getSeat($course_id);
-        $user = $model->getUser($course_id);
+        $user = $model->getSeatUser($course_id);
         $course = $model->getInfo($course_id);
 
         $this->success(['seat' => $seat, 'user' => $user, 'course'=>$course]);
@@ -94,7 +94,7 @@ class CoursesController extends CommonController {
             $ret = $order ? 4 : 3;
 
             if ($ret == 4){
-                $count = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+                $count = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->getField('');
                 $ret = $count ? 41 : 40;
             }
             
@@ -103,8 +103,17 @@ class CoursesController extends CommonController {
             }
         }
 
-
         $this->success($ret);
+    }
+
+    public function mySeat(){
+        $course_id = intval(I('course_id'));
+
+        $course = M('Course')->where(array('id'=>$course_id, 'status'=>1))->find();
+        empty($course) && $this->error('课程编号错误');
+        $seat_no = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->getField('seat_no');
+
+        $this->success($seat_no ? $seat_no : '');
     }
 
     // 我的课程
