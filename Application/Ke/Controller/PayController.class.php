@@ -19,6 +19,9 @@ class PayController extends CommonController {
         $course = M('Course')->where(array('id'=>$course_id, 'status'=>1))->find();
         empty($course) || ($course['start_date'] < time()) && $this->error('课程不存在或已经结束');
 
+        // 检查是否已经爆满
+        $course['total'] <= $course['num'] && $this->error('抱歉，你来晚了该课程已爆满');
+
         $model = M('CourseOrder');
         // 检查用户是否已经报名
         $count = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>1))->count();
