@@ -20,8 +20,7 @@ class PayController extends CommonController {
         empty($course) || ($course['start_date'] < time()) && $this->error('课程不存在或已经结束');
 
         // 检查是否已经爆满
-        $apply_user = M('CourseOrder')->where(array('status'=>1, 'course_id'=>$course_id))->count();
-        $apply_user >= $course['num'] && $this->error('抱歉，你来晚了该课程已爆满');
+        $course['total'] <= $course['num'] && $this->error('抱歉，你来晚了该课程已爆满');
 
         $model = M('CourseOrder');
         // 检查用户是否已经报名
