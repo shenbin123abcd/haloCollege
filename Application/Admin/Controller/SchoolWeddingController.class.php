@@ -155,6 +155,15 @@ class SchoolWeddingController extends CommonController {
         $this->assign('list', $count);
         $this->display('visits');
     }
+
+    public function _join_video(&$data){
+        $bol =array('否','是');
+        foreach ($data as $key=>$value){
+            $data[$key]['recommend'] = $bol[$value['is_recommend']];
+            
+        }
+
+    }
     
     
     
