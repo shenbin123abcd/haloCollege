@@ -83,9 +83,7 @@ class PublicController extends CommonController {
 
             $model->where(array('id' => $user['id']))->save(array('last_time' => time(), 'login_ip' => get_client_ip()));
 
-            //// 微社区token
-            //$wsq = $model->getMicroToken($user);
-            //$user['wsq'] = $wsq;
+
             $token = jwt_encode($user);
             $add_token['uid'] = $user['id'];
             $add_token['token'] = md5($token);
