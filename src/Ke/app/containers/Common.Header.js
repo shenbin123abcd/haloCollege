@@ -12,10 +12,10 @@ var HeaderContainer = React.createClass({
 
         const { dispatch,monthList,location} = this.props
 
-        // console.log(hb.location.url("?month"))
+        // console.log(window.location.href)
 
         var item;
-        if(location.pathname=='/'){
+        if(ev.pathname=='/'){
             if(ev.query.month){
                 dispatch(fetchCourseIfNeeded(`${ev.query.month}`));
                 let item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
@@ -25,6 +25,9 @@ var HeaderContainer = React.createClass({
                 dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
                 dispatch(setCurrentMonth(item));
             }
+            app.wechat.init({
+                link : window.location.href,
+            });
         }else{
             if(monthList.filter(n=>n.active).length>0){
                 dispatch(resetMonth())

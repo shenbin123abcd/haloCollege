@@ -47,11 +47,11 @@ var Index = React.createClass({
     componentDidUpdate  : function(prevState,prevProps){
         // console.log(11,this.props.isFetching)
         // console.log('componentDidUpdate',prevState,prevProps,this.props)
-        if(this.props.isFetching){
-            app.wechat.init({
-                link : window.location.href,
-            });
-        }
+        // if(this.props.isFetching){
+        //     app.wechat.init({
+        //         link : window.location.href,
+        //     });
+        // }
 
 
     },
