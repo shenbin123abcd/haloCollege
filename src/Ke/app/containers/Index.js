@@ -7,6 +7,9 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 var Index = React.createClass({
     componentDidMount() {
         document.title='幻熊课堂';
+        if(Modernizr.weixin&&Modernizr.ios){
+            hb.hack.setTitle(document.title);
+        }
         const { dispatch,monthList,location,isFetching} = this.props;
         // console.log(location.query)
 

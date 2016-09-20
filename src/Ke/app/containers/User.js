@@ -3,13 +3,17 @@ import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 import PageLoading  from '../components/Common.Pageloading'
 
+
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var User= React.createClass({
   componentDidMount() {
-     document.title='我的个人中心';
+      document.title='我的个人中心';
+      if(Modernizr.weixin&&Modernizr.ios){
+          hb.hack.setTitle(document.title);
+      }
       app.wechat.init();
-     let { dispatch,data} = this.props;
-     dispatch(fetchUserItemsIfNeeded());
+      let { dispatch,data} = this.props;
+      dispatch(fetchUserItemsIfNeeded());
   },
   handleClick(e){
     const {dispatch , data }=this.props;

@@ -9,6 +9,9 @@ import { destroySeats } from '../actions/common.seat'
 var Seatinfo = React.createClass({
     componentDidMount() {
         document.title='座位表';
+        if(Modernizr.weixin&&Modernizr.ios){
+            hb.hack.setTitle(document.title);
+        }
         app.wechat.init({
             link : window.location.href,
         });
