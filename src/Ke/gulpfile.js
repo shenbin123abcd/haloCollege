@@ -13,6 +13,9 @@ var appConfig = {
     themeSrc:'./',
     themeDist:'../../Public/Ke',
     themeViewDist:'../../Application/Ke/View/Index',
+    domain:'',
+    devDomain:'http://ke.hx.com',
+    productionDomain:'http://ke.halobear.com',
     port:9201,
 };
 
@@ -99,7 +102,7 @@ gulp.task('build',['sass','images','webpack'], function () {
         .pipe(jsFilter)
         .pipe(plugins.revReplace({manifest: manifestJs}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: `/Public/Ke`,
+            defaultCDNBase: `${appConfig.domain}/Public/Ke`,
             //defaultCDNBase: "../",
             allowRev: true,
             allowMin: true,
@@ -122,7 +125,7 @@ gulp.task('build',['sass','images','webpack'], function () {
         .pipe(cssFilter)
         .pipe(plugins.revReplace({manifest: manifestCss}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: `/Public/Ke`,
+            defaultCDNBase: `${appConfig.domain}/Public/Ke`,
             // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
             allowRev: true,
             allowMin: true,
@@ -150,7 +153,7 @@ gulp.task('build',['sass','images','webpack'], function () {
         .pipe(htmlFilter)
         .pipe(plugins.revReplace({manifest: manifestHtml}))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: "__PUBLIC__/Ke",
+            defaultCDNBase: `${appConfig.domain}/Public/Ke`,
             // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
             allowRev: true,
             allowMin: true,
@@ -205,7 +208,7 @@ gulp.task('copy:view', ['copy:css'],function () {
             ]
         }))
         .pipe(plugins.cdnizer({
-            defaultCDNBase: `__PUBLIC__/Ke`,
+            defaultCDNBase: `/Public/Ke`,
             //defaultCDNBase: "../",
             allowRev: true,
             allowMin: true,
@@ -230,8 +233,15 @@ gulp.task('clean', require('del').bind(null, [
 gulp.task('dev', ['clean'], function() {
     gulp.start('watch:dev');
 });
+gulp.task('devp', ['clean'], function() {
+    appConfig.domain=appConfig.devDomain;
+    gulp.start('build');
+});
+
+
 gulp.task('default',['clean'], function() {
     //gulp.start('build');
+    appConfig.domain=appConfig.productionDomain;
     gulp.start('build');
 });
 
@@ -262,6 +272,8 @@ gulp.task("webpack:ewteert", function(callback) {
         .pipe(gulp.dest(`tmp`))
         ;
 });
+
+
 gulp.task("webpack", function(callback) {
     var webpackConfig=require('./webpack.config.js');
     return webpack( webpackConfig, function(err, stats) {

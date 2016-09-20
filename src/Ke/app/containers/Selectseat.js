@@ -55,6 +55,9 @@ var SeatBtn =({selectedItem,selectRandomSeat,bookSeat})=>{
 var SelectSeat = React.createClass({
     componentDidMount() {
         document.title='座位表';
+        if(Modernizr.weixin&&Modernizr.ios){
+            hb.hack.setTitle(document.title);
+        }
         app.wechat.init();
         const { dispatch ,routeParams} = this.props
         // console.log(this.props)

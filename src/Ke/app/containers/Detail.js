@@ -11,7 +11,12 @@ var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Detail= React.createClass({
   componentDidMount() {
      document.title='幻熊课堂详情';
+      if(Modernizr.weixin&&Modernizr.ios){
+          hb.hack.setTitle(document.title);
+      }
       app.wechat.init({
+          title: '幻熊课堂详情',
+          content: '幻熊课堂详情',
           link : window.location.href,
       });
      const { dispatch,routeParams } = this.props
