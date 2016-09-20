@@ -56,6 +56,15 @@
                                 <textarea name="content" id="content" type="editor" >{$data['content']}</textarea></td>
                         </tr>
                         <tr>
+                            <th>是否设为推荐</th>
+                            <td>
+                                <select name="is_recommend">
+                                    <option value="0" <eq name="data.is_recommend" value="0">selected</eq>>否</option>
+                                    <option value="1" <eq name="data.is_recommend" value="1">selected</eq>>是</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>分享页地址</th>
                             <td><input type="text" class="input length_5" name="share_url" value="{$data['share_url']}"></td>
                         </tr>

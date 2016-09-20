@@ -15,6 +15,16 @@ class CommonController extends Controller {
     }
 
     /**
+     * 获取微信配置信息
+     */
+    public function getWechat(){
+        $jssdk = new \Org\Util\Jssdk("wxb43a4c82b5203c21", "70f8e2b10b41fba0176013f4526edf7b", urldecode(I('url')));
+        $signPackage = $jssdk->GetSignPackage();
+        unset($signPackage['rawString']);
+        $this->ajaxReturn($signPackage);
+    }
+
+    /**
      * 获取微信用户信息
      */
     protected function _getWechatUser(){
@@ -22,7 +32,7 @@ class CommonController extends Controller {
         $halobear = cookie('halobear');
         $this->user = $this->wcache($halobear);
 
-        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test'))) {
+        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
             cookie('halobear', null, -86400);
             $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']);
             if (IS_AJAX) {
