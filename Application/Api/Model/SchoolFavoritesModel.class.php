@@ -18,11 +18,12 @@ class SchoolFavoritesModel extends Model{
      * @param  integer $limit 获取数量
      * @return [type]         列表
      */
-    public function getList( $limit = 12 ) {
+    public function getList( $limit = 12 ,$user) {
         $page = I('page');
-        $map = array('uid'=>D('SchoolAccount')->id);
+        $map = array('uid'=>$user['uid']);
         $total = $this->where($map)->count();
         $list = $this->where($map)->limit($limit)->page($page)->order('id DESC')->select();
+        
         return array('total'=>$total, 'list'=>empty($list) ? array() : $this->_format($list));
     }
     
@@ -31,8 +32,8 @@ class SchoolFavoritesModel extends Model{
         foreach ($list as $key => $value) {
             $vid[] = $value['vid'];
         }
-        $guests_id = array_unique($guests_id);
-        $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
+        //$guests_id = array_unique($guests_id);
+        //$guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
 
         $video = D('SchoolVideo')->join('wtw_school_guests AS g ON g.id = wtw_school_video.guests_id')->where(array('wtw_school_video.id'=>array('in', $vid)))->getField('wtw_school_video.id AS video_id, wtw_school_video.title AS video_title, wtw_school_video.views AS video_views, wtw_school_video.cover_url AS video_cover, wtw_school_video.times AS video_times,g.id AS guests_id,g.title AS guests_title,g.position AS guests_position,g.avatar_url AS guests_avatar');
 
@@ -48,8 +49,8 @@ class SchoolFavoritesModel extends Model{
     }
 
     // 收藏
-    public function act($vid){
-        $uid = D('SchoolAccount')->id;
+    public function act($vid,$uid){
+        $uid = $uid;
         $map = array('vid'=>$vid,'uid'=>$uid);
 
         // 检查

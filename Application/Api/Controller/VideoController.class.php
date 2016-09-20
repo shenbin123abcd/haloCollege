@@ -1,14 +1,18 @@
 <?php
 /**
- * 接口
- * @author wtwei
- * @version $Id$
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2016/9/18
+ * Time: 16:16
  */
+
 namespace Api\Controller;
 
 use Think\Controller;
-
-class ApiController extends ApiBaseController {
+class VideoController extends CommonController {
+    protected $module_auth = 0;
+    protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
+    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise');
 
     /**
      * 根据类型获取列表
@@ -44,7 +48,7 @@ class ApiController extends ApiBaseController {
 
     /**
      * 获取视频列表 （根据分类id）( V2)
-    */
+     */
     public function getListVideo(){
         $is_hot = intval(I('is_hot'));
         $is_vip = intval(I('is_vip'));
@@ -77,7 +81,7 @@ class ApiController extends ApiBaseController {
 
     /**
      * 获取不同类型推荐视频列表（V2）
-    */
+     */
     public function recommendVideoList(){
         $model = D('SchoolVideo');
         $member_list = $model->getListByCate(array('is_vip'=>1),$page=1,$per_page=2);
@@ -218,7 +222,6 @@ class ApiController extends ApiBaseController {
      * @return [type]     视频地址
      */
     public function getUrl($vid) {
-        $this->_auth();
         $url = D('SchoolVideo')->getUrl(intval($vid));
 
         $url ? $this->success('success', $url) : $this->error('视频不存在', $url);
@@ -243,9 +246,15 @@ class ApiController extends ApiBaseController {
         if (!IS_POST) {
             $this->error('Access denied');
         }
-        $this->_auth();
         $model = D('SchoolComment');
-
+        $_POST['uid'] = $this->user['uid'];
+        //用户名用真实姓名
+        $user = getTrueName($_POST['uid']);
+        if(!empty($user)){
+            $_POST['username'] = $user['truename'];
+        }else{
+            $_POST['username'] = $this->user['username'];
+        }
         if ($model->create()) {
             $id = $model->add();
             $id ? $this->success('评论成功！') : $this->error('评论失败！');
@@ -281,15 +290,14 @@ class ApiController extends ApiBaseController {
 
     /**
      * 视频会员开通（ 作废）
-    */
+     */
     public function openMember(){
-        $this->_auth();
         $type = trim(I('cate'));
         if(empty($type)){
             $this->error('参数错误！');
         }
         $model_user = D('SchoolAccount');
-        $data['uid'] = $model_user->id;
+        $data['uid'] = $this->user['uid'];
         //$data['username'] = $model_user->username;
         //$data['phone'] = $model_user->phone;
         switch ($type){
@@ -333,7 +341,7 @@ class ApiController extends ApiBaseController {
 
     /**
      *会员叠加（作废）
-    */
+     */
     public function continue_member($uid){
         $where['uid'] = $uid;
         $where['is_expire'] = 0;
@@ -352,10 +360,9 @@ class ApiController extends ApiBaseController {
 
     /**
      * 定时任务检测会员是否过期或判断用户是否开通会员（作废）
-    */
+     */
     public function checkExpire(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
+        $uid = $this->user['uid'];
         $where['uid'] = $uid;
         $where['status'] = 1;
         $where['is_expire'] = 0;
@@ -397,27 +404,28 @@ class ApiController extends ApiBaseController {
      * 获取会员过期时间及开通的会员类型
      */
     public function getExpireDate(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
+
+        $uid = $this->user['uid'];
         $where['uid'] = $uid;
         $where['status'] = 1;
         $member = M('SchoolMember')->where($where)->find();
         $open_member = $this->get_open_member($uid);
-        $data['open_member'] = $open_member;
-        $data['expire'] = $member['end_time'] ? $member['end_time'] : '';
+        if (!empty($open_member)){
+            $open_member[0]['expire'] = $member['end_time'] ? $member['end_time'] : '';
+        }
+        $data[]= $open_member[0];
         $this->success('success',$data);
     }
 
     /**
      * 记录播放
-    */
+     */
     public function recordPlay(){
-        $this->_auth();
         $data['vid'] = I('vid');
         if(empty($data['vid'])){
             $this->error('参数错误！');
         }
-        $data['uid'] = D('SchoolAccount')->id;
+        $data['uid'] = $this->user['uid'];
         $data['progress'] = I('progress') ? I('progress') : '0%';
         $data['create_time'] = time();
         $data['update_time'] = time();
@@ -443,10 +451,9 @@ class ApiController extends ApiBaseController {
 
     /**
      * 播放记录列表
-    */
+     */
     public function getRecord(){
-        $this->_auth();
-        $uid = D('SchoolAccount')->id;
+        $uid = $this->user['uid'];
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $where['uid'] = $uid;
@@ -473,14 +480,14 @@ class ApiController extends ApiBaseController {
 
     /**
      * 登录状态记录
-    */
+     */
     public function loginRecord(){
 
     }
 
     /**
      * 获取开通的会员类型
-    */
+     */
     public function get_open_member($uid){
         $where['uid'] = $uid;
         $where['status'] = 1;
@@ -490,9 +497,9 @@ class ApiController extends ApiBaseController {
         }
         $min_cocunt = array_count_values($member_arr);
         $min_cate = min($member_arr);
-        $open_member = M('SchoolMemberCate')->where(array('id'=>$min_cate,'status'=>1))->field('id as cate_id,title as cate_title')->find();
+        $open_member = M('SchoolMemberCate')->where(array('id'=>$min_cate,'status'=>1))->field('id as cate_id,title as cate_title')->select();
         if (!empty($open_member)){
-            $open_member['cate_count'] = $min_cocunt[$min_cate];
+            $open_member[0]['cate_count'] = $min_cocunt[$min_cate];
         }
         return $open_member;
 
@@ -505,7 +512,7 @@ class ApiController extends ApiBaseController {
 
     /**
      * 热门标签
-    */
+     */
     public function hotTag() {
         $tag = array('信仰', '潘珍玉', '金熊奖', '蔡易瑾', '花艺设计');
 
@@ -527,62 +534,59 @@ class ApiController extends ApiBaseController {
 
     // 收藏
     public function favoritesAct() {
-        $this->_auth();
 
         $vid = intval(I('vid'));
         if (empty($vid)) {
             $this->error('参数错误');
         }
-
+        $uid = $this->user['uid'];
         $count = M('SchoolVideo')->where(array('id' => $vid, 'status' => 1))->count();
         if ($count == 0) {
             $this->error('视频不存在');
         }
 
-        D('SchoolFavorites')->act($vid);
+        D('SchoolFavorites')->act($vid,$uid);
         $this->success('操作成功');
     }
 
     // 我的收藏
     public function myFavorites() {
-        $this->_auth();
         $per_page = I('per_page');
-        $list = D('SchoolFavorites')->getList($per_page ? $per_page : 12);
+        $user = $this->user;
+        $list = D('SchoolFavorites')->getList($per_page ? $per_page : 12,$user);
         $this->success('success', $list);
     }
 
     // 取消收藏
     public function delFavorites() {
-        $this->_auth();
 
+        $uid = $this->user['uid'];
         $vids = I('vids');
         if (empty($vids)) {
             $this->error('参数错误');
         }
 
-        $ret = D('SchoolFavorites')->where(array('uid' => D('SchoolAccount')->id, 'vid' => array('in', $vids)))->delete();
+        $ret = D('SchoolFavorites')->where(array('uid' => $uid, 'vid' => array('in', $vids)))->delete();
 
         $ret ? $this->success('操作成功') : $this->error('操作失败');
     }
 
     // 我的评论
     public function myComments() {
-        $this->_auth();
         $per_page = I('per_page');
-        $list = D('SchoolComment')->my($per_page ? $per_page : 12);
+        $list = D('SchoolComment')->my($per_page ? $per_page : 12, 1);
         $this->success('success', $list);
     }
 
     // 删除评论
     public function delComment() {
-        $this->_auth();
-
+        $uid = $this->user['uid'];
         $ids = I('id');
         if (empty($ids)) {
             $this->error('参数错误');
         }
 
-        $ret = D('SchoolComment')->where(array('uid' => D('SchoolAccount')->id, 'id' => array('in', $ids)))->delete();
+        $ret = D('SchoolComment')->where(array('uid' => $uid, 'id' => array('in', $ids)))->delete();
         $ret ? $this->success('删除成功') : $this->error('删除失败');
     }
 
@@ -596,17 +600,16 @@ class ApiController extends ApiBaseController {
 
     /**
      * 视频点赞
-    */
+     */
     public function videoPraise(){
-        $this->_auth();
         $model = D('SchoolAccount');
         $data['vid'] = I('vid');
-        $data['uid'] = $model->id;
+        $data['uid'] = $this->user['uid'];
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
         }else{
-            $data['username'] = $model->username;
+            $data['username'] = $this->user['username'];
         }
         $data['headimg'] = get_avatar($data['uid']);
         $data['create_time'] = time();
@@ -645,12 +648,11 @@ class ApiController extends ApiBaseController {
 
     /**
      * 视频取消点赞
-    */
+     */
     public function videoCancelPraise(){
-        $this->_auth();
         $model = D('SchoolAccount');
         $vid = I('vid');
-        $uid = $model->id;
+        $uid = $this->user['uid'];
         if (empty($vid)) {
             $this->error('参数错误！');
         }
@@ -669,6 +671,71 @@ class ApiController extends ApiBaseController {
             $this->success('取消点赞成功！');
         } else {
             $this->error('取消点赞失败！');
+        }
+    }
+
+    //分类迁移
+    public function changeCate(){
+        $videos = M('SchoolVideo')->select();
+        foreach ($videos as $key=>$value){
+            $category = '';
+            if (empty($value['category'])){
+                $category.= $value['cate1'];
+                if (!empty($value['cate3'])){
+                    $cate3_arr = explode(',',$value['cate3']);
+                    foreach ($cate3_arr as $key_cate3=>$value_cate3){
+                        switch ($value_cate3){
+                            case '1':
+                                $category.=','.'5';
+                                break;
+                            case '2':
+                                $category.=','.'6';
+                                break;
+                            case '3':
+                                $category.=','.'7';
+                                break;
+                            case '4':
+                                $category.=','.'8';
+                                break;
+                            default:
+
+                        }
+                    }
+
+                }
+                $videos[$key]['category'] = $category;
+                $data = $videos[$key];
+                $result = M('SchoolVideo')->save($data);
+                if ($result==false){
+                    $this->error($data);
+                }
+
+            }
+
+        }
+
+    }
+
+    //分类名称迁移
+    public function changeName(){
+        $cate = M('SchoolCate')->getField('id,title');
+        $videos = M('SchoolVideo')->select();
+        foreach ($videos as $key=>$value){
+            if(empty($value['cate_title'])){
+                if(!empty($value['category'])){
+                    $cate_arr = explode(',',$value['category']);
+                    foreach ($cate_arr as $key_cate=>$value_cate){
+                        $cate_title_arr[] = $cate[$value_cate];
+                    }
+                    $cate_title = implode(',',$cate_title_arr);
+                    unset($cate_title_arr);
+                    $videos[$key]['cate_title'] = $cate_title;
+                    $result = M('SchoolVideo')->save($videos[$key]);
+                    if ($result==false){
+                        $this->error($videos[$key]);
+                    }
+                }
+            }
         }
     }
 
