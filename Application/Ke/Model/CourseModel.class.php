@@ -58,7 +58,7 @@ class CourseModel extends Model {
             }
 
             // 嘉宾
-            $guest = M('SchoolGuests')->where(array('id'=>array('in', $guest_id)))->getField('id,title AS name, position');
+            $guest = M('SchoolGuests')->where(array('id'=>array('in', $guest_id), 'status'=>1))->getField('id,title AS name, position');
 
             foreach ($list as $key => $value) {
                 $list[$key]['guest'] = $guest[$value['guest_id']];
@@ -89,7 +89,7 @@ class CourseModel extends Model {
 
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
-            $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id']))->field('title AS name, position, content')->find();
+            $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id'], 'status'=>1))->field('title AS name, position, content')->find();
             $data['video'] = M('SchoolVideo')->where(array('cate1'=>2, 'guests_id'=>$data['guest_id']))->field('id, cover_url, title')->select();
             foreach ($data['video'] as $key=>$item) {
                 $data['video'][$key]['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $item['cover_url'];
@@ -186,8 +186,10 @@ class CourseModel extends Model {
 
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
-            $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id']))->field('title AS name, position, content,avatar_url')->find();
-            $data['guest']['avatar_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['guest']['avatar_url'];
+            $data['guest'] = M('SchoolGuests')->where(array('id'=>$data['guest_id'], 'status'=>1))->field('title AS name, position, content,avatar_url')->find();
+            if (!empty($data['guest'])){
+                $data['guest']['avatar_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['guest']['avatar_url'];
+            }
         }
 
         return $data ? $data : array();
