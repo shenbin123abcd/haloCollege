@@ -15,9 +15,9 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        //const status=1;
+        //const status=5;
         let _this=this;
-        function renderEnterBtn(){
+        function renderBottomBtnGroup(){
             if(status==1){
                 return(
                     <div className="flex-bottom-btn">
@@ -85,9 +85,10 @@ export default React.createClass({
                 }
 
                 if(chooseSeat!=null){
-                    let lastPosition=parseInt(chooseSeat.split(',').length)-1;
-                    line=addZero(chooseSeat.split(',')[0]);
-                    seat=addZero(chooseSeat.split(',')[lastPosition]);
+                    let descArray=chooseSeat.split(',');
+                    let lastPosition=parseInt(descArray.length)-1;
+                    line=addZero(descArray[0]);
+                    seat=addZero(descArray[lastPosition]);
                 }
 
                 return  (
@@ -112,7 +113,7 @@ export default React.createClass({
         }
         return(
             <div>
-                {renderEnterBtn()}
+                {renderBottomBtnGroup()}
             </div>
         )
     }
