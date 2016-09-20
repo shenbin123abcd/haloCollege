@@ -15,7 +15,7 @@ class SchoolGuestsController extends CommonController {
 	}
 	
 	public function _before_add(){
-		$this->token = $this->qiniu('crmpub', 'college/avatar/');
+		$this->token = $this->qiniu('crmpub', 'college/avatar');
 	}
 
 }
