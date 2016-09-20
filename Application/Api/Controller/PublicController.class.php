@@ -93,12 +93,12 @@ class PublicController extends CommonController {
             if($result!==false){
                 $id = M('Session')->add($add_token);
             }
-            $this->success('登录成功', array('token' => $token, 'wsq' => $wsq, 'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
+            $this->success('登录成功', array('token' => $token,'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
         } else {
             $this->error('账号或密码错误');
         }
     }
-    
+
 
     /**
      * 注册

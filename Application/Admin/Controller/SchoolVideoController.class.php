@@ -6,15 +6,14 @@
  */
 namespace Admin\Controller;
 class SchoolVideoController extends CommonController {
-	public function _join_search(&$map,&$val){
-		if($val=='category'){
-			$category = $_REQUEST [$val];
-			$map['_string'] = 'FIND_IN_SET(' . $category. ',category)';
-			unset($map[$val]);
+	public function filter(&$map){
+		if(!empty($_REQUEST['category'])){
+			$map['_string'] = 'FIND_IN_SET(' . $_REQUEST['category']. ',category)';
+			unset($map['category']);
 		}
 	}
 
-	public function _join_video(&$data){
+	public function _join(&$data){
 		$bol =array('否','是');
 		foreach ($data as $key=>$value){
 			$data[$key]['vip'] = $bol[$value['is_vip']];
@@ -41,6 +40,7 @@ class SchoolVideoController extends CommonController {
 	}
 	
 	public function _before_insert(){
+		dump($_POST);exit;
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
 
 		$this->_before_update();
