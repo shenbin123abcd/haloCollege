@@ -26,6 +26,8 @@ var HeaderContainer = React.createClass({
                 dispatch(setCurrentMonth(item));
             }
             app.wechat.init({
+                title: `幻熊课堂${item.year}${item.month}`,
+                content: `幻熊课堂${item.year}${item.month}`,
                 link : window.location.href,
             });
         }else{

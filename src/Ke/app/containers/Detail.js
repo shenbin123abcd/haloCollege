@@ -15,6 +15,8 @@ var Detail= React.createClass({
           hb.hack.setTitle(document.title);
       }
       app.wechat.init({
+          title: '幻熊课堂详情',
+          content: '幻熊课堂详情',
           link : window.location.href,
       });
      const { dispatch,routeParams } = this.props
