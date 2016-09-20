@@ -85,7 +85,6 @@ class CommonController extends Controller {
 			//$options=array('where'=>$where,'order'=>"`{$field}` {$order}");
 			$data = $model->select($options);
 			method_exists($this, '_join') && $this->_join($data);
-			method_exists($this, '_join_video') && $this->_join_video($data);
 			$this->assign('list', $data);
 			$this->assign('page', $page->show());
 
@@ -107,8 +106,7 @@ class CommonController extends Controller {
 
 		foreach ($model->getDbFields() as $key => $val) {
 			if (isset($_REQUEST [$val]) && $_REQUEST [$val] != '' && empty($map [$val])) {
-				$map [$val] = $val == 'title' ? array('like','%'. $_REQUEST [$val] .'%') : $_REQUEST [$val];				
-				method_exists($this, '_join_search') && $this->_join_search($map,$val);
+				$map [$val] = $val == 'title' ? array('like','%'. $_REQUEST [$val] .'%') : $_REQUEST [$val];
 			}
 		}
 	}
@@ -337,6 +335,34 @@ class CommonController extends Controller {
         $token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
         return $token;
     }
+
+	//生成七牛token --非编辑器
+	protected function qiniuBigCover($bucket,$dir = 'image',$callback = 'http://college-koala.halobear.com/public/qiniuUploadCallback'){
+		$accessKey = C('QINIU_AK');
+		$secretKey = C('QINIU_SK');
+
+		$deadline = time()+1728000;
+		$saveKey = $dir . '/$(etag)$(suffix)';
+		$callbackBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=$(fname)&fsize=$(fsize)&filetype=${x:filetype}&video=${x:video}&module=' . $dir;
+
+		$data =  array(
+			'scope'=>$bucket,
+			'deadline'=>$deadline,
+			'saveKey'=>$saveKey
+		);
+
+		if ($callback) {
+			$data['callbackUrl'] = $callback;
+			$data['callbackBody'] = $callbackBody;
+		}
+		$data = json_encode($data);
+		$find = array('+', '/');
+		$replace = array('-', '_');
+		$data = str_replace($find, $replace, base64_encode($data));
+		$sign = hash_hmac('sha1', $data, $secretKey, true);
+		$token = $accessKey . ':' . str_replace($find, $replace, base64_encode($sign)).':'.$data ;
+		return $token;
+	}
 
 	//生成七牛token --banner图片上传
 	protected function qiniuBanner($bucket,$dir = 'image',$callback = 'http://college-koala.halobear.com/public/qiniuUploadBanner'){

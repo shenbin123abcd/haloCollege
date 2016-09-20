@@ -23,6 +23,7 @@ class SchoolWeddingController extends CommonController {
         foreach ($data as $key=>$value){
             $data[$key]['count']=isset($visit_count[$value['id']]) ? $visit_count[$value['id']] : 0;
         }
+        method_exists($this, '_recommend') && $this->_recommend($data);
     }
 
     //获取头条访问量
@@ -156,7 +157,7 @@ class SchoolWeddingController extends CommonController {
         $this->display('visits');
     }
 
-    public function _join_video(&$data){
+    public function _recommend(&$data){
         $bol =array('否','是');
         foreach ($data as $key=>$value){
             $data[$key]['recommend'] = $bol[$value['is_recommend']];

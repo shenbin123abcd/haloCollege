@@ -117,8 +117,15 @@ const UserList=(data)=>{
                     }
                     function chooseSeat(){
                         if(n.seat_no){
-                            let seatRow=n.seat_no.split(',')[0];
-                            let seatLine=n.seat_no.split(',')[1];
+                            let addZero=(num)=>{
+                                if(num<10){
+                                    return ('0'+num)
+                                }else{
+                                    return num
+                                }
+                            };
+                            let seatRow=addZero(n.seat_no.split(',')[0]);
+                            let seatLine=addZero(n.seat_no.split(',')[1]);
                             return (seatRow+'排'+seatLine+'座');
                         }else{
                             return ('尚未选座');
