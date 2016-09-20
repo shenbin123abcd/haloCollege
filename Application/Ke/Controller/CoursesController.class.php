@@ -20,7 +20,12 @@ class CoursesController extends CommonController {
 
         $data = D('Course')->detail($id);
 
-        empty($data) ? $this->error('课程不存在') : $this->success($data);
+        if(empty($data)){
+            $this->error('课程不存在');
+        }else{
+            $data['tel'] = '';
+            $this->success($data);
+        }
     }
 
     // 座位表请求
@@ -133,11 +138,11 @@ class CoursesController extends CommonController {
             foreach ($list as $item) {
                 $guests_id[] = $item['guest_id'];
             }
-            $guests = M('SchoolGuests')->where(array('id' => array('in', $guests_id)))->getField('id, CONCAT("http://7xopel.com2.z0.glb.qiniucdn.com/",avatar_url) AS avatar');
+            $guests = M('SchoolGuests')->where(array('id' => array('in', $guests_id), 'status'=>1))->getField('id, CONCAT("http://7xopel.com2.z0.glb.qiniucdn.com/",avatar_url) AS avatar');
             $cate = C('KE.COURSE_CATE');
             foreach ($list AS $key => $value) {
                 $list[$key]['cate'] = $cate[$value['cate_id']];
-                $list[$key]['avatar_url'] = $guests[$value['guest_id']]['avatar'];
+                $list[$key]['avatar_url'] = isset($guests[$value['guest_id']]) ? $guests[$value['guest_id']]['avatar'] : '';
                 $list[$key]['seat_no'] = $record[$value['id']];
                 $list[$key]['start_day'] = $value['start_date'] > time() ? ceil(($value['start_date'] - time()) / 86400) : 0;
 

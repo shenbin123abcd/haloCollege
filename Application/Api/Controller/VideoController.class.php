@@ -222,9 +222,39 @@ class VideoController extends CommonController {
      * @return [type]     视频地址
      */
     public function getUrl($vid) {
-        $url = D('SchoolVideo')->getUrl(intval($vid));
+        $uid = $this->user['uid'];
+        $video = M('SchoolVideo')->where(array('id'=>$vid,'status'=>1))->find();
+        //判断是否需要登录观看视频
+        if($video['auth'] ==1){
+            if(empty($uid)){
+                $this->error('该视频登录后才能观看！');
+            } else{
+                $url = $this->is_member($video,$uid,$vid);
+            }
+        }else{
+            $url = $this->is_member($video,$uid,$vid);
+        }
 
         $url ? $this->success('success', $url) : $this->error('视频不存在', $url);
+    }
+
+    /**
+     * 判断是否为会员专享视频
+    */
+    public function is_member($video,$uid,$vid){
+        $now = time();
+        //判断是否获取VIP视频
+        if ($video['is_vip'] ==1){
+            $member = M('SchoolMember')->where(array('uid'=>$uid))->find();
+            if ($member['end_time']<$now){
+                $this->error('非会员不能观看！');
+            }else{
+                $url = D('SchoolVideo')->getUrl(intval($vid));
+            }
+        }else{
+            $url = D('SchoolVideo')->getUrl(intval($vid));
+        }
+        return $url;
     }
 
     /**

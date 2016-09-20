@@ -98,6 +98,7 @@ class PublicController extends CommonController {
             $this->error('账号或密码错误');
         }
     }
+    
 
     /**
      * 注册
