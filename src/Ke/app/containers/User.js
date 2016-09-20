@@ -97,7 +97,7 @@ const UserList=(data)=>{
             {
                 data.data.map((n,i)=>{
                     function checkIfEnd(){
-                        if(n.start_day>0){
+                        if(n.start_day && n.start_day>0){
                             return (
                                 <div className="content-isend f-10">
                                     距离开课还有{n.start_day}天
