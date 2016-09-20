@@ -135,8 +135,9 @@ var DetailMiddle=React.createClass({
 var TelBlock=React.createClass({
     render(){
         let tel=this.props.telData;
+        let renderTel=()=>('tel:'+tel);
         return(
-            <a className="tel-block clearfix" href="tel:123456789">
+            <a className="tel-block clearfix" href={renderTel()}>
                 <div className="sign-num-block clearfix">
                     <div className="tel-line"></div>
                     <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-kefu f-20"></span>拨打客服电话</div>
