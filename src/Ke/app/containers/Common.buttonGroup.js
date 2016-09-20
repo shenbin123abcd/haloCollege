@@ -102,19 +102,42 @@ var CommonButtonGroup= React.createClass({
     },
     render(){
         let priceData=this.props.priceData;
-        let numData=this.props.numData;
         let idData=this.props.idData;
-        let {res,isFetching,dipatch,showModal}=this.props;
+        let {res,showModal,data}=this.props;
         return(
-            <ButtonGroup handleClose={this.handleClose} priceData={priceData} idData={idData} status={res} showModal={showModal} handleClick={this.handleClick} handleSubmit={this.handleSubmit} handleOpen={this.handleOpen}></ButtonGroup>
+            <ButtonGroup
+                chooseSeat={data}
+                handleClose={this.handleClose}
+                priceData={priceData}
+                idData={idData}
+                status={res}
+                showModal={showModal}
+                handleClick={this.handleClick}
+                handleSubmit={this.handleSubmit}
+                handleOpen={this.handleOpen}
+            >
+            </ButtonGroup>
         )
 
     }
 })
 
 function mapStateToProps(state) {
-    const { courseStatus } = state
-    return courseStatus
+    const { courseStatus,seatDesc } = state;
+    const {
+        res,
+        isFetching,
+        showModal
+    }=courseStatus;
+    const {
+        data
+    }=seatDesc
+    return {
+        res,
+        isFetching,
+        showModal,
+        data,
+    }
 
 }
 
