@@ -301,7 +301,7 @@ var DetailContent=React.createClass({
 var InterviewBlock=React.createClass({
     render(){
         let data=this.props.interviewData;
-        if(data){
+        if(data.length!=0){
             return (
                 <div className="interview-block">
                     <div className="desc-title f-13">
