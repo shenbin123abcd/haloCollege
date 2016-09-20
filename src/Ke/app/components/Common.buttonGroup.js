@@ -15,7 +15,7 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        //const status=5;
+        //const status=1;
         let _this=this;
         function renderEnterBtn(){
             if(status==1){
@@ -24,10 +24,11 @@ export default React.createClass({
                         <div className="choose-seat-btn f-15" data-type="disable-appointment-choose-seat" onClick={handleClick}>在线选座</div>
                         <div className='enter-btn f-15 able'  onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
                         <div className="appointment-now-modal">
-                            <Modal show={showModal} onHide={handleClose}>
+                            <Modal show={showModal}>
                                 <Modal.Body>
                                     <div className='modal-body-content'>
                                         <div className="content-pic">
+                                            <div className="close-btn" onClick={handleClose}>&times;</div>
                                             <img src={appointmentPic} alt=""/>
                                         </div>
                                         <form>
@@ -72,18 +73,23 @@ export default React.createClass({
                 )
             }else if(status==41){
                 let line='',seat='';
-                function addZero(num){
+
+                let addZero=(num)=>{
                     let number=parseInt(num);
+
                     if(number<10){
                         return ('0'+number)
                     }else{
                         return number
                     }
                 }
+
                 if(chooseSeat!=null){
+                    let lastPosition=parseInt(chooseSeat.split(',').length)-1;
                     line=addZero(chooseSeat.split(',')[0]);
-                    seat=addZero(chooseSeat.split(',')[1]);
+                    seat=addZero(chooseSeat.split(',')[lastPosition]);
                 }
+
                 return  (
                     <div className="flex-bottom-btn">
                         <div className="choose-seat-btn f-15">

@@ -1,6 +1,6 @@
 export const REQUEST_COURSE_STATUS='REQUEST_COURSE_STATUS'
 export const RECEIVE_COURSE_STATUS='RECEIVE_COURSE_STATUS'
-export const RECEIVE_SEAT_INFO='RECEIVE_SEAT_INFO'
+export const RECEIVE_SEAT_DESC='RECEIVE_SEAT_DESC'
 
 function requestStatusPosts(res){
     return {
@@ -20,7 +20,7 @@ export function receiveStatusPosts(id,res,showModal){
 
 export function receiveChooseSeat(data){
     return{
-        type:RECEIVE_SEAT_INFO,
+        type:RECEIVE_SEAT_DESC,
         data
     }
 }

@@ -44,7 +44,7 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <TelBlock></TelBlock>
+                    <TelBlock telData={fetchData.tel}></TelBlock>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
@@ -134,6 +134,7 @@ var DetailMiddle=React.createClass({
 
 var TelBlock=React.createClass({
     render(){
+        let tel=this.props.telData;
         return(
             <a className="tel-block clearfix" href="tel:123456789">
                 <div className="sign-num-block clearfix">

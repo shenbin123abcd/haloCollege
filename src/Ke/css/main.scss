@@ -1401,6 +1401,13 @@ body{
           margin: 35px 0;
           margin-bottom: 20px;
           text-align:center;
+          position: relative;
+          .close-btn{
+            position: absolute;
+            top:-25px;
+            right:20px;
+            font-size:25px;
+          }
           img{
             width: 111px;
             margin: auto;
