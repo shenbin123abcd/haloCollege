@@ -65,7 +65,7 @@ export function fetchCourseIfNeeded(req) {
 }
 
 
-export function setCurrentMonth(data){
+export function setCurrentMonth(data=[]){
   // console.log(data)
   return {
     type: 'setCurrentMonth',
