@@ -1,19 +1,23 @@
 
 import CommonHeader from './Common.Header'
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
+const App = React.createClass({
+    render: function() {
+        // console.log(this.props)
+        let { children,monthList,location,route,history }=this.props
+        return (
 
-const App = ({ children,monthList,location,route }) => {
-    // console.log(location)
+            <div>
+                <CommonHeader items={monthList} location={location} history={history}  />
+                {
+                    children
+                }
+            </div>
+        )
+    }
+});
 
-    return (
 
-    <div>
-        <CommonHeader items={monthList} location={location}   />
-        {
-            children
-        }
-    </div>
-)}
+
 
 function mapStateToProps(state) {
     const { monthList} = state
@@ -23,3 +27,4 @@ function mapStateToProps(state) {
 }
 
 export default ReactRedux.connect(mapStateToProps)(App)
+

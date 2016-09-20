@@ -20,11 +20,9 @@ class WeddingController extends CommonController {
     */
     public function category(){
         $category = M('SchoolWeddingCategory')->where("status=1")->field('id,name')->select();
-        array_unshift($category,array('id'=>'1','name'=>'推荐'));
         $data['category'] = !empty($category) ? array_values($category) : (object)$category;
         $this->success('success',$data);
     }
-
 
     /**
      * 婚礼头条列表

@@ -2,10 +2,38 @@ import Header from '../components/Common.Header'
 import NavItem from '../components/Common.Header.NavItem'
 import { fetchCourseIfNeeded,setCurrentMonth ,resetMonth} from '../actions'
 
+
+var withRouter=ReactRouter.withRouter
 var HeaderContainer = React.createClass({
+    unHandlerUrlChange(){
+
+    },
+    handlerUrlChange(ev){
+
+        const { dispatch,monthList,location} = this.props
+
+        // console.log(hb.location.url("?month"))
+
+        var item;
+        if(location.pathname=='/'){
+            if(ev.query.month){
+                dispatch(fetchCourseIfNeeded(`${ev.query.month}`));
+                let item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
+                dispatch(setCurrentMonth(item));
+            }else{
+                let item=monthList[0]
+                dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
+                dispatch(setCurrentMonth(item));
+            }
+        }else{
+            if(monthList.filter(n=>n.active).length>0){
+                dispatch(resetMonth())
+            }
+        }
+    },
 
     renderNavStatus(props){
-        const { dispatch,monthList,location} = props
+        const { dispatch,monthList,location,history} = props
         // console.log(location)
         var item;
         if(location.pathname=='/'){
@@ -30,13 +58,21 @@ var HeaderContainer = React.createClass({
     },
 
     componentDidMount() {
-        this.renderNavStatus(this.props)
+        // this.renderNavStatus(this.props)
+        const { dispatch,monthList,location} = this.props
+
+        // console.log(this.props)
+
+        this.unHandlerUrlChange=this.props.router.listen(this.handlerUrlChange)
 
     },
     componentWillReceiveProps : function(nextProps) {
         // console.log('componentWillReceiveProps',nextProps,this.props)
-        this.renderNavStatus(nextProps)
+        // this.renderNavStatus(nextProps)
 
+    },
+    componentWillUnmount(nextProps){
+        this.unHandlerUrlChange()
     },
     renderNav:function (item, i) {
         return (
@@ -61,4 +97,6 @@ function mapStateToProps(state) {
     }
 }
 
-export default ReactRedux.connect(mapStateToProps)(HeaderContainer)
+
+
+export default ReactRedux.connect(mapStateToProps)(withRouter(HeaderContainer))
