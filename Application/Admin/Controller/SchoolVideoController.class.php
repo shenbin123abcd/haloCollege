@@ -40,7 +40,6 @@ class SchoolVideoController extends CommonController {
 	}
 	
 	public function _before_insert(){
-		dump($_POST);exit;
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
 
 		$this->_before_update();
