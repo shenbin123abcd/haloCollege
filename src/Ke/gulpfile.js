@@ -233,7 +233,7 @@ gulp.task('clean', require('del').bind(null, [
 gulp.task('dev', ['clean'], function() {
     gulp.start('watch:dev');
 });
-gulp.task('dev:production', ['clean'], function() {
+gulp.task('devp', ['clean'], function() {
     appConfig.domain=appConfig.devDomain;
     gulp.start('build');
 });
