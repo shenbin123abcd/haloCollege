@@ -44,23 +44,23 @@ var Detail= React.createClass({
             // console.log(app.wechat.getShareDate())
             if(!this.props.data){
                 app.wechat.init({
-                    title: `幻熊课堂-${app.util.formatTitle(nextProps.data.data.title)}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
                     content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
             }else if(this.props.data.data.id!=nextProps.data.data.id){
                 app.wechat.init({
-                    title: `幻熊课堂-${app.util.formatTitle(nextProps.data.data.title)}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
                     content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
             }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
-                    title: `幻熊课堂-${app.util.formatTitle(nextProps.data.data.title)}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
                     content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 })){
                 app.wechat.init({
-                    title: `幻熊课堂-${app.util.formatTitle(nextProps.data.data.title)}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
                     content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
