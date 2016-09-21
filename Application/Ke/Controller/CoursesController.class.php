@@ -189,6 +189,9 @@ class CoursesController extends CommonController {
             $this->error('手机号格式错误');
         }
 
+        $course = M('Course')->where(array('id' => $data['course_id'], 'status' => 1))->find();
+        empty($course) && $this->error('课程编号错误');
+
         // 是否报名
         $model = D('Course');
         if ($model->isReserve($data['course_id'], 1)) {
