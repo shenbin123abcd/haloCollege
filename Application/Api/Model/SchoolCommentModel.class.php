@@ -112,10 +112,11 @@ class SchoolCommentModel extends Model {
 
 
 	// 我的评论
-	public function my($limit = 12, $is_page = 0){
+	public function my($limit = 12, $is_page = 0,$uid){
 		$page = I('page');
 		// $page = !empty($page) ?　$page : 1;
-		$map = array('uid'=>$this->getUid());
+		//$map = array('uid'=>$this->getUid());
+		$map = array('uid'=>$uid);
 		$total = $this->where($map)->count();
 		$list = $this->where($map)->order('id DESC')->page($page)->limit($limit)->select();
 

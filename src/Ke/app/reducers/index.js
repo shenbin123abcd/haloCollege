@@ -7,6 +7,7 @@ import seatInfo from './seatinfo'
 import courseStatus from './button.status'
 import selectSeat from './selectseat'
 import seatDesc from './seat.desc'
+import showSuccessModal from './showSuccessModal'
 
 export default Redux.combineReducers({
     courseList,
@@ -18,4 +19,5 @@ export default Redux.combineReducers({
     courseStatus,
     selectSeat,
     seatDesc,
+    showSuccessModal,
 })

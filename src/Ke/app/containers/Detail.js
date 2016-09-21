@@ -248,7 +248,7 @@ var TeacherDesc=React.createClass({
     componentDidMount(){
         let contentHeight=$('#desc-content').outerHeight();
         let scrollHeight=''
-        if(contentHeight<=57){
+        if(contentHeight<=56){
             $("#desc-content").removeClass('text-hidden');
             $("#see-more-btn").hide();
         }else{
@@ -269,7 +269,7 @@ var TeacherDesc=React.createClass({
             $("#slide-up-btn").on('click',function(e){
                 e.preventDefault();
                 $("#desc-content").animate({
-                    height:57,
+                    height:56,
                 },400,function(){
                     $(window).scrollTop(scrollHeight);
                 });
@@ -324,7 +324,7 @@ var DetailContent=React.createClass({
                 <span className="line"></span>课程介绍
             </div>
             <div className="desc-content">
-                <div className="desc-cintent-text" dangerouslySetInnerHTML={renderHtml()} />
+                <div className="desc-content-text" dangerouslySetInnerHTML={renderHtml()} />
             </div>
         </div>
     )
