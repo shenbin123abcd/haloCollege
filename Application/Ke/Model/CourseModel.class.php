@@ -86,6 +86,7 @@ class CourseModel extends Model {
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
 
+            $data['month'] = date('Ym', $data['start_date']);
             if ($this->getStep($id)){
                 if ($data['day'] > 1){
                     $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
