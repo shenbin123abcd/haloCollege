@@ -177,6 +177,8 @@ class CoursesController extends CommonController {
 
         $data = array('course_id' => $course_id, 'name' => $name, 'phone' => $phone, 'wechat_id' => $this->user['id'], 'create_time' => time(), 'status' => 1);
         $model->add($data);
+
+        $this->success([],'预约成功');
     }
 
     // 提交报名信息
