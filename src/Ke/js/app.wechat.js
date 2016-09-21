@@ -30,7 +30,7 @@ app.wechat=(function(){
         loadedScript:false,
         data:{
             title: '幻熊课堂',
-            content: '幻熊课堂',
+            content: '婚礼行业全新课程体系 幻熊学院独家授权',
             link: 'http://ke.halobear.com/',
             logo: 'http://ke.halobear.com/Public/Ke/images/wechat-share-default.png'
         },
