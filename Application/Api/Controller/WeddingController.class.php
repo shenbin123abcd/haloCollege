@@ -845,7 +845,7 @@ class WeddingController extends CommonController {
             foreach ($list as $key=>$value){
                 $list[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
                 $list[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
-                $list[$key]['praise_count'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
+                $list[$key]['praiseCount'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
             }
 
         }
