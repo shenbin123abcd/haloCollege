@@ -177,6 +177,8 @@ class CoursesController extends CommonController {
 
         $data = array('course_id' => $course_id, 'name' => $name, 'phone' => $phone, 'wechat_id' => $this->user['id'], 'create_time' => time(), 'status' => 1);
         $model->add($data);
+
+        $this->success([],'预约成功');
     }
 
     // 提交报名信息
@@ -185,7 +187,7 @@ class CoursesController extends CommonController {
 
         if (empty($data['name']) || empty($data['phone']) || empty($data['company'])) {
             $this->error('请将数据填写完整');
-        }elseif (is_mobile($data['phone'])){
+        }elseif (!is_mobile($data['phone'])){
             $this->error('手机号格式错误');
         }
 
