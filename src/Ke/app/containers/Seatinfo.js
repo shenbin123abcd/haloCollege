@@ -12,6 +12,7 @@ var Seatinfo = React.createClass({
         if(Modernizr.weixin&&Modernizr.ios){
             hb.hack.setTitle(document.title);
         }
+        app.wechat.init();
         const { dispatch ,routeParams} = this.props
         dispatch(fetchSeatInfoIfNeeded(routeParams.id))
         dispatch(fetchCourseStatusIfNeeded(routeParams.id));
