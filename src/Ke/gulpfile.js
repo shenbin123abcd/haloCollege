@@ -234,14 +234,14 @@ gulp.task('dev', ['clean'], function() {
     gulp.start('watch:dev');
 });
 gulp.task('devp', ['clean'], function() {
-    appConfig.domain=appConfig.devDomain;
+    // appConfig.domain=appConfig.devDomain;
     gulp.start('build');
 });
 
 
 gulp.task('default',['clean'], function() {
     //gulp.start('build');
-    appConfig.domain=appConfig.productionDomain;
+    // appConfig.domain=appConfig.productionDomain;
     gulp.start('build');
 });
 
