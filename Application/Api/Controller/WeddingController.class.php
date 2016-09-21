@@ -838,13 +838,14 @@ class WeddingController extends CommonController {
                     }
                 }
             }
-            //获取头条评论数、访问量
+            //获取头条评论数、访问量、点赞数
             $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
-            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+            $comment_count = M('SchoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+            $praise_count = M('SchoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id)');
             foreach ($list as $key=>$value){
                 $list[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
                 $list[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
-
+                $list[$key]['praise_count'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
             }
 
         }
