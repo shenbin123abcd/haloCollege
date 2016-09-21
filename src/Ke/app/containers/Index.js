@@ -20,36 +20,38 @@ var Index = React.createClass({
         return str.substring(1);
     },
     componentWillReceiveProps : function(nextProps) {
-        // const { dispatch,monthList,location,isFetching} = this.props;
+        const { monthList} = this.props;
         // console.log(1,this.props.isFetching)
         // console.log(2,nextProps.isFetching)
         // console.log('componentWillReceiveProps',nextProps,this.props)
         // const { dispatch,monthList,location} = nextProps
-
-
+        var shareMonth=''
 
         if(nextProps.items){
-            if(nextProps.location.query.month){
-                if(!this.props.items){
+            if(!nextProps.location.query.month){
+                shareMonth=monthList[0].month
+            }else{
+                shareMonth=nextProps.location.query.month.substring(4,6)
+            }
+            if(!this.props.items){
+                app.wechat.init({
+                    title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                    content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
+                    link : window.location.href,
+                });
+            }else if(this.props.receivedAt!=nextProps.receivedAt){
+                if(nextProps.items.length==0){
                     app.wechat.init({
                         title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                        content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程大纲：${this.formatContent(nextProps.items)}`,
+                        content: `${Number(shareMonth)}月份课程正在筹备中`,
                         link : window.location.href,
                     });
-                }else if(this.props.receivedAt!=nextProps.receivedAt){
-                    if(nextProps.items.length==0){
-                        app.wechat.init({
-                            title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                            content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程正在筹备中`,
-                            link : window.location.href,
-                        });
-                    }else{
-                        app.wechat.init({
-                            title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                            content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程大纲：${this.formatContent(nextProps.items)}`,
-                            link : window.location.href,
-                        });
-                    }
+                }else{
+                    app.wechat.init({
+                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                        content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
+                        link : window.location.href,
+                    });
                 }
             }
         }
