@@ -79,7 +79,7 @@ class PublicController extends CommonController {
             $user['truename'] = $userInfo['truename'];
 
             $key = get_avatar($user['id'], 'middle', 0);
-            $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
+            $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/public/qiniuUpload', $key);
 
             $model->where(array('id' => $user['id']))->save(array('last_time' => time(), 'login_ip' => get_client_ip()));
 
@@ -118,7 +118,7 @@ class PublicController extends CommonController {
                 $user = array('id' => $result['data'], 'username' => I('username'), 'phone' => I('phone'));
                 $token = jwt_encode($user);
                 $key = get_avatar($user['id'], 'middle', 0);
-                $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/api/qiniuUpload', $key);
+                $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/public/qiniuUpload', $key);
                 $this->success('注册成功', array('token' => $token, 'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
             } else {
                 $info = $result['info'];
@@ -330,6 +330,11 @@ class PublicController extends CommonController {
             $result[$value['name']] = json_decode($value['value']) ? json_decode($value['value'],true) : $value['value'];
         }
         C($result);
+    }
+
+    public function qiniuUpload() {
+
+        $this->ajaxReturn(array('url' => C('AVATAR_URL') . $_POST['key'], 'width' => $_POST['w'], 'height' => $_POST['h']));
     }
 
 

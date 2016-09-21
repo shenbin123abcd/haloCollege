@@ -534,11 +534,7 @@ class VideoController extends CommonController {
         return $open_member;
 
     }
-
-    public function qiniuUpload() {
-
-        $this->ajaxReturn(array('url' => C('AVATAR_URL') . $_POST['key'], 'width' => $_POST['w'], 'height' => $_POST['h']));
-    }
+    
 
     /**
      * 热门标签
