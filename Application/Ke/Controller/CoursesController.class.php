@@ -1,7 +1,6 @@
 <?php
 namespace Ke\Controller;
 
-use Org\Util\Payment;
 
 class CoursesController extends CommonController {
     // 课程列表
@@ -23,7 +22,7 @@ class CoursesController extends CommonController {
         if (empty($data)) {
             $this->error('课程不存在');
         } else {
-            $data['tel'] = '';
+            $data['tel'] = '4000258717';
             $this->success($data);
         }
     }
