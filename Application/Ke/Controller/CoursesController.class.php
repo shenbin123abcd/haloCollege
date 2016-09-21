@@ -185,7 +185,7 @@ class CoursesController extends CommonController {
 
         if (empty($data['name']) || empty($data['phone']) || empty($data['company'])) {
             $this->error('请将数据填写完整');
-        }elseif (is_mobile($data['phone'])){
+        }elseif (!is_mobile($data['phone'])){
             $this->error('手机号格式错误');
         }
 
