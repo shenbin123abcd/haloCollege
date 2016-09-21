@@ -10,7 +10,7 @@ var HeaderContainer = React.createClass({
     },
     handlerUrlChange(ev){
         const { dispatch,monthList,location} = this.props
-        // console.log(ev)
+
         var item;
         if(ev.pathname=='/'){
             if(ev.query.month){
@@ -25,6 +25,7 @@ var HeaderContainer = React.createClass({
                 dispatch(setCurrentMonth(item));
             }else{
                 item=monthList[0]
+
                 dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
                 dispatch(setCurrentMonth(item));
             }

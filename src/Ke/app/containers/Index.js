@@ -26,26 +26,30 @@ var Index = React.createClass({
         // console.log('componentWillReceiveProps',nextProps,this.props)
         // const { dispatch,monthList,location} = nextProps
 
+
+
         if(nextProps.items){
-            if(!this.props.items){
-                app.wechat.init({
-                    title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                    content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程大纲：${this.formatContent(nextProps.items)}`,
-                    link : window.location.href,
-                });
-            }else if(this.props.receivedAt!=nextProps.receivedAt){
-                if(nextProps.items.length==0){
-                    app.wechat.init({
-                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                        content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程正在筹备中`,
-                        link : window.location.href,
-                    });
-                }else{
+            if(nextProps.location.query.month){
+                if(!this.props.items){
                     app.wechat.init({
                         title: `婚礼行业全新课程体系 幻熊学院独家授权`,
                         content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程大纲：${this.formatContent(nextProps.items)}`,
                         link : window.location.href,
                     });
+                }else if(this.props.receivedAt!=nextProps.receivedAt){
+                    if(nextProps.items.length==0){
+                        app.wechat.init({
+                            title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                            content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程正在筹备中`,
+                            link : window.location.href,
+                        });
+                    }else{
+                        app.wechat.init({
+                            title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                            content: `${Number(nextProps.location.query.month.substring(4,6))}月份课程大纲：${this.formatContent(nextProps.items)}`,
+                            link : window.location.href,
+                        });
+                    }
                 }
             }
         }
