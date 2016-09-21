@@ -20,9 +20,9 @@ class CoursesController extends CommonController {
 
         $data = D('Course')->detail($id);
 
-        if(empty($data)){
+        if (empty($data)) {
             $this->error('课程不存在');
-        }else{
+        } else {
             $data['tel'] = '';
             $this->success($data);
         }
@@ -39,7 +39,7 @@ class CoursesController extends CommonController {
         $user = $model->getSeatUser($course_id);
         $course = $model->getInfo($course_id);
 
-        $this->success(['seat' => $seat, 'user' => $user, 'course'=>$course]);
+        $this->success(['seat' => $seat, 'user' => $user, 'course' => $course]);
     }
 
     // 选座页
@@ -83,27 +83,27 @@ class CoursesController extends CommonController {
     }
 
     // 报名状态
-    public function applyStatus(){
+    public function applyStatus() {
         $course_id = intval(I('course_id'));
 
-        $course = M('Course')->where(array('id'=>$course_id, 'status'=>1))->find();
+        $course = M('Course')->where(array('id' => $course_id, 'status' => 1))->find();
         empty($course) && $this->error('课程编号错误');
 
-        if ($course['step'] == 0){
+        if ($course['step'] == 0) {
             // 是否预约
             $model = M('CourseReserve');
-            $reserve = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+            $reserve = $model->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id, 'type' => 0))->count();
             $ret = $reserve ? 2 : 1;
-        }else{
-            $order = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id'=>$course_id))->count();
+        } else {
+            $order = M('CourseOrder')->where(array('wechat_id' => $this->user['id'], 'status' => 1, 'course_id' => $course_id))->count();
             $ret = $order ? 4 : 3;
 
-            if ($ret == 4){
-                $count = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->getField('');
+            if ($ret == 4) {
+                $count = M('CourseRecord')->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id))->getField('');
                 $ret = $count ? 41 : 40;
             }
-            
-            if ($course['start_date'] < time()){
+
+            if ($course['start_date'] < time()) {
                 $ret = 5;
             }
         }
@@ -111,12 +111,12 @@ class CoursesController extends CommonController {
         $this->success($ret);
     }
 
-    public function mySeat(){
+    public function mySeat() {
         $course_id = intval(I('course_id'));
 
-        $course = M('Course')->where(array('id'=>$course_id, 'status'=>1))->find();
+        $course = M('Course')->where(array('id' => $course_id, 'status' => 1))->find();
         empty($course) && $this->error('课程编号错误');
-        $seat_no = M('CourseRecord')->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->getField('seat_no');
+        $seat_no = M('CourseRecord')->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id))->getField('seat_no');
 
         $this->success($seat_no ? $seat_no : '');
     }
@@ -138,7 +138,7 @@ class CoursesController extends CommonController {
             foreach ($list as $item) {
                 $guests_id[] = $item['guest_id'];
             }
-            $guests = M('SchoolGuests')->where(array('id' => array('in', $guests_id), 'status'=>1))->getField('id, CONCAT("http://7xopel.com2.z0.glb.qiniucdn.com/",avatar_url) AS avatar');
+            $guests = M('SchoolGuests')->where(array('id' => array('in', $guests_id), 'status' => 1))->getField('id, CONCAT("http://7xopel.com2.z0.glb.qiniucdn.com/",avatar_url) AS avatar');
             $cate = C('KE.COURSE_CATE');
             foreach ($list AS $key => $value) {
                 $list[$key]['cate'] = $cate[$value['cate_id']];
@@ -155,11 +155,11 @@ class CoursesController extends CommonController {
             }
         }
 
-        $this->success(['list'=>$list, 'user'=>['username'=>$this->user['nickname'], 'avatar'=>$this->user['headimgurl']]]);
+        $this->success(['list' => $list, 'user' => ['username' => $this->user['nickname'], 'avatar' => $this->user['headimgurl']]]);
     }
 
     // 预约课程
-    public function reserve(){
+    public function reserve() {
         $course_id = intval(I('course_id'));
         $phone = trim(I('phone'));
         $name = trim(I('name'));
@@ -167,29 +167,41 @@ class CoursesController extends CommonController {
         !is_mobile($phone) && $this->error('手机号格式错误');
         empty($name) && $this->error('请填写称呼');
 
-        $course = M('Course')->where(array('id'=>$course_id))->count();
+        $course = M('Course')->where(array('id' => $course_id))->count();
         empty($course) && $this->error('课程不存在');
 
         // 是否预约
         $model = M('CourseReserve');
-        $reserve = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id))->count();
+        $reserve = $model->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id, 'type' => 0))->count();
         $reserve && $this->error('你已经预约过该课程了');
 
-        $data = array('course_id'=>$course_id,'name'=>$name,'phone'=>$phone, 'wechat_id'=>$this->user['id'], 'create_time'=>time());
+        $data = array('course_id' => $course_id, 'name' => $name, 'phone' => $phone, 'wechat_id' => $this->user['id'], 'create_time' => time(), 'status' => 1);
         $model->add($data);
     }
 
+    // 提交报名信息
+    public function apply() {
+        $data = ['name' => trim(I('name')), 'phone' => trim(I('phone')), 'company' => trim(I('company')), 'type' => 1, 'wechat_id' => $this->user['id'], 'uid' => 0, 'course_id' => intval(I('course_id')), 'create_time' => time(), 'status' => 0];
 
-    public function test() {
-        vendor('Pay.Payment');
+        if (empty($data['name']) || empty($data['phone']) || empty($data['company'])) {
+            $this->error('请将数据填写完整');
+        }elseif (is_mobile($data['phone'])){
+            $this->error('手机号格式错误');
+        }
 
-        $pay = new Payment('alipay');
-        $pay->setNotify('http://ke.halobear.com/course/notify');
+        // 是否报名
+        $model = D('Course');
+        if ($model->isReserve($data['course_id'], 1)) {
+            $this->error('你已经报过名了');
+        }
 
-        $sign = $pay->sign(['subject' => 'test12', 'body' => '测试', 'order_no' => '121111', 'price' => '0.02']);
+        // 是否提交报名
+        if ($model->isSubmitApply($data['course_id'])) {
+            M('CourseReserve')->where(array('wechat_id' => $this->user['id'], 'course_id' => $data['course_id'], 'type' => 1))->save($data);
+        } else {
+            M('CourseReserve')->add($data);
+        }
 
-        //$data = 'service="mobile.securitypay.pay"&_input_charset="utf-8"&notify_url="https%3A%2F%2Fapi.pingxx.com%2Fnotify%2Fcharges%2Fch_m5OyjLyLaznDyfn9WH90e5K0"&partner="2088611020356950"&out_trade_no="20160913221240344628"&subject="u3010u5e7bu718au5546u57ceu3011030u6d6au6f2bu795eu5723uff5cu5723u5149"&body="u3010u5e7bu718au5546u57ceu3011030u6d6au6f2bu795eu5723uff5cu5723u5149"&total_fee="499.00"&payment_type="1"&seller_id="2088611020356950"&it_b_pay="2016-09-14 22:12:44"&sign="sOfdpMLLjDqAqTK4%2F1gRkJCyxVNO4ceHJI6eKPWvm2LWdE0I5plE010Tc88ulD0myUugA%2B56t%2BbHwP%2BX2upWlCouPu0HuGYvB0Y1nDLXWSItIKgR26jTLQdII0zX7C6cJOO0%2B%2FcPtODp5s4CZN96fz%2BkPVaB4B3YGF%2BLMRpsJF0%3D"&sign_type="RSA"';
-
-        $this->success($sign['data']);//$sign['data']
+        $this->success('提交成功');
     }
 }
