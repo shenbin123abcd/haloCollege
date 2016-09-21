@@ -34,7 +34,7 @@ class CommonController extends Controller {
 
         if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
             cookie('halobear', null, -86400);
-            $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']);
+            $url = 'http://ke.halobear.com/courses/wechat?url='; // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
             if (IS_AJAX) {
                 $this->ajaxReturn(array('iRet'=>-1,'info'=>'No authorization token was found', 'data'=>$url));
             }else{
@@ -198,8 +198,12 @@ class CommonController extends Controller {
      * @param string $error
      */
     protected function error($info = '网络繁忙请稍候再试', $error = '') {
-        $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
-        $this->ajaxReturn(array('iRet' => 0, 'info' => $info, 'error' => $error), $type);
+        if(IS_AJAX){
+            $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
+            $this->ajaxReturn(array('iRet' => 0, 'info' => $info, 'error' => $error), $type);
+        }else{
+            redirect('http://ke.halobear.com');
+        }
     }
 
     /**
@@ -208,7 +212,11 @@ class CommonController extends Controller {
      * @param array  $data
      */
     protected function success($data = array(), $info = '成功') {
-        $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
-        $this->ajaxReturn(array('iRet' => 1, 'info' => $info, 'data' => $data), $type);
+        if(IS_AJAX){
+            $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
+            $this->ajaxReturn(array('iRet' => 1, 'info' => $info, 'data' => $data), $type);
+        }else{
+            redirect('http://ke.halobear.com');
+        }
     }
 }
