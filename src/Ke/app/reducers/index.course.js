@@ -5,7 +5,8 @@ import {
 
 export default (state = {
     isFetching: false,
-    items: null
+    items: null,
+    receivedAt: null,
 }, action) => {
     switch(action.type) {
         case REQUEST_COURSE:
@@ -16,6 +17,7 @@ export default (state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 items: action.items,
+                receivedAt: action.receivedAt,
             })
         default:
             return state

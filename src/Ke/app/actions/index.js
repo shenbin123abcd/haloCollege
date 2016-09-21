@@ -14,9 +14,9 @@ function receiveCourse(req, res) {
   // console.log(res)
   return {
     type: RECEIVE_COURSE,
-    index:req,
+    req:req,
     items: res.data,
-    receivedAt: '12345'
+    receivedAt: new Date().getTime()
   }
 }
 

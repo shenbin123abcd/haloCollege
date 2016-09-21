@@ -12,13 +12,43 @@ var Index = React.createClass({
         }
         const { dispatch,monthList,location,isFetching} = this.props;
     },
+    formatContent(arr){
+        let str='';
+        arr.forEach((n,i)=>{
+            str+=`${app.util.formatTitle(n.title)},`;
+        });
+        return str;
+    },
     componentWillReceiveProps : function(nextProps) {
         // const { dispatch,monthList,location,isFetching} = this.props;
         // console.log(1,this.props.isFetching)
         // console.log(2,nextProps.isFetching)
         // console.log('componentWillReceiveProps',nextProps,this.props)
         // const { dispatch,monthList,location} = nextProps
-
+       
+        if(nextProps.items){
+            if(!this.props.items){
+                app.wechat.init({
+                    title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                    content: `${'02'}月份课程大纲：${this.formatContent(nextProps.items)}`,
+                    link : window.location.href,
+                });
+            }else if(this.props.receivedAt!=nextProps.receivedAt){
+                if(nextProps.items.length==0){
+                    app.wechat.init({
+                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                        content: `${'02'}月份课程正在筹备中`,
+                        link : window.location.href,
+                    });
+                }else{
+                    app.wechat.init({
+                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                        content: `${'02'}月份课程大纲${this.formatContent(nextProps.items)}`,
+                        link : window.location.href,
+                    });
+                }
+            }
+        }
     },
     componentDidUpdate  : function(prevState,prevProps){
         // console.log(11,this.props.isFetching)
@@ -97,13 +127,15 @@ function mapStateToProps(state) {
     const { monthList,courseList } = state
     const {
         isFetching,
-        items
+        items,
+        receivedAt,
     } = courseList
 
     return {
         isFetching,
         items,
         monthList,
+        receivedAt,
     }
 }
 
