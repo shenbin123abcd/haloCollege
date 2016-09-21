@@ -18,8 +18,8 @@ var HeaderContainer = React.createClass({
                 item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
                 if(!item){
                     item={
-                        month:ev.query.month.substring(0,4),
-                        year:ev.query.month.substring(4,6),
+                        year:ev.query.month.substring(0,4),
+                        month:ev.query.month.substring(4,6),
                     }
                 }
                 dispatch(setCurrentMonth(item));
