@@ -33,8 +33,8 @@ var CommonButtonGroup= React.createClass({
         const { dispatch,idData }=this.props;
         let data={
             course_id:idData,
-            phone:e.phone,
-            name:e.name,
+            phone:$.trim(e.phone),
+            name:$.trim(e.name),
         }
         if(data.name==''){
             hb.lib.weui.alert('请填写姓名');
@@ -51,7 +51,12 @@ var CommonButtonGroup= React.createClass({
             data:data,
             success:function(res){
                 //console.log(res);
-                dispatch(receiveStatusPosts(idData,2,false))
+                if(res.iRet==1){
+                    dispatch(receiveStatusPosts(idData,2,false))
+                }else{
+                    hb.lib.weui.alert(res.info);
+                }
+
             },
             error:function(error){
                 hb.lib.weui.alert(error);
@@ -64,9 +69,9 @@ var CommonButtonGroup= React.createClass({
         let name='';
         let data={
             course_id:idData,
-            phone:e.phone,
-            name:e.name,
-            company:e.company,
+            phone:$.trim(e.phone),
+            name:$.trim(e.name),
+            company:$.trim(e.company),
         }
         if(data.name==''){
             hb.lib.weui.alert('请填写姓名');
@@ -85,36 +90,41 @@ var CommonButtonGroup= React.createClass({
             url:'/courses/apply',
             data:data,
             success:function(res){
-                dispatch(buySuccessModal(false));
-                let data={
-                    course_id: id,
-                };
-                name='course'+id;
-                let path=hb.location.url('path');
-                setTimeout(function(){
-                    app.pay.callPay(name).callpay({
-                        url: '/pay/course',
-                        data:data,
-                        onSuccess:function (res) {
-                            dispatch(receiveStatusPosts(id,40,false));
-                            app.modal.confirm({
-                                pic:'able-seat',
-                                content:'报名成功，是否前去选座？',
-                                leftBtn:'稍等片刻',
-                                rightBtn:'前去选座'
-                            }).then(function(){
-                                browserHistory.push(`/course/selectseat_${id}`);
-                            },function(){
-                                if(path.indexOf('/course/detail_')>-1){
-                                    dispatch(fetchCourseDetailIfNeeded(id));
-                                }
-                            })
-                        },
-                        onFail:function (res) {
-                            hb.lib.weui.alert(res);
-                        },
-                    });
-                },500);
+                if(res.iRet==1) {
+                    hb.store.set('ke-buy-info',data);
+                    dispatch(buySuccessModal(false));
+                    /*let data = {
+                        course_id: id,
+                    };
+                    name = 'course' + id;
+                    let path = hb.location.url('path');
+                    setTimeout(function () {
+                        app.pay.callPay(name).callpay({
+                            url: '/pay/course',
+                            data: data,
+                            onSuccess: function (res) {
+                                dispatch(receiveStatusPosts(id, 40, false));
+                                app.modal.confirm({
+                                    pic: 'able-seat',
+                                    content: '报名成功，是否前去选座？',
+                                    leftBtn: '稍等片刻',
+                                    rightBtn: '前去选座'
+                                }).then(function () {
+                                    browserHistory.push(`/course/selectseat_${id}`);
+                                }, function () {
+                                    if (path.indexOf('/course/detail_') > -1) {
+                                        dispatch(fetchCourseDetailIfNeeded(id));
+                                    }
+                                })
+                            },
+                            onFail: function (res) {
+                                hb.lib.weui.alert(res);
+                            },
+                        });
+                    }, 500);*/
+                }else{
+                    hb.lib.weui.alert(res.info);
+                }
             },
             error:function(error){
                 hb.lib.weui.alert(error);
