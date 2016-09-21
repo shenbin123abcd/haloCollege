@@ -1,7 +1,7 @@
 let Link=ReactRouter.Link
 let Modal=ReactBootstrap.Modal;
 import appointmentPic from '../images/appointment-pic.png'
-import buySuccessPic from '../images/unable-seat.png'
+import buySuccessPic from '../images/unable-seat2.png'
 //import ModalAppointment from './Modal.appointment'
 import { fetchCourseStatusIfNeeded,receiveStatusPosts } from '../actions/buttonGroup'
 
