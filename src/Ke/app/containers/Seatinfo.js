@@ -13,6 +13,8 @@ var Seatinfo = React.createClass({
             hb.hack.setTitle(document.title);
         }
         app.wechat.init({
+            title: `幻熊课堂座位表`,
+            content: `幻熊课堂座位表`,
             link : window.location.href,
         });
         const { dispatch ,routeParams} = this.props

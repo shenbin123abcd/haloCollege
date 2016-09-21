@@ -1,17 +1,17 @@
 app.wechat=(function(){
     "use strict";
-    function init() {
-        wechat.init();
+    function init(shareDate) {
+        wechat.init(shareDate);
     }
     // var id=hb.Cookies.get('wechat_ticket_id');
     var wechat = {
         init: function(shareDate) {
             var _this = this;
             if (typeof(shareDate) !== 'undefined') {
-                this.data.title = shareDate.title||this.data.title;
-                this.data.content = shareDate.content||this.data.content;
-                this.data.link = shareDate.link||this.data.link;
-                this.data.logo = shareDate.logo||this.data.logo;
+                this.data.title = shareDate.title||_this.data.title;
+                this.data.content = shareDate.content||_this.data.content;
+                this.data.link = shareDate.link||_this.data.link;
+                this.data.logo = shareDate.logo||_this.data.logo;
             }
             if(_this.loadedScript){
                 _this.act();
@@ -29,7 +29,7 @@ app.wechat=(function(){
             title: '幻熊课堂',
             content: '幻熊课堂',
             link: 'http://ke.halobear.com/',
-            logo: '/images/wechat-share-default.png'
+            logo: 'http://ke.halobear.com/images/wechat-share-default.png'
         },
         act: function() {
             var _this = this;

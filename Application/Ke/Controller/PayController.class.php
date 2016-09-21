@@ -95,7 +95,12 @@ class PayController extends CommonController {
                 $ret = M('CourseOrder')->where(array('id'=>$order['id']))->save($data);
 
                 if ($ret){
+                    // 报名状态
+                    M('CourseReserve')->where(array('wechat_id' => $order['wechat_id'], 'course_id' => $order['course_id'], 'type' => 1))->setField('status', 1);
                     M('Course')->where(array('id'=>$order['course_id']))->setInc('num');
+                    // 短信通知
+                    $phone = M('CourseReserve')->where(array('wechat_id' => $order['wechat_id'], 'course_id' => $order['course_id'], 'type' => 1))->getField('phone');
+                    $this->_notice($order['course_id'], $phone);
                 }
             } else { // 用户支付失败
                 write_log('pay_course_error' . date('Ymd'), var_export($notify, 1));
@@ -219,5 +224,20 @@ class PayController extends CommonController {
             return true; // 返回处理完成
         });
         $response->send();
+    }
+
+    // 报名成功后短信通知
+    private function _notice($course_id, $phone){
+        $course = M('Course')->where(array('id'=>$course_id))->find();
+
+        if (!empty($course)){
+            // 上课日期
+            $date = date('m月d日', $course['start_date']);
+
+            // 地点
+            $place = '上海';
+            $addr = '幻熊学院';
+            send_msg($phone, array($date, $place, $addr, $course['title']), 118349, '8aaf070857418a58015745ded06402d3');
+        }
     }
 }

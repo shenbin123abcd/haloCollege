@@ -14,7 +14,7 @@ class SchoolVideoController extends CommonController {
 	}
 
 	public function _join(&$data){
-		$bol =array('否','是');
+		$bol =array('<b style="color: red">否</b>','<b style="color: green">是</b>');
 		foreach ($data as $key=>$value){
 			$data[$key]['vip'] = $bol[$value['is_vip']];
 			$data[$key]['recommend'] = $bol[$value['is_recommend']];
