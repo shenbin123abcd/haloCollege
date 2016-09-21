@@ -4,6 +4,25 @@ namespace Ke\Controller;
 use Think\Controller;
 
 class UcController extends CommonController {
+    /**
+     * 获取微信用户信息
+     */
+    protected function _getWechatUser(){
+
+        $halobear = cookie('halobear');
+        $this->user = $this->wcache($halobear);
+
+        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
+            cookie('halobear', null, -86400);
+            $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI']);
+            if (IS_AJAX) {
+                $this->ajaxReturn(array('iRet'=>-1,'info'=>'No authorization token was found', 'data'=>$url));
+            }else{
+                redirect($url);
+            }
+        }
+    }
+
     public function book() {
         $this->assign('is_address', get_address($this->user['id']) ? 1 : 0);
         $this->display();

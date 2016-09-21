@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('id asc')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('start_date ASC, id DESC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
@@ -25,7 +25,12 @@ class CourseModel extends Model {
                 $list[$key]['last_num'] = $value['total'] - $value['num'];
 
                 if ($this->getStep($value['id'])){
-                    $list[$key]['start_date'] = date('m月d日', $value['start_date']);
+                    if ($value['day'] > 1){
+                        $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
+                        $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
+                    }else{
+                        $list[$key]['start_date'] = date('m月d', $value['start_date']);
+                    }
                 }else{
                     $list[$key]['start_date'] = date('m月', $value['start_date']);
                 }
@@ -82,7 +87,12 @@ class CourseModel extends Model {
             $data['cate'] = $cate[$data['cate_id']];
 
             if ($this->getStep($id)){
-                $data['start_date'] = date('Y.m.d', $data['start_date']);
+                if ($data['day'] > 1){
+                    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
+                    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
+                }else{
+                    $data['start_date'] = date('Y.m.d', $data['start_date']);
+                }
             }else{
                 $data['start_date'] = date('Y.m', $data['start_date']);
             }
@@ -174,7 +184,7 @@ class CourseModel extends Model {
         if($data){
             if ($this->getStep($course_id)){
                 if ($data['day'] > 1){
-                    $end_date = $data['start_date'] + $data['day'] * 86400;
+                    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
                     $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
                 }else{
                     $data['start_date'] = date('m月d', $data['start_date']);
@@ -182,7 +192,6 @@ class CourseModel extends Model {
             }else{
                 $data['start_date'] = date('m月', $data['start_date']);
             }
-
 
             $data['last_num'] = $data['total'] - $data['num'];
             // 嘉宾
@@ -202,6 +211,31 @@ class CourseModel extends Model {
      */
     public function getStep($course_id){
         return $this->where(array('id'=>$course_id))->getField('step');
+    }
+
+    /**
+     * 是否预约或报名
+     * @param int $course_id
+     * @param int $type
+     * @return mixed
+     */
+    public function isReserve($course_id, $type = 0){
+        $uid = session('wechat_user.id');
+        $reserve = M('CourseReserve')->where(array('wechat_id'=>$uid, 'course_id'=>$course_id, 'type'=>$type, 'status'=>1))->count();
+
+        return $reserve;
+    }
+
+    /**
+     * 是否提交报名
+     * @param $course_id
+     * @return mixed
+     */
+    public function isSubmitApply($course_id){
+        $uid = session('wechat_user.id');
+        $reserve = M('CourseReserve')->where(array('wechat_id'=>$uid, 'course_id'=>$course_id, 'type'=>1))->count();
+
+        return $reserve;
     }
 }
 

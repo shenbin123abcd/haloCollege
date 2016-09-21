@@ -29,7 +29,7 @@ app.wechat=(function(){
             title: '幻熊课堂',
             content: '幻熊课堂',
             link: 'http://ke.halobear.com/',
-            logo: '/images/wechat-share-default.png'
+            logo: 'http://ke.halobear.com/Public/Ke/images/wechat-share-default.png'
         },
         act: function() {
             var _this = this;

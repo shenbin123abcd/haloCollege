@@ -973,7 +973,7 @@ body {
           margin:0 0 8px;
         }
         &.text-hidden{
-          height:57px;
+          height:56px;
           overflow: hidden;
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -1023,9 +1023,13 @@ body {
         width:100%;
         margin-bottom:15px;
       }
-      .desc-cintent-text{
+      .desc-content-text{
         .p1,p{
           margin:0 0 8px;
+        }
+        img{
+          display:block;
+          max-width:100%;
         }
       }
     }

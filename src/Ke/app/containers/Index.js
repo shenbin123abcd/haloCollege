@@ -11,19 +11,6 @@ var Index = React.createClass({
             hb.hack.setTitle(document.title);
         }
         const { dispatch,monthList,location,isFetching} = this.props;
-        // console.log(location.query)
-
-        // if(location.query.month){
-        //     let item=monthList.filter(n=>(n.year.toString()+n.month.toString())==location.query.month)[0]
-        //     dispatch(setCurrentMonth(item));
-        //     dispatch(fetchCourseIfNeeded(`${location.query.month}`));
-        // }else{
-        //     let item=monthList.filter(n=>n.active)[0]
-        //     // browserHistory.push(`/?month=${item.year}${item.month}`);
-        //     // console.log(item.active)
-        //     // dispatch(setCurrentMonth(item));
-        //     dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
-        // }
     },
     componentWillReceiveProps : function(nextProps) {
         // const { dispatch,monthList,location,isFetching} = this.props;
@@ -31,20 +18,6 @@ var Index = React.createClass({
         // console.log(2,nextProps.isFetching)
         // console.log('componentWillReceiveProps',nextProps,this.props)
         // const { dispatch,monthList,location} = nextProps
-        // var item;
-        //
-        // if(location.query.month){
-        //     item=monthList.filter(n=>(n.year.toString()+n.month.toString())==location.query.month)[0]
-        // }else{
-        //     item=monthList[0]
-        // }
-        //
-        // // console.log(item.month)
-        //
-        // if(item!=monthList.filter(n=>n.active)[0]){
-        //     dispatch(setCurrentMonth(item));
-        //     dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
-        // }
 
     },
     componentDidUpdate  : function(prevState,prevProps){
@@ -55,7 +28,6 @@ var Index = React.createClass({
         //         link : window.location.href,
         //     });
         // }
-
 
     },
     handleCourseClick(index) {

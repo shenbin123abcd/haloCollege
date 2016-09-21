@@ -18,16 +18,23 @@ var HeaderContainer = React.createClass({
         if(ev.pathname=='/'){
             if(ev.query.month){
                 dispatch(fetchCourseIfNeeded(`${ev.query.month}`));
-                let item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
+                item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
+                if(!item){
+                    item={
+                        month:ev.query.month.substring(0,4),
+                        year:ev.query.month.substring(4,6),
+                    }
+                }
                 dispatch(setCurrentMonth(item));
             }else{
-                let item=monthList[0]
+                item=monthList[0]
                 dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
                 dispatch(setCurrentMonth(item));
             }
+            // console.log('item',`${item.year}${item.month}`)
             app.wechat.init({
-                title: `幻熊课堂首页`,
-                content: `幻熊课堂首页`,
+                title: `幻熊课堂`,
+                content: `幻熊课堂${item.year}年${item.month}月课程`,
                 link : window.location.href,
             });
         }else{

@@ -35,7 +35,7 @@ class PaymentController extends CommonController {
         }
         $cate['price'] = 0.01;
         if (empty($order)){
-            $body = $cate['title'];
+            $body = '【幻熊学院】' . $cate['title'];
             $order['order_no'] = 'MB' . date("d") . rand(10,99) . implode(explode('.', microtime(1)));
             $order['uid'] = $this->user['id'];
             $order['cate'] = $cate_id;
