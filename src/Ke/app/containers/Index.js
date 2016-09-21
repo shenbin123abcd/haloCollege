@@ -15,9 +15,9 @@ var Index = React.createClass({
     formatContent(arr){
         let str='';
         arr.forEach((n,i)=>{
-            str+=`${app.util.formatTitle(n.title)},`;
+            str+=`,${app.util.formatTitle(n.title)}`;
         });
-        return str;
+        return str.substring(1);
     },
     componentWillReceiveProps : function(nextProps) {
         // const { dispatch,monthList,location,isFetching} = this.props;
