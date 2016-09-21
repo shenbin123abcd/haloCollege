@@ -147,10 +147,10 @@ class CoursesController extends CommonController {
                 $list[$key]['start_day'] = $value['start_date'] > time() ? ceil(($value['start_date'] - time()) / 86400) : 0;
 
                 if ($value['day'] > 1) {
-                    $end_date = $value['start_date'] + $value['day'] * 86400;
-                    $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
+                    $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
+                    $list[$key]['start_date'] = date('Y年m月d', $value['start_date']) . '-' . date('d日', $end_date);
                 } else {
-                    $list[$key]['start_date'] = date('m月d', $value['start_date']);
+                    $list[$key]['start_date'] = date('Y年m月d', $value['start_date']);
                 }
             }
         }
