@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('start_date DESC, id asc')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('start_date ASC, id DESC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
@@ -26,7 +26,7 @@ class CourseModel extends Model {
 
                 if ($this->getStep($value['id'])){
                     if ($value['day'] > 1){
-                        $end_date = $value['start_date'] + $value['day'] * 86400;
+                        $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
                         $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
                     }else{
                         $list[$key]['start_date'] = date('m月d', $value['start_date']);
