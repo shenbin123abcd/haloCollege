@@ -21,31 +21,31 @@ var Seatinfo = React.createClass({
         // console.log('componentWillReceiveProps')
         // console.log(nextProps)
         // console.log(1,this.props.course,nextProps.course);
-        if(nextProps.course){
-            if(!this.props.course){
-                app.wechat.init({
-                    title: `幻熊课堂-座位表`,
-                    content: `${nextProps.course.title}`,
-                    link : window.location.href,
-                });
-            }else if(this.props.data.id!=nextProps.data.id){
-                app.wechat.init({
-                    title: `幻熊课堂-座位表`,
-                    content: `${nextProps.course.title}`,
-                    link : window.location.href,
-                });
-            }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
-                    title: `幻熊课堂-座位表`,
-                    content: `${nextProps.course.title}`,
-                    link : window.location.href,
-                })){
-                app.wechat.init({
-                    title: `幻熊课堂-座位表`,
-                    content: `${nextProps.course.title}`,
-                    link : window.location.href,
-                });
-            }
-        }
+        // if(nextProps.course){
+        //     if(!this.props.course){
+        //         app.wechat.init({
+        //             title: `幻熊课堂-座位表`,
+        //             content: `${nextProps.course.title}`,
+        //             link : window.location.href,
+        //         });
+        //     }else if(this.props.data.id!=nextProps.data.id){
+        //         app.wechat.init({
+        //             title: `幻熊课堂-座位表`,
+        //             content: `${nextProps.course.title}`,
+        //             link : window.location.href,
+        //         });
+        //     }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
+        //             title: `幻熊课堂-座位表`,
+        //             content: `${nextProps.course.title}`,
+        //             link : window.location.href,
+        //         })){
+        //         app.wechat.init({
+        //             title: `幻熊课堂-座位表`,
+        //             content: `${nextProps.course.title}`,
+        //             link : window.location.href,
+        //         });
+        //     }
+        // }
     },
     hbDrag:null,
     componentDidUpdate  : function(prevState,prevProps){

@@ -3,6 +3,7 @@ import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'
 import {fetchCourseDetailIfNeeded} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
+import { fetchCourseIfNeeded,setCurrentMonth ,resetMonth} from '../actions'
 
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory;
@@ -19,32 +20,48 @@ var Detail= React.createClass({
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
   },
+    formatContent(str){
+        return str.replace(/\r\n|\r/g,'')
+    },
     componentWillReceiveProps : function(nextProps) {
-        // let {data,isFetching,dipatch}=this.props;
+        let {dispatch}=this.props;
+        if(nextProps.data){
+            if(!this.props.data){
+                dispatch(setCurrentMonth({
+                    year:nextProps.data.data.month.substring(0,4),
+                    month:nextProps.data.data.month.substring(4,6),
+                }));
+            }else if(nextProps.data.month!=this.props.data.month){
+                dispatch(setCurrentMonth({
+                    year:nextProps.data.data.month.substring(0,4),
+                    month:nextProps.data.data.month.substring(4,6),
+                }));
+            }
+        }
         // console.log(1,this.props.data,nextProps.data);
         // console.log(2,app.wechat.getShareDate());
         if(nextProps.data){
             // console.log(app.wechat.getShareDate())
             if(!this.props.data){
                 app.wechat.init({
-                    title: `幻熊课堂-${nextProps.data.data.cate}`,
-                    content: `${nextProps.data.data.title}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
             }else if(this.props.data.data.id!=nextProps.data.data.id){
                 app.wechat.init({
-                    title: `幻熊课堂-${nextProps.data.data.cate}`,
-                    content: `${nextProps.data.data.title}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
             }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
-                    title: `幻熊课堂-${nextProps.data.data.cate}`,
-                    content: `${nextProps.data.data.title}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 })){
                 app.wechat.init({
-                    title: `幻熊课堂-${nextProps.data.data.cate}`,
-                    content: `${nextProps.data.data.title}`,
+                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
                     link : window.location.href,
                 });
             }
