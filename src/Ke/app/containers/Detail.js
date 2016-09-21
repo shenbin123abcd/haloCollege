@@ -14,15 +14,42 @@ var Detail= React.createClass({
       if(Modernizr.weixin&&Modernizr.ios){
           hb.hack.setTitle(document.title);
       }
-      app.wechat.init({
-          title: '幻熊课堂详情',
-          content: '幻熊课堂详情',
-          link : window.location.href,
-      });
+
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
   },
+    componentWillReceiveProps : function(nextProps) {
+        // let {data,isFetching,dipatch}=this.props;
+        // console.log(1,this.props.data,nextProps.data);
+        // console.log(2,app.wechat.getShareDate());
+        if(nextProps.data){
+            // console.log(app.wechat.getShareDate())
+            if(!this.props.data){
+                app.wechat.init({
+                    title: `幻熊课堂-${nextProps.data.data.cate}`,
+                    content: `${nextProps.data.data.title}`,
+                    link : window.location.href,
+                });
+            }else if(this.props.data.data.id!=nextProps.data.data.id){
+                app.wechat.init({
+                    title: `幻熊课堂-${nextProps.data.data.cate}`,
+                    content: `${nextProps.data.data.title}`,
+                    link : window.location.href,
+                });
+            }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
+                    title: `幻熊课堂-${nextProps.data.data.cate}`,
+                    content: `${nextProps.data.data.title}`,
+                    link : window.location.href,
+                })){
+                app.wechat.init({
+                    title: `幻熊课堂-${nextProps.data.data.cate}`,
+                    content: `${nextProps.data.data.title}`,
+                    link : window.location.href,
+                });
+            }
+        }
+    },
 
   render() {
     let {data,isFetching,dipatch}=this.props;

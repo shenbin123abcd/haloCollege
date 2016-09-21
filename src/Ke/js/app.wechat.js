@@ -3,6 +3,9 @@ app.wechat=(function(){
     function init(shareDate) {
         wechat.init(shareDate);
     }
+    function getShareDate() {
+        return wechat.data;
+    }
     // var id=hb.Cookies.get('wechat_ticket_id');
     var wechat = {
         init: function(shareDate) {
@@ -87,5 +90,6 @@ app.wechat=(function(){
 
     return{
         init:init,
+        getShareDate:getShareDate,
     }
 }());
