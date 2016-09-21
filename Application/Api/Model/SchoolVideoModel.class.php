@@ -129,6 +129,9 @@ class SchoolVideoModel extends Model{
                 $data['video']['status_praise'] = -1;
             }
 
+            //点赞数量
+            $count_praise = M('SchoolVideoPraise')->where(array('vid'=>$id,'status'=>1))->count();
+            $data['video']['count_praise'] = intval($count_praise) ? intval($count_praise) : 0;
 
         }else{
             $data = array();
