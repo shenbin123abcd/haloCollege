@@ -22,6 +22,26 @@ export default React.createClass({
         let _this=this;
         function renderBottomBtnGroup(){
             if(status==1){
+                const appointData=hb.store.get('ke-appoint-info');
+                let appointInfo=()=>{
+                    if(appointData){
+                        return(
+                            <div className="content-form-block">
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" value={appointData.name} ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" value={appointData.phone} ref='phone'/>
+                                <div className="desc-text">我们将在开课前一个月以短信形式通知你，<br/>请耐心等待。</div>
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div className="content-form-block">
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" ref='phone'/>
+                                <div className="desc-text">我们将在开课前一个月以短信形式通知你，<br/>请耐心等待。</div>
+                            </div>
+                        )
+                    }
+                }
                 return(
                     <div className="flex-bottom-btn">
                         <div className="choose-seat-btn f-15" data-type="disable-appointment-choose-seat" onClick={handleClick}>在线选座</div>
@@ -35,11 +55,7 @@ export default React.createClass({
                                             <img src={appointmentPic} alt=""/>
                                         </div>
                                         <form>
-                                            <div className="content-form-block">
-                                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" ref='name'/>
-                                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" ref='phone'/>
-                                                <div className="desc-text">我们将在开课前一个月以短信形式通知你，<br/>请耐心等待。</div>
-                                            </div>
+                                            {appointInfo()}
                                             <div className='modal-dialog-footer f-15'>
                                                 <div className="modal-dialog-send" onClick={e=>handleSubmit({
                                                 name:$(_this.refs.name).val(),
@@ -61,6 +77,28 @@ export default React.createClass({
                     </div>
                 )
             }else if(status==3){
+                const storeData=hb.store.get('ke-buy-info');
+                let buyInfo=()=>{
+                    if(storeData){
+                        return(
+                            <div className="content-form-block">
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" value={storeData.name} ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" value={storeData.phone} ref='phone'/>
+                                <input type="text" placeholder="阁下公司" className="form-control input-style f-12 last" value={storeData.company} ref='company'/>
+                                <div className="desc-text">请留下以上信息，支付成功后我们会给您发送确认短信</div>
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div className="content-form-block">
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" ref='phone'/>
+                                <input type="text" placeholder="阁下公司" className="form-control input-style f-12 last" ref='company'/>
+                                <div className="desc-text">请留下以上信息，支付成功后我们会给您发送确认短信</div>
+                            </div>
+                        )
+                    }
+                }
                 return(
                     <div className="flex-bottom-btn">
                         <div className="choose-seat-btn f-15" data-type="disable-choose-seat" onClick={handleClick}>在线选座</div>
@@ -74,12 +112,7 @@ export default React.createClass({
                                             <img src={buySuccessPic} alt=""/>
                                         </div>
                                         <form>
-                                            <div className="content-form-block">
-                                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" ref='name'/>
-                                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" ref='phone'/>
-                                                <input type="text" placeholder="阁下公司" className="form-control input-style f-12 last" ref='company'/>
-                                                <div className="desc-text">请留下以上信息，支付成功后我们会给您发送确认短信</div>
-                                            </div>
+                                            {buyInfo()}
                                             <div className='modal-dialog-footer f-15'>
                                                 <div className="modal-dialog-send" onClick={e=>toBuySubmit({
                                                 name:$(_this.refs.name).val(),

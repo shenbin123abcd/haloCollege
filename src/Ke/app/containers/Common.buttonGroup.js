@@ -50,8 +50,8 @@ var CommonButtonGroup= React.createClass({
             url:'/courses/reserve',
             data:data,
             success:function(res){
-                //console.log(res);
                 if(res.iRet==1){
+                    hb.store.set('ke-appoint-info',data);
                     dispatch(receiveStatusPosts(idData,2,false))
                 }else{
                     hb.lib.weui.alert(res.info);
@@ -93,7 +93,7 @@ var CommonButtonGroup= React.createClass({
                 if(res.iRet==1) {
                     hb.store.set('ke-buy-info',data);
                     dispatch(buySuccessModal(false));
-                    /*let data = {
+                    let data = {
                         course_id: id,
                     };
                     name = 'course' + id;
@@ -121,7 +121,7 @@ var CommonButtonGroup= React.createClass({
                                 hb.lib.weui.alert(res);
                             },
                         });
-                    }, 500);*/
+                    }, 500);
                 }else{
                     hb.lib.weui.alert(res.info);
                 }

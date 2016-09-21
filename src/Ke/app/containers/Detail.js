@@ -297,7 +297,7 @@ var DetailContent=React.createClass({
                 <span className="line"></span>课程介绍
             </div>
             <div className="desc-content">
-                <div className="desc-cintent-text" dangerouslySetInnerHTML={renderHtml()} />
+                <div className="desc-content-text" dangerouslySetInnerHTML={renderHtml()} />
             </div>
         </div>
     )
