@@ -53,6 +53,7 @@ var CommonButtonGroup= React.createClass({
                 if(res.iRet==1){
                     hb.store.set('ke-appoint-info',data);
                     dispatch(receiveStatusPosts(idData,2,false))
+                    hb.lib.weui.toast(res.info);
                 }else{
                     hb.lib.weui.alert(res.info);
                 }
@@ -86,6 +87,7 @@ var CommonButtonGroup= React.createClass({
             hb.lib.weui.alert('请填写您的公司名');
             return false;
         }
+        //hb.store.set('ke-buy-info',data);
         $.ajax({
             url:'/courses/apply',
             data:data,
@@ -93,7 +95,7 @@ var CommonButtonGroup= React.createClass({
                 if(res.iRet==1) {
                     hb.store.set('ke-buy-info',data);
                     dispatch(buySuccessModal(false));
-                    let data = {
+                    let data2 = {
                         course_id: id,
                     };
                     name = 'course' + id;
@@ -101,7 +103,7 @@ var CommonButtonGroup= React.createClass({
                     setTimeout(function () {
                         app.pay.callPay(name).callpay({
                             url: '/pay/course',
-                            data: data,
+                            data: data2,
                             onSuccess: function (res) {
                                 dispatch(receiveStatusPosts(id, 40, false));
                                 app.modal.confirm({
