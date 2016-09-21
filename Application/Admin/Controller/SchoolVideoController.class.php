@@ -20,6 +20,7 @@ class SchoolVideoController extends CommonController {
 			$data[$key]['recommend'] = $bol[$value['is_recommend']];
 			$data[$key]['hot'] = $bol[$value['is_hot']];
 		}
+		method_exists($this, 'get_guest_name') && $this->get_guest_name($data);
 
 	}
 	
@@ -151,5 +152,19 @@ class SchoolVideoController extends CommonController {
 		$data['refresh'] = false;
 		$data['state']  = empty($list) ? 'fail' : 'success';
 		$this->ajaxReturn($data);
+	}
+
+    //获取嘉宾名字
+	public function get_guest_name (&$data){
+		foreach ($data as $key=>$value){
+			$guests_id[] =$value['guests_id'];
+		}
+		if (!empty($guests_id)){
+			$where['id'] = array('in',$guests_id);
+			$guests_name = M('SchoolGuests')->where($where)->getField('id as guest_id,title as guest_name');
+		}
+		foreach ($data as $key=>$value){
+			$data[$key]['guests'] = $guests_name[$value['guests_id']];
+		}
 	}
 }

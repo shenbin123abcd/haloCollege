@@ -306,7 +306,7 @@ class WeddingController extends CommonController {
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
@@ -357,7 +357,7 @@ class WeddingController extends CommonController {
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
@@ -396,7 +396,7 @@ class WeddingController extends CommonController {
         $data['comment_id'] = I('comment_id');
         $data['uid_be'] = I('uid_be');
         $data['uid_do'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $data['type_report'] = I('type');
         $data['create_time'] = time();
         $data['update_time'] = time();
@@ -447,7 +447,7 @@ class WeddingController extends CommonController {
     public function praise() {
         $data['comment_id'] = I('comment_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
@@ -524,7 +524,7 @@ class WeddingController extends CommonController {
         $model = M('SchoolWeddingFavorites');
         $data['wedding_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];
@@ -1053,7 +1053,7 @@ class WeddingController extends CommonController {
     public function weddingPraise() {
         $data['wedding_id'] = I('wedding_id');
         $data['uid'] = $this->user['uid'];
-        $data['wsq_id'] = $this->user['wsq']->uid;
+        //$data['wsq_id'] = $this->user['wsq']->uid;
         $user = getTrueName($data['uid']);
         if(!empty($user)){
             $data['username'] = $user['truename'];

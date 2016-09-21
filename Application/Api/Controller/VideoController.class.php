@@ -603,8 +603,9 @@ class VideoController extends CommonController {
 
     // 我的评论
     public function myComments() {
+        $uid = $this->user['uid'];
         $per_page = I('per_page');
-        $list = D('SchoolComment')->my($per_page ? $per_page : 12, 1);
+        $list = D('SchoolComment')->my($per_page ? $per_page : 12, 1,$uid);
         $this->success('success', $list);
     }
 
