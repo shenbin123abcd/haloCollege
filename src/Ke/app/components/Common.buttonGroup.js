@@ -18,7 +18,7 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        //const status=3;
+        //const status=1;
         let _this=this;
         function renderBottomBtnGroup(){
             if(status==1){
@@ -60,7 +60,10 @@ export default React.createClass({
                                                 <div className="modal-dialog-send" onClick={e=>handleSubmit({
                                                 name:$(_this.refs.name).val(),
                                                 phone:$(_this.refs.phone).val()
-                                                })}>提交</div>
+                                                })}>
+                                                    <div className="line"></div>
+                                                    提交
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -118,7 +121,10 @@ export default React.createClass({
                                                 name:$(_this.refs.name).val(),
                                                 phone:$(_this.refs.phone).val(),
                                                 company:$(_this.refs.company).val(),
-                                                })}>去支付</div>
+                                                })}>
+                                                    <div className="line"></div>
+                                                    去支付
+                                                </div>
                                             </div>
                                         </form>
                                     </div>

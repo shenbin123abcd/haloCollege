@@ -102,7 +102,7 @@ var Detail= React.createClass({
                     <div className="bg-gap">
                         <div className="weixin-block">
                             <img src={weixinPic} alt=""/>
-                            <div className="text">长按二维码添加「 幻熊学院客服 」<br/>咨询课程报名相关事项</div>
+                            <div className="text">长按二维码添加「 幻熊学院 」客服微信号<br/>咨询课程报名相关事项</div>
                         </div>
                     </div>
                     <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
