@@ -1,0 +1,55 @@
+<div class="wrap J_check_wrap">
+	<!--导航-->
+	<div class="nav">
+		<ul class="cc">
+			<li <eq name="Think.get.type" value="1"> class="current"</eq>>
+			<a href="__URL__/index?type=1">报名列表</a>
+			</li>
+			<li <eq name="Think.get.type" value="0"> class="current"</eq>>
+			<a href="__URL__/index?type=0">预约列表</a>
+			</li>
+		</ul>
+	</div>
+	<!--/导航-->
+	<!--说明-->
+	<div class="h_a">说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>视频管理</li>
+		</ol>
+	</div>
+	<!--/说明-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form action="__URL__/index?type={$Think.get.type}" method="get">
+		<div class="search_type cc mb10">
+			<label>手机：</label>
+			<input name="phone" type="text" class="input length_2 mr10" value="{$Think.get.phone}"/>
+			<label>姓名：</label>
+			<input name="name" type="text" class="input length_2 mr10" value="{$Think.get.name}"/>
+			<button type="submit" class="btn">搜索</button>
+		</div>
+	</form>
+	<!--/搜索-->
+	<!--操作-->
+	<div class="mb10">
+		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>新增</a>
+	</div>
+	<!--/操作-->
+	<!--列表-->
+	<form class="J_ajaxForm" action="" method="post">
+		<div class="table_list">
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:course,title:课程,width:200}{field:name,title:姓名,width:200}{field:company,title:公司,width:120}{field:phone,title:手机,width:120}{field:remark,title:备注,width:120}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<div class="p10"></div>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<div class="select_pages"><div class="pages">{$page}</div></div>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete" data-subcheck="true" data-msg="确定要删除选中的数据？">删除</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/forbid/cid/{$Think.get.cid}">禁用</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/resume/cid/{$Think.get.cid}">恢复</button>
+			</div>
+		</div>
+	</form>
+	<!--/列表-->
+</div>
