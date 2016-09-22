@@ -16,9 +16,9 @@ export default React.createClass({
         const showModal=this.props.showModal;
         const showSuccessModal=this.props.showSuccessModal;
         const id=this.props.idData;
-        //const status=this.props.status;
+        const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        const status=3;
+        //const status=3;
         let _this=this;
         function renderBottomBtnGroup(){
             if(status==1){
