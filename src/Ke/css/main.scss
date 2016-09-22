@@ -1027,6 +1027,24 @@ body {
         .p1,p{
           margin:0 0 8px;
         }
+        ul{
+          list-style: none;
+
+          li{
+            padding-left: 0.5em;
+            &:before{
+              content: '·';
+              position: absolute;
+              margin-left: -0.5em;
+              font-size:13px;
+              font-weight:bold;
+
+
+
+            }
+          }
+
+        }
         img{
           display:block;
           max-width:100%;
