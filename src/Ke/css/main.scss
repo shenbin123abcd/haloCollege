@@ -754,9 +754,23 @@ body {
   background: #f6f6f6;
   //margin-bottom:50px;
   .bg-gap{
-    height:15px;
     background:#f6f6f6;
     width:100%;
+    padding:58px 0 50px 0;
+    .weixin-block{
+      text-align: center;
+      .text{
+        font-size:11px;
+        width:100%;
+        margin-top:15px;
+        color:#666666;
+      }
+      img{
+        width:111px;
+        margin:auto;
+        box-shadow: 0 3px 5px rgba(0,0,0,.2);
+      }
+    }
   }
   .detail-top{
     .detail-bg{

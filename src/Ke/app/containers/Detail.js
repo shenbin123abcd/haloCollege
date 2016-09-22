@@ -1,4 +1,5 @@
 import playBtn from '../images/play-btn.png'
+import weixinPic from '../images/weixin.jpg'
 import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'
 import {fetchCourseDetailIfNeeded} from '../actions/detail'
@@ -98,7 +99,12 @@ var Detail= React.createClass({
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
-                    <div className="bg-gap"></div>
+                    <div className="bg-gap">
+                        <div className="weixin-block">
+                            <img src={weixinPic} alt=""/>
+                            <div className="text">长按二维码添加「 幻熊学院客服 」<br/>咨询课程报名相关事项</div>
+                        </div>
+                    </div>
                     <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
                 </div>
             )
