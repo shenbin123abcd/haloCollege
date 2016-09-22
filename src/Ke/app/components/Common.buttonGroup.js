@@ -16,9 +16,9 @@ export default React.createClass({
         const showModal=this.props.showModal;
         const showSuccessModal=this.props.showSuccessModal;
         const id=this.props.idData;
-        const status=this.props.status;
+        //const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        //const status=3;
+        const status=3;
         let _this=this;
         function renderBottomBtnGroup(){
             if(status==1){
@@ -27,8 +27,8 @@ export default React.createClass({
                     if(appointData){
                         return(
                             <div className="content-form-block">
-                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" value={appointData.name} ref='name'/>
-                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" value={appointData.phone} ref='phone'/>
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" defaultValue={appointData.name} ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" defaultValue={appointData.phone} ref='phone'/>
                                 <div className="desc-text">我们将在开课前一个月以短信形式通知你，<br/>请耐心等待。</div>
                             </div>
                         )
@@ -82,9 +82,9 @@ export default React.createClass({
                     if(storeData){
                         return(
                             <div className="content-form-block">
-                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" value={storeData.name} ref='name'/>
-                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" value={storeData.phone} ref='phone'/>
-                                <input type="text" placeholder="阁下公司" className="form-control input-style f-12 last" value={storeData.company} ref='company'/>
+                                <input type="text" placeholder="阁下称呼" className="form-control input-style f-12" defaultValue={storeData.name} ref='name'/>
+                                <input type="text" placeholder="阁下手机号" className="form-control input-style f-12 last" defaultValue={storeData.phone} ref='phone'/>
+                                <input type="text" placeholder="阁下公司" className="form-control input-style f-12 last" defaultValue={storeData.company} ref='company'/>
                                 <div className="desc-text">请留下以上信息，支付成功后我们会给您发送确认短信</div>
                             </div>
                         )
