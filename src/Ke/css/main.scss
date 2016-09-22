@@ -1508,8 +1508,16 @@ body {
             margin-top: 20px;
             font-size: 17px;
             text-align: center;
-            border-top: 1px solid #d7d7d7;
+            //border-top: 1px solid #d7d7d7;
             color: #fe5a40;
+            .line{
+              height:1px;
+              width:100%;
+              position: absolute;
+              top:0;
+              background: #d7d7d7;
+              transform: scale(1, 0.5);
+            }
           }
         }
       }
