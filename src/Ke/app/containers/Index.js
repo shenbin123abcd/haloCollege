@@ -34,18 +34,18 @@ var Index = React.createClass({
                 shareMonth=nextProps.location.query.month.substring(4,6)
             }
             if(!this.props.items){
-                app.wechat.init({
-                    title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                    content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
-                    link : window.location.href,
-                });
-            }else if(this.props.receivedAt!=nextProps.receivedAt){
                 if(nextProps.items.length==0){
+                    app.wechat.init();
+                }else{
                     app.wechat.init({
                         title: `婚礼行业全新课程体系 幻熊学院独家授权`,
-                        content: `${Number(shareMonth)}月份课程正在筹备中`,
+                        content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
                         link : window.location.href,
                     });
+                }
+            }else if(this.props.receivedAt!=nextProps.receivedAt){
+                if(nextProps.items.length==0){
+                    app.wechat.init();
                 }else{
                     app.wechat.init({
                         title: `婚礼行业全新课程体系 幻熊学院独家授权`,

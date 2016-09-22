@@ -1,0 +1,33 @@
+<div class="wrap">
+<div class="nav">
+	<div class="return"><a href="__URL__/index/pid/{$Think.get.pid}">返回上一级</a></div>
+</div>
+
+<form id="J_rigths_form" class="J_ajaxForm" action="__URL__/update" method="post" enctype="multipart/form-data">
+<div class="J_tabs_contents">
+	<div>
+		<div class="h_a">编辑</div>
+		<div class="table_full">
+			<table width="100%">
+				<col class="th" />
+				<col width="400" />
+				<col />
+				<tr>
+					<th>备注</th>
+					<td>
+						<textarea class="textarea" name="remark" cols="30" rows="10">{$data.content}</textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+		<input type="hidden" name="id" value="{$data.id}">
+		<input type="hidden" name="qiniu_token" value="{$token}">
+		<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
+	</div>
+</div>
+</form>
+</div>
