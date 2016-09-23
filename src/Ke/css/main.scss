@@ -838,6 +838,10 @@ body {
     .detail-bg{
       width:100%;
       position: relative;
+      height: 0;
+      padding-bottom: 50.66667%;
+      overflow: hidden;
+      background: #fff;
       img.bg-img{
         width:100%;
       }
