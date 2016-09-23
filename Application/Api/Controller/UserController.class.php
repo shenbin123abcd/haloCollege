@@ -110,7 +110,7 @@ class UserController extends CommonController{
         $where['status'] = 1;
         $info = D('Userinfo')->where($where)->find();
         if(empty($info)){
-            $data['info'] = array();
+            $data['info'] = $info ;
             $this->success('个人信息为空，请去完善！',$data);
         }
         $data['info'] = $info;
