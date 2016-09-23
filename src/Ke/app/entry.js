@@ -25,7 +25,7 @@ let htmlClass=''
 
 const onUpdateRoute = () => {
     let path=hb.location.url('path')
-    // console.log(path,path.indexOf('/user')>-1)
+    console.log(path,path.indexOf('/user')>-1)
     switch (true){
         case path=='/course':
         case path=='/course/':
@@ -57,10 +57,15 @@ const onLeaveRoute = (prevState) => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
+
         <Route path="/course" component={App}   >
             <IndexRoute component={Index}  onLeave={onLeaveRoute} />
-            <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
-            <Route path="/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
+        </Route>
+
+        <Route path="/course/" component={App}   >
+            <IndexRoute component={Index}  onLeave={onLeaveRoute} />
+            <Route path="user" component={User}   onLeave={onLeaveRoute}  />
+            <Route path="detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
         </Route>
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
