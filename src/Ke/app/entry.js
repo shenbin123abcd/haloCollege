@@ -9,6 +9,7 @@ import App from './containers/App'
 
 var Router=ReactRouter.Router
 var Route=ReactRouter.Route
+var Redirect=ReactRouter.Redirect
 var IndexRoute=ReactRouter.IndexRoute
 var browserHistory=ReactRouter.browserHistory
 var Provider=ReactRedux.Provider
@@ -25,7 +26,7 @@ let htmlClass=''
 
 const onUpdateRoute = () => {
     let path=hb.location.url('path')
-    console.log(path,path.indexOf('/user')>-1)
+    // console.log(path,path.indexOf('/user')>-1)
     switch (true){
         case path=='/course/index':
             htmlClass=`html-index`
@@ -66,7 +67,7 @@ ReactDOM.render(
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
-
+        <Redirect from="*" to="/course/index" />
     </Router>
   </Provider>,
     reactElement
