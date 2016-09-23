@@ -14,8 +14,6 @@ var SeatCell= React.createClass({
             dispatch(selectSeat(item))
         }
 
-
-
     },
     render(){
         let {item,index,itemsLength,selectedItem}=this.props;
