@@ -18,7 +18,6 @@ var User= React.createClass({
   handleClick(e){
     const {dispatch , data }=this.props;
     let type=$(e.target).data('type');
-      console.log(type);
     if(type=='SHOW_OPEN'){
         browserHistory.push(`/course/user?cate_id=1`);
         dispatch(receiveUserPosts('SHOW_OPEN'))
