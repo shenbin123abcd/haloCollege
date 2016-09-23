@@ -5,6 +5,7 @@ import PageLoading  from '../components/Common.Pageloading'
 
 var browserHistory=ReactRouter.browserHistory;
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
+var withRouter=ReactRouter.withRouter;
 var User= React.createClass({
   componentDidMount() {
       document.title='我的个人中心';
@@ -193,7 +194,7 @@ function mapStateToProps(state) {
 
 }
 
-export default ReactRedux.connect(mapStateToProps)(User)
+export default ReactRedux.connect(mapStateToProps)(withRouter(User))
 
 
 
