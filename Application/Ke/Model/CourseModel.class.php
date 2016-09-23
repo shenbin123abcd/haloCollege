@@ -250,7 +250,7 @@ class CourseModel extends Model {
 
             $start_date = date('m月d', $time) . '-' . date($format, $end_date);
         }else{
-            $start_date = date('m月d', $time);
+            $start_date = date('m月d日', $time);
         }
         return $start_date;
     }
