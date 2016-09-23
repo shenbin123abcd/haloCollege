@@ -12,10 +12,10 @@ var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Detail= React.createClass({
   componentDidMount() {
-     document.title='幻熊课堂详情';
-      if(Modernizr.weixin&&Modernizr.ios){
-          hb.hack.setTitle(document.title);
-      }
+     // document.title='幻熊课堂详情';
+     //  if(Modernizr.weixin&&Modernizr.ios){
+     //      hb.hack.setTitle(document.title);
+     //  }
 
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
@@ -38,7 +38,15 @@ var Detail= React.createClass({
                     month:nextProps.data.data.month.substring(4,6),
                 }));
             }
+            if(document.title!=nextProps.data.data.title){
+                document.title=nextProps.data.data.title;
+                if(Modernizr.weixin&&Modernizr.ios){
+                    hb.hack.setTitle(document.title);
+                }
+            }
         }
+
+
         // console.log(1,this.props.data,nextProps.data);
         // console.log(2,app.wechat.getShareDate());
         if(nextProps.data){
