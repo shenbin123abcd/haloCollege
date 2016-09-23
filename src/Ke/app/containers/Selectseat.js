@@ -73,7 +73,7 @@ var SelectSeat = React.createClass({
     componentDidUpdate  : function(prevState){
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
-        let {isBooking,isBookSuccess,isBookFailure,info}=this.props;
+        let {isBooking,isBookSuccess,isBookFailure,info,course}=this.props;
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
         // console.log(prevState,this.props)
         if(prevState.items&&!this.hbDrag){
@@ -92,7 +92,7 @@ var SelectSeat = React.createClass({
         }
 
         if(isBookSuccess){
-            hb.lib.weui.alert(info).then(res=>browserHistory.push('/course/user'))
+            hb.lib.weui.alert(info).then(res=>browserHistory.push(`/course/user?cate_id=${course.cate_id}`))
         }
 
     },
