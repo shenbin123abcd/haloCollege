@@ -11,7 +11,7 @@ app.wechat=(function(){
         init: function(shareDate) {
             var _this = this;
             var defaultData={
-                title: '婚礼行业全新课程体系 幻熊研习社独家授权',
+                title: '婚礼业全新课程体系  幻熊研习社匠心打造',
                 content: '幻熊研习社联合国内外著名婚礼人携手打造婚礼行业全新课程体系，涉及婚礼策划，销售谈单，花艺设计，宴会设计，婚礼手绘......带来最经典的行业干货分享。',
                 link: 'http://ke.halobear.com/',
                 logo: 'http://ke.halobear.com/Public/Ke/images/wechat-share-default.png'
