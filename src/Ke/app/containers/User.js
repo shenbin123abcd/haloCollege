@@ -18,6 +18,7 @@ var User= React.createClass({
   handleClick(e){
     const {dispatch , data }=this.props;
     let type=$(e.target).data('type');
+      console.log(type);
     if(type=='SHOW_OPEN'){
         browserHistory.push(`/course/user?cate_id=1`);
         dispatch(receiveUserPosts('SHOW_OPEN'))
@@ -76,17 +77,17 @@ const Header=(data)=>{
         if(active && active=='SHOW_OPEN'){
             return(
                 <div className="top-tab">
-                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
+                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><span className="haloIcon haloIcon-open f-20" ></span>公开课</div>
                     <div className="tab-tip"></div>
-                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
+                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><span className="haloIcon haloIcon-training f-20" ></span>培训营</div>
                 </div>
             )
         }else if(active && active=='SHOW_TRAINING_CAMP'){
             return(
                 <div className="top-tab">
-                    <div className="tab-item f-15" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
+                    <div className="tab-item f-15" data-type='SHOW_OPEN' onClick={data.handleClick}><span className="haloIcon haloIcon-open f-20"></span>公开课</div>
                     <div className="tab-tip"></div>
-                    <div className="tab-item f-15 active" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
+                    <div className="tab-item f-15 active" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><span className="haloIcon haloIcon-training f-20"></span>培训营</div>
                 </div>
             )
         }
