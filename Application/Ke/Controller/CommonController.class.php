@@ -11,7 +11,9 @@ class CommonController extends Controller {
      */
     public function _initialize() {
         //cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
-        $this->_getWechatUser();
+        if (!in_array(CONTROLLER_NAME, ['Public'])){
+            $this->_getWechatUser();
+        }
     }
 
     /**
