@@ -59,16 +59,18 @@ ReactDOM.render(
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
         <Redirect from="/course/" to="/course/index" />
         <Route path="/course/" component={App}   >
-
             <Route path="/"  component={Index}  onLeave={onLeaveRoute}  />
             <Route path="index"  component={Index}  onLeave={onLeaveRoute}  />
             <Route path="user" component={User}   onLeave={onLeaveRoute}  />
             <Route path="detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
+            <Route path="rIndex"   onEnter={e=>{window.location.href='/course/index'}}  />
         </Route>
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
-        <Redirect from="*" to="/course/index" />
+        
+        <Redirect from="/course/*" to="/course/index" />
+        <Redirect from="*" to="/course/rIndex" />
     </Router>
   </Provider>,
     reactElement
