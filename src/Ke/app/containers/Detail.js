@@ -109,7 +109,9 @@ var Detail= React.createClass({
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <div className="bg-gap">
                         <div className="weixin-block">
-                            <img src={weixinPic} alt=""/>
+                            <div className="wrapper">
+                                <img src={weixinPic} alt=""/>
+                            </div>
                             <div className="text">长按二维码添加「 幻熊学院 」客服微信号<br/>咨询课程报名相关事项</div>
                         </div>
                     </div>
@@ -244,10 +246,11 @@ var ClassDesc=React.createClass({
       data.forEach(function(n,i){
           n.desc=descList[i];
       });
+      //data[2].desc='11月01-12月02日';
 
       data[0].desc='￥'+data[0].desc+'/人';
       if(cate=='公开课'){
-          data[3].desc=data[3].desc+'天期会';
+          data[3].desc=data[3].desc+'天课时';
       }else{
           data[3].desc=data[3].desc+'天课时';
       }

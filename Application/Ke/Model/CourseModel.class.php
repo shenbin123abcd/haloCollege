@@ -25,12 +25,13 @@ class CourseModel extends Model {
                 $list[$key]['last_num'] = $value['total'] - $value['num'];
 
                 if ($this->getStep($value['id'])){
-                    if ($value['day'] > 1){
-                        $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
-                        $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
-                    }else{
-                        $list[$key]['start_date'] = date('m月d', $value['start_date']);
-                    }
+                    //if ($value['day'] > 1){
+                    //    $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
+                    //    $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
+                    //}else{
+                    //    $list[$key]['start_date'] = date('m月d', $value['start_date']);
+                    //}
+                    $list[$key]['start_date'] = $this->_parseDate($value['start_date'], $value['day']);
                 }else{
                     $list[$key]['start_date'] = date('m月', $value['start_date']);
                 }
@@ -88,12 +89,13 @@ class CourseModel extends Model {
 
             $data['month'] = date('Ym', $data['start_date']);
             if ($this->getStep($id)){
-                if ($data['day'] > 1){
-                    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
-                    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
-                }else{
-                    $data['start_date'] = date('Y.m.d', $data['start_date']);
-                }
+                //if ($data['day'] > 1){
+                //    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
+                //    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
+                //}else{
+                //    $data['start_date'] = date('Y.m.d', $data['start_date']);
+                //}
+                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day']);
             }else{
                 $data['start_date'] = date('Y.m', $data['start_date']);
             }
@@ -184,12 +186,13 @@ class CourseModel extends Model {
         $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,start_date,price,total,num,place,day')->find();
         if($data){
             if ($this->getStep($course_id)){
-                if ($data['day'] > 1){
-                    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
-                    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
-                }else{
-                    $data['start_date'] = date('m月d', $data['start_date']);
-                }
+                //if ($data['day'] > 1){
+                //    $end_date = $data['start_date'] + ($data['day'] - 1) * 86400;
+                //    $data['start_date'] = date('m月d', $data['start_date']) . '-' . date('d日', $end_date);
+                //}else{
+                //    $data['start_date'] = date('m月d', $data['start_date']);
+                //}
+                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day']);
             }else{
                 $data['start_date'] = date('m月', $data['start_date']);
             }
@@ -237,6 +240,19 @@ class CourseModel extends Model {
         $reserve = M('CourseReserve')->where(array('wechat_id'=>$uid, 'course_id'=>$course_id, 'type'=>1))->count();
 
         return $reserve;
+    }
+
+    public function _parseDate($time, $day){
+        if ($day > 1){
+            $end_date = $time + ($day - 1) * 86400;
+            $format = date('m', $time) != date('m', $end_date) ? 'm月d日' : 'd日';
+
+
+            $start_date = date('m月d', $time) . '-' . date($format, $end_date);
+        }else{
+            $start_date = date('m月d日', $time);
+        }
+        return $start_date;
     }
 }
 

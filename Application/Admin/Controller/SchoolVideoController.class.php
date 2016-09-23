@@ -14,11 +14,14 @@ class SchoolVideoController extends CommonController {
 	}
 
 	public function _join(&$data){
-		$bol =array('<b style="color: red">否</b>','<b style="color: green">是</b>');
+		$bol =array('<b style="color: red">否</b>','<b style="color: green">是</b>','<b style="color: green">已上传</b>');
 		foreach ($data as $key=>$value){
 			$data[$key]['vip'] = $bol[$value['is_vip']];
 			$data[$key]['recommend'] = $bol[$value['is_recommend']];
 			$data[$key]['hot'] = $bol[$value['is_hot']];
+			if(!empty($value['big_cover_url'])){
+				$data[$key]['is_big_cover'] = $bol[2];
+			}
 		}
 		method_exists($this, 'get_guest_name') && $this->get_guest_name($data);
 
@@ -28,7 +31,8 @@ class SchoolVideoController extends CommonController {
 		$this->_before_add();
 	}
 	
-	public function _before_edit(){		
+	public function _before_edit(){
+
 		$this->_before_add();
 	}
 	
@@ -42,7 +46,7 @@ class SchoolVideoController extends CommonController {
 	
 	public function _before_insert(){
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
-
+		empty($_POST['big_cover_url']) && $this->error('请上传封面大图');
 		$this->_before_update();
 		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
 		empty($_POST['guests_id']) && $this->error('嘉宾不存在');

@@ -174,7 +174,7 @@ class CoursesController extends CommonController {
         $reserve = $model->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id, 'type' => 0))->count();
         $reserve && $this->error('你已经预约过该课程了');
 
-        $data = array('course_id' => $course_id, 'name' => $name, 'phone' => $phone, 'wechat_id' => $this->user['id'], 'create_time' => time(), 'status' => 1);
+        $data = array('course_id' => $course_id, 'name' => $name, 'phone' => $phone, 'wechat_id' => $this->user['id'], 'create_time' => time(), 'status' => 1, 'remark'=>'', 'is_notice'=>0);
         $model->add($data);
 
         $this->success([],'预约成功');

@@ -810,9 +810,14 @@ body {
   .bg-gap{
     background:#f6f6f6;
     width:100%;
-    padding:58px 0 50px 0;
+    padding:48px 0 40px 0;
     .weixin-block{
       text-align: center;
+      .wrapper{
+        box-shadow: 0 3px 5px rgba(0,0,0,.2);
+        width: 111px;
+        margin: auto;
+      }
       .text{
         font-size:11px;
         width:100%;
@@ -820,9 +825,9 @@ body {
         color:#666666;
       }
       img{
-        width:111px;
+        width:100%;
         margin:auto;
-        box-shadow: 0 3px 5px rgba(0,0,0,.2);
+        //
       }
     }
   }
@@ -936,7 +941,7 @@ body {
     display: block;
   }
   .class-desc-block{
-    padding:18px 10px;
+    padding:18px 5px;
     background: #fff;
     margin-top:15px;
     width:100%;
@@ -996,6 +1001,7 @@ body {
       .desc-item-content{
         text-align: center;
         margin-top:8px;
+        font-size:.22rem;
         .item1{
           color:#fa7167;
         }
