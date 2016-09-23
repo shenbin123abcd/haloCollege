@@ -8,7 +8,7 @@ const NavItem = ({item}) => {
     return(
 
     <div className={itemClass} >
-        <Link to={`/course?month=${item.year}${item.month}`} className="link"  >
+        <Link to={`/course/index?month=${item.year}${item.month}`} className="link"  >
             {item.month}月
         </Link>
     </div>
