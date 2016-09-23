@@ -238,7 +238,7 @@ var ClassDesc=React.createClass({
       data.forEach(function(n,i){
           n.desc=descList[i];
       });
-      data[2].desc='11月01-12月02日';
+      //data[2].desc='11月01-12月02日';
 
       data[0].desc='￥'+data[0].desc+'/人';
       if(cate=='公开课'){
