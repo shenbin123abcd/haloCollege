@@ -56,13 +56,15 @@ const onLeaveRoute = (prevState) => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
-        <Route path="/" component={App}   >
+        <Route path="/course" component={App}   >
             <IndexRoute component={Index}  onLeave={onLeaveRoute} />
-            <Route path="user" component={User}   onLeave={onLeaveRoute}  />
-            <Route path="course/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
+            <Route path="/user" component={User}   onLeave={onLeaveRoute}  />
+            <Route path="/detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
         </Route>
+        
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
+
     </Router>
   </Provider>,
     reactElement
