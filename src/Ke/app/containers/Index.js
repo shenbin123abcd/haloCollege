@@ -6,7 +6,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 var Index = React.createClass({
     componentDidMount() {
-        document.title='幻熊课堂';
+        document.title='幻熊研习社';
         if(Modernizr.weixin&&Modernizr.ios){
             hb.hack.setTitle(document.title);
         }
@@ -38,7 +38,7 @@ var Index = React.createClass({
                     app.wechat.init();
                 }else{
                     app.wechat.init({
-                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                        title: `婚礼行业全新课程体系 幻熊研习社独家授权`,
                         content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
                         link : window.location.href,
                     });
@@ -48,7 +48,7 @@ var Index = React.createClass({
                     app.wechat.init();
                 }else{
                     app.wechat.init({
-                        title: `婚礼行业全新课程体系 幻熊学院独家授权`,
+                        title: `婚礼行业全新课程体系 幻熊研习社独家授权`,
                         content: `${Number(shareMonth)}月份课程大纲：${this.formatContent(nextProps.items)}`,
                         link : window.location.href,
                     });

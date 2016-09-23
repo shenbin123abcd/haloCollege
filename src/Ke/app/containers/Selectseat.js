@@ -54,7 +54,7 @@ var SeatBtn =({selectedItem,selectRandomSeat,bookSeat})=>{
 
 var SelectSeat = React.createClass({
     componentDidMount() {
-        document.title='座位表';
+        document.title='座位表-在线选座';
         if(Modernizr.weixin&&Modernizr.ios){
             hb.hack.setTitle(document.title);
         }
