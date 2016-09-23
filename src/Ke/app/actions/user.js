@@ -4,6 +4,7 @@ export const SHOW_OPEN_CLASS='SHOW_OPEN_CLASS'
 export const SHOW_TRAINING_CAMPS='SHOW_TRANING_CAMPS'
 
 var receiveDate='';
+var browserHistory=ReactRouter.browserHistory;
 
 function requestUserPosts(data){
     return{
@@ -12,7 +13,7 @@ function requestUserPosts(data){
     }
 }
 
-export function receiveUserPosts(filter="SHOW_OPEN"){
+export function receiveUserPosts(filter){
     return{
         type:RECEIVE_USER_ITEMS,
         data:receiveDate,
@@ -25,8 +26,15 @@ function fetchUserItems(req){
         dispatch(requestUserPosts(req))
         return app.ajax(`/courses/my`)
             .then(data=>{
-            receiveDate=data.data
-            return dispatch(receiveUserPosts());
+            receiveDate=data.data;
+            let id = hb.location.url('?cate_id');
+            if(id && id==2){
+                return dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'));
+            }else{
+                browserHistory.push(`/course/user?cate_id=1`);
+                return dispatch(receiveUserPosts('SHOW_OPEN'));
+            }
+
         })
     }
 }

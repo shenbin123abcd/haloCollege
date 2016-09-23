@@ -3,7 +3,7 @@ import userNoData from '../images/user-no-data.png'
 import {fetchUserItemsIfNeeded,showOpenClass,showTrainingCamps,receiveUserPosts} from '../actions/user'
 import PageLoading  from '../components/Common.Pageloading'
 
-
+var browserHistory=ReactRouter.browserHistory;
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var User= React.createClass({
   componentDidMount() {
@@ -18,17 +18,17 @@ var User= React.createClass({
   handleClick(e){
     const {dispatch , data }=this.props;
     let type=$(e.target).data('type');
-    $(".top-tab .tab-item").removeClass('active');
-    $(e.target).addClass('active');
     if(type=='SHOW_OPEN'){
+        browserHistory.push(`/course/user?cate_id=1`);
         dispatch(receiveUserPosts('SHOW_OPEN'))
     }else{
+        browserHistory.push(`/course/user?cate_id=2`);
         dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'))
     }
   },
 
   render() {
-    let {isFetching,list,user,monthList,location}=this.props;
+    let {isFetching,list,user,monthList,location,filter}=this.props;
     var _this=this;
     function renderUserPage(){
         if(!user && !list){
@@ -42,7 +42,7 @@ var User= React.createClass({
         }else if(isEmpty){
             return (
                 <div className="height-wrapper">
-                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <Header data={user} handleClick={_this.handleClick} showActive={filter}></Header>
                     <div className='content-list no-data-block'>
                         <div className="wrapper">
                             <img src={userNoData} alt=""/>
@@ -53,7 +53,7 @@ var User= React.createClass({
         }else{
             return(
                 <div className="height-wrapper">
-                    <Header data={user} handleClick={_this.handleClick}></Header>
+                    <Header data={user} handleClick={_this.handleClick} showActive={filter}></Header>
                     <UserList data={list}></UserList>
                 </div>
             )
@@ -71,6 +71,26 @@ var User= React.createClass({
 
 const Header=(data)=>{
     let user=data.data;
+    let active=data.showActive;
+    function showActive(){
+        if(active && active=='SHOW_OPEN'){
+            return(
+                <div className="top-tab">
+                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
+                    <div className="tab-tip"></div>
+                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
+                </div>
+            )
+        }else if(active && active=='SHOW_TRAINING_CAMP'){
+            return(
+                <div className="top-tab">
+                    <div className="tab-item f-15" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
+                    <div className="tab-tip"></div>
+                    <div className="tab-item f-15 active" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
+                </div>
+            )
+        }
+    }
     return(
         <div className="user-page-top">
             <img src={bgUser} alt=""/>
@@ -83,11 +103,7 @@ const Header=(data)=>{
                 </div>
             </div>
             <div className="tab-wrapper">
-                <div className="top-tab">
-                    <div className="tab-item f-15 active" data-type='SHOW_OPEN' onClick={data.handleClick}><i className="haloIcon haloIcon-open f-20"></i>公开课</div>
-                    <div className="tab-tip"></div>
-                    <div className="tab-item f-15" data-type='SHOW_TRAINING_CAMP' onClick={data.handleClick}><i className="haloIcon haloIcon-training f-20"></i>培训营</div>
-                </div>
+                {showActive()}
             </div>
         </div>
     )
@@ -160,9 +176,9 @@ const showFilter=(data,filter)=>{
         case "SHOW_ALL":
             return data
         case 'SHOW_OPEN':
-            return data.filter(n=>n.cate=='公开课')
+            return data.filter(n=>n.cate_id==1)
         case 'SHOW_TRAINING_CAMP':
-            return data.filter(n=>n.cate=='培训营')
+            return data.filter(n=>n.cate_id==2)
     }
 }
 
@@ -173,6 +189,7 @@ function mapStateToProps(state) {
         list:showFilter(state.userItems.list,state.userItems.filter),
         user:state.userItems.user,
         isFetching:state.userItems.isFetching,
+        filter:state.userItems.filter,
     }
 
 }
