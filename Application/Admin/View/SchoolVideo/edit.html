@@ -90,8 +90,8 @@
 					<th>是否需要登录</th>
 					<td>
 						<select name="auth">
-							<option value="1" <eq name="data.auth" value="1">selected</eq>>是</option>
 							<option value="0" <eq name="data.auth" value="0">selected</eq>>否</option>
+							<option value="1" <eq name="data.auth" value="1">selected</eq>>是</option>
 						</select>
 					</td>
 				</tr>
@@ -102,6 +102,15 @@
 							<option value="0" <eq name="data.is_hot" value="0">selected</eq>>否</option>
 							<option value="1" <eq name="data.is_hot" value="1">selected</eq>>是</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>封面（大图）</th>
+					<td>
+						<input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="big_cover">
+						<div>
+							<img src="http://7xopel.com2.z0.glb.qiniucdn.com/{$data.big_cover_url}?imageView/1/w/246/h/185/q/85" alt="">
+						</div>
 					</td>
 				</tr>
 				<tr>

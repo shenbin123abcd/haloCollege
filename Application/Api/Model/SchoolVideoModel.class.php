@@ -72,9 +72,9 @@ class SchoolVideoModel extends Model{
         $order = 'sort DESC';
         if(!empty($is_recommend)){
             $map['is_recommend'] = 1;
-            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip')->select();
+            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url')->select();
         }else{
-            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip')->select();
+            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url')->select();
         }
         unset($map['is_recommend']);
         $total = $this->where($map)->count();
@@ -245,6 +245,7 @@ class SchoolVideoModel extends Model{
         foreach ($list as $key => $value) {
             $list[$key]['guests'] = $guests[$value['guests_id']];
             $list[$key]['cover_url'] = C('IMG_URL') . $value['cover_url'];
+            $list[$key]['big_cover_url'] = C('IMG_URL') . $value['big_cover_url'];
         }
 
         return $list;

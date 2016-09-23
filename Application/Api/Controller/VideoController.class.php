@@ -76,6 +76,7 @@ class VideoController extends CommonController {
         }
 
         $data = D('SchoolVideo')->getListByCate($map,$page,$per_page);
+
         $this->success('success', $data);
     }
 
@@ -199,7 +200,7 @@ class VideoController extends CommonController {
     public function videoDetail($id) {
         $id = intval($id);
         empty($id) && $this->error('参数错误');
-        $data = D('SchoolVideo')->getDetail($id);
+        $data = D('SchoolVideo')->getDetail($id,$auth=0);
 
         empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
     }
@@ -451,31 +452,53 @@ class VideoController extends CommonController {
      * 记录播放
      */
     public function recordPlay(){
-        $data['vid'] = I('vid');
-        if(empty($data['vid'])){
+        $uid = $this->user['uid'];
+//        $record = '{"record_list":[{"vid":"101","progress":"111","play_time":123456780},{"vid":"102","progress":"122","play_time":123456780},{"vid":"103","progress":"13","play_time":123456789}]}
+//';
+        $record = I('record');
+        if(empty($record)){
             $this->error('参数错误！');
         }
-        $data['uid'] = $this->user['uid'];
-        $data['progress'] = I('progress') ? I('progress') : '0%';
+//        $record[] =array('vid'=>11,'progress'=>111,'play_time'=>1234556);
+//        $record[] =array('vid'=>22,'progress'=>222,'play_time'=>1234556);
+//        $record[] =array('vid'=>33,'progress'=>333,'play_time'=>1234556);
+        $record_json = json_encode($record);
+        $record_arr = $record_json->record_list;
+        if (empty($record_arr)){
+            $this->error('参数解析错误！');
+        }
+        //写入数据
+        foreach ($record_arr as $key=>$value){
+            $result = $this->record($value,$uid);
+            $this->success('返回数据',$result);
+            if (!!$result ==false){
+                $this->error('记录操作失败！');
+            }
+        }
+        $this->success('记录保存成功！');
+    }
+
+    /**
+     * 播放记录添加
+    */
+    public function record($value,$uid){
+        $data['vid'] = $value->vid;
+        $data['uid'] = $uid;
+        $data['progress'] = $value->progress ? $value->progress : 0;
+        $data['play_time'] = $value->play_time ? $value->play_time : 0;
         $data['create_time'] = time();
         $data['update_time'] = time();
         $data['status'] = 1;
-        $record = M('SchoolVideoRecord')->where(array('uid'=>$data['uid'],'vid'=>$data['vid'],'status'=>1))->find();
+        $record = M('SchoolVideoRecord')->where(array('uid'=>$uid,'vid'=>$value->vid,'status'=>1))->find();
         if(!empty($record)){
-            $record['progress'] = I('progress') ? I('progress') : $record['progress'];
+            $record['progress'] = $value->progress ? $value->progress : $record['progress'];
+            $record['play_time'] = $value->play_time ? $value->play_time : $record['play_time'];
             $record['update_time'] = time();
             $result = M('SchoolVideoRecord')->save($record);
-            if($result!==false){
-                $this->success('播放记录保存成功！');
-            }else{
-                $this->error(M('SchoolVideoRecord')->getError());
-            }
-        }
-        $id = M('SchoolVideoRecord')->add($data);
-        if($id){
-            $this->success('播放记录添加成功！');
+            return $result;
         }else{
-            $this->error(M('SchoolVideoRecord')->getError());
+            $id = M('SchoolVideoRecord')->add($data);
+            return $id;
         }
     }
 
@@ -488,20 +511,22 @@ class VideoController extends CommonController {
         $per_page = I('per_page') ? I('per_page') : 10000;
         $where['uid'] = $uid;
         $where['status'] =1;
-        $record = M('SchoolVideoRecord')->where($where)->field('vid,progress')->select();
+        $record = M('SchoolVideoRecord')->where($where)->field('vid,progress,play_time')->select();
         if(empty($record)){
             $this->success('success',array('record'=>array()));
         }
         foreach ($record as $key=>$value){
             $vid_arr[] = $value['vid'];
-            $progress[$value['vid']] = $value['progress'];
+            $progress[$value['vid']]['progress']= $value['progress'];
+            $progress[$value['vid']]['play_time'] = $value['play_time'];
         }
         $vid_arr = array_unique($vid_arr);
         $map['id'] = array('in',$vid_arr);
         $videos = D('SchoolVideo')->getListByCate($map,$page,$per_page);
         $videos = $videos['list'];
         foreach ($videos as $key=>$value){
-            $videos[$key]['play_progress'] = $progress[$value['id']];
+            $videos[$key]['progress'] = $progress[$value['id']]['progress'];
+            $videos[$key]['play_time'] = $progress[$value['id']]['play_time'];
         }
         $data['videos'] = $videos;
         $this->success('success',$data);
@@ -765,6 +790,8 @@ class VideoController extends CommonController {
             }
         }
     }
+
+
 
 
 

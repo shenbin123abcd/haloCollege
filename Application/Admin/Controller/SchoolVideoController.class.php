@@ -28,7 +28,8 @@ class SchoolVideoController extends CommonController {
 		$this->_before_add();
 	}
 	
-	public function _before_edit(){		
+	public function _before_edit(){
+
 		$this->_before_add();
 	}
 	
@@ -42,7 +43,7 @@ class SchoolVideoController extends CommonController {
 	
 	public function _before_insert(){
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
-
+		empty($_POST['big_cover_url']) && $this->error('请上传封面大图');
 		$this->_before_update();
 		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
 		empty($_POST['guests_id']) && $this->error('嘉宾不存在');

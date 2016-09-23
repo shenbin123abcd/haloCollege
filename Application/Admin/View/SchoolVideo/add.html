@@ -101,8 +101,8 @@
 					<th>是否需要登录</th>
 					<td>
 						<select name="auth">
-							<option value="1">是</option>
 							<option value="0">否</option>
+							<option value="1">是</option>
 						</select>
 					</td>
 				</tr>
@@ -114,6 +114,10 @@
 							<option value="1">是</option>
 						</select>
 					</td>
+				</tr>
+				<tr >
+					<th>封面（大图）</th>
+					<td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="big_cover"></td>
 				</tr>
 				<tr>
 					<th>是否设为推荐</th>
@@ -298,4 +302,5 @@
 		}
 
 	});
+
 </script>

@@ -58,8 +58,7 @@ class UserController extends CommonController{
             if ($model->create($info)) {
                 $result = $model->save($info);
                 if ($result !== false) {
-                    $result = $model->positionToMicro($info, $access_token, $wsq_name,$gender);
-                    $this->success('个人信息保存成功！',array('wsq_id'=>$result['id']));
+                    $this->success('个人信息保存成功！');
                 } else {
                     $this->error('个人信息保存失败！');
                 }
