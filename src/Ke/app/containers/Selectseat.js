@@ -92,7 +92,7 @@ var SelectSeat = React.createClass({
         }
 
         if(isBookSuccess){
-            hb.lib.weui.alert(info).then(res=>browserHistory.push('/user'))
+            hb.lib.weui.alert(info).then(res=>browserHistory.push('/course/user'))
         }
 
     },
