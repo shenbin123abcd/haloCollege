@@ -242,7 +242,7 @@ var ClassDesc=React.createClass({
 
       data[0].desc='￥'+data[0].desc+'/人';
       if(cate=='公开课'){
-          data[3].desc=data[3].desc+'天期会';
+          data[3].desc=data[3].desc+'天课时';
       }else{
           data[3].desc=data[3].desc+'天课时';
       }
