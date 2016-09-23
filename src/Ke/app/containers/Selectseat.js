@@ -74,6 +74,12 @@ var SelectSeat = React.createClass({
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
         let {isBooking,isBookSuccess,isBookFailure,info,course}=this.props;
+
+        // console.log(course)
+        // if(course){
+        //     console.log(`/course/user?cate_id=${course.cate_id}`)
+        // }
+
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
         // console.log(prevState,this.props)
         if(prevState.items&&!this.hbDrag){
