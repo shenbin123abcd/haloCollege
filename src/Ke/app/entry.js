@@ -57,6 +57,7 @@ const onLeaveRoute = (prevState) => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
+        <Redirect from="/" to="/course/rIndex" />
         <Redirect from="/course/" to="/course/index" />
         <Route path="/course/" component={App}   >
             <Route path="/"  component={Index}  onLeave={onLeaveRoute}  />
@@ -68,7 +69,7 @@ ReactDOM.render(
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
-        
+
         <Redirect from="/course/*" to="/course/index" />
         <Redirect from="*" to="/course/rIndex" />
     </Router>
