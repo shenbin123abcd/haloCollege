@@ -11,3 +11,16 @@ function get_address($uid){
 
     return $address;
 }
+
+/**
+ * 新浪短网址
+ * @param $url
+ * @return mixed
+ */
+function get_url($url){
+    $ret = curl_get('http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=' . urlencode($url));
+    if (!empty($ret) && isset($ret[0]) && $ret[0]['type']==0){
+        $url = $ret[0]['url_short'];
+    }
+    return $url;
+}
