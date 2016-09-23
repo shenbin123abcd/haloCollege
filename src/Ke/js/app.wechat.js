@@ -10,11 +10,19 @@ app.wechat=(function(){
     var wechat = {
         init: function(shareDate) {
             var _this = this;
+            var defaultData={
+                title: '婚礼行业全新课程体系 幻熊学院独家授权',
+                content: '幻熊学院联合国内外著名婚礼人携手打造婚礼行业全新课程体系，涉及婚礼策划，销售谈单，花艺设计，宴会设计，婚礼手绘......带来最经典的行业干货分享。',
+                link: 'http://ke.halobear.com/',
+                logo: 'http://ke.halobear.com/Public/Ke/images/wechat-share-default.png'
+            }
             if (typeof(shareDate) !== 'undefined') {
-                this.data.title = shareDate.title||_this.data.title;
-                this.data.content = shareDate.content||_this.data.content;
-                this.data.link = shareDate.link||_this.data.link;
-                this.data.logo = shareDate.logo||_this.data.logo;
+                this.data.title = shareDate.title||defaultData.title;
+                this.data.content = shareDate.content||defaultData.content;
+                this.data.link = shareDate.link||defaultData.link;
+                this.data.logo = shareDate.logo||defaultData.logo;
+            }else{
+                this.data=defaultData
             }
             if(_this.loadedScript){
                 _this.act();
@@ -28,12 +36,7 @@ app.wechat=(function(){
             }
         },
         loadedScript:false,
-        data:{
-            title: '幻熊课堂',
-            content: '幻熊课堂',
-            link: 'http://ke.halobear.com/',
-            logo: 'http://ke.halobear.com/Public/Ke/images/wechat-share-default.png'
-        },
+        data:{},
         act: function() {
             var _this = this;
             $.ajax({

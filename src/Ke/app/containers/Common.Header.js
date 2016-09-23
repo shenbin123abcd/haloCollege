@@ -9,10 +9,7 @@ var HeaderContainer = React.createClass({
 
     },
     handlerUrlChange(ev){
-
         const { dispatch,monthList,location} = this.props
-
-        // console.log(window.location.href)
 
         var item;
         if(ev.pathname=='/'){
@@ -21,29 +18,27 @@ var HeaderContainer = React.createClass({
                 item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
                 if(!item){
                     item={
-                        month:ev.query.month.substring(0,4),
-                        year:ev.query.month.substring(4,6),
+                        year:ev.query.month.substring(0,4),
+                        month:ev.query.month.substring(4,6),
                     }
                 }
                 dispatch(setCurrentMonth(item));
             }else{
                 item=monthList[0]
+
                 dispatch(fetchCourseIfNeeded(`${item.year}${item.month}`));
                 dispatch(setCurrentMonth(item));
             }
             // console.log('item',`${item.year}${item.month}`)
-            app.wechat.init({
-                title: `幻熊课堂`,
-                content: `幻熊课堂${item.year}年${item.month}月课程`,
-                link : window.location.href,
-            });
+        }else if(ev.pathname.indexOf('/course/detail_')>-1){
+
+
         }else{
             if(monthList.filter(n=>n.active).length>0){
                 dispatch(resetMonth())
             }
         }
     },
-
     renderNavStatus(props){
         const { dispatch,monthList,location,history} = props
         // console.log(location)
@@ -65,8 +60,6 @@ var HeaderContainer = React.createClass({
                 dispatch(resetMonth())
             }
         }
-
-
     },
 
     componentDidMount() {
