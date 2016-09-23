@@ -256,6 +256,9 @@ body {
     }
     .img-box{
       position: relative;
+      height: 0;
+      padding-bottom: 53.52%;
+      overflow: hidden;
       .img{
         border-radius: 6px 6px 0 0;
         width: 100%;
