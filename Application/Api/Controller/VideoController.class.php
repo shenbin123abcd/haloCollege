@@ -453,24 +453,18 @@ class VideoController extends CommonController {
      */
     public function recordPlay(){
         $uid = $this->user['uid'];
-//        $record = '{"record_list":[{"vid":"101","progress":"111","play_time":123456780},{"vid":"102","progress":"122","play_time":123456780},{"vid":"103","progress":"13","play_time":123456789}]}
-//';
         $record = I('record');
         if(empty($record)){
             $this->error('参数错误！');
         }
-//        $record[] =array('vid'=>11,'progress'=>111,'play_time'=>1234556);
-//        $record[] =array('vid'=>22,'progress'=>222,'play_time'=>1234556);
-//        $record[] =array('vid'=>33,'progress'=>333,'play_time'=>1234556);
-        $record_json = json_encode($record);
-        $record_arr = $record_json->record_list;
+        $record_str = htmlspecialchars_decode($record);
+        $record_arr = json_decode($record_str);
         if (empty($record_arr)){
             $this->error('参数解析错误！');
         }
         //写入数据
         foreach ($record_arr as $key=>$value){
             $result = $this->record($value,$uid);
-            $this->success('返回数据',$result);
             if (!!$result ==false){
                 $this->error('记录操作失败！');
             }

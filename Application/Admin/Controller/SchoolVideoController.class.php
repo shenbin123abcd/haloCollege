@@ -14,11 +14,14 @@ class SchoolVideoController extends CommonController {
 	}
 
 	public function _join(&$data){
-		$bol =array('<b style="color: red">否</b>','<b style="color: green">是</b>');
+		$bol =array('<b style="color: red">否</b>','<b style="color: green">是</b>','<b style="color: green">已上传</b>');
 		foreach ($data as $key=>$value){
 			$data[$key]['vip'] = $bol[$value['is_vip']];
 			$data[$key]['recommend'] = $bol[$value['is_recommend']];
 			$data[$key]['hot'] = $bol[$value['is_hot']];
+			if(!empty($value['big_cover_url'])){
+				$data[$key]['is_big_cover'] = $bol[2];
+			}
 		}
 		method_exists($this, 'get_guest_name') && $this->get_guest_name($data);
 

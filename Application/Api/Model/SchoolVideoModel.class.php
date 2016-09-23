@@ -113,7 +113,7 @@ class SchoolVideoModel extends Model{
             $data['video']['cover_url'] = C('IMG_URL'). $data['video']['cover_url'];// . '!720x480'
 
             // 嘉宾信息
-            $data['guests'] = M('SchoolGuests')->where(array('id'=>$data['video']['guests_id']))->field('title AS name, position, avatar_url, content')->find();
+            $data['guests'] = M('SchoolGuests')->where(array('id'=>$data['video']['guests_id']))->field('title, position, avatar_url, content')->find();
 
             // 嘉宾头像
             $data['guests']['avatar_url'] = $data['guests']['avatar_url'] ? C('IMG_URL'). $data['guests']['avatar_url'] : '';
