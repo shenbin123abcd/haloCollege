@@ -183,7 +183,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
     public function getInfo($course_id){
-        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,start_date,price,total,num,place,day')->find();
+        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,cate_id,start_date,price,total,num,place,day')->find();
         if($data){
             if ($this->getStep($course_id)){
                 //if ($data['day'] > 1){
@@ -250,7 +250,7 @@ class CourseModel extends Model {
 
             $start_date = date('m月d', $time) . '-' . date($format, $end_date);
         }else{
-            $start_date = date('m月d', $time);
+            $start_date = date('m月d日', $time);
         }
         return $start_date;
     }

@@ -6,7 +6,7 @@ const Header = ({items,renderItem}) => (
         </div>
         <span className="bar-box"></span>
         <div className="user-box">
-            <Link to="/user"  className="haloIcon haloIcon-user-single"></Link>
+            <Link to="/course/user?cate_id=1"  className="haloIcon haloIcon-user-single"></Link>
         </div>
     </div>
 )

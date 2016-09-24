@@ -12,7 +12,7 @@ var HeaderContainer = React.createClass({
         const { dispatch,monthList,location} = this.props
 
         var item;
-        if(ev.pathname=='/'){
+        if(ev.pathname=='/course/index'){
             if(ev.query.month){
                 dispatch(fetchCourseIfNeeded(`${ev.query.month}`));
                 item=monthList.filter(n=>(n.year.toString()+n.month.toString())==ev.query.month)[0]
@@ -43,7 +43,7 @@ var HeaderContainer = React.createClass({
         const { dispatch,monthList,location,history} = props
         // console.log(location)
         var item;
-        if(location.pathname=='/'){
+        if(location.pathname=='/course/index'){
             if(location.query.month){
                 item=monthList.filter(n=>(n.year.toString()+n.month.toString())==location.query.month)[0]
             }else{

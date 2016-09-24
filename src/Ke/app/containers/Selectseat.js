@@ -54,7 +54,7 @@ var SeatBtn =({selectedItem,selectRandomSeat,bookSeat})=>{
 
 var SelectSeat = React.createClass({
     componentDidMount() {
-        document.title='座位表';
+        document.title='座位表-在线选座';
         if(Modernizr.weixin&&Modernizr.ios){
             hb.hack.setTitle(document.title);
         }
@@ -73,7 +73,13 @@ var SelectSeat = React.createClass({
     componentDidUpdate  : function(prevState){
         // console.log('componentDidUpdate')
         // console.log(prevState,prevProps)
-        let {isBooking,isBookSuccess,isBookFailure,info}=this.props;
+        let {isBooking,isBookSuccess,isBookFailure,info,course}=this.props;
+
+        // console.log(course)
+        // if(course){
+        //     console.log(`/course/user?cate_id=${course.cate_id}`)
+        // }
+
         let dragDom=$(this.refs.dragContainer).find('[data-my-drag]').get()[0]
         // console.log(prevState,this.props)
         if(prevState.items&&!this.hbDrag){
@@ -92,7 +98,7 @@ var SelectSeat = React.createClass({
         }
 
         if(isBookSuccess){
-            hb.lib.weui.alert(info).then(res=>browserHistory.push('/user'))
+            hb.lib.weui.alert(info).then(res=>browserHistory.push(`/course/user?cate_id=${course.cate_id}`))
         }
 
     },
