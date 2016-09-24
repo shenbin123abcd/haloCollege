@@ -107,14 +107,7 @@ var Detail= React.createClass({
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
-                    <div className="bg-gap">
-                        <div className="weixin-block">
-                            <div className="wrapper">
-                                <img src={weixinPic} alt=""/>
-                            </div>
-                            <div className="text">长按二维码添加「 幻熊研习社 」客服微信号<br/>咨询课程报名相关事项</div>
-                        </div>
-                    </div>
+                    <WeixinBlock cateId={fetchData.cate_id}></WeixinBlock>
                     <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
                 </div>
             )
@@ -395,6 +388,31 @@ var InterviewBlock=React.createClass({
             return false;
         }
     }
+})
+
+var WeixinBlock=React.createClass({
+  render(){
+    let cateId=this.props.cateId;
+
+    let renderWx=()=>{
+      if(cateId!=1){
+        return(
+          <div className="bg-gap">
+            <div className="weixin-block">
+                <div className="wrapper">
+                    <img src={weixinPic} alt=""/>
+                </div>
+                <div className="text">长按二维码添加「 幻熊研习社 」客服微信号<br/>咨询课程报名相关事项</div>
+            </div>
+          </div>
+        )
+      }
+    }
+    
+    return(
+      {renderWx()}
+    )
+  }
 })
 
 function mapStateToProps(state) {
