@@ -269,9 +269,9 @@ body {
         height: 100%;
         left: 0;
         top: 0;
-        background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
+        //background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
         border-radius: 6px 6px 0 0;
-      }
+      } 
       .guest-box{
         position: absolute;
         left: 0.26rem;
@@ -849,7 +849,7 @@ body {
         height: 100%;
         left: 0;
         top: 0;
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+        //background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
       }
       .teacher-desc{
         position: absolute;
