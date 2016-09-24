@@ -39,7 +39,7 @@ class PaymentController extends CommonController {
             $order['order_no'] = 'MB' . date("d") . rand(10,99) . implode(explode('.', microtime(1)));
             $order['uid'] = $this->user['id'];
             $order['cate'] = $cate_id;
-            $order['price'] = $cate['price'];
+            $order['price'] = $cate['count_price'];
             $order['pay_type'] = $pay_type;
             $order['body'] = $body;
             $order['exp_time'] = time() + 6900;
