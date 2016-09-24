@@ -281,6 +281,7 @@ body {
       }
       .name{
         font-size: 0.34rem;
+        font-weight: 700;
       }
       .position{
         margin-top: 0.1rem;
@@ -857,6 +858,9 @@ body {
         transform: translateY(-50%);
         color:#fff;
         left:15px;
+        .name{
+          font-weight: 700;
+        }
       }
       .sign-block{
         position: absolute;
