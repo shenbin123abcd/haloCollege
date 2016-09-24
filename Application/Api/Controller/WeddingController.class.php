@@ -806,6 +806,7 @@ class WeddingController extends CommonController {
         }
     }
 
+
     /**
      * 我的——收藏
     */
@@ -853,6 +854,7 @@ class WeddingController extends CommonController {
         $data['total'] = intval($total);
         $this->success('success', $data);
     }
+
 
     /**
      * 我的——删除收藏
