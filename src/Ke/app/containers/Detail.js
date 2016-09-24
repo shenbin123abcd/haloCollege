@@ -408,11 +408,10 @@ var WeixinBlock=React.createClass({
         )
       }
     }
-    
+
     return(
       {renderWx()}
     )
-  }
 })
 
 function mapStateToProps(state) {
