@@ -410,7 +410,10 @@ var WeixinBlock=React.createClass({
     }
 
     return(
-      {renderWx()}
+      <div>
+        {renderWx()}
+      </div>
+      
     )
 })
 
