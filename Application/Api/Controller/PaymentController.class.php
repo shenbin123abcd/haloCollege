@@ -33,7 +33,7 @@ class PaymentController extends CommonController {
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
             $order = array();
         }
-        $cate['price'] = 0.01;
+        //$cate['price'] = 0.01;
         if (empty($order)){
             $body = '【幻熊学院】' . $cate['title'];
             $order['order_no'] = 'MB' . date("d") . rand(10,99) . implode(explode('.', microtime(1)));
