@@ -112,7 +112,7 @@ var Detail= React.createClass({
                             <div className="wrapper">
                                 <img src={weixinPic} alt=""/>
                             </div>
-                            <div className="text">长按二维码添加「 幻熊学院 」客服微信号<br/>咨询课程报名相关事项</div>
+                            <div className="text">长按二维码添加「 幻熊研习社 」客服微信号<br/>咨询课程报名相关事项</div>
                         </div>
                     </div>
                     <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>

@@ -277,11 +277,10 @@ body {
         left: 0.26rem;
         top: 1.3rem;
         color: #ffffff;
-
+        display:none;
       }
       .name{
         font-size: 0.34rem;
-        font-weight: 700;
       }
       .position{
         margin-top: 0.1rem;
@@ -858,9 +857,7 @@ body {
         transform: translateY(-50%);
         color:#fff;
         left:15px;
-        .name{
-          font-weight: 700;
-        }
+        display:none;
       }
       .sign-block{
         position: absolute;
