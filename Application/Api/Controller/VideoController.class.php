@@ -90,7 +90,7 @@ class VideoController extends CommonController {
         $member['cate_title'] = '会员专享';
         $member['list'] = $member_list['list'];
         $list[] = $member;
-        $cate = M('SchoolCate')->getField('id,title');
+        $cate = M('SchoolCate')->where(array('status'=>1))->getField('id,title');
         foreach ($cate as $key=>$value){
             $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)'),$page=1,$per_page=2,$is_recommend=1);
             $data['cate_id'] = $key;

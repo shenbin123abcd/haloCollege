@@ -269,15 +269,15 @@ body {
         height: 100%;
         left: 0;
         top: 0;
-        background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
+        //background-image: linear-gradient(to right,rgba(#000,0.5),rgba(#000,0.1));
         border-radius: 6px 6px 0 0;
-      }
+      } 
       .guest-box{
         position: absolute;
         left: 0.26rem;
         top: 1.3rem;
         color: #ffffff;
-
+        //display:none;
       }
       .name{
         font-size: 0.34rem;
@@ -849,7 +849,7 @@ body {
         height: 100%;
         left: 0;
         top: 0;
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+        //background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
       }
       .teacher-desc{
         position: absolute;
@@ -857,6 +857,7 @@ body {
         transform: translateY(-50%);
         color:#fff;
         left:15px;
+        display:none;
       }
       .sign-block{
         position: absolute;
@@ -1125,7 +1126,7 @@ body {
 
         }
         img{
-          display:block;
+          display:inline-block;
           max-width:100%;
           margin-bottom: 18px;
           &+br{

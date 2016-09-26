@@ -35,7 +35,7 @@ class PayController extends CommonController {
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
             $order = array();
         }
-        $course['price'] = 0.01;
+        //$course['price'] = 0.01;
         if (empty($order)){
             $body = $course['title'] . '-' . $course['city'];
             $order['wechat_id'] = $this->user['id'];
