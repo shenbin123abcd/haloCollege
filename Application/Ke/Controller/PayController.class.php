@@ -35,7 +35,7 @@ class PayController extends CommonController {
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
             $order = array();
         }
-        $course['price'] = 0.01;
+
         if (empty($order)){
             $body = $course['title'] . '-' . $course['city'];
             $order['wechat_id'] = $this->user['id'];
@@ -233,11 +233,19 @@ class PayController extends CommonController {
         if (!empty($course)){
             // 上课日期
             $date = date('m月d日', $course['start_date']);
+            $title = '《'. $course['title'] .'》';
+            $guest = M('SchoolGuests')->where(['id'=>$course['guest_id']])->find();
 
             // 地点
-            $place = '上海';
-            $addr = '幻熊学院';
-            send_msg($phone, array($date, $place, $addr, $course['title']), 118349, '8aaf070857418a58015745ded06402d3');
+            $place = $course['place'];
+
+            if ($course['cate_id'] == 1){
+                // 公开课
+                send_msg($phone, array($date, $title), 119538, '8aaf070857418a58015745ded06402d3');
+            }else{
+                // 培训营
+                send_msg($phone, array($date, $title, $guest['title'] . '老师',$place), 119508, '8aaf070857418a58015745ded06402d3');
+            }
         }
     }
 }

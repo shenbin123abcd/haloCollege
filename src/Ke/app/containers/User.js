@@ -7,14 +7,37 @@ var browserHistory=ReactRouter.browserHistory;
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var withRouter=ReactRouter.withRouter;
 var User= React.createClass({
+    unHandlerUrlChange(){
+
+    },
+    handlerUrlChange(ev){
+        const { dispatch } = this.props;
+        if(ev.pathname=='/course/user'){
+            if(ev.query.cate_id==1){
+                dispatch(receiveUserPosts('SHOW_OPEN'))
+            }else{
+                dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'))
+            }
+        }
+    },
   componentDidMount() {
       document.title='我的个人中心';
+      let _this=this;
       if(Modernizr.weixin&&Modernizr.ios){
           hb.hack.setTitle(document.title);
       }
       app.wechat.init();
-      let { dispatch,data} = this.props;
+      let { dispatch} = this.props;
       dispatch(fetchUserItemsIfNeeded());
+      setTimeout(function(){
+          _this.unHandlerUrlChange=_this.props.router.listen(_this.handlerUrlChange)
+      },500);
+  },
+  componentWillReceiveProps(nextProps){
+      let {filter}=this.props;
+      if(filter!=nextProps.filter){
+          return true;
+      }
   },
   handleClick(type){
     const {dispatch , data }=this.props;
@@ -26,6 +49,9 @@ var User= React.createClass({
         dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'))
     }
   },
+    componentWillUnmount(nextProps){
+        this.unHandlerUrlChange()
+    },
 
   render() {
     let {isFetching,list,user,monthList,location,filter}=this.props;
