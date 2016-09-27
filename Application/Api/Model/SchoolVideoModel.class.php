@@ -133,6 +133,14 @@ class SchoolVideoModel extends Model{
             $count_praise = M('SchoolVideoPraise')->where(array('vid'=>$id,'status'=>1))->count();
             $data['video']['count_praise'] = intval($count_praise) ? intval($count_praise) : 0;
 
+           //播放进度
+            if($user['id']){
+                $play_time = M('SchoolVideoRecord')->where(array('uid'=>$user['id'],'vid'=>$id))->field('play_time')->find();
+                $data['video']['play_time'] = empty($play_time) ? 0 : intval($play_time['play_time']);
+            }else{
+                $data['video']['play_time'] = -1;
+            }
+
         }else{
             $data = array();
         }

@@ -9,6 +9,8 @@
 namespace Api\Controller;
 
 use Think\Controller;
+use Think\Exception;
+
 class VideoController extends CommonController {
     protected $module_auth = 0;
     protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
@@ -435,16 +437,25 @@ class VideoController extends CommonController {
      * 获取会员过期时间及开通的会员类型
      */
     public function getExpireDate(){
-
         $uid = $this->user['uid'];
         $where['uid'] = $uid;
         $where['status'] = 1;
         $member = M('SchoolMember')->where($where)->find();
-        $open_member = $this->get_open_member($uid);
-        if (!empty($open_member)){
-            $open_member[0]['expire'] = $member['end_time'] ? $member['end_time'] : '';
-        }
-        $data[]= $open_member[0];
+        $expire = $member['end_time']-time();
+        $member_cate = M('SchoolMemberCate')->getField('id,title');
+       if ($expire<0){
+           $this->success('success',$data[]=array());
+       }elseif ($expire > 0 && $expire<=30*24*60*60){
+            $cate = 4;
+       }elseif ($expire > 30*24*60*60 && $expire<=3*30*24*60*60){
+            $cate = 3;
+       }elseif ($expire > 3*30*24*60*60 && $expire <= 6*30*24*60*60){
+            $cate = 2;
+       }else{
+            $cate = 1;
+       }
+        $open_member = array('cate_id'=>$cate,'cate_title'=>$member_cate[$cate],'expire'=>$member['end_time']);
+        $data[]= $open_member;
         $this->success('success',$data);
     }
 
