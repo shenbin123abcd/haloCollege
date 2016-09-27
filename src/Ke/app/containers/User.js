@@ -12,6 +12,7 @@ var User= React.createClass({
     },
     handlerUrlChange(ev){
         const { dispatch } = this.props;
+        console.log(ev);
         if(ev.pathname=='/course/user'){
             if(ev.query.cate_id==1){
                 dispatch(receiveUserPosts('SHOW_OPEN'))
@@ -29,7 +30,7 @@ var User= React.createClass({
       let { dispatch} = this.props;
       dispatch(fetchUserItemsIfNeeded());
       this.unHandlerUrlChange=this.props.router.listen(this.handlerUrlChange);
-      console.log(1);
+
   },
   componentWillReceiveProps(nextProps){
       let {filter}=this.props;

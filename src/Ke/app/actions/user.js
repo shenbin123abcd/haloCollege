@@ -28,8 +28,10 @@ function fetchUserItems(req){
             .then(data=>{
             receiveDate=data.data;
             let id = hb.location.url('?cate_id');
-            if(id && id==2){
+            if(id&&id==2){
                 return dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'));
+            }else if(id&&id==1){
+                return dispatch(receiveUserPosts('SHOW_OPEN'));
             }else{
                 browserHistory.push(`/course/user?cate_id=1`);
                 return dispatch(receiveUserPosts('SHOW_OPEN'));
