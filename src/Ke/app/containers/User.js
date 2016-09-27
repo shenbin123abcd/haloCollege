@@ -22,16 +22,14 @@ var User= React.createClass({
     },
   componentDidMount() {
       document.title='我的个人中心';
-      let _this=this;
       if(Modernizr.weixin&&Modernizr.ios){
           hb.hack.setTitle(document.title);
       }
       app.wechat.init();
       let { dispatch} = this.props;
       dispatch(fetchUserItemsIfNeeded());
-      setTimeout(function(){
-          _this.unHandlerUrlChange=_this.props.router.listen(_this.handlerUrlChange)
-      },500);
+      this.unHandlerUrlChange=this.props.router.listen(this.handlerUrlChange);
+      console.log(1);
   },
   componentWillReceiveProps(nextProps){
       let {filter}=this.props;
@@ -198,13 +196,15 @@ const UserList=(data)=>{
 }
 
 const showFilter=(data,filter)=>{
-    switch(filter){
-        case "SHOW_ALL":
-            return data
-        case 'SHOW_OPEN':
-            return data.filter(n=>n.cate_id==1)
-        case 'SHOW_TRAINING_CAMP':
-            return data.filter(n=>n.cate_id==2)
+    if(data!=undefined){
+        switch(filter){
+            case "SHOW_ALL":
+                return data
+            case 'SHOW_OPEN':
+                return data.filter(n=>n.cate_id==1)
+            case 'SHOW_TRAINING_CAMP':
+                return data.filter(n=>n.cate_id==2)
+        }
     }
 }
 
