@@ -171,4 +171,37 @@ class SchoolVideoController extends CommonController {
 			$data[$key]['guests'] = $guests_name[$value['guests_id']];
 		}
 	}
+
+    //修改热门、会员、推荐状态
+	public function change_status (){
+		$id = I('id');
+		$status = I('is_status');
+		$remark  = I('remark');
+		$video = M('SchoolVideo')->where(array('id'=>$id,'status'=>1))->find();
+		if (empty($video) || $status==''){
+			$this->error('参数错误！');
+		}else{
+			$change_status = $status==1 ? 0 : 1 ;
+			switch ($remark){
+				case 'is_hot':
+					$video['is_hot'] = $change_status;
+					break;
+				case 'is_recommend':
+					$video['is_recommend'] = $change_status;
+					break;
+				case 'is_vip':
+					$video['is_vip'] = $change_status;
+					break;
+				default:
+					$this->error('参数错误！');
+					break;
+			}
+			$result = M('SchoolVideo')->save($video);
+			if ($result!==false){
+				$this->success('状态修改成功！');
+			}else{
+				$this->error('状态修改失败！');
+			}
+		}
+	}
 }
