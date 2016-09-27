@@ -12,7 +12,7 @@ var User= React.createClass({
     },
     handlerUrlChange(ev){
         const { dispatch } = this.props;
-        console.log(ev);
+        //console.log(ev);
         if(ev.pathname=='/course/user'){
             if(ev.query.cate_id==1){
                 dispatch(receiveUserPosts('SHOW_OPEN'))
@@ -210,7 +210,7 @@ const showFilter=(data,filter)=>{
 }
 
 function mapStateToProps(state) {
-    const { userItems} = state
+    const { userItems} = state;
     const {data}=userItems;
     return {
         list:showFilter(state.userItems.list,state.userItems.filter),
