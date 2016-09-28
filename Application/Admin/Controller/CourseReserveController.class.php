@@ -14,7 +14,7 @@ class CourseReserveController extends CommonController {
             }
 
             $course = M('Course')->where(array('id'=>array('in', $course_id)))->getField('id, title');
-            foreach ($data as $key=>$itme){
+            foreach ($data as $key=>$item){
                 $data[$key]['course'] = $course[$item['course_id']];
             }
         }
