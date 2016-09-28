@@ -8,6 +8,7 @@
 
 namespace Api\Model;
 
+
 use Think\Model;
 
 class SchoolVideoModel extends Model{
@@ -67,7 +68,7 @@ class SchoolVideoModel extends Model{
     /**
      * 获取视频列表(V2)
     */
-    public function getListByCate($map=array(),$page,$per_page,$is_recommend){
+    public function getListByCate($map=array(),$page,$per_page,$is_recommend){        
         $map['status'] =1;
         $order = 'sort DESC';
         if(!empty($is_recommend)){
