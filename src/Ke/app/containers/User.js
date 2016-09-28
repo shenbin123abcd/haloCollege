@@ -12,6 +12,7 @@ var User= React.createClass({
     },
     handlerUrlChange(ev){
         const { dispatch } = this.props;
+        //console.log(ev);
         if(ev.pathname=='/course/user'){
             if(ev.query.cate_id==1){
                 dispatch(receiveUserPosts('SHOW_OPEN'))
@@ -22,16 +23,14 @@ var User= React.createClass({
     },
   componentDidMount() {
       document.title='我的个人中心';
-      let _this=this;
       if(Modernizr.weixin&&Modernizr.ios){
           hb.hack.setTitle(document.title);
       }
       app.wechat.init();
       let { dispatch} = this.props;
       dispatch(fetchUserItemsIfNeeded());
-      setTimeout(function(){
-          _this.unHandlerUrlChange=_this.props.router.listen(_this.handlerUrlChange)
-      },500);
+      this.unHandlerUrlChange=this.props.router.listen(this.handlerUrlChange);
+
   },
   componentWillReceiveProps(nextProps){
       let {filter}=this.props;
@@ -198,18 +197,20 @@ const UserList=(data)=>{
 }
 
 const showFilter=(data,filter)=>{
-    switch(filter){
-        case "SHOW_ALL":
-            return data
-        case 'SHOW_OPEN':
-            return data.filter(n=>n.cate_id==1)
-        case 'SHOW_TRAINING_CAMP':
-            return data.filter(n=>n.cate_id==2)
+    if(data!=undefined){
+        switch(filter){
+            case "SHOW_ALL":
+                return data
+            case 'SHOW_OPEN':
+                return data.filter(n=>n.cate_id==1)
+            case 'SHOW_TRAINING_CAMP':
+                return data.filter(n=>n.cate_id==2)
+        }
     }
 }
 
 function mapStateToProps(state) {
-    const { userItems} = state
+    const { userItems} = state;
     const {data}=userItems;
     return {
         list:showFilter(state.userItems.list,state.userItems.filter),
