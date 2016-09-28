@@ -235,16 +235,16 @@ class VideoController extends CommonController {
     }
 
 
-    ///**
-    // * 视频详情无需登录
-    // */
-    //public function videoDetailV2($id) {
-    //    $id = intval($id);
-    //    empty($id) && $this->error('参数错误');
-    //    $data = D('SchoolVideo')->getDetail($id, 0);
-    //
-    //    empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
-    //}
+    /**
+     * 视频详情无需登录
+     */
+    public function videoDetailV2($id) {
+        $id = intval($id);
+        empty($id) && $this->error('参数错误');
+        $data = D('SchoolVideo')->getDetail($id, 0);
+
+        empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
+    }
 
     /**
      * 获取视频地址
