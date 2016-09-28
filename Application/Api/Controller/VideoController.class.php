@@ -87,20 +87,47 @@ class VideoController extends CommonController {
      */
     public function recommendVideoList(){
         $model = D('SchoolVideo');
-        $member_list = $model->getListByCate(array('is_vip'=>1),$page=1,$per_page=2);
+        $member_list = $model->getListByCate(array('is_vip'=>1),$page=1,$per_page=2,$is_recommend=1);
         $member['cate_id'] = 0;
         $member['cate_title'] = '会员专享';
         $member['list'] = $member_list['list'];
         $list[] = $member;
+        //过滤视频，保证各分类的推荐视频不重复
+        $filter_vid =array();
+        $filter_vid[] = $member_list['list'][0]['id'];
+        $filter_vid[] = $member_list['list'][1]['id'];
         $cate = M('SchoolCate')->where(array('status'=>1))->getField('id,title');
         foreach ($cate as $key=>$value){
-            $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)'),$page=1,$per_page=2,$is_recommend=1);
+            $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)','id'=>array('not in',$filter_vid)),$page=1,$per_page=2,$is_recommend=1);
+
+            //保证首页列表各分类有两个视频（推荐视频不够，由非推荐视频补充）
+            $num = 2-count($data_list['list']);
+            if ($num==2 || $num==1){
+                $data_list = $this->add_recommend_videos($data_list,$filter_vid,$key,$num);
+            }
+
             $data['cate_id'] = $key;
             $data['cate_title'] = $value;
             $data['list'] = $data_list['list'];
             $list[] = $data;
+            $filter_vid[] = $data_list['list'][0]['id'];
+            $filter_vid[] = $data_list['list'][1]['id'];
+            array_unique($filter_vid);
         }
+        unset($filter_vid);
         $this->success('success', $list);
+    }
+
+    /**
+     * 保证首页列表各分类有两个视频（推荐视频不够，由非推荐视频补充）
+    */
+    public function add_recommend_videos($data_list,$filter_vid,$key,$num){
+        $model = D('SchoolVideo');
+        !empty($data_list['list'][0]['id']) && $filter_vid[] = $data_list['list'][0]['id'];
+        $video = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)','id'=>array('not in',$filter_vid)),$page=1,$per_page=$num);
+        !empty($video['list'][0]) && $data_list['list'][] =$video['list'][0];
+        !empty($video['list'][1]) && $data_list['list'][] = $video['list'][1];
+        return $data_list;
     }
 
     /**
@@ -197,7 +224,7 @@ class VideoController extends CommonController {
     }
 
     /**
-     * 视频详情
+     * 视频详情(V2)
      */
     public function videoDetail($id) {
         $id = intval($id);
