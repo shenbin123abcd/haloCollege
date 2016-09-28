@@ -471,7 +471,7 @@ class VideoController extends CommonController {
         $expire = $member['end_time']-time();
         $member_cate = M('SchoolMemberCate')->getField('id,title');
        if ($expire<0){
-           $this->success('success',$data[]=array());
+           $this->success('success',$data=null);
        }elseif ($expire > 0 && $expire<=30*24*60*60){
             $cate = 4;
        }elseif ($expire > 30*24*60*60 && $expire<=3*30*24*60*60){
