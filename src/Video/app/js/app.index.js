@@ -83,7 +83,7 @@
 			var videoWrapperHtml='';
 			var guests=res.guests;
 			var video=res.video;
-			video.is_vip=1;
+			//video.is_vip=1;
 			if(video.is_vip==1){
 				videoWrapperHtml=`
 					<div class="video-top-block no-access">
