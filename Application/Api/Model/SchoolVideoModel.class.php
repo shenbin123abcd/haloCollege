@@ -10,6 +10,7 @@ namespace Api\Model;
 
 
 use Think\Model;
+use Think\Upload\Driver\Qiniu;
 
 class SchoolVideoModel extends Model{
     /**
@@ -87,22 +88,17 @@ class SchoolVideoModel extends Model{
      * @param  [type] $id 视频编号
      * @return [type]     array('video'=>array(), 'guests'=>array())
      */
-    public function getDetail($id, $auth = 1){
+    public function getDetail($id){
 
         // 访问数
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
-        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip')->find();
+        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip,auth')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
-            $user = get_user();
-            if(!empty($user) || $auth == 0){
-                $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
-            }else{
-                $data['video']['url'] = '';
-            }
-            $data['video']['share_url'] = 'http://college.halobear.com/lectureDetail/' . $id;
+            $data['video']['url'] = $this->_getUrl($data['video']);
+            $data['video']['share_url'] = 'http://college-api.halobear.com/video/detail?id=' . $id;
 
             // 判断用户是否收藏
             $data['video']['is_favorite'] = 0;
@@ -147,6 +143,23 @@ class SchoolVideoModel extends Model{
         }
 
         return $data;
+    }
+
+    /**
+     * 获取视频播放地址
+     * @param $video
+     * @return string
+     */
+    private function _getUrl($video){
+        $user = get_user();
+        $url = '';
+
+        // 是否需要登录
+        if (($video['auth'] == 1 && !empty($user)) || ($video['is_vip'] == 1 && check_vip($user['id'])) || ($video['auth'] == 0 && $video['is_vip'] == 0)){
+            $url = $this->privateDownloadUrl(C('VIDEO_URL') . $video['url']);
+        }
+
+        return $url;
     }
 
     /**
