@@ -371,7 +371,7 @@ var InterviewBlock=React.createClass({
                         {
                             data.map((n,i)=>{
                                 return(
-                                    <a className="list-block-item" key={i} href={`http://college.halobear.com/lectureDetail/${n.id}`}>
+                                    <a className="list-block-item" key={i} href={`http://college-api.halobear.com/video/detail?id=${n.id}`}>
                                         <div className="item-cover-wrapper">
                                             <img className="item-cover" src={`${n.cover_url}?imageView2/1/w/220/h/144`} alt=""/>
                                             <img className='play-btn' src={playBtn} alt=""/>
