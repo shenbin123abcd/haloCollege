@@ -7,6 +7,10 @@ class EmptyController extends Controller{
 	}
 
     public function _empty(){
-		$this->ajaxReturn(array('info'=>'Not Found','error'=>404,'status'=>0));
+        if (IS_AJAX){
+            $this->ajaxReturn(array('info'=>'Not Found','error'=>404,'status'=>0));
+        }else{
+            $this->display('Index:index');
+        }
 	}
 }
