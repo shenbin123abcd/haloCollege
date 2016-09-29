@@ -168,8 +168,8 @@
 						</a>
 					</div>
 				`;
-			})
-			$("#recommend-block").empty().html(recommendStr);
+			});
+			$("#recommend-block").empty().html('<div class="title f-16">为你推荐</div>'+recommendStr);
 
 		},function(error){
 			hb.lib.weui.alert({
