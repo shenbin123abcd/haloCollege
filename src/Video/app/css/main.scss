@@ -152,14 +152,17 @@ body{
 			color:#666666;
 			margin-top:5px;
 			.desc-left{
-				flex:0 0 60%;
+				flex:0 0 70%;
 				text-overflow:ellipsis;
 				white-space:nowrap;
 				overflow:hidden;
 			}
 			.desc-right{
-				flex:0 0 40%;
+				flex:0 0 30%;
 				text-align: right;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				overflow:hidden;
 			}
 		}
 	}
