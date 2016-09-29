@@ -8,6 +8,12 @@
 /src/Toutiao/app/css/main.css.map
 /src/Toutiao/tmp
 
+/Public/Home/Video/*
+/Application/Home/View/Video/*.html
+/src/Video/app/css/main.css
+/src/Video/app/css/main.css.map
+/src/Video/tmp
+
 /Public/Ke/*
 /Application/Ke/View/Index/*.html
 /src/Ke/app/css/main.css
