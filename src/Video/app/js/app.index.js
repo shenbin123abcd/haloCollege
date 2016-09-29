@@ -1,6 +1,7 @@
 ;app.index=(function(){
 	'use strict';
 	var videoHeight='';
+	var videoWidth='';
 
 	function init(){
 		checkVideoHeigt();
@@ -24,7 +25,7 @@
 	function contentService(data){
 		var deferred=$.Deferred();
 		$.ajax({
-			url: "http://collegeapi-test.weddingee.com/v1/api/videoDetailV2",
+			url: "http://college-api.halobear.com/v1/video/videoDetail",
 			data: data,
 			dataType:'jsonp',
 			success: function(res, textStatus, errorThrown) {
@@ -45,8 +46,8 @@
 		var deferred=$.Deferred();
 		//deferred.reject(-1);
 		$.ajax({
-			method: "GET",
-			url: "http://collegeapi-test.weddingee.com/v1/api/videoRecommend",
+			//method: "GET",
+			url: "http://college-api.halobear.com/v1/video/videoRecommend",
 			data: data,
 			dataType:'jsonp',
 			success: function(res, textStatus, errorThrown) {
@@ -66,8 +67,9 @@
 
 	function checkVideoHeigt(){
 		$(document).ready(function(){
-			var videoWidth=parseInt($(document).width());
+			videoWidth=parseInt($(document).width());
 			videoHeight=videoWidth*0.6667;
+			console.log(videoWidth,videoHeight);
 		})
 	}
 
@@ -81,7 +83,7 @@
 			var videoWrapperHtml='';
 			var guests=res.guests;
 			var video=res.video;
-			video.is_vip=0;
+			//video.is_vip=0;
 			if(video.is_vip==1){
 				videoWrapperHtml=`
 					<div class="video-top-block no-access">
@@ -93,7 +95,15 @@
 				`;
 			}else{
 				videoWrapperHtml=`
-					<video style="background:#000000; " controls poster=${video.cover_url} controls="controls" src=${video.url} width="100%" height=${videoHeight} preload="auto"></video>
+					<video style="background:#000000; "
+						controls
+						poster=${video.cover_url}
+						controls="controls"
+						src=${video.url}
+						width=${videoWidth}
+						height=${videoHeight}
+						preload="auto" >
+					</video>
 				`;
 			};
 
@@ -101,7 +111,7 @@
 				<div class="video-info">
 					<div class="info-title f-16">${video.title}</div>
 					<div class="info-desc clearfix">
-						<div class="desc-left f-15">${guests.name}丨${guests.position}</div>
+						<div class="desc-left f-15">${guests.title}丨${guests.position}</div>
 						<div class="desc-right f-15">播放：${video.views}</div>
 					</div>
 				</div>
@@ -110,7 +120,7 @@
 						<img src=${guests.avatar_url} alt="">
 					</div>
 					<div class="desc-info-block">
-						<div class="name f-16">${guests.name}</div>
+						<div class="name f-16">${guests.title}</div>
 						<div class="text f-14">${guests.content}</div>
 					</div>
 				</div>
