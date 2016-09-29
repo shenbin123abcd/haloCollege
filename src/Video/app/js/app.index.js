@@ -83,7 +83,7 @@
 			var videoWrapperHtml='';
 			var guests=res.guests;
 			var video=res.video;
-			//video.is_vip=0;
+			video.is_vip=1;
 			if(video.is_vip==1){
 				videoWrapperHtml=`
 					<div class="video-top-block no-access">
@@ -129,10 +129,13 @@
 			$("#guest-block").empty().html(guestHtml);
 			if($("#play-btn")){
 				$("#play-btn").on('click',function(e){
-					hb.lib.weui.alert({
+					hb.lib.weui.confirm({
 						title:'温馨提示',
-						content:'请先下载幻熊学院APP</br><a style="color:#888;" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.halobear.weddingvideo">点击下载</a>',
-						btn:'确定',
+						content:'请先下载幻熊学院APP',
+						leftBtn:'取消',
+						rightBtn:'去下载',
+					}).then(function(){
+						window.location.href='http://a.app.qq.com/o/simple.jsp?pkgname=com.halobear.weddingvideo';
 					})
 				})
 			}

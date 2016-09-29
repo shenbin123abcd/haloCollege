@@ -98,7 +98,10 @@ body{
 .video-detail-body{
 	background: transparent;
 	padding-bottom:60px;
-	
+	.weui_dialog_confirm .weui_dialog .weui_dialog_bd{
+		text-align: center;
+
+	}
 }
 .video-detail-block{
 	.video-top-block{
