@@ -69,7 +69,7 @@
 		$(document).ready(function(){
 			videoWidth=parseInt($(document).width());
 			videoHeight=videoWidth*0.6667;
-			console.log(videoWidth,videoHeight);
+			//console.log(videoWidth,videoHeight);
 		})
 	}
 
