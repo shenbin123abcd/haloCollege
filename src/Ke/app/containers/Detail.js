@@ -322,7 +322,7 @@ var TeacherDesc=React.createClass({
                             {
                                 data.map((n,i)=>{
                                     return(
-                                        <p className="desc-style">{n}</p>
+                                        <p className="desc-style" key={i}>{n}</p>
                                     )
                                 })
                             }
