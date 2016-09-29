@@ -161,10 +161,10 @@
 			res.forEach(function(n,i){
 				recommendStr+=`
 					<div class="recommend-item">
-						<a class="cover-block" href='http://college.halobear.com/lectureDetail/${n.id}'>
+						<a class="cover-block" href='http://college-api.halobear.com/video/detail?id=${n.id}'>
 							<img src=${n.cover_url} alt="">
 						</a>
-						<a class="desc-block" href='http://college.halobear.com/lectureDetail/${n.id}'>
+						<a class="desc-block" href='http://college-api.halobear.com/video/detail?id=${n.id}'>
 							<div class="title f-15">${n.title}</div>
 							<div class="info f-13">${n.guests.title} | ${n.guests.position}</div>
 							<div class="play-num f-13">播放 ：${n.views}</div>
