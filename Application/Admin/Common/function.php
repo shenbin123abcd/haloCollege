@@ -364,7 +364,7 @@ function make_qiniu_token($bucket, $module, $returnUrl, $key) {
 
     $deadline = time()+1728000;
     $saveKey = 'College/' . $module . '/' . ($key ? $key : '$(year)$(mon)/${day}/$(etag)$(suffix)');
-    $returnBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=$(fname)&fsize=$(fsize)&filetype=${x:filetype}&code=${x:code}&module=' . $module;
+    $returnBody = 'key=$(key)&w=$(imageInfo.width)&h=$(imageInfo.height)&fname=&fsize=$(fsize)&filetype=${x:filetype}&code=${x:code}&module=' . $module;
     $bucket = $key ? $bucket . ':' . $saveKey : $bucket;
     $data =  array(
         'scope'=>$bucket,
