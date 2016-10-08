@@ -92,16 +92,54 @@ class SchoolVideoModel extends Model{
         // 访问数
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
-        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip')->find();
+        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip,auth')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
             $user = get_user();
-            if(!empty($user) || $auth == 0){
-                $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+            //判断是否需要登录观看视频
+            if($data['video']['auth'] ==1){
+                if(empty($user['uid'])){
+                    $data['video']['url'] = '';
+                } else{
+                    //判断是否是VIP视频
+                    if ($data['video']['is_vip'] ==1){
+                        $now = time();
+                        $member = M('SchoolMember')->where(array('uid'=>$user['uid']))->find();
+                        if ($member['end_time']<$now){
+                            $data['video']['url'] = '';
+                        }else{
+                            $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+                        }
+                    }else{
+                        $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+                    }
+                }
             }else{
-                $data['video']['url'] = '';
+                //判断是否是VIP视频
+                if ($data['video']['is_vip'] ==1){
+                    if (empty($user['uid'])){
+                        $data['video']['url'] = '';
+                    }else{
+                        $now = time();
+                        $member = M('SchoolMember')->where(array('uid'=>$user['uid']))->find();
+                        if ($member['end_time']<$now){
+                            $data['video']['url'] = '';
+                        }else{
+                            $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+                        }
+                    }
+                }else{
+                    $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+                }
             }
+            //if(!empty($user) || $auth == 0){
+            //
+            //
+            //    $data['video']['url'] = $this->privateDownloadUrl(C('VIDEO_URL') . $data['video']['url']);
+            //}else{
+            //    $data['video']['url'] = '';
+            //}
             $data['video']['share_url'] = 'http://college.halobear.com/lectureDetail/' . $id;
 
             // 判断用户是否收藏
@@ -148,6 +186,8 @@ class SchoolVideoModel extends Model{
 
         return $data;
     }
+
+
 
     /**
      * 获取视频地址
