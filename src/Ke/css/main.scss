@@ -648,6 +648,7 @@ body {
     .avatar-box{
       margin-top: 12px;
       display: flex;
+      flex-wrap: nowrap;
       .img{
         width: 30px;
         height: 30px;
