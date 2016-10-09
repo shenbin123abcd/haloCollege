@@ -650,6 +650,7 @@ body {
       display: flex;
       flex-wrap: nowrap;
       .img{
+        flex-shrink:0;
         width: 30px;
         height: 30px;
         border-radius: 50%;
