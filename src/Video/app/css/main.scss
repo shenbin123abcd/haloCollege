@@ -97,6 +97,11 @@ body{
 }
 .video-detail-body{
 	background: transparent;
+	padding-bottom:60px;
+	.weui_dialog_confirm .weui_dialog .weui_dialog_bd{
+		text-align: center;
+
+	}
 }
 .video-detail-block{
 	.video-top-block{
@@ -147,14 +152,17 @@ body{
 			color:#666666;
 			margin-top:5px;
 			.desc-left{
-				flex:0 0 60%;
+				flex:0 0 70%;
 				text-overflow:ellipsis;
 				white-space:nowrap;
 				overflow:hidden;
 			}
 			.desc-right{
-				flex:0 0 40%;
+				flex:0 0 30%;
 				text-align: right;
+				text-overflow:ellipsis;
+				white-space:nowrap;
+				overflow:hidden;
 			}
 		}
 	}

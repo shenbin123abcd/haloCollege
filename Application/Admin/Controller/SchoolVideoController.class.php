@@ -40,6 +40,7 @@ class SchoolVideoController extends CommonController {
 		$this->token = $this->qiniu('crmpub', 'college/cover');
 		$this->gudests = M('SchoolGuests')->where(array('status'=>1))->select();
 		$this->category = M('SchoolCate')->where(array('type'=>1))->select();
+		$this->charge_standard = M('VideoChargeStandard')->where(array('status'=>1))->select();
 		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
 		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
 	}
@@ -50,6 +51,7 @@ class SchoolVideoController extends CommonController {
 		$this->_before_update();
 		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
 		empty($_POST['guests_id']) && $this->error('嘉宾不存在');
+		!empty($_POST['charge_standard']) ? $_POST['charge_standard'] : "";
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['create_time'] = time();
@@ -81,6 +83,7 @@ class SchoolVideoController extends CommonController {
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);
 		$_POST['category'] = empty($_POST['category']) ? '' : implode(',', $_POST['category']);
+		$_POST['charge_standard'] = empty($_POST['charge_standard']) ? '' : implode(',', $_POST['charge_standard']);
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['update_time'] =time();

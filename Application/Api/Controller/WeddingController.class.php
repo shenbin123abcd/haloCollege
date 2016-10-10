@@ -375,7 +375,7 @@ class WeddingController extends CommonController {
             $id = $model->add();
             if ($id) {
                 /*$parent_data = $this->get_parent_data($data['parent_id']);
-                $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('username'=>$data['username'],'headimg'=>$data['headimg'],'parent_data'=>$parent_data)));
+                $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('username'=>$data['username'],'headimg'=>$data['headimg'],'parent_data'=>$parent_data),'type'=>'wedding_reply','push_time'=>time()));
                 $msg_id = $result->data->msg_id ? $result->data->msg_id : '';
                 $this->success('回复成功！',array('msg_id'=>$msg_id));*/
                 $this->success('回复成功！');

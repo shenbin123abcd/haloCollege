@@ -32,7 +32,7 @@ gulp.task('images', function () {
         .pipe(gulp.dest('tmp/images'))
 });
 
-gulp.task('build',['sass','images'], function () {
+gulp.task('build:1',['sass','images'], function () {
     var htmlFilter = plugins.filter('**/*.html',{restore: true});
     var jsFilter = plugins.filter('**/*.js',{restore: true});
     var jsVenderFilter = plugins.filter('**/vender.js',{restore: true});
@@ -96,6 +96,123 @@ gulp.task('build',['sass','images'], function () {
             replaceInExtensions: ['.js', '.css', '.html', '.ejs']
         }))
         .pipe(htmlFilter)
+        // .pipe(plugins.revReplace({manifest: manifestHtml}))
+        // .pipe(plugins.cdnizer({
+        //     defaultCDNBase: "__PUBLIC__/Home/Video",
+        //     // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
+        //     allowRev: true,
+        //     allowMin: true,
+        //     files: [
+        //         'js/vender-*.js',
+        //         {
+        //             file: 'js/**/*.js',
+        //             cdn: '../tmp/js/${ filename }'
+        //         },
+        //         // {
+        //         //     file: 'css/**/*.css',
+        //         //     cdn: '../tmp/css/${ filename }'
+        //         // },
+        //         // Thi
+        //         // s file is on the default CDN, and will replaced with //my.cdn.host/base/js/app.js
+        //         // 'css/**/*.css',
+        //         // 'js/**/*.js',
+        //         // 'js/hb.js',
+        //         'images/**/*.{jpg,png,mp3,mp4}',
+        //     ]
+        // }))
+        // .pipe(plugins.inject(gulp.src(['./tmp/js/main.js']), {
+        //     starttag: '<!-- inject:main:{{ext}} -->',
+        //     transform: function (filePath, file) {
+        //         // console.log(file.contents)
+        //         // return file contents as string
+        //         return `<script>${file.contents.toString('utf8').replace(/\\/g,'\\')}</script>`
+        //     }
+        // }))
+        // .pipe(plugins.inject(gulp.src(['./tmp/css/main.css']), {
+        //     starttag: '<!-- inject:main:{{ext}} -->',
+        //     transform: function (filePath, file) {
+        //         // console.log(file.contents)
+        //         // return file contents as string
+        //         return `<style>${file.contents.toString('utf8').replace(/\\/g,'\\')}</style>`
+        //     }
+        // }))
+        //
+        // .pipe(plugins.htmlmin({
+        //     removeComments: true,
+        //     collapseWhitespace: true,
+        //     conservativeCollapse: true,
+        //     ignoreCustomFragments: [ /<%[\s\S]*?%>/, /<\?[\s\S]*?\?>/, /<include[\s\S]*?\/>/,/<else\/>/ ],
+        //     minifyJS: false,
+        //     minifyCSS: false,
+        // }))
+        .pipe(gulp.dest('../../Application/Home/View/Video'))
+        // .pipe(gulp.dest('dest'))
+        .pipe(htmlFilter.restore)
+});
+gulp.task('build',['build:1'], function () {
+    var htmlFilter = plugins.filter('**/*.html',{restore: true});
+    var jsFilter = plugins.filter('**/*.js',{restore: true});
+    var jsVenderFilter = plugins.filter('**/vender.js',{restore: true});
+    var cssFilter = plugins.filter('**/*.css',{restore: true});
+    var manifestHtml = gulp.src("tmp/images/rev-manifest.json");
+    var manifestCss = gulp.src("tmp/images/rev-manifest.json");
+    var manifestJs = gulp.src("tmp/images/rev-manifest.json");
+    return gulp.src('../../Application/Home/View/Video/detail.html')
+        // .pipe(plugins.useref())
+        // .pipe(jsFilter)
+        // .pipe(plugins.revReplace({manifest: manifestJs}))
+        // .pipe(plugins.cdnizer({
+        //     defaultCDNBase: "__PUBLIC__/Home/Video",
+        //     // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
+        //     allowRev: true,
+        //     allowMin: true,
+        //     matchers: [
+        //         /(["'`])(.+?)(["'`])/gi,
+        //     ],
+        //     fallback: false,
+        //     files: [
+        //         'images/**/*.{jpg,png,mp3,mp4}',
+        //     ]
+        // }))
+        // .pipe(plugins.babel({
+        //     presets: ['es2015']
+        // }))
+        // .pipe(plugins.uglify())
+        // // .pipe(plugins.rev())
+        // .pipe(jsVenderFilter)
+        // .pipe(plugins.rev())
+        // .pipe(gulp.dest('../../Public/Home/Video'))
+        // .pipe(jsVenderFilter.restore)
+        // .pipe(gulp.dest('./tmp'))
+        // .pipe(jsFilter.restore)
+        // .pipe(cssFilter)
+        // .pipe(plugins.revReplace({manifest: manifestCss}))
+        // .pipe(plugins.cdnizer({
+        //     defaultCDNBase: "__PUBLIC__/Home/Video",
+        //     // defaultCDNBase: "http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/supplier",
+        //     allowRev: true,
+        //     allowMin: true,
+        //     relativeRoot: 'css',
+        //     // matchers: [
+        //     //     /(["'`\(])(.+?)(["'`\)])/gi,
+        //     // ],
+        //     // fallback: false,
+        //     files: [
+        //         'images/**/*.{jpg,png,mp3,mp4}',
+        //     ]
+        // }))
+        // .pipe(plugins.autoprefixer({
+        //     browsers:  ['> 0%'],
+        //     cascade: false
+        // }))
+        // .pipe(plugins.csso())
+        // // .pipe(plugins.rev())
+        // .pipe(gulp.dest('./tmp'))
+        // .pipe(cssFilter.restore)
+        // .pipe(plugins.revReplace({
+        //     replaceInExtensions: ['.js', '.css', '.html', '.ejs']
+        // }))
+        // .pipe(htmlFilter)
         .pipe(plugins.revReplace({manifest: manifestHtml}))
         .pipe(plugins.cdnizer({
             defaultCDNBase: "__PUBLIC__/Home/Video",
@@ -147,7 +264,7 @@ gulp.task('build',['sass','images'], function () {
         }))
         .pipe(gulp.dest('../../Application/Home/View/Video'))
         // .pipe(gulp.dest('dest'))
-        .pipe(htmlFilter.restore)
+        // .pipe(htmlFilter.restore)
 });
 
 
