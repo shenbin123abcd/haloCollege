@@ -627,15 +627,14 @@ body {
     position: fixed;
     width: 100%;
     height: 113px;
-    overflow: auto;
+    //overflow: auto;
     left: 0;
     bottom: 50px;
     background-image: linear-gradient(to bottom,#f6f0ef,#f6f6f6 5px);
-    padding-left: 15px;
     padding-top: 13px;
-
     .title{
       font-size: 14px;
+      padding-left: 15px;
       color: #333333;
       .haloIcon{
         color: #999999;
@@ -645,10 +644,19 @@ body {
 
       }
     }
+    .avatar-inner{
+      width: 100%;
+      overflow: auto;
+      padding-top: 12px;
+      padding-left: 15px;
+      padding-bottom: 15px;
+    }
     .avatar-box{
-      margin-top: 12px;
+      //margin-top: 12px;
       display: flex;
+      flex-wrap: nowrap;
       .img{
+        flex-shrink:0;
         width: 30px;
         height: 30px;
         border-radius: 50%;
