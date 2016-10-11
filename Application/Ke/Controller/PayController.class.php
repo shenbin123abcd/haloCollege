@@ -252,10 +252,6 @@ class PayController extends CommonController {
         }
     }
 
-    public function test(){
-        $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',1, 30, '测试购买');
-    }
-
     //微信通知
     private function _wechat_notice($tpl,$course_id,$wechat_id,$username){
         $openid = array('oEgUssxz4-N1oTyiHDCs7I1qvlO4','oEgUssy9t6hZ-nresv0kImH0UCzg');
@@ -267,6 +263,8 @@ class PayController extends CommonController {
             'buy_user'=>$username.' '.'报名'
         );
         $wechat = new \Org\Util\Wechat();
-        $wechat->sendMsg($openid, $data_wechat_notice, $tpl);
+        foreach ($openid AS $value){
+            $wechat->sendMsg($value, $data_wechat_notice, $tpl);
+        }
     }
 }
