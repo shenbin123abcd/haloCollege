@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('start_date ASC, id DESC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('num DESC,start_date ASC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
