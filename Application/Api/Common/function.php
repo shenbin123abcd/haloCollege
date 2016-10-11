@@ -16,3 +16,13 @@ function check_vip($uid){
 
     return !empty($end_time) && $end_time > time() ? 1 : 0;
 }
+
+/**
+ * 检查用户是否购买视频
+*/
+function is_buy($uid,$vid){
+    $record = M('VideoBuyRecord')->where(array('status'=>1,'uid'=>$uid,'vid'=>$vid))->count();
+
+    return empty($record) ? 0 : 1;
+
+}

@@ -50,38 +50,8 @@
 						<volist name="category" id="vo">
 							<label><input name="category[]" <if condition="in_array($vo['id'], explode(',',$data['category']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.title}</span></label>
 						</volist>
-
-						<!--<select class="cate" name="cate1">-->
-							<!--<option value="">请选择</option>-->
-							<!--<volist name="cate1" id="vo">-->
-								<!--<option value="{$vo.id}" <eq name="data.cate1" value="$vo['id']">selected</eq>>{$vo.title}</option>-->
-							<!--</volist>-->
-						<!--</select>-->
-						<!--<input type="hidden" name="cate1_title" value="{$data.cate1_title}">-->
 					</td>
 				</tr>
-				<!--<tr>-->
-					<!--<th></th>-->
-					<!--<td>-->
-						<!--<select class="cate" name="cate2">-->
-							<!--<option value="">请选择</option>-->
-							<!--<volist name="cate2" id="vo">-->
-								<!--<option value="{$vo.id}" <eq name="data.cate2" value="$vo['id']">selected</eq>>{$vo.title}</option>-->
-							<!--</volist>-->
-						<!--</select>-->
-						<!--<input type="hidden" name="cate2_title" value="{$data.cate2_title}">-->
-					<!--</td>-->
-				<!--</tr>-->
-				<!--<tr>-->
-					<!--<th></th>-->
-					<!--<td>-->
-						<!--<label><input name="cate3[]" <if condition="in_array(1, explode(',',$data['cate3']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="1"><span>管理类</span></label>-->
-						<!--<label><input name="cate3[]" <if condition="in_array(2, explode(',',$data['cate3']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="2"><span>策划类</span></label>-->
-						<!--<label><input name="cate3[]" <if condition="in_array(3, explode(',',$data['cate3']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="3"><span>营销类</span></label>-->
-						<!--<label><input name="cate3[]" <if condition="in_array(4, explode(',',$data['cate3']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="4"><span>主持类</span></label>-->
-						<!--<label><input name="cate3[]" <if condition="in_array(5, explode(',',$data['cate3']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="5"><span>其它类</span></label>-->
-					<!--</td>-->
-				<!--</tr>-->
 				<tr>
 					<th>排序</th>
 					<td><input type="number" class="input length_5" name="sort" value="{$data.sort}"><p>数值越大越靠前</p></td>
@@ -129,6 +99,14 @@
 							<option value="0" <eq name="data.is_vip" value="0">selected</eq>>否</option>
 							<option value="1" <eq name="data.is_vip" value="1">selected</eq>>是</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>收费标准</th>
+					<td>
+						<volist name="charge_standard" id="vo">
+							<label><input name="charge_standard[]" <if condition="in_array($vo['id'], explode(',',$data['charge_standard']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.price}元({$vo.note})</span></label>
+						</volist>
 					</td>
 				</tr>
 			</table>

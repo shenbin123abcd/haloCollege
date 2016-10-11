@@ -14,7 +14,7 @@ use Think\Exception;
 class VideoController extends CommonController {
     protected $module_auth = 0;
     protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
-    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise');
+    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise','buyRecord');
 
     /**
      * 根据类型获取列表
@@ -96,7 +96,7 @@ class VideoController extends CommonController {
         $filter_vid =array();
         $filter_vid[] = $member_list['list'][0]['id'];
         $filter_vid[] = $member_list['list'][1]['id'];
-        $cate = M('SchoolCate')->where(array('status'=>1))->getField('id,title');
+        $cate = M('SchoolCate')->where(array('status'=>1,'type'=>1))->getField('id,title');
         foreach ($cate as $key=>$value){
             $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)','id'=>array('not in',$filter_vid)),$page=1,$per_page=2,$is_recommend=1);
 
@@ -678,7 +678,7 @@ class VideoController extends CommonController {
      * 获取分类接口
      */
     public function getCate() {
-        $list = M('SchoolCate')->where(array('status' => 1))->select();
+        $list = M('SchoolCate')->where(array('status' => 1,'type'=>1))->select();
         $this->success('success', $list);
     }
 
@@ -757,6 +757,28 @@ class VideoController extends CommonController {
             $this->error('取消点赞失败！');
         }
     }
+    
+
+    /**
+     * 获取视频购买记录
+    */
+    public function buyRecord(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $model = D('SchoolVideo');
+        $uid = $this->user['uid'];
+        $list = M('VideoBuyRecord')->join('left join wtw_school_video as a on wtw_video_buy_record.vid = a.id')
+            ->where(array( 'wtw_video_buy_record.uid'=>$uid,'wtw_video_buy_record.status'=>1,'a.status'=>1))
+            ->order('wtw_video_buy_record.create_time DESC')
+            ->page($page,$per_page)
+            ->field('a.id,a.title,a.cover_url,a.guests_id,a.views,a.times,a.cate_title,a.is_vip,a.big_cover_url,a.charge_standard,wtw_video_buy_record.create_time as buy_time')
+            ->select();
+        //$list = $model->get_course_info ($list);
+        //获取嘉宾信息
+        $data['list'] = empty($list) ? array() : $model->_format($list);
+        $this->success('success',$data);
+
+    }
 
     //分类迁移
     public function changeCate(){
@@ -802,7 +824,7 @@ class VideoController extends CommonController {
 
     //分类名称迁移
     public function changeName(){
-        $cate = M('SchoolCate')->getField('id,title');
+        $cate = M('SchoolCate')->where(array('type'=>1))->getField('id,title');
         $videos = M('SchoolVideo')->select();
         foreach ($videos as $key=>$value){
             if(empty($value['cate_title'])){

@@ -26,7 +26,7 @@ class Ping {
         Pingpp::setPrivateKeyPath(VENDOR_PATH.'Pay/ping/ping_rsa_private_key.pem');
     }
 
-    public function pay($order, $channel = 'alipay') {
+    public function pay($order, $channel = 'alipay', $type = 'member') {
         try {
             $data = array(
                 'subject' => $order['body'],
@@ -37,7 +37,8 @@ class Ping {
                 //'extra' => $this->_getExtra($channel),
                 'channel' => $channel,
                 'client_ip' => get_client_ip(),
-                'app' => array('id' => $this->appId));
+                'app' => array('id' => $this->appId),
+                'metadata'=>['order_type'=>$type]);
 
             $ch = Charge::create($data);
 

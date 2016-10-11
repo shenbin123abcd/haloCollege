@@ -137,6 +137,14 @@
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<th>收费标准</th>
+					<td>
+						<volist name="charge_standard" id="vo">
+							<label><input name="charge_standard[]" data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.price}元({$vo.note})</span></label>
+						</volist>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</div>

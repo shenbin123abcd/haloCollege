@@ -27,6 +27,14 @@
 			<input name="phone" type="text" class="input length_2 mr10" value="{$Think.get.phone}"/>
 			<label>姓名：</label>
 			<input name="name" type="text" class="input length_2 mr10" value="{$Think.get.name}"/>
+			<label>课程：</label>
+			<input name="course_title" type="text" class="input length_2 mr10" value="{$Think.get.course_title}"/>
+			<label>状态：</label>
+			<select name="status" >
+				<option value="">请选择</option>
+				<option value="0" <eq name="Think.request.status" value="0">selected</eq>>未成功</option>
+				<option value="1" <eq name="Think.request.status" value="1">selected</eq>>成功</option>
+			</select>
 			<button type="submit" class="btn">搜索</button>
 		</div>
 	</form>
@@ -39,7 +47,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:course,title:课程,width:200}{field:name,title:姓名,width:200}{field:company,title:公司,width:120}{field:phone,title:手机,width:120}{field:remark,title:备注,width:120}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:course,title:课程,width:200}{field:name,title:姓名,width:200}{field:company,title:公司,width:120}{field:phone,title:手机,width:120}{field:remark,title:备注,width:120}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">
