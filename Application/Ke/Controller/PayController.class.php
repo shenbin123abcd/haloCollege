@@ -101,6 +101,9 @@ class PayController extends CommonController {
                     // 短信通知
                     $phone = M('CourseReserve')->where(array('wechat_id' => $order['wechat_id'], 'course_id' => $order['course_id'], 'type' => 1))->getField('phone');
                     $this->_notice($order['course_id'], $phone);
+
+                    //微信通知
+                    $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',$order['course_id'],$order['wechat_id'],$this->user['username']);
                 }
             } else { // 用户支付失败
                 write_log('pay_course_error' . date('Ymd'), var_export($notify, 1));
@@ -247,5 +250,23 @@ class PayController extends CommonController {
                 send_msg($phone, array($date, $title, $guest['title'] . '老师',$place), 119508, '8aaf070857418a58015745ded06402d3');
             }
         }
+    }
+
+    public function test(){
+        $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',1, 30, '测试购买');
+    }
+
+    //微信通知
+    private function _wechat_notice($tpl,$course_id,$wechat_id,$username){
+        $openid = array('oEgUssxz4-N1oTyiHDCs7I1qvlO4','oEgUssy9t6hZ-nresv0kImH0UCzg');
+        $course = M('Course')->where(array('id'=>$course_id))->find();
+        $course_reserve = M('CourseReserve')->where(array('course_id'=>$course_id,'wechat_id'=>$wechat_id))->find();
+        $data_wechat_notice=array(
+            'course_guest'=>$course_reserve['name'].'|'.$course['title'],
+            'buy_time'=>date('Y-m-d',time()),
+            'buy_user'=>$username.' '.'报名'
+        );
+        $wechat = new \Org\Util\Wechat();
+        $wechat->sendMsg($openid, $data_wechat_notice, $tpl);
     }
 }

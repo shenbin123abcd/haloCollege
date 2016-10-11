@@ -153,11 +153,11 @@ class SchoolVideoModel extends Model{
      * @return [type]     array('video'=>array(), 'guests'=>array())
      */
     public function getDetail($id){
-
+        $user = get_user();
         // 访问数
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
-        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,is_vip,auth,category,charge_standard')->find();
+        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,times,is_vip,auth,category,charge_standard')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
@@ -361,7 +361,7 @@ class SchoolVideoModel extends Model{
 
 
  
-    private function _format($list){
+    public function _format($list){
         foreach ($list as $key => $value) {
             $guests_id[] = $value['guests_id'];
         }

@@ -12,6 +12,7 @@ use Think\Controller;
 use Think\Exception;
 
 class VideoController extends CommonController {
+
     protected $module_auth = 0;
     protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
     ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise','buyRecord');
@@ -757,12 +758,22 @@ class VideoController extends CommonController {
             $this->error('取消点赞失败！');
         }
     }
-    
+
+    //微信通知
+    public function wechat_notice(){
+        $data_wechat_notice=array(
+            'course_guest'=>'张虎'.'|'.'婚礼公开课',
+            'buy_time'=>date('Y-m-d',time()),
+            'buy_user'=>'张虎'.' '.'报名'
+        );
+        $wechat = new \Org\Util\Wechat();
+        $wechat->sendMsg($openid='oEgUss_opL2It0Qby_HKGCZtN2cY', $data_wechat_notice, $tpl='DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A');
+    }
 
     /**
      * 获取视频购买记录
     */
-    public function buyRecord(){
+    public function buyRecord(){        
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $model = D('SchoolVideo');
@@ -776,6 +787,7 @@ class VideoController extends CommonController {
         //$list = $model->get_course_info ($list);
         //获取嘉宾信息
         $data['list'] = empty($list) ? array() : $model->_format($list);
+        
         $this->success('success',$data);
 
     }

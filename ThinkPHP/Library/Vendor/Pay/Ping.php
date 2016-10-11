@@ -38,7 +38,7 @@ class Ping {
                 'channel' => $channel,
                 'client_ip' => get_client_ip(),
                 'app' => array('id' => $this->appId),
-                'metadata'=>['order_type'=>$type]);
+                'metadata'=>['order_type'=>$type]); 
 
             $ch = Charge::create($data);
 

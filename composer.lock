@@ -82,12 +82,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "100271120bbfd299b70e2067da56a6bc9f12268d"
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/guzzle/guzzle/100271120bbfd299b70e2067da56a6bc9f12268d.zip",
-                "reference": "100271120bbfd299b70e2067da56a6bc9f12268d",
+                "url": "https://packagist.phpcomposer.com/files/guzzle/guzzle/ebf29dee597f02f09f4d5bbecc68230ea9b08f60.zip",
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60",
                 "shasum": ""
             },
             "require": {
@@ -136,7 +136,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-08-31 01:08:05"
+            "time": "2016-10-08 15:01:37"
         },
         {
             "name": "guzzlehttp/promises",
@@ -306,12 +306,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952"
+                "reference": "214b8ef34b17ed0fcd3a5e027ef5a9ae9ebeb193"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/Seldaek/monolog/f42fbdfd53e306bda545845e4dbfd3e72edb4952.zip",
-                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952",
+                "url": "https://packagist.phpcomposer.com/files/Seldaek/monolog/214b8ef34b17ed0fcd3a5e027ef5a9ae9ebeb193.zip",
+                "reference": "214b8ef34b17ed0fcd3a5e027ef5a9ae9ebeb193",
                 "shasum": ""
             },
             "require": {
@@ -322,7 +322,7 @@
                 "psr/log-implementation": "1.0.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9",
+                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
                 "jakub-onderka/php-parallel-lint": "0.9",
@@ -376,7 +376,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-07-29 03:23:52"
+            "time": "2016-10-03 18:31:30"
         },
         {
             "name": "mytharcher/alipay-php-sdk",
@@ -426,12 +426,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/socialite.git",
-                "reference": "0582aa49d8298072ef4e726c1d7cd6824df4b8aa"
+                "reference": "8d3785c2cf0fedaad4fbfe252ed53589359657cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/overtrue/socialite/0582aa49d8298072ef4e726c1d7cd6824df4b8aa.zip",
-                "reference": "0582aa49d8298072ef4e726c1d7cd6824df4b8aa",
+                "url": "https://packagist.phpcomposer.com/files/overtrue/socialite/8d3785c2cf0fedaad4fbfe252ed53589359657cb.zip",
+                "reference": "8d3785c2cf0fedaad4fbfe252ed53589359657cb",
                 "shasum": ""
             },
             "require": {
@@ -468,7 +468,7 @@
                 "wechat",
                 "weibo"
             ],
-            "time": "2016-07-07 03:40:26"
+            "time": "2016-10-09 10:27:53"
         },
         {
             "name": "overtrue/wechat",
@@ -534,12 +534,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "64e0f8320639b434baa073a40dd1e037e3286555"
+                "reference": "44515c40a4c4effc53c1e6c0e7158f711473dc98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/silexphp/Pimple/64e0f8320639b434baa073a40dd1e037e3286555.zip",
-                "reference": "64e0f8320639b434baa073a40dd1e037e3286555",
+                "url": "https://packagist.phpcomposer.com/files/silexphp/Pimple/44515c40a4c4effc53c1e6c0e7158f711473dc98.zip",
+                "reference": "44515c40a4c4effc53c1e6c0e7158f711473dc98",
                 "shasum": ""
             },
             "require": {
@@ -572,7 +572,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11 15:11:22"
+            "time": "2016-09-10 19:36:25"
         },
         {
             "name": "pingplusplus/pingpp-php",
@@ -678,12 +678,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/php-fig/log/d8e60a5619fff77f9669da8997697443ef1a1d7e.zip",
-                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "url": "https://packagist.phpcomposer.com/files/php-fig/log/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d.zip",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -717,7 +717,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-01-06 21:40:42"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "symfony/http-foundation",
@@ -725,12 +725,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "f1e825ebf8947be664ecfd4b3c8dfd927104a5ea"
+                "reference": "a253dca70944b62ea371d26a03db5c9cbb657525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/symfony/http-foundation/f1e825ebf8947be664ecfd4b3c8dfd927104a5ea.zip",
-                "reference": "f1e825ebf8947be664ecfd4b3c8dfd927104a5ea",
+                "url": "https://packagist.phpcomposer.com/files/symfony/http-foundation/a253dca70944b62ea371d26a03db5c9cbb657525.zip",
+                "reference": "a253dca70944b62ea371d26a03db5c9cbb657525",
                 "shasum": ""
             },
             "require": {
@@ -770,7 +770,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-08-22 12:11:39"
+            "time": "2016-10-07 19:50:49"
         },
         {
             "name": "symfony/polyfill-mbstring",

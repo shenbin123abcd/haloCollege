@@ -11,7 +11,7 @@ namespace Api\Controller;
 use Org\Util\Ping;
 
 class PaymentController extends CommonController {
-    protected $action_auth = ['createMemberOrder'];
+    protected $action_auth = ['createMemberOrder','createVideoOrder'];
     private $payType = ['alipay', 'wx'];
 
     public function createMemberOrder(){
@@ -84,6 +84,13 @@ class PaymentController extends CommonController {
         // 检查收费类型
         $cate = M('VideoChargeStandard')->where(array('id'=>$cate_id, 'status'=>1))->find();
         empty($cate) && $this->error('收费标准不存在');
+
+        //检查收费类型跟视频是否匹配
+        $video = M('SchoolVideo')->where(array('id'=>$vid,'status'=>1))->find();
+        empty($video) && $this->error('视频不存在！');
+        empty($video['charge_standard']) && $this->error('视频与收费类型不匹配！');
+        $standard_arr = explode(',',$video['charge_standard']);
+        !in_array($cate_id,$standard_arr) && $this->error('视频与收费类型不匹配！');
 
         // 创建订单
         $model = M('VideoOrder');
@@ -212,6 +219,12 @@ class PaymentController extends CommonController {
             }
             M('SchoolMember')->where(array('uid'=>$order['uid']))->save(array('end_time'=>$end_time, 'update_time'=>time()));
         }
+
+        //会员购买成功后的消息推送
+        /*$object_push = A('Push');
+        $result = $object_push->pushMsgPersonal(array('uid'=>$order['uid'],'content'=>'尊敬的会员'.','.'您已成功购买'.$order['body'],'extra'=>array('push_time'=>time()),'type'=>'member'));
+        $msg_id = $result->data->msg_id ? $result->data->msg_id : '';*/       
+       
         return true;
     }
 
@@ -235,11 +248,11 @@ class PaymentController extends CommonController {
             write_log('a', M()->_sql());
         }        
 
-        $buy_record = M('VideoBuyRecord')->where(array('uid'=>$order['uid'],'vid'=>$order['vid']))->find();       
+        $buy_record = M('VideoBuyRecord')->where(array('uid'=>$order['uid'],'vid'=>$order['vid'],'status'=>1))->find();
         if (empty($buy_record)){
             M('VideoBuyRecord')->add(array('uid'=>$order['uid'], 'vid'=>$order['vid'], 'create_time'=>time(), 'update_time'=>time(), 'status'=>1,'charge_standard'=>$order['cate']));
         }else{            
-            M('VideoBuyRecord')->where(array('uid'=>$order['uid'],'vid'=>$order['vid']))->save(array('charge_standard'=>$order['cate'], 'update_time'=>time()));
+            M('VideoBuyRecord')->where(array('uid'=>$order['uid'],'vid'=>$order['vid']))->save(array('charge_standard'=>$buy_record['charge_standard'].','.$order['cate'], 'update_time'=>time()));
         }
         return true;
     }

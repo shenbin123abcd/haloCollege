@@ -21,7 +21,7 @@ function check_vip($uid){
  * 检查用户是否购买视频
 */
 function is_buy($uid,$vid){
-    $record = M('VideoBuyRecord')->where(array('status'=>1,'uid'=>$uid,'vid'=>$vid))->count();
+    $record = M('VideoOrder')->where(array('status'=>1,'uid'=>$uid,'vid'=>$vid))->count();
 
     return empty($record) ? 0 : 1;
 
