@@ -4,6 +4,7 @@ import User from './containers/User'
 import Index from './containers/index'
 import Seatinfo from './containers/seatinfo'
 import Selectseat from './containers/selectseat'
+import Consult from './containers/Consult'
 import App from './containers/App'
 
 
@@ -40,6 +41,10 @@ const onUpdateRoute = () => {
             htmlClass=`html-user`
             bodyClass=`body-user`
             break;
+        case path=='/course/consult':
+            htmlClass=`html-consult`
+            bodyClass=`body-consult`
+            break;
         default:
             htmlClass=`html`
             bodyClass=`body`
@@ -65,6 +70,7 @@ ReactDOM.render(
             <Route path="user" component={User}   onLeave={onLeaveRoute}  />
             <Route path="detail_:id" component={Detail}    onLeave={onLeaveRoute}  />
             <Route path="rIndex"   onEnter={e=>{window.location.href='/course/index'}}  />
+            <Route path="consult" component={Consult}   onLeave={onLeaveRoute}  />
         </Route>
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}    onLeave={onLeaveRoute}  />
