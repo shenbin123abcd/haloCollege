@@ -1,0 +1,46 @@
+<div class="wrap J_check_wrap">
+	<!--导航-->
+	<div class="nav">
+		<ul class="cc">
+			<li class="current">
+				<a href="__SELF__">会员管理</a>
+			</li>
+		</ul>
+	</div>
+	<!--/导航-->
+	<!--操作-->
+	<div class="mb10">
+		<a class="btn J_dialog" href="__URL__/add" title="新增用户"><span class="add"></span>   新增用户</a>
+	</div>
+	<!--/操作-->
+	<!--搜索-->
+	<div class="h_a">搜索</div>
+	<form action="__URL__/index" method="get">
+		<div class="search_type cc mb10">
+			<label>用户名包含：</label>
+			<input name="username" type="text" class="input length_2 mr10" value="{$Think.get.username}"/>
+			<label>UID：</label>
+			<input name="id" type="number" min="1" class="input length_1 mr10" value="{$Think.get.id}">
+			<label>电子邮箱：</label>
+			<input name="email" type="text" class="input mr10" value="{$Think.get.email}">
+			<button type="submit" class="btn">搜索</button>
+		</div>
+	</form>
+	<!--/搜索-->
+	<!--列表-->
+	<form class="J_ajaxForm" action="" method="post">
+		<div class="table_list">
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:uid,title:UID,width:60}{field:username,title:用户名,width:120}{field:phone,title:电话,width:120}{field:body,title:会员类型,width:120}{field:pay_type,title:支付方式,width:120}{field:pay_time,title:购买时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,width:60}"/>
+			<div class="p10"></div>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<div class="select_pages"><div class="pages">{$page}</div></div>
+				<!--button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete" data-subcheck="true" data-msg="你确定删除选择的这些用户吗？">删除</button-->
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/forbid">禁用</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/resume">恢复</button>
+			</div>
+		</div>
+	</form>
+	<!--/列表-->
+</div>

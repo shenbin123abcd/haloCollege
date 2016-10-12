@@ -39,14 +39,14 @@ class PushController extends CommonController {
 
     }
 
-    public function pushMsgPersonal($msg = array('uid' => 0, 'content' => '', 'extra' => array())) {
+    public function pushMsgPersonal($msg = array('uid' => 0, 'content' => '', 'extra' => array(),'type'=>'')) {
         // 初始化
         $client = new \JPush($this->app_key, $this->master_secret);
         $platForm = array('ios', 'android');
 
         $msg_content = $msg['content'];
         $msg_title = "msg title";
-        $msg_type = "type";
+        $msg_type = $msg['type'];
         $msg_extra = $msg['extra'];
 
         $alias = "halocollege_" . $msg['uid'];

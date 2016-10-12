@@ -70,7 +70,7 @@ class CommonController extends Controller {
 	protected function _list($model,$where=array()) {
          
 		$this->_search($model,$where);
-
+		
 		$this->filter($where);
 		$totalRows = $model->where($where)->count();
 
@@ -109,6 +109,7 @@ class CommonController extends Controller {
 				$map [$val] = $val == 'title' ? array('like','%'. $_REQUEST [$val] .'%') : $_REQUEST [$val];
 			}
 		}
+
 	}
 	
 	/**
