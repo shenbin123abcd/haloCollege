@@ -61,7 +61,7 @@ function fetchConsultItems(req){
                             },
                         ];
                     res.data.forEach((n,i)=>{
-                        _.assign({},n,{
+                        _.assign(n,{
                             status:false
                         })
                     })
