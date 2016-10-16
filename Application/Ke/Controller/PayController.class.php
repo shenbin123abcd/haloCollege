@@ -291,15 +291,16 @@ class PayController extends CommonController {
         // 记录
         $balance = $agents['balance'] + $amount;
         $check = M('course_agents_log')->where(['agents_id'=>$agents['id'],'order_id'=>$order['id']])->count();
+        $remark = $course['title'] . '（'. $course_reserve['name'] .' 购买）';
         if (!$check){
             M('CourseAgents')->where(['id'=>$agents['id']])->setField('balance', $balance);
-            M('course_agents_log')->add(['agents_id'=>$agents['id'],'order_id'=>$order['id'], 'amount'=>$balance, 'amount_log'=>$amount, 'create_time'=>time()]);
+            M('course_agents_log')->add(['agents_id'=>$agents['id'],'order_id'=>$order['id'], 'amount'=>$balance, 'amount_log'=>$amount, 'create_time'=>time(), 'remark'=>$remark]);
         }else{
             $balance -= $amount;
         }
 
         $data = [
-            'course'=>$course['title'] . '（'. $course_reserve['name'] .' 购买）',
+            'course'=>$remark,
             'amount'=> $amount,
             'remark'=>'累计余额：' . number_format($balance, 2, '.', '')
         ];

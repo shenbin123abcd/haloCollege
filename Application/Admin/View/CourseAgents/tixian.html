@@ -1,0 +1,21 @@
+<style type="text/css">
+	body{ width:320px; }
+</style>
+<form class="J_ajaxForm" action="__URL__/tixian" method="post" >
+	<div class="pop_cont pop_table" style="height:auto;">
+		<table width="100%">
+			<tr>
+				<th>金额：</th>
+				<td>
+					<input name="amount" type="text" class="input length_3" value="{$Think.get.username}">
+					<div class="tips-info">提现金额不能超过余额</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="pop_bottom">
+		<input type="hidden" name="id" value="{$Think.get.id}" />
+		<button type="button" class="btn fr" id="J_dialog_close">取消</button>
+		<button type="submit" class="btn btn_submit mr10 fr J_ajax_submit_btn">提交</button>
+	</div>
+</form>
