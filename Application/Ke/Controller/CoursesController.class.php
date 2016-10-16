@@ -208,4 +208,15 @@ class CoursesController extends CommonController {
 
         $this->success('提交成功');
     }
+
+    public function getAgents(){
+        $code = cookie('agents');
+        $agents = M('CourseAgents')->where(['code'=>$code])->find();
+        $user = [];
+        if (!empty($agents)){
+            $user = M('WechatAuth')->where(['openid'=>$agents['openid']])->field('nickname, headimgurl')->find();
+        }
+
+        $this->success($user);
+    }
 }

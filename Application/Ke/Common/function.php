@@ -24,3 +24,17 @@ function get_url($url){
     }
     return $url;
 }
+
+function get_code(){
+    $agents = cookie('agents');
+    if (!empty($agents)){
+        // 检查code的有效性
+        $check = M('CourseAgents')->where(['code'=>$agents, 'status'=>1])->count();
+
+        if ($check){
+            return $agents;
+        }
+    }
+
+    return '';
+}

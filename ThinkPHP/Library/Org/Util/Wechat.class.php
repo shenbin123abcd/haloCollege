@@ -33,7 +33,7 @@ class Wechat {
     }
     
     // 消息模板发生消息
-    public function sendMsg($openid, $data, $tpl = '9ukmH3wiAMYfTYjzALN6ClFKJOk-pqZjE6JrZMhwavY'){
+    public function sendMsg($openid, $data, $tpl = '9ukmH3wiAMYfTYjzALN6ClFKJOk-pqZjE6JrZMhwavY', $url=''){
         $notice = $this->app->notice;
 
         $map = [
@@ -74,6 +74,20 @@ class Wechat {
                     "keyword1"  => isset($data['course_guest']) ? $data['course_guest'] : '',
                     "keyword2"   => isset($data['buy_time']) ? $data['buy_time'] : '',
                     "remark" => isset($data['buy_user']) ? $data['buy_user'] : '',
+                ],
+            ],
+            // 返佣提醒
+            'xO9QZfIxRUY4sHwsu_fquXS4g9Ucpj82NXxgJzZutMA' => [
+                'touser' => $openid,
+                'template_id' => $tpl,
+                'topcolor' => '#ef4c81',
+                'url'=>$url,
+                'data' => [
+                    "first"  => array('您分销的课程有用户已支付成功哦', '#ef4c81'),
+                    "keyword1"  => isset($data['course']) ? $data['course'] : '',
+                    "keyword2"   => isset($data['amount']) ? $data['amount'] : '',
+                    "keyword3"   => '支付成功',
+                    "remark" => isset($data['remark']) ? $data['remark'] : '',
                 ],
             ]
         ];
