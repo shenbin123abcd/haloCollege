@@ -227,7 +227,8 @@ var DetailMiddle=React.createClass({
 var TelBlock=React.createClass({
     render(){
         let res=this.props.res;
-        if(res.data.length>0){
+        //console.log(res);
+        if(res.iRet==1){
             return(
                 <Link className="tel-block clearfix" to={`/course/branding`}>
                     <div className="sign-num-block clearfix">
