@@ -42,8 +42,16 @@ const CourseItem = ({item}) => {
         'total total-gkk': item.cate=='公开课',
         'total total-pxy': item.cate=='培训营',
     });
+    let link=''
+    let val=hb.Cookies.get('agents');
+    let code=hb.location.url('?code');
+    if(val && !code){
+        link=`/course/detail_${item.id}?code=${val}`;
+    }else{
+        link=`/course/detail_${item.id}`;
+    }
     return (
-        <Link to={`/course/detail_${item.id}`}  className="item">
+        <Link to={link}  className="item">
             <div className="img-box">
                 <img className="img" src={`${item.cover_url}?imageView2/1/w/710/h/380`}/>
                 <div className="img-over-layer" ></div>
