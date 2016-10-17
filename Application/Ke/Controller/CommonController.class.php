@@ -12,7 +12,21 @@ class CommonController extends Controller {
     public function _initialize() {
         //cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
         if (!in_array(CONTROLLER_NAME, ['Public'])){
+            $this->_checkCode();
             $this->_getWechatUser();
+        }
+    }
+
+    private function _checkCode(){
+        $code = I('code');
+        $agents = cookie('agents');
+        if (!empty($code)){ //  && empty($agents)
+            // 检查code的有效性
+            $check = M('CourseAgents')->where(['code'=>$code, 'status'=>1])->count();
+
+            if ($check){
+                cookie('agents', $code, 86400 * 30);
+            }
         }
     }
 
