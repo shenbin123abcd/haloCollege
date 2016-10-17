@@ -93,7 +93,8 @@ var Branding=React.createClass({
                         sendBtnStatus:false,
                         timeOut:false,
                         count:60,
-                    })
+                    });
+                    hb.lib.weui.alert(res.info);
                   }else{
                       hb.lib.weui.alert(res.info);
                   }

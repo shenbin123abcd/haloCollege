@@ -98,7 +98,7 @@ var Detail= React.createClass({
         }else{
             let fetchData=data.data;
             //console.log(res)
-            let val=hb.Cookies.set('agents');
+            let val=hb.Cookies.get('agents');
             let link='';
             if(val){
                 link=window.location.href+val;
