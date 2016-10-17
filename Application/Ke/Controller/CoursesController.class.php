@@ -268,6 +268,6 @@ class CoursesController extends CommonController {
             $user = M('WechatAuth')->where(['openid'=>$agents['openid']])->field('nickname, headimgurl')->find();
         }
 
-        $this->success($user);
+        $user ? $this->success($user) : $this->error();
     }
 }
