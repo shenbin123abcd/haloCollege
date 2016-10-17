@@ -1,5 +1,5 @@
 import {
-    REQUEST_COURSE_DETAIL, RECEIVE_COURSE_DETAIL,GET_AGENTS
+    REQUEST_COURSE_DETAIL, RECEIVE_COURSE_DETAIL,GET_AGENTS,DESTROY_DETAIL_DATA
 } from '../actions/detail'
 
 
@@ -22,6 +22,13 @@ export default (state = {
             return Object.assign({}, state, {
                 res:action.res
             })
+        case DESTROY_DETAIL_DATA:
+            return Object.assign({}, state, {
+                isFetching: false,
+                data: null,
+                res:null
+            })
+
         default:
             return state
     }

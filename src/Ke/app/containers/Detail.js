@@ -2,7 +2,7 @@ import playBtn from '../images/play-btn.png'
 import weixinPic from '../images/weixin.jpg'
 import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'
-import {fetchCourseDetailIfNeeded} from '../actions/detail'
+import {fetchCourseDetailIfNeeded,initial} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 import { fetchCourseIfNeeded,setCurrentMonth ,resetMonth} from '../actions'
 
@@ -24,6 +24,10 @@ var Detail= React.createClass({
           hb.Cookies.set('agents',val);
       }
   },
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(initial())
+    },
     formatContent(str){
         return str.replace(/\r\n|\r/g,'')
     },
@@ -82,8 +86,8 @@ var Detail= React.createClass({
     },
   isWechatInit:false,
   render() {
-    let {data,isFetching,dispatch,res}=this.props;
-
+    let {data,isFetching,dispatch,res,courseDetail}=this.props;
+    console.log(this.props);
     let _this=this;
     let renderDetailPage=()=>{
         if(!data){
@@ -95,7 +99,7 @@ var Detail= React.createClass({
             return <PageLoading key={1}/>
         }else if(isEmpty){
             return <div>no data</div>
-        }else{
+        }else if(data.data){
             let fetchData=data.data;
             //console.log(res)
             let val=hb.Cookies.get('agents');
@@ -109,6 +113,7 @@ var Detail= React.createClass({
             }
 
             //console.log(data)
+
 
             dispatch(setCurrentMonth({
                 year:data.data.month.substring(0,4),

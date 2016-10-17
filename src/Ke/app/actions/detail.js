@@ -1,6 +1,7 @@
 export const REQUEST_COURSE_DETAIL='REQUEST_COURSE_DETAIL'
 export const RECEIVE_COURSE_DETAIL='RECEIVE_COURSE_DETAIL'
 export const GET_AGENTS='GET_AGENTS'
+export const DESTROY_DETAIL_DATA='DESTROY_DETAIL_DATA'
 function requestDetailPosts(data){
     return {
         type:REQUEST_COURSE_DETAIL,
@@ -20,6 +21,13 @@ function getAgents(res){
     return{
         type:GET_AGENTS,
         res,
+    }
+}
+
+export function initial(){
+    return{
+        type:DESTROY_DETAIL_DATA,
+        items: null,
     }
 }
 
