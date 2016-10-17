@@ -16,71 +16,76 @@ var Detail= React.createClass({
      //  if(Modernizr.weixin&&Modernizr.ios){
      //      hb.hack.setTitle(document.title);
      //  }
-
      const { dispatch,routeParams } = this.props
      dispatch(fetchCourseDetailIfNeeded(routeParams.id));
      dispatch(fetchCourseStatusIfNeeded(routeParams.id));
+     let val=hb.location.url('?code');
+      if(val){
+          hb.Cookies.set('agents',val);
+      }
   },
     formatContent(str){
         return str.replace(/\r\n|\r/g,'')
     },
     componentWillReceiveProps : function(nextProps) {
-        let {dispatch}=this.props;
-        if(nextProps.data){
-            if(!this.props.data){
-                dispatch(setCurrentMonth({
-                    year:nextProps.data.data.month.substring(0,4),
-                    month:nextProps.data.data.month.substring(4,6),
-                }));
-            }else if(nextProps.data.month!=this.props.data.month){
-                dispatch(setCurrentMonth({
-                    year:nextProps.data.data.month.substring(0,4),
-                    month:nextProps.data.data.month.substring(4,6),
-                }));
-            }
-            if(document.title!=nextProps.data.data.title){
-                document.title=nextProps.data.data.title;
-                if(Modernizr.weixin&&Modernizr.ios){
-                    hb.hack.setTitle(document.title);
-                }
-            }
-        }
+        //let {dispatch}=this.props;
+        //if(nextProps.data){
+        //    if(!this.props.data){
+        //        dispatch(setCurrentMonth({
+        //            year:nextProps.data.data.month.substring(0,4),
+        //            month:nextProps.data.data.month.substring(4,6),
+        //        }));
+        //    }else if(nextProps.data.month!=this.props.data.month){
+        //        dispatch(setCurrentMonth({
+        //            year:nextProps.data.data.month.substring(0,4),
+        //            month:nextProps.data.data.month.substring(4,6),
+        //        }));
+        //    }
+        //    if(document.title!=nextProps.data.data.title){
+        //        document.title=nextProps.data.data.title;
+        //        if(Modernizr.weixin&&Modernizr.ios){
+        //            hb.hack.setTitle(document.title);
+        //        }
+        //    }
+        //}
 
 
         // console.log(1,this.props.data,nextProps.data);
         // console.log(2,app.wechat.getShareDate());
-        if(nextProps.data){
-            // console.log(app.wechat.getShareDate())
-            if(!this.props.data){
-                app.wechat.init({
-                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-                    link : window.location.href,
-                });
-            }else if(this.props.data.data.id!=nextProps.data.data.id){
-                app.wechat.init({
-                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-                    link : window.location.href,
-                });
-            }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
-                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-                    link : window.location.href,
-                })){
-                app.wechat.init({
-                    title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-                    content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-                    link : window.location.href,
-                });
-            }
-        }
-    },
 
+        //if(nextProps.data){
+        //    // console.log(app.wechat.getShareDate())
+        //    if(!this.props.data){
+        //        app.wechat.init({
+        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
+        //            link : window.location.href,
+        //        });
+        //    }else if(this.props.data.data.id!=nextProps.data.data.id){
+        //        app.wechat.init({
+        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
+        //            link : window.location.href,
+        //        });
+        //    }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
+        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
+        //            link : window.location.href,
+        //        })){
+        //        app.wechat.init({
+        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
+        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
+        //            link : window.location.href,
+        //        });
+        //    }
+        //}
+    },
+  isWechatInit:false,
   render() {
-    let {data,isFetching,dipatch}=this.props;
+    let {data,isFetching,dispatch,res}=this.props;
+
     let _this=this;
-    function renderDetailPage(){
+    let renderDetailPage=()=>{
         if(!data){
             var isNull=true
         }else if(data.length===0){
@@ -92,6 +97,32 @@ var Detail= React.createClass({
             return <div>no data</div>
         }else{
             let fetchData=data.data;
+            //console.log(res)
+            let val=hb.Cookies.set('agents');
+            let link='';
+            if(val){
+                link=window.location.href+val;
+            }else{
+                link=window.location.href;
+            }
+
+            //console.log(data)
+
+            dispatch(setCurrentMonth({
+                year:data.data.month.substring(0,4),
+                month:data.data.month.substring(4,6),
+            }));
+
+            if(!this.isWechatInit){
+                app.wechat.init({
+                    title: `${app.util.formatTitle(data.data.title)}`,
+                    content: `时间：${data.data.start_date}，地点：${data.data.place}，讲师介绍：${data.data.guest.content}`,
+                    link : link,
+                });
+                this.isWechatInit=true;
+            }
+
+
             const classData={
                 price:fetchData.price,
                 place:fetchData.place,
@@ -102,13 +133,14 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <TelBlock telData={fetchData.tel}></TelBlock>
+                    <TelBlock telData={fetchData.tel} res={res}></TelBlock>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <WeixinBlock cateId={fetchData.cate_id}></WeixinBlock>
                     <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
+                    <Tel data={fetchData.tel}></Tel>
                 </div>
             )
         }
@@ -190,18 +222,30 @@ var DetailMiddle=React.createClass({
   }
 })
 
+
+
 var TelBlock=React.createClass({
     render(){
         let tel=this.props.telData;
+        let res=this.props.res;
         let renderTel=()=>('tel:'+tel);
         return(
-            <a className="tel-block clearfix" href={renderTel()}>
+            <Link className="tel-block clearfix" to={`/course/branding`}>
                 <div className="sign-num-block clearfix">
                     <div className="tel-line"></div>
-                    <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-kefu f-20"></span>拨打客服电话</div>
-                    <div className="sign-num-block-right f-13"><i className="haloIcon haloIcon-right"></i></div>
+                    <div className="sign-num-block-left f-14">
+                        <span className="haloIcon haloIcon-great f-20"></span>
+                        <span>{res.data.nickname}</span>
+                        <span className="tuijianren">
+                            <span className="circle"><img src={res.data.headimgurl} alt=""/></span>
+                        </span>
+                    </div>
+                    <div className="sign-num-block-right f-13">
+                        申请成为推荐人
+                        <i className="haloIcon haloIcon-right"></i>
+                    </div>
                 </div>
-            </a>
+            </Link>
         )
     }
 })
@@ -403,9 +447,9 @@ var WeixinBlock=React.createClass({
                     <img src={weixinPic} alt=""/>
                 </div>
                 <div className="text">长按二维码添加「 幻熊研习社 」客服微信号<br/>咨询课程报名相关事项</div>
-                <div className="consult">
+                {/*<div className="consult">
                     <Link to={`/course/consult`}><span>报名须知 》</span></Link>
-                </div>
+                </div>*/}
             </div>
           </div>
         )
@@ -418,6 +462,17 @@ var WeixinBlock=React.createClass({
       </div>
     )
   }  
+});
+
+var Tel=React.createClass({
+    render(){
+        let tel=this.props.data;
+        return(
+            <a className="tel-fixed" href={`tel:${tel}`}>
+                <span className="haloIcon haloIcon-kefu"></span>
+            </a>
+        )
+    }
 })
 
 function mapStateToProps(state) {
