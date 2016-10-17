@@ -226,27 +226,32 @@ var DetailMiddle=React.createClass({
 
 var TelBlock=React.createClass({
     render(){
-        let tel=this.props.telData;
         let res=this.props.res;
-        let renderTel=()=>('tel:'+tel);
-        return(
-            <Link className="tel-block clearfix" to={`/course/branding`}>
-                <div className="sign-num-block clearfix">
-                    <div className="tel-line"></div>
-                    <div className="sign-num-block-left f-14">
-                        <span className="haloIcon haloIcon-great f-20"></span>
-                        <span>{res.data.nickname}</span>
+        if(res.data.length>0){
+            return(
+                <Link className="tel-block clearfix" to={`/course/branding`}>
+                    <div className="sign-num-block clearfix">
+                        <div className="tel-line"></div>
+                        <div className="sign-num-block-left f-14">
+                            <span className="haloIcon haloIcon-great f-20"></span>
+                            <span>{res.data.nickname}</span>
                         <span className="tuijianren">
                             <span className="circle"><img src={res.data.headimgurl} alt=""/></span>
                         </span>
+                        </div>
+                        <div className="sign-num-block-right f-13">
+                            申请成为推荐人
+                            <i className="haloIcon haloIcon-right"></i>
+                        </div>
                     </div>
-                    <div className="sign-num-block-right f-13">
-                        申请成为推荐人
-                        <i className="haloIcon haloIcon-right"></i>
-                    </div>
-                </div>
-            </Link>
-        )
+                </Link>
+            )
+        }else{
+            return(
+                <div></div>
+            )
+        }
+
     }
 })
 
