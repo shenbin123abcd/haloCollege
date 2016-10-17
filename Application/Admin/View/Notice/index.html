@@ -1,0 +1,110 @@
+<div class="wrap J_check_wrap">
+	<!--说明-->
+	<div class="h_a">说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>通知管理</li>
+		</ol>
+	</div>
+	<!--/说明-->
+
+</div>
+
+<form id="J_rigths_form" class="J_ajaxForm" action="__URL__/notice" method="post" enctype="multipart/form-data">
+	<div class="J_tabs_contents">
+		<div>
+			<div class="h_a">新增</div>
+			<div class="table_full">
+				<table width="100%">
+					<col class="th" />
+					<col width="400" />
+					<col />
+					<tr>
+						<th>通知内容</th>
+						<td><input type="text" class="input length_5" name="content" id="content"></td>
+					</tr>
+					<tr>
+						<th>通知类型</th>
+						<td>
+							<select name="msg_type">
+								<option value="">请选择</option>
+								<volist name="alert_cate" id="vo">
+									<option value="{$vo.push_id}">{$vo.title}</option>
+								</volist>
+
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><a href="#" id="add">添加自定义字段</a></td>
+					</tr>
+
+				</table>
+			</div>
+		</div>
+		<div class="btn_wrap">
+			<div class="btn_wrap_pd">
+				<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn" >通知</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!--自定义字段弹窗-->
+<div name="dialog" id="dialog" style="position: fixed;
+	_position:absolute;
+	z-index:1;
+	top: 50%;
+	left: 50%;
+	margin: -141px 0 0 -201px;
+	width: 400px;
+	height:280px;
+	border:1px solid #CCC;
+	line-height: 100px;
+	text-align:center;
+	font-size: 14px;
+	background-color:#F4F4F4;
+	display: none;" >
+	<labe>键名</labe><input type="text" name="key" id="key"><br>
+	<label>值</label><input type="text" name="value" id="value"><br>
+<input type="button" name="true" id="true" value="确定">
+	<input type="button" name="cancel" id="cancel" value="取消">
+</div>
+
+<script>
+$(document).ready(function(){
+	//自定义字段编辑窗口
+	$('#add').click(function(){
+		$('#dialog').show();
+	});
+	$('#true').click(function(){
+		var key = $('#key').val();
+		var value = $('#value').val();
+		var extra = $('.extra');
+		var name = key+"_extra";
+		if (key=='' || value==''){
+			alert("键名和键值不能为空！");
+			return;
+		}
+		$('tr:last').after('<tr><th>'+key+'</th><td><input type="text" class="input length_5 extra" name='+name+' value='+value+'></td><td></td></tr>');
+		$('#key').val('');
+		$('#value').val('');
+		$('#dialog').hide();
+	});
+	$('#J_rights_form_btn').click(function(){
+		var content = $('#content').val();
+		if (content==''){
+			alert('通知内容不能为空!');
+		}
+		location.reload()
+
+	});
+	$('#cancel').click(function(){
+		$('#key').val('');
+		$('#value').val('');
+		$('#dialog').hide();
+	});
+
+});
+</script>
+

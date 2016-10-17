@@ -25,7 +25,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:姓名,width:80}{field:position,title:职务,width:200}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:title,title:姓名,width:80}{field:position,title:职务,width:200}{field:company,title:公司,width:200}{field:is_headimg,title:头像,width:200}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">

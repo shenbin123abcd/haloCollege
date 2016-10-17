@@ -71,37 +71,73 @@ class SchoolCommentModel extends Model {
 	 * 获取评论列表（最新）
 	 */
 	public function getCommentList($page,$per_page,$vid){
-		$url = 'http://college-api.halobear.com/v1/public/getUserInfo';
+		$user = get_user();
 		$where['status']=1;
 		$where['vid']=$vid;
 		$total = $this->where($where)->count();
-		$list = $this->where($where)->page($page,$per_page)->order('id DESC')->field('id,uid,username,content,score,create_time')->select();
+		$list = $this->where($where)->page($page,$per_page)->order('id DESC')->field('id,uid,vid,username,content,score,create_time,comment_id,remark')->select();
 		foreach ($list as $key => $value) {
 			$list[$key]['avatar'] = get_avatar($value['uid']);
 		}
 		//获取用户职位等信息
 		foreach ($list as $key=>$value){
 			$uid_arr[] = $value['uid'];
+			$comment_id_arr[] = $value['id'];
 		}
-		$uid_arr_unique = array_unique($uid_arr);
+		if (!empty($uid_arr)){
+			$user_info = $this->get_user_info($uid_arr);
+			foreach ($list as $key_user=>$value_user){
+				$list[$key_user]['position'] = empty($user_info[$value_user['uid']]) ? '' :  $user_info[$value_user['uid']];
+				if ($value_user['remark'] ==1){
+					$reply_uid[] = $value_user['comment_id'];
+				}
+			}
+			//获取回复的父评论
+			$reply_uid_unique = array_unique($reply_uid);
+			if (!empty($reply_uid_unique)){
+				$list_parent = $this->where(array('status'=>1,'vid'=>$vid,'id'=>array('in',$reply_uid_unique)))->getField('id,uid,vid,username,content,score,create_time,comment_id,remark');
+				foreach ($list_parent as $key=>$value){
+					$list_parent[$key]['position'] = empty($user_info[$value['uid']]) ? '' :  $user_info[$value['uid']];
+				}
+			}
+			foreach ($list as $key=>$value){
+				$list[$key]['parent_reply'] = $list_parent[$value['comment_id']];
+			}
 
-		if(!empty($uid_arr_unique)){
-			$uid = json_encode($uid_arr_unique);
-			$data =array(
-				'uid'=>$uid,
-			);
-			$result = curl_post($url,$data);
-			$userInfo = $result['data']['userInfo'];
-			foreach ($list as $key_list=>$value_list){
-				$list[$key_list]['position'] = '';
-				foreach ($userInfo as $key_userInfo=>$value_userInfo){
-					if($value_list['uid']==$value_userInfo['uid']){
-						$list[$key_list]['position'] = $value_userInfo['position'];
+		    //获取评论点赞状态和点赞数
+			if (!empty($comment_id_arr)){
+				$count_praise = M('VideoCommentPraise')->where(array('comment_id'=>array('in',$comment_id_arr)))->group('comment_id')->getField('comment_id,count(id)');
+				foreach ($list as $key=>$value){
+					$list[$key]['count_praise'] = $count_praise[$value['id']] ? $count_praise[$value['id']] : 0;
+				}
+				if (!empty($user)){
+					$status_praise = M('VideoCommentPraise')->where(array('uid'=>$user['uid'],'comment_id'=>array('in',$comment_id_arr)))->group('comment_id')->getField('comment_id,count(id)');
+					foreach ($list as $key=>$value){
+						$list[$key]['status_praise'] = $status_praise[$value['id']] ? $status_praise[$value['id']] : 0;
+					}
+				}else{
+					foreach ($list as $key=>$value){
+						$list[$key]['status_praise'] = -1;
 					}
 				}
 			}
+
+
 		}
+
 		return array('total'=>$total, 'list'=>empty($list) ? array() : $list);
+	}
+	
+	/**
+	 * 获取用户职位信息
+	*/
+	public function get_user_info($uid_arr){
+		$uid_arr_unique = array_unique($uid_arr);
+		$where_user['uid'] = array('in', $uid_arr_unique);
+		$where_user['status'] = 1;
+		$userInfo = M('Userinfo')->where($where_user)->getField('uid,position');
+		
+		return $userInfo;
 	}
 
 	protected function _after_insert($data, $option){

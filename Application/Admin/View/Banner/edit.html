@@ -21,27 +21,31 @@
                         </tr>
                         <tr>
                             <th>图片</th>
-                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.clouddn.com"  multiple="multiple" key="banner" name="banner">
-                                <fieldset>
-                                    <legend>附件列表：</legend>
-                                    <volist name="attach" id="vo">
-                                        <span><a href="{$vo.src}" target="_blank"><img src="{$vo.src}" style="width: 300px;height: 300px"><a href="__URL__/attach_delete?id={$vo.id}" onclick="if (confirm('确定移除吗？')) {deleteFile(this)};return false;">移除</a></span>
-                                    </volist>
-                                </fieldset>
+                            <td>
+                                <input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="banner">
+                                <div>
+                                    <img src="http://7xopel.com2.z0.glb.qiniucdn.com/{$data.banner_url}?imageView/1/w/246/h/185/q/85" alt="">
+                                </div>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <th>描述</th>
                             <td><input type="text" class="input length_5" name="desc" value="{$data.desc}"></td>
                         </tr>
                         <tr>
-                            <th>类型</th>
-                            <td><input type="text" class="input length_5" name="type" value="{$data.type}"></td>
+                            <th>URL或ID</th>
+                            <td><input type="text" class="input length_5" name="redirect_url_id" value="{$data.redirect_url_id}"></td>
                         </tr>
                         <tr>
-                            <th>Banner ID</th>
-                            <td><input type="text" class="input length_5" name="banner_id" value="{$data.banner_id}"></td>
+                            <th>类型</th>
+                            <td>
+                            <select name="type">
+                                <option value="" <eq name="data.redirect_url_id" value="">selected</eq>>请选择</option>
+                                <volist name="type" id="vo">
+                                    <option value="{$key}" <eq name="data.redirect_url_id" value="{$key}">selected</eq>>{$vo}</option>
+                                </volist>
+                            </select>
+                            </td>
                         </tr>
 
                     </table>
@@ -51,7 +55,6 @@
             <div class="btn_wrap">
                 <div class="btn_wrap_pd">
                     <input type="hidden" name="qiniu_token" value="{$token}">
-
                     <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
                 </div>
             </div>

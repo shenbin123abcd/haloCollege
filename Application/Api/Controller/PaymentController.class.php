@@ -221,9 +221,7 @@ class PaymentController extends CommonController {
         }
 
         //会员购买成功后的消息推送
-        /*$object_push = A('Push');
-        $result = $object_push->pushMsgPersonal(array('uid'=>$order['uid'],'content'=>'尊敬的会员'.','.'您已成功购买'.$order['body'],'extra'=>array('push_time'=>time()),'type'=>'member'));
-        $msg_id = $result->data->msg_id ? $result->data->msg_id : '';*/       
+        $this->member_notice($order['uid'],$order['body']);
        
         return true;
     }
@@ -266,5 +264,26 @@ class PaymentController extends CommonController {
             write_log('ping_notify_error', '支付完成，IP校验失败来源ip' . $ip);
             exit("fail");
         }
+    }
+
+    //会员购买成功消息通知
+    public function member_notice($uid,$content){
+        $push = A('Push');
+        $status = is_login($uid);
+        if ($status){
+            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'尊敬的会员'.','.'您已成功购买'.$content,'extra'=>array('push_time'=>time()),'type'=>3));
+        }
+        $msg['from_uid'] = 0;
+        $msg['from_username'] = '';
+        $msg['to_uid'] = $uid;
+        $msg['content'] = '尊敬的会员'.','.'您已成功购买'.$content;
+        $msg['detail_id'] = 0;
+        $msg['msg_type'] = 3;
+        $msg['push_time'] = time();
+        $msg['extra'] = '';
+        $msg['is_read'] = 0;
+        $msg['remark_type'] = 0;
+        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $push_msg = M('PushMsg')->add($msg);
     }
 }

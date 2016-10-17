@@ -109,6 +109,15 @@
 						</volist>
 					</td>
 				</tr>
+				<tr>
+					<th>保存<br><b style="color: red">若选“是”，视频只被保存在数据库，不会被马上发布到app！</b></th>
+					<td>
+						<select name="conserve">
+							<option value="0" <eq name="data.status" value="1">selected</eq>>否</option>
+							<option value="1" <eq name="data.status" value="0">selected</eq>>是</option>
+						</select>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</div>

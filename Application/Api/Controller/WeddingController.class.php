@@ -352,8 +352,6 @@ class WeddingController extends CommonController {
      * 婚礼头条回复提交接口
     */
     public function replyPost() {
-        //推送
-        //$object_push = A('Push');
         $model = D('SchoolWeddingComment');
         $data['parent_id'] = I('parent_id');
         $data['uid'] = $this->user['uid'];
@@ -374,10 +372,8 @@ class WeddingController extends CommonController {
         if ($model->create($data)) {
             $id = $model->add();
             if ($id) {
-                /*$parent_data = $this->get_parent_data($data['parent_id']);
-                $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('username'=>$data['username'],'headimg'=>$data['headimg'],'parent_data'=>$parent_data),'type'=>'wedding_reply'));
-                $msg_id = $result->data->msg_id ? $result->data->msg_id : '';
-                $this->success('回复成功！',array('msg_id'=>$msg_id));*/
+                //推送
+                $this->reply_push($data);
                 $this->success('回复成功！');
             } else {
                 $this->error('回复失败！');
@@ -385,6 +381,31 @@ class WeddingController extends CommonController {
         } else {
             $this->error($model->getError());
         }
+
+    }
+
+    /**
+     * 回复推送
+    */
+    public function reply_push($data){
+        $object_push = A('Push');
+        $parent_data = $this->get_parent_data($data['parent_id']);
+        $status = is_login($parent_data['uid']);
+        if ($status){
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['remark_id'],'push_time'=>time()),'type'=>1));
+    }
+        $msg['from_uid'] = $data['uid'];
+        $msg['from_username'] = $data['username'];
+        $msg['to_uid'] = $parent_data['uid'];
+        $msg['content'] = $data['content'];
+        $msg['detail_id'] = $parent_data['remark_id'];
+        $msg['msg_type'] = 1;
+        $msg['push_time'] = time();
+        $msg['extra'] = '';
+        $msg['is_read'] = 0 ;
+        $msg['remark_type'] = 0;
+        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $push_msg = M('PushMsg')->add($msg);
 
     }
 
@@ -1302,7 +1323,7 @@ class WeddingController extends CommonController {
      */
     public function get_parent_data($parent_id){
         $where['id'] = $parent_id;
-        $parent_data = M('schoolWeddingComment')->where($where)->field('uid,content,username,headimg')->find();
+        $parent_data = M('SchoolWeddingComment')->where($where)->field('uid,remark_id,content,username,headimg')->find();
         return $parent_data;
     }
 

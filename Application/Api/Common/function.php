@@ -26,3 +26,17 @@ function is_buy($uid,$vid){
     return empty($record) ? 0 : 1;
 
 }
+
+/**
+ * 判断用户是否登录
+*/
+function is_login($uid){
+    $login = M('UserLogin')->where(array('uid'=>$uid))->find();
+    if ($login['is_login']==1 && $login['token_exp']>time()){
+        $stauts = 1;
+    }else{
+        $stauts = 0;
+    }
+    
+    return $stauts;
+}

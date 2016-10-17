@@ -15,7 +15,7 @@ class VideoController extends CommonController {
 
     protected $module_auth = 0;
     protected $action_auth = array('getExpireDate','getUrl','commontSave','openMember','checkExpire','recordPlay','getRecord','favoritesAct','myFavorites'
-    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise','buyRecord');
+    ,'delFavorites','myComments','delComment','videoPraise','videoCancelPraise','buyRecord','replySave','commentPraise','commentCancelPraise','memberDeadlineNotice');
 
     /**
      * 根据类型获取列表
@@ -323,6 +323,77 @@ class VideoController extends CommonController {
             $this->error($model->getError());
         }
     }
+    
+    /**
+     * 回复
+    */
+    public function replySave(){
+        $model = D('SchoolComment');
+        if (empty($_POST['comment_id'])){
+            $this->error('参数错误！');
+        }
+        //检查回复的评论跟视频是否匹配
+        $count = $model->where(array('vid'=>$_POST['vid'],'id'=>$_POST['comment_id']))->count();
+        if (empty($count)){
+            $this->error('回复的评论与视频不匹配！');
+        }
+        $_POST['uid'] = $this->user['uid'];
+        //标志是回复
+        $_POST['remark'] = 1;
+        //用户名用真实姓名
+        $user = getTrueName($_POST['uid']);
+        if(!empty($user)){
+            $_POST['username'] = $user['truename'];
+        }else{
+            $_POST['username'] = $this->user['username'];
+        }
+        if ($model->create()) {
+            $id = $model->add();
+            if ($id){
+                //推送
+                $this->reply_push($_POST);
+                $this->success('回复成功！');
+            }else{
+                $this->error('回复失败！');
+            }
+        } else {
+            $this->error($model->getError());
+        }
+    }
+
+    /**
+     * 回复推送
+     */
+    public function reply_push($data){
+        $object_push = A('Push');
+        $parent_data = $this->get_parent_comment($data['comment_id']);
+        $status = is_login($parent_data['uid']);
+        if ($status){
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time()),'type'=>2));
+        }
+        $msg['from_uid'] = $data['uid'];
+        $msg['from_username'] = $data['username'];
+        $msg['to_uid'] = $parent_data['uid'];
+        $msg['content'] = $data['content'];
+        $msg['detail_id'] = $parent_data['vid'];
+        $msg['msg_type'] = 2;
+        $msg['push_time'] = time();
+        $msg['extra'] = '';
+        $msg['is_read'] = 0 ;
+        $msg['remark_type'] = 0;
+        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $push_msg = M('PushMsg')->add($msg);
+
+    }
+
+    /**
+     * 获取回复的评论对象
+    */
+    public function get_parent_comment($comment_id){
+        $where['id'] = $comment_id;
+        $parent_data = M('SchoolComment')->where($where)->field('uid,vid,content,username')->find();
+        return $parent_data;
+    }
 
     public function commentList($vid, $per_page = 12) {
         $vid = intval($vid);
@@ -616,6 +687,12 @@ class VideoController extends CommonController {
         $this->success('success', $data);
     }
 
+    /**Banner
+    */
+    public function bannerList(){
+
+    }
+
     // 收藏
     public function favoritesAct() {
 
@@ -732,6 +809,36 @@ class VideoController extends CommonController {
     }
 
     /**
+     * 视频评论点赞
+    */
+    public function commentPraise(){
+        $model = M('VideoCommentPraise');
+        $data['comment_id'] = I('comment_id');
+        $data['uid'] = $this->user['uid'];
+        $praise = $model->where(array('uid'=>$data['uid'],'comment_id'=>$data['comment_id']))->count();
+        !empty($praise) && $this->error('您已经对该评论点赞过了！');
+        $video = D('SchoolComment')->where(array('id' => $data['comment_id']))->find();
+        empty($video) &&  $this->error('参数错误！');
+        $user = getTrueName($data['uid']);
+        if(!empty($user)){
+            $data['username'] = $user['truename'];
+        }else{
+            $data['username'] = $this->user['username'];
+        }
+        $data['headimg'] = get_avatar($data['uid']);
+        $data['create_time'] = time();
+        $data['update_time'] = time();
+        $data['status'] = 1;
+        $id = $model->add($data);
+        if ($id) {
+            $this->success('点赞成功！');
+        } else {
+            $this->error('点赞失败！');
+        }
+    }
+
+
+    /**
      * 视频取消点赞
      */
     public function videoCancelPraise(){
@@ -759,16 +866,26 @@ class VideoController extends CommonController {
         }
     }
 
-    //微信通知
-    public function wechat_notice(){
-        $data_wechat_notice=array(
-            'course_guest'=>'张虎'.'|'.'婚礼公开课',
-            'buy_time'=>date('Y-m-d',time()),
-            'buy_user'=>'张虎'.' '.'报名'
-        );
-        $wechat = new \Org\Util\Wechat();
-        $wechat->sendMsg($openid='oEgUss_opL2It0Qby_HKGCZtN2cY', $data_wechat_notice, $tpl='DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A');
+    /**
+     * 评论取消点赞
+    */
+    public function commentCancelPraise(){
+        $model = M('VideoCommentPraise');
+        $comment_id = I('comment_id');
+        empty($comment_id) && $this->error('参数错误！');
+        $uid = $this->user['uid'];
+        $where['uid'] = $uid;
+        $where['comment_id'] = $comment_id;
+        $praise = $model->where($where)->find();
+        empty($praise) &&  $this->error('您不曾对该内容点赞过！');
+        $result = $model->where($where)->delete();
+        if ($result !== false) {
+            $this->success('取消点赞成功！');
+        } else {
+            $this->error('取消点赞失败！');
+        }
     }
+
 
     /**
      * 获取视频购买记录
@@ -791,8 +908,37 @@ class VideoController extends CommonController {
         $this->success('success',$data);
 
     }
+    
+    /**
+     * 会员即将到期推送消息提醒
+    */
+    public function memberDeadlineNotice(){
+        $cate_id = intval(I('cate_id'));
+        $day = I('day');
+        empty($cate_id) && $this->error('参数错误！');
+        $member = M('SchoolMemberCate')->where(array('id'=>$cate_id))->getField('id,title');
+        $push = A('Push');
+        $uid = $this->user['uid'];
+        if ($uid){
+            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'还剩'.$day.'天'.','.'您的'.$member[$cate_id].'就到期了哦！','extra'=>array('push_time'=>time()),'type'=>4));
+        }
+        $msg['from_uid'] = 0;
+        $msg['from_username'] = '';
+        $msg['to_uid'] = $uid;
+        $msg['content'] = '还剩'.$day.'天'.','.'您的'.$member[$cate_id].'就到期了哦！';
+        $msg['detail_id'] = 0;
+        $msg['msg_type'] = 4;
+        $msg['push_time'] = time();
+        $msg['extra'] = '';
+        $msg['is_read'] = 0;
+        $msg['remark_type'] = 0;
+        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $push_msg = M('PushMsg')->add($msg);
+        $this->success('success');
+    }
 
-    //分类迁移
+
+    //分类迁移（）
     public function changeCate(){
         $videos = M('SchoolVideo')->select();
         foreach ($videos as $key=>$value){
@@ -856,6 +1002,38 @@ class VideoController extends CommonController {
             }
         }
     }
+    
+//     读取json数据文件,遍历存储到数据库
+public function read(){
+    $model = M('RegionNew');
+    $json_string = file_get_contents('1476240779195.json');
+    $data = json_decode($json_string, true);
+    $data_area = $data['district'];
+    foreach ($data_area as $key_1=>$value_1){
+        $data_1['region_code'] = $value_1['i'];
+        $data_1['region_name'] = $value_1['n'];
+        $data_1['parent_id'] = $value_1['p'];
+        $data_1['level'] = $value_1['l'];
+        $model->add($data_1);
+        $value_1_c = $value_1['c'];
+        foreach ($value_1_c as $key_2=>$value_2){
+            $data_2['region_code'] = $value_2['i'];
+            $data_2['region_name'] = $value_2['n'];
+            $data_2['parent_id'] = $value_2['p'];
+            $data_2['level'] = $value_2['l'];
+            $model->add($data_2);
+            $value_1_c_c = $value_2['c'];
+            foreach ($value_1_c_c as $key_3=>$value_3){
+                $data_3['region_code'] = $value_3['i'];
+                $data_3['region_name'] = $value_3['n'];
+                $data_3['parent_id'] = $value_3['p'];
+                $data_3['level'] = $value_3['l'];
+                $model->add($data_3);
+            }
+        }
+
+    }
+}
 
 
 

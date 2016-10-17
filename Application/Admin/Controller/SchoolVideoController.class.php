@@ -56,7 +56,7 @@ class SchoolVideoController extends CommonController {
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['create_time'] = time();
 		$_POST['update_time'] = time();
-		$_POST['status'] =1;
+		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
 	}
 
 	//获取视频分类名称
@@ -87,6 +87,7 @@ class SchoolVideoController extends CommonController {
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['update_time'] =time();
+		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
 		//$_POST['cate3'] = empty($_POST['cate3']) ? '' : implode(',', $_POST['cate3']);
 	}
 

@@ -10,19 +10,27 @@
 	<!--/导航-->
 	<!--操作-->
 	<div class="mb10">
-		<a class="btn J_dialog" href="__URL__/add" title="新增用户"><span class="add"></span>   新增用户</a>
+		<a class="btn" href="__URL__/add" title="新增"><span class="add"></span>开通会员</a>
 	</div>
 	<!--/操作-->
 	<!--搜索-->
 	<div class="h_a">搜索</div>
 	<form action="__URL__/index" method="get">
 		<div class="search_type cc mb10">
-			<label>用户名包含：</label>
-			<input name="username" type="text" class="input length_2 mr10" value="{$Think.get.username}"/>
-			<label>UID：</label>
-			<input name="id" type="number" min="1" class="input length_1 mr10" value="{$Think.get.id}">
-			<label>电子邮箱：</label>
-			<input name="email" type="text" class="input mr10" value="{$Think.get.email}">
+			<label>会员类型：</label>
+			<select name="cate">
+				<option value="">请选择</option>
+				<volist name="member_cate" id="vo">
+					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo['id']">selected</eq>>{$vo.title}</option>
+				</volist>
+			</select>
+			<label>支付状态：</label>
+			<select name="status">
+				<option value="">请选择</option>
+				<volist name="pay_status" id="vo">
+					<option value="{$key}" <eq name="Think.request.status" value="{$key}">selected</eq>>{$vo}</option>
+				</volist>
+			</select>
 			<button type="submit" class="btn">搜索</button>
 		</div>
 	</form>

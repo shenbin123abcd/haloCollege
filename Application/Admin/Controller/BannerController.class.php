@@ -11,14 +11,18 @@ use Think\Controller;
 
 class BannerController extends CommonController{
     public function _before_add(){
-        $this->token = $this->qiniu('crmpub','Banner');
+        $this->type=array('1'=>'H5页面','2'=>'全屏播放','3'=>'视频详情','4'=>'人文文章');
+        $this->token = $this->qiniu('crmpub', 'college/banner');
 
     }
 
     public function _before_insert(){
+        empty($_POST['banner_url']) && $this->error('请上传banner图片');
         empty($_POST['title']) && $this->error('请填写Banner标题！');
         empty($_POST['desc']) && $this->error('请填写Banner描述！');
         empty($_POST['type']) && $this->error('请填写Banner类型！');
+        $_POST['type'] = intval( $_POST['type']);
+        empty($_POST['redirect_url_id']) && $this->error('请填写跳转地址或者id！');
         $_POST['create_time']=time();
         $_POST['update_time']=time();
         $_POST['status']=1;

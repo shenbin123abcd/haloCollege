@@ -10,6 +10,9 @@ use Think\Controller;
 
 class PublicController extends CommonController {
 
+    protected $module_auth = 0;
+    protected $action_auth = array('loginStatus','getPushMsg','readedStatus');
+
     /**
      * 七牛上传回调 --非编辑器
      */
@@ -233,7 +236,7 @@ class PublicController extends CommonController {
             $this->error('发送过于频繁，请一分钟后再试');
         }
 
-        $code = rand(100001, 999999);
+            $code = rand(100001, 999999);
         $ret = send_msg($to, array($code), 23351, '8a48b551488d07a80148a5a1ea330a06');
         if ($ret['iRet'] == 0) {
             M('phone')->where(array('phone' => $to))->delete();
@@ -335,6 +338,73 @@ class PublicController extends CommonController {
     public function qiniuUpload() {
 
         $this->ajaxReturn(array('url' => C('AVATAR_URL') . $_POST['key'], 'width' => $_POST['w'], 'height' => $_POST['h']));
+    }
+
+    /**
+     * 前端向后端通知用户的登录状态
+    */
+    public function loginStatus(){
+        $model = M('UserLogin');
+        $exp = 2592000;
+        $user = $this->user;
+        $is_login = I('is_login');
+        $is_login=='' && $this->error('参数错误！');
+        $data['uid'] = $user['id'];
+        $record =$model->where(array('uid'=>$data['uid']))->find();
+        if ($is_login){
+            $data['is_login'] = $is_login;
+            $data['token_exp'] = time()+$exp;
+            if (!empty($record)){
+                $record['is_login'] = $is_login;
+                $record['token_exp'] = $data['token_exp'];
+                $model->save($record);
+            }else{
+                $model->add($data);
+            }
+        }else{
+            $data['is_login'] = $is_login;
+            $data['token_exp'] = time();
+            if (!empty($record)){
+                $record['is_login'] = $is_login;
+                $record['token_exp'] = $data['token_exp'];
+                $model->save($record);
+            }else{
+                $model->add($data);
+            }
+        }
+        $this->success('success');
+
+    }
+
+    /**
+     * 获取推送消息
+    */
+    public function getPushMsg(){
+        $uid = $this->user['uid'];
+        $data = M('PushMsg')->where(array('to_uid'=>$uid))->select();
+        $this->success('success',$data);
+    }
+
+    /**
+     * 推送消息已读状态修改
+    */
+    public function readedStatus(){
+        $uid = $this->user['uid'];
+        $msg_no = I('msg_no');
+        empty($msg_no) && $this->error('参数错误！');
+        $model = M('PushMsg');
+       $msg = $model->where(array('msg_no'=>$msg_no,'to_uid'=>$uid))->find();
+        if (!empty($msg)){
+            $msg['is_read'] =1;
+            $result = $model->save($msg);
+            if ($result!==false){
+                $this->success('success');
+            }else{
+                $this->error('状态修改失败！');
+            }
+        }else{
+            $this->error('不存在该条消息！');
+        }
     }
 
 

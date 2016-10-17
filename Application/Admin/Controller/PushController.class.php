@@ -6,11 +6,11 @@
  * Time: 16:03
  */
 
-namespace Api\Controller;
+namespace Admin\Controller;
 
 use Think\Controller;
 
-class PushController extends CommonController {
+class PushController extends Controller {
     private $app_key = 'eb9b8a1cc71a294e9225c211';
     private $master_secret = '4b0f11f62c881a49af4ddd98';
 
@@ -20,6 +20,10 @@ class PushController extends CommonController {
         $platForm = array('ios', 'android');
         $msg_content = $msg['content'];
         $msg_title = "msg title1";
+        $msg['extra']['content'] = $msg_content;
+        $msg['extra']['from_username'] = '';
+        $msg['extra']['detail_id'] = '';
+        $msg['extra']['from_headimg'] = '';
         $msg_extra = $msg['extra'];
 
         $sendno = rand(100001, 999999);

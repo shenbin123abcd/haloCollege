@@ -19,20 +19,26 @@
                         </tr>
                         <tr>
                             <th>图片</th>
-                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.clouddn.com"  multiple="multiple" key="banner" name="banner"></td>
-                            <td></td>
+                            <td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="banner"></td>
                         </tr>
                         <tr>
                             <th>描述</th>
                             <td><input type="text" class="input length_5" name="desc"></td>
                         </tr>
                         <tr>
-                            <th>类型</th>
-                            <td><input type="text" class="input length_5" name="type"></td>
+                            <th>URL或ID</th>
+                            <td><input type="text" class="input length_5" name="redirect_url_id"></td>
                         </tr>
                         <tr>
-                            <th>Banner ID</th>
-                            <td><input type="text" class="input length_5" name="banner_id"></td>
+                            <th>类型</th>
+                            <td>
+                            <select name="type">
+                                <option value="">请选择</option>
+                                <volist name="type" id="vo">
+                                    <option value="{$key}">{$vo}</option>
+                                </volist>
+                            </select>
+                            </td>
                         </tr>
 
                     </table>
@@ -42,7 +48,6 @@
             <div class="btn_wrap">
                 <div class="btn_wrap_pd">
                     <input type="hidden" name="qiniu_token" value="{$token}">
-
                     <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
                 </div>
             </div>
