@@ -48,6 +48,7 @@ class PayController extends CommonController {
             $order['type'] = 0;
             $order['status'] = 0;
             $order['sign'] = '';
+            $order['code'] = get_code();
 
             $order_id = $model->add($order);
 
@@ -101,6 +102,9 @@ class PayController extends CommonController {
                     // 短信通知
                     $phone = M('CourseReserve')->where(array('wechat_id' => $order['wechat_id'], 'course_id' => $order['course_id'], 'type' => 1))->getField('phone');
                     $this->_notice($order['course_id'], $phone);
+
+                    // 返佣
+                    $this->_agentsNotice($order);
 
                     //微信通知
                     $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',$order['course_id'],$order['wechat_id'],$this->user['username']);
@@ -252,10 +256,6 @@ class PayController extends CommonController {
         }
     }
 
-    public function test(){
-        $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',1, 30, '测试购买');
-    }
-
     //微信通知
     private function _wechat_notice($tpl,$course_id,$wechat_id,$username){
         $openid = array('oEgUssxz4-N1oTyiHDCs7I1qvlO4','oEgUssy9t6hZ-nresv0kImH0UCzg');
@@ -267,6 +267,44 @@ class PayController extends CommonController {
             'buy_user'=>$username.' '.'报名'
         );
         $wechat = new \Org\Util\Wechat();
-        $wechat->sendMsg($openid, $data_wechat_notice, $tpl);
+        foreach ($openid AS $value){
+            $wechat->sendMsg($value, $data_wechat_notice, $tpl);
+        }
+    }
+
+//    public function test(){
+//        $order = M('CourseOrder')->where(['id'=>113])->find();
+//        $this->_agentsNotice($order);
+//    }
+
+    // 分销提醒
+    private function _agentsNotice($order){
+        if (empty($order['code'])){
+            return;
+        }
+
+        $course = M('Course')->where(array('id'=>$order['course_id']))->find();
+        $course_reserve = M('CourseReserve')->where(array('course_id'=>$order['course_id'],'wechat_id'=>$order['wechat_id']))->find();
+        $agents = M('CourseAgents')->where(['code'=>$order['code']])->find();
+        $amount  = number_format($order['price'] * 0.1, 2, '.', '');
+
+        // 记录
+        $balance = $agents['balance'] + $amount;
+        $check = M('course_agents_log')->where(['agents_id'=>$agents['id'],'order_id'=>$order['id']])->count();
+        $remark = $course['title'] . '（'. $course_reserve['name'] .' 购买）';
+        if (!$check){
+            M('CourseAgents')->where(['id'=>$agents['id']])->setField('balance', $balance);
+            M('course_agents_log')->add(['agents_id'=>$agents['id'],'order_id'=>$order['id'], 'amount'=>$balance, 'amount_log'=>$amount, 'create_time'=>time(), 'remark'=>$remark]);
+        }else{
+            $balance -= $amount;
+        }
+
+        $data = [
+            'course'=>$remark,
+            'amount'=> $amount,
+            'remark'=>'累计余额：' . number_format($balance, 2, '.', '')
+        ];
+        $wechat = new \Org\Util\Wechat();
+        $wechat->sendMsg($agents['openid'], $data, 'xO9QZfIxRUY4sHwsu_fquXS4g9Ucpj82NXxgJzZutMA', 'http://ke.halobear.com');
     }
 }

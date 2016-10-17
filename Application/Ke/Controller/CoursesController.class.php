@@ -208,4 +208,66 @@ class CoursesController extends CommonController {
 
         $this->success('提交成功');
     }
+
+    // 申请代理商
+    public function agentsApply(){
+        $phone = I('phone');
+        $code = I('code');
+
+        if (empty($phone) || strlen($code) != 6){
+            $this->error('请填写正确的手机号和验证码');
+        }
+
+        $ret = M('phone')->where(array('phone'=>I('phone'), 'code'=>$code, 'create_time'=>array('gt', time() - 7200)))->count();
+        !$ret && $this->error('验证码错误或已失效');
+
+        $agents = M('CourseAgents')->where(['phone'=>$phone])->find();
+        if ($agents){
+            $this->error('你已经提交申请了，请耐心等待');
+        }else{
+            M('CourseAgents')->add(['phone'=>$phone, 'create_time'=>time(), 'update_time'=>time()]);
+            $this->success('提交成功，工作人员会在一个工作日内与您联系');
+        }
+    }
+
+    // 获取申请代理商验证码
+    public function agentsCode(){
+        $to = I('phone');
+
+        if (strlen($to) != 11){
+            $this->error('请输入正确的手机号');
+        }
+
+        $data = M('phone')->where(array('phone' => $to))->find();
+
+        $phone_code = $data['code'];
+        if (!empty($phone_code) && time() - $data['create_time'] < 60) {
+            $this->error('发送过于频繁，请一分钟后再试');
+        }
+
+        $code = rand(100001, 999999);
+        $ret = send_msg($to, array($code), 23351, '8a48b551488d07a80148a5a1ea330a06');
+        if ($ret['iRet'] == 0) {
+            M('phone')->where(array('phone' => $to))->delete();
+            $ret = M('phone')->add(array('phone' => $to, 'code' => $code, 'create_time' => time()));
+
+            $this->success('短信发送成功，请注意查收！');
+        } elseif ($ret['iRet'] == 160040) {
+            $this->error('该号码发送过于频繁，请明天再来！');
+        } else {
+            $this->error('网络繁忙，请稍候再试！');
+        }
+    }
+
+    // 获取代理商信息
+    public function getAgents(){
+        $code = cookie('agents');
+        $agents = M('CourseAgents')->where(['code'=>$code])->find();
+        $user = [];
+        if (!empty($agents)){
+            $user = M('WechatAuth')->where(['openid'=>$agents['openid']])->field('nickname, headimgurl')->find();
+        }
+
+        $this->success($user);
+    }
 }

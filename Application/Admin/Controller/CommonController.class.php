@@ -95,7 +95,7 @@ class CommonController extends Controller {
 	 * 查询过滤
 	 */
 	protected function filter(&$map = array()){
-		
+
 	}
 	
 	/**
