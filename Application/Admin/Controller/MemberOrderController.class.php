@@ -10,6 +10,7 @@ namespace Admin\Controller;
 
 
 class MemberOrderController extends CommonController{
+    
     public function _join(&$data){
         $pay_type = ['<b style="color: blue">支付宝</b>','<b style="color: #00dd1c">微信</b>'];
         $status_arr = ['<b style="color: #774400">未支付</b>','<b style="color: green">支付成功</b>','<b style="color: red">订单已过期</b>'];

@@ -47,7 +47,6 @@ class NoticeController extends Controller{
                 $msg['msg_no'] = $msg_no;
                 $push_msg = M('PushMsg')->add($msg);
             }
-
         }
         
     }
