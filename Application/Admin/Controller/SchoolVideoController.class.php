@@ -39,7 +39,7 @@ class SchoolVideoController extends CommonController {
 	public function _before_add(){
 		$this->token = $this->qiniu('crmpub', 'college/cover');
 		$this->gudests = M('SchoolGuests')->where(array('status'=>1))->select();
-		$this->category = M('SchoolCate')->where(array('type'=>1))->select();
+		$this->category = M('SchoolCate')->where(array('type'=>1,'status'=>1))->select();
 		$this->charge_standard = M('VideoChargeStandard')->where(array('status'=>1))->select();
 		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
 		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
