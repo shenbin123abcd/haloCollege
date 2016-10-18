@@ -22,6 +22,12 @@ class CourseAgentsModel extends CommonModel{
         array('update_time', 'time', self::MODEL_BOTH, 'function'),
         array('status', '1', self::MODEL_INSERT, 'string'),
         array('code', 'uniqid', self::MODEL_INSERT, 'function'),
+        array('qudao', 'getQudao', self::MODEL_INSERT, 'callback'),
     );
 
+    public function getQudao(){
+        $user = member_info();
+
+        return $user['id'];
+    }
 }
