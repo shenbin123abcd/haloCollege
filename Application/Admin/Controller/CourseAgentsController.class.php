@@ -6,6 +6,12 @@ class CourseAgentsController extends CommonController {
     public function _join(&$data){
         foreach ($data as $key=>$item) {
             $data[$key]['code'] = 'http://ke.halobear.com?code=' . $item['code'];
+            $qudao[] = $item['qudao'];
+        }
+        $user = M('Member')->where(['id'=>['in', $qudao]])->getField('id, username');
+
+        foreach ($data as $key=>$item) {
+            $data[$key]['qudao'] = $user[$item['qudao']];
         }
     }
 
@@ -32,6 +38,13 @@ class CourseAgentsController extends CommonController {
             $this->success('提现成功');
         }
         $this->display();
+    }
+
+    public function _before_update(){
+        $qudao = I('qudao');
+        if ($this->user['id'] != $qudao && $qudao > 0){
+            $this->error('你没有权限编辑');
+        }
     }
 
 

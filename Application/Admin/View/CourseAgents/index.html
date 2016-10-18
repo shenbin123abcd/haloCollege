@@ -4,7 +4,9 @@
 	<form action="__URL__/index" method="get">
 		<div class="search_type cc mb10">
 			<label>服务商名：</label>
-			<input name="title" type="text" class="input length_2 mr10" value="{$Think.get.title}"/>
+			<input name="username" type="text" class="input length_2 mr10" value="{$Think.get.title}"/>
+			<label>渠道：</label>
+			<input name="username" type="text" class="input length_2 mr10" value="{$Think.get.title}"/>
 			<button type="submit" class="btn">搜索</button>
 		</div>
 	</form>
@@ -17,7 +19,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:username,title:姓名,width:100,url:/CourseAgentsLog/index/agents_id/$id}{field:company,title:公司,width:120}{field:phone,title:手机号,width:80}{field:balance,title:余额,width:100}{field:code,title:url,width:260}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}{text:提现,url:__URL__/tixian/id/$id,class:J_dialog}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:username,title:姓名,width:100,url:/CourseAgentsLog/index/agents_id/$id}{field:company,title:公司,width:120}{field:phone,title:手机号,width:80}{field:balance,title:余额,width:100}{field:code,title:url,width:260}{field:qudao,title:渠道,width:260}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}{text:提现,url:__URL__/tixian/id/$id,class:J_dialog}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">
