@@ -130,7 +130,8 @@ class PublicController extends CommonController {
                 } else if ($info == 'The username has already been taken.') {
                     $info = '该用户名已存在！';
                 }
-                $this->error($result['info']);
+                //$this->error($result['info']);
+                $this->error($info);
             }
         } else {
             $this->error($model->getError());
