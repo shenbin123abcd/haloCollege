@@ -45,6 +45,10 @@ class CourseAgentsController extends CommonController {
         if ($this->user['id'] != $qudao && $qudao > 0){
             $this->error('你没有权限编辑');
         }
+
+        if (empty($qudao)){
+            $_POST['qudao'] = $this->user['id'];
+        }
     }
 
 
