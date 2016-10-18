@@ -368,8 +368,9 @@ class VideoController extends CommonController {
         $object_push = A('Push');
         $parent_data = $this->get_parent_comment($data['comment_id']);
         $status = is_login($parent_data['uid']);
+        $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($status){
-            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time()),'type'=>2));
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time(),'msg_no'=>$msg_no),'type'=>2));
         }
         $msg['from_uid'] = $data['uid'];
         $msg['from_username'] = $data['username'];
@@ -381,7 +382,7 @@ class VideoController extends CommonController {
         $msg['extra'] = '';
         $msg['is_read'] = 0 ;
         $msg['remark_type'] = 0;
-        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $msg['msg_no'] = $msg_no;
         $push_msg = M('PushMsg')->add($msg);
 
     }
@@ -690,7 +691,13 @@ class VideoController extends CommonController {
     /**Banner
     */
     public function bannerList(){
+        $model = M('Banner');
+        $data = $model->where(array('status'=>1))->field('title,desc,banner_url as img,redirect_url_id as url,type')->select();
+        foreach ($data as $key=>$value){
+            $data[$key]['img'] = 'http://7xopel.com2.z0.glb.clouddn.com/'.$value['img'];
+        }
 
+        $this->success('success', $data);
     }
 
     // 收藏
@@ -919,8 +926,9 @@ class VideoController extends CommonController {
         $member = M('SchoolMemberCate')->where(array('id'=>$cate_id))->getField('id,title');
         $push = A('Push');
         $uid = $this->user['uid'];
+        $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($uid){
-            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'还剩'.$day.'天'.','.'您的'.$member[$cate_id].'就到期了哦！','extra'=>array('push_time'=>time()),'type'=>4));
+            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'还剩'.$day.'天'.','.'您的'.$member[$cate_id].'就到期了哦！','extra'=>array('push_time'=>time(),'msg_no'=>$msg_no),'type'=>4));
         }
         $msg['from_uid'] = 0;
         $msg['from_username'] = '';
@@ -932,7 +940,7 @@ class VideoController extends CommonController {
         $msg['extra'] = '';
         $msg['is_read'] = 0;
         $msg['remark_type'] = 0;
-        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $msg['msg_no'] = $msg_no;
         $push_msg = M('PushMsg')->add($msg);
         $this->success('success');
     }

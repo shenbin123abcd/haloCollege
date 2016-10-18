@@ -22,8 +22,12 @@ class PushController extends Controller {
         $msg_title = "msg title1";
         $msg['extra']['content'] = $msg_content;
         $msg['extra']['from_username'] = '';
+        $msg['extra']['from_uid'] = 0;
+        $msg['extra']['to_uid'] = 0;
         $msg['extra']['detail_id'] = '';
-        $msg['extra']['from_headimg'] = '';
+        $msg['extra']['extra'] = '';
+        $msg['extra']['is_read'] = 0;
+        $msg['extra']['remark_type'] = 1;
         $msg_extra = $msg['extra'];
 
         $sendno = rand(100001, 999999);

@@ -52,6 +52,9 @@ class PushController extends CommonController {
         //数据全部封装到extra
         $msg['extra']['content'] = $msg['content'];
         $msg['extra']['msg_type'] = $msg['type'];
+        $msg['extra']['extra'] = '';
+        $msg['extra']['is_read'] = 0;
+        $msg['extra']['remark_type'] = 0;
         $msg_extra = $msg['extra'];
 
         //$alias = "halocollege_".$msg['uid'];

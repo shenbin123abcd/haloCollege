@@ -25,8 +25,10 @@ class NoticeController extends Controller{
                     $extra[$name[0]] = $value;
                 }
             }
+            $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
             $extra['msg_type'] = $data['msg_type'];
             $extra['push_time'] = time();
+            $extra['msg_no'] = $msg_no;
             $object_push = A('Push');
             $result = $object_push->pushMsgAlert(array('content'=>$data['content'],'extra'=>$extra));
             //存储系统消息
@@ -42,7 +44,7 @@ class NoticeController extends Controller{
                 $msg['extra'] = '';
                 $msg['is_read'] = 0 ;
                 $msg['remark_type'] = 1;
-                $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+                $msg['msg_no'] = $msg_no;
                 $push_msg = M('PushMsg')->add($msg);
             }
 

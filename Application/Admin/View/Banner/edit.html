@@ -39,10 +39,10 @@
                         <tr>
                             <th>类型</th>
                             <td>
-                            <select name="type">
-                                <option value="" <eq name="data.redirect_url_id" value="">selected</eq>>请选择</option>
+                            <select name="type" id="type">
+                                <!--<option value="" <eq name="data.type" value="">selected</eq>>请选择</option>-->
                                 <volist name="type" id="vo">
-                                    <option value="{$key}" <eq name="data.redirect_url_id" value="{$key}">selected</eq>>{$vo}</option>
+                                    <option value="{$key}" <eq name="data.type" value="$key">selected</eq>>{$vo}</option>
                                 </volist>
                             </select>
                             </td>

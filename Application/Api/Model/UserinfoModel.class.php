@@ -16,6 +16,7 @@ class UserinfoModel extends Model{
      */
     protected $_validate = array(
         array('truename', 'require', '用户姓名不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
+        array('truename', 'checkUsername', '用户姓名只能是字母或汉字！', self::MUST_VALIDATE, 'callback', self:: MODEL_BOTH),
         array('sex', 'require', '性别不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
         array('wechat', 'require', '微信不能为空！', self::VALUE_VALIDATE, 'regex', self:: MODEL_BOTH),
         array('province', 'require', '用户地区不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
@@ -24,6 +25,16 @@ class UserinfoModel extends Model{
          //array('brief', 'require', '用户简介不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
 
     );
+
+    /**
+     * 用户真实姓名检查
+    */
+    public function checkUsername(){
+        $username = I('truename');
+        $result = preg_match('/[^a-zA-Z\x{4e00}-\x{9fa5}]/u',$username);
+
+        return empty($result) ? true : false;
+    }
 
     /**
      * 自动完成

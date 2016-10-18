@@ -17,7 +17,8 @@ class SchoolAccountModel extends Model {
 			array('username', '2,20', '用户名长度不能小于2位或大于20位！', self::VALUE_VALIDATE, 'length', self:: MODEL_BOTH),
 			array('username', '', '该用户名已存在！', self::MUST_VALIDATE, 'unique', self:: MODEL_BOTH),
 			array('password', 'require', '密码不允许为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
-			array('password', '5,32', '密码长度不能小于5位或大于32位！', self::VALUE_VALIDATE, 'length', self:: MODEL_BOTH),
+			array('password', '5,20', '密码长度不能小于5位或大于20位！', self::VALUE_VALIDATE, 'length', self:: MODEL_BOTH),
+		    array('password', 'checkPwd', '密码只能是数字、字母或者数字和字母的组合！', self::VALUE_VALIDATE, 'callback', self:: MODEL_BOTH),
 			array('phone', 'checkPhone', '手机格式错误！', self::MUST_VALIDATE, 'callback', self:: MODEL_BOTH),
 			array('phone', '', '该手机已存在！', self::MUST_VALIDATE, 'unique', self:: MODEL_BOTH),
 			// array('city', 'require', '填写城市', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
@@ -26,6 +27,16 @@ class SchoolAccountModel extends Model {
 			//array('code', 'checkCode', '邀请码错误！', self::MUST_VALIDATE, 'callback', Model:: MODEL_INSERT),
 			array('verify_code', 'checkVerifyCode', '验证码错误或已失效！', self::MUST_VALIDATE, 'callback', self:: MODEL_BOTH),
 	);
+
+	/**
+	 * 密码检查
+	*/
+	public function checkPwd(){
+		$pwd = I('password');
+		$result = preg_match('/[^a-zA-Z0-9]/',$pwd);
+
+		return empty($result) ? true : false;
+	}
 	
 	/**
 	 * 自动完成

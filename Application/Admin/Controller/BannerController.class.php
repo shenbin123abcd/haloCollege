@@ -10,8 +10,20 @@ namespace Admin\Controller;
 use Think\Controller;
 
 class BannerController extends CommonController{
+    public $banner_type = array('1'=>'H5页面','2'=>'全屏播放','3'=>'视频详情','4'=>'热文文章');
+
+    public function _join(&$data){
+        foreach ($data as $key=>$value){
+            $url = 'http://7xopel.com2.z0.glb.clouddn.com/'.$value['banner_url'];
+            $data[$key]['img'] = '<img'.' '.'style='.'width:300px;height:100px'.' '.'src='.$url.' '.'/>';
+            $data[$key]['type'] = $this->banner_type[$value['type']];
+        }
+
+
+    }
+
     public function _before_add(){
-        $this->type=array('1'=>'H5页面','2'=>'全屏播放','3'=>'视频详情','4'=>'人文文章');
+        $this->type=$this->banner_type;
         $this->token = $this->qiniu('crmpub', 'college/banner');
 
     }

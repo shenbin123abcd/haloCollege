@@ -115,7 +115,7 @@ class PublicController extends CommonController {
             $result = $model->register();
 
             // Log::write(var_export($result));
-            if ($result['iRet'] == 1) {                
+            if ($result['iRet'] == 1) {
                 // 产生用户标识
                 $id = $model->add();
                 $user = array('id' => $result['data'], 'username' => I('username'), 'phone' => I('phone'));
@@ -132,7 +132,7 @@ class PublicController extends CommonController {
                 }
                 $this->error($result['info']);
             }
-        } else {            
+        } else {
             $this->error($model->getError());
         }
     }

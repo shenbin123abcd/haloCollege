@@ -391,8 +391,9 @@ class WeddingController extends CommonController {
         $object_push = A('Push');
         $parent_data = $this->get_parent_data($data['parent_id']);
         $status = is_login($parent_data['uid']);
+        $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($status){
-            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['remark_id'],'push_time'=>time()),'type'=>1));
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['remark_id'],'push_time'=>time(),'msg_no'=>$msg_no),'type'=>1));
     }
         $msg['from_uid'] = $data['uid'];
         $msg['from_username'] = $data['username'];
@@ -404,7 +405,7 @@ class WeddingController extends CommonController {
         $msg['extra'] = '';
         $msg['is_read'] = 0 ;
         $msg['remark_type'] = 0;
-        $msg['msg_no'] = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $msg['msg_no'] = $msg_no;
         $push_msg = M('PushMsg')->add($msg);
 
     }
