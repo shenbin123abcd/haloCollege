@@ -6,6 +6,7 @@ import Seatinfo from './containers/seatinfo'
 import Selectseat from './containers/selectseat'
 import Consult from './containers/Consult'
 import App from './containers/App'
+import Branding from './containers/Branding'
 
 
 var Router=ReactRouter.Router
@@ -45,6 +46,10 @@ const onUpdateRoute = () => {
             htmlClass=`html-consult`
             bodyClass=`body-consult`
             break;
+        case path=='/course/branding':
+            htmlClass=`html-branding`
+            bodyClass=`body-branding`
+            break;
         default:
             htmlClass=`html`
             bodyClass=`body`
@@ -81,6 +86,8 @@ ReactDOM.render(
 
         <Route path="/course/seatinfo_:id" component={Seatinfo}     onLeave={onLeaveRoute}  />
         <Route path="/course/selectseat_:id" component={Selectseat}    onLeave={onLeaveRoute}  />
+
+        <Route path="/course/branding" component={Branding}     onLeave={onLeaveRoute}  />
 
         <Redirect from="/course/*" to="/course/index" />
         <Redirect from="*" to="/course/rIndex" />

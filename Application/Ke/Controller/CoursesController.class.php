@@ -225,8 +225,8 @@ class CoursesController extends CommonController {
         if ($agents){
             $this->error('你已经提交申请了，请耐心等待');
         }else{
-            M('CourseAgents')->add(['phone'=>$phone, 'create_time'=>time(), 'update_time'=>time()]);
-            $this->success('提交成功，工作人员会在一个工作日内与您联系');
+            M('CourseAgents')->add(['phone'=>$phone, 'create_time'=>time(), 'update_time'=>time(), 'code'=>uniqid()]);
+            $this->success('', '提交成功，工作人员会在一个工作日内与您联系');
         }
     }
 
@@ -268,6 +268,11 @@ class CoursesController extends CommonController {
             $user = M('WechatAuth')->where(['openid'=>$agents['openid']])->field('nickname, headimgurl')->find();
         }
 
-        $this->success($user);
+        if(empty($user)){
+            cookie('agents', null, time()-86400);
+            $this->error();
+        }else{
+            $this->success($user);
+        }
     }
 }
