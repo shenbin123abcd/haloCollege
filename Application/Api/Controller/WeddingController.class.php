@@ -40,7 +40,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding.category_id'] = $category_id;
         $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
             ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
-            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
             ->page($page, $per_page)->select();
         //&amp转换为&
         foreach ($list as $key=>$value){
@@ -101,7 +101,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding.is_recommend'] = 1;
         $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
             ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
-            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
             ->page($page, $per_page)->select();
         //&amp转换为&
         foreach ($list as $key=>$value){

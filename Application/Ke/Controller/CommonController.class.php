@@ -17,7 +17,7 @@ class CommonController extends Controller {
         }
     }
 
-    private function _checkCode(){
+    protected function _checkCode(){
         $code = I('code');
         $agents = cookie('agents');
         if (!empty($code)){ //  && empty($agents)
@@ -52,7 +52,7 @@ class CommonController extends Controller {
             cookie('halobear', null, -86400);
             $url = 'http://ke.halobear.com/courses/wechat?url='; // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
             if (IS_AJAX) {
-                $this->ajaxReturn(array('iRet'=>-1,'info'=>'No authorization token was found', 'data'=>$url));
+                $this->ajaxReturn(array('iRet'=>-1,'info'=>'只能在微信中使用', 'data'=>$url));
             }else{
                 redirect($url);
             }

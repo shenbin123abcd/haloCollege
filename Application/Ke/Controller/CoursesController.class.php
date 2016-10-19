@@ -3,6 +3,14 @@ namespace Ke\Controller;
 
 
 class CoursesController extends CommonController {
+    public function _initialize()
+    {
+        if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents'])){
+            $this->_checkCode();
+            $this->_getWechatUser();
+        }
+    }
+
     // 课程列表
     public function index() {
         $month = intval(I('month'));
@@ -62,6 +70,14 @@ class CoursesController extends CommonController {
         empty($course_id) && $this->error('课程编号错误');
         empty($seat_no) && $this->error('座位号号错误');
 
+        // 临时封坐
+        if ((time() > strtotime('2016-10-19 20:00') && time() < strtotime('2016-10-20 10:00')) && $course_id == 12){
+            $temp = explode(',', $seat_no);
+            if ($temp[0] <= 10){
+                $this->error('抱歉，前十排选座暂未开放');
+            }
+        }
+
         // 检查用户是否报名
         $apply = M('CourseOrder')->where(array('course_id' => $course_id, 'wechat_id' => $this->user['id'], 'status' => 1))->count();
         empty($apply) && $this->error('抱歉，你还没有报名');
@@ -83,10 +99,15 @@ class CoursesController extends CommonController {
 
     // 报名状态
     public function applyStatus() {
+
         $course_id = intval(I('course_id'));
 
         $course = M('Course')->where(array('id' => $course_id, 'status' => 1))->find();
         empty($course) && $this->error('课程编号错误');
+
+        if (empty($this->user)){
+            $this->success($course['step'] == 0 ? 1 : 3);
+        }
 
         if ($course['step'] == 0) {
             // 是否预约
@@ -98,7 +119,7 @@ class CoursesController extends CommonController {
             $ret = $order ? 4 : 3;
 
             if ($ret == 4) {
-                $count = M('CourseRecord')->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id))->getField('');
+                $count = M('CourseRecord')->where(array('wechat_id' => $this->user['id'], 'course_id' => $course_id))->count();
                 $ret = $count ? 41 : 40;
             }
 
