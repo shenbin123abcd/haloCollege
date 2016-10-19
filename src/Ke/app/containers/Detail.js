@@ -87,8 +87,6 @@ var Detail= React.createClass({
   isWechatInit:false,
   render() {
     let {data,isFetching,dispatch,res,courseDetail}=this.props;
-    console.log(this.props);
-    let _this=this;
     let renderDetailPage=()=>{
         if(!data){
             var isNull=true
@@ -112,8 +110,6 @@ var Detail= React.createClass({
                 link=window.location.href;
             }
 
-            //console.log(data)
-
 
             dispatch(setCurrentMonth({
                 year:data.data.month.substring(0,4),
@@ -136,6 +132,7 @@ var Detail= React.createClass({
                 start_date:fetchData.start_date,
                 day:fetchData.day,
             };
+
             return(
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
@@ -146,7 +143,11 @@ var Detail= React.createClass({
                     <DetailContent contentData={fetchData}></DetailContent>
                     <InterviewBlock interviewData={fetchData.video}></InterviewBlock>
                     <WeixinBlock cateId={fetchData.cate_id}></WeixinBlock>
-                    <BottomBtn priceData={fetchData.price} idData={fetchData.id}></BottomBtn>
+                    <BottomBtn
+                        priceData={fetchData.price}
+                        idData={fetchData.id}
+                    >
+                    </BottomBtn>
                     <Tel data={fetchData.tel}></Tel>
                 </div>
             )
