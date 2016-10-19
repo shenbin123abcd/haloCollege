@@ -374,7 +374,7 @@ class VideoController extends CommonController {
         $status = is_login($parent_data['uid']);
         $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($status){
-               $result = $object_push->pushMsgPersonal(array('uid'=>22,'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time(),'msg_no'=>$msg_no),'type'=>2));
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time(),'msg_no'=>$msg_no),'type'=>2));
         }
         $msg['from_uid'] = $data['uid'];
         $msg['from_username'] = $data['username'];
