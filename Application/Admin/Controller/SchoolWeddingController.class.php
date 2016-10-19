@@ -53,10 +53,21 @@ class SchoolWeddingController extends CommonController {
         empty($_POST['headline']) && $this->error('请填写婚礼标题！');
         empty($_POST['brief']) && $this->error('请填写婚礼简介！');
         empty($_POST['category_id']) && $this->error('请选择头条分类！');
-        empty($_POST['content']) && $this->error('请编辑头条内容！');
-        $pattern = "/(<img.*?)(src=.*?\/?>)/";
-        $string = preg_replace($pattern, "$1style='width:100%;display:block;'$2", $_POST['content']);
-        $_POST['content'] = $string;
+        //判断是否跳转到h5页面
+        if ($_POST['is_h5']==0){
+            empty($_POST['content']) && $this->error('请编辑头条内容！');
+            $pattern = "/(<img.*?)(src=.*?\/?>)/";
+            $string = preg_replace($pattern, "$1style='width:100%;display:block;'$2", $_POST['content']);
+            $_POST['content'] = $string;
+        }else{
+            if (!empty($_POST['content'])){
+                $pattern = "/(<img.*?)(src=.*?\/?>)/";
+                $string = preg_replace($pattern, "$1style='width:100%;display:block;'$2", $_POST['content']);
+                $_POST['content'] = $string;
+            }else{
+                $_POST['content'] = '';
+            }
+        }
         $_POST['create_time'] = time();
         $_POST['update_time'] = time();
         $_POST['status'] = 1;

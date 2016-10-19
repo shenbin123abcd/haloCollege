@@ -696,9 +696,10 @@ class VideoController extends CommonController {
     */
     public function bannerList(){
         $model = M('Banner');
-        $data = $model->where(array('status'=>1))->field('title,desc,banner_url as img,redirect_url_id as url,type')->select();
+        $data = $model->where(array('status'=>1))->field('title,desc,banner_url as img,redirect_url_id as url,type,subimg_url as subimg')->order('sort DESC')->select();
         foreach ($data as $key=>$value){
             $data[$key]['img'] = 'http://7xopel.com2.z0.glb.clouddn.com/'.$value['img'];
+            $data[$key]['subimg'] = empty($value['subimg']) ? '' : 'http://7xopel.com2.z0.glb.clouddn.com/'.$value['subimg'];
         }
 
         $this->success('success', $data);

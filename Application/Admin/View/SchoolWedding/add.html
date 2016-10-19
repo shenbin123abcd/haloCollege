@@ -37,6 +37,15 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>是否要跳转到H5详情页</th>
+                            <td>
+                            <select name="is_h5" id="is_h5">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                            </td>
+                        </tr>
+                        <tr id="editor">
                             <th>内容</th>
                             <td><p style="color: red">上传图片名不能有汉字，否则上传不成功！请重命名为字母、数字或其组合，再上传！</p>
                                 <textarea name="content" id="content" type="editor"></textarea></td>
@@ -77,6 +86,17 @@
         </div>
     </form>
 </div>
+<!--选择跳转到h5页面，编辑框隐藏-->
+<script>
+    $(document).ready(function(){
+        $('option[value=1]').click(function(){
+            $('#editor').hide();
+        });
+        $('option[value=0]').click(function(){
+            $('#editor').show();
+        });
+    });
 
-
+</script>
+<!--/选择跳转到h5页面，编辑框隐藏-->
 
