@@ -1,7 +1,7 @@
 import ButtonGroup from '../components/Common.buttonGroup'
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory;
-import { fetchCourseStatusIfNeeded,receiveStatusPosts,buySuccessModal,timeOutStart} from '../actions/buttonGroup'
+import { fetchCourseStatusIfNeeded,receiveStatusPosts,buySuccessModal,timeOutStart,timeOutOver} from '../actions/buttonGroup'
 import {fetchCourseDetailIfNeeded} from '../actions/detail'
 
 
@@ -10,7 +10,6 @@ var CommonButtonGroup= React.createClass({
         const { dispatch ,idData}=this.props;
         let btnType=e.type;
         let id= idData;
-        let name='';
 
         if(btnType=="disable-choose-seat"){
             app.modal.alert({
@@ -154,8 +153,10 @@ var CommonButtonGroup= React.createClass({
         let {dispatch}=this.props;
         this.timer=setTimeout(()=>dispatch(timeOutStart(time)),1000);
     },
-    componentWillUnMount(){
+    componentWillUnmount(){
+        let {dispatch}=this.props;
         this.timer && clearTimeout(this.timer);
+        dispatch(timeOutOver());
     },
     render(){
         let priceData=this.props.priceData;

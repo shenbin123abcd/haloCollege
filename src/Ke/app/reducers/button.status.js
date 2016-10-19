@@ -1,5 +1,5 @@
 import {
-    REQUEST_COURSE_STATUS, RECEIVE_COURSE_STATUS,TIME_OUT_START
+    REQUEST_COURSE_STATUS, RECEIVE_COURSE_STATUS,TIME_OUT_START,TIME_OUT_OVER
 } from '../actions/buttonGroup'
 
 
@@ -9,10 +9,10 @@ export default (state = {
     showModal:false,
 
     start_time:'',
-    d:'no',
-    h:'no',
-    m:'no',
-    s:'no',
+    d:'',
+    h:'',
+    m:'',
+    s:'',
 
 }, action) => {
     switch(action.type) {
@@ -28,7 +28,7 @@ export default (state = {
             })
         case TIME_OUT_START:
             let start_time=action.time;
-            const ts = (new Date(start_time).getTime()*1000-new Date().getTime())/1000;
+            const ts = (start_time*1000-new Date().getTime())/1000;
             if(ts>0) {
                 var d = parseInt(ts / 86400, 10);
                 var h = parseInt(ts / 3600 % 24, 10);
@@ -49,6 +49,15 @@ export default (state = {
                     s:'no',
                 })
             }
+        case TIME_OUT_OVER:
+            return _.assign({
+                start_time:'',
+                d:'',
+                h:'',
+                m:'',
+                s:'',
+            })
+
         default:
             return state
     }
