@@ -272,7 +272,7 @@ class PaymentController extends CommonController {
         $status = is_login($uid);
         $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($status){
-            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'尊敬的会员'.','.'您已成功购买'.$content,'extra'=>array('from_uid'=>'','from_username'=>'','push_time'=>time(),'msg_no'=>$msg_no,'detail_id'=>0,),'type'=>3));
+            $result = $push->pushMsgPersonal(array('uid'=>$uid,'content'=>'尊敬的会员'.','.'您已成功购买'.$content,'extra'=>array('from_uid'=>'','from_username'=>'','push_time'=>time(),'msg_no'=>$msg_no,'detail_id'=>0,'redirect_url'=>''),'type'=>3));
         }
         $msg['from_uid'] = 0;
         $msg['from_username'] = '';
@@ -285,6 +285,7 @@ class PaymentController extends CommonController {
         $msg['is_read'] = 0;
         $msg['remark_type'] = 0;
         $msg['msg_no'] = $msg_no;
+        $msg['redirect_url'] = '';
         $push_msg = M('PushMsg')->add($msg);
     }
 }

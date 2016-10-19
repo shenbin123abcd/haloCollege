@@ -29,8 +29,9 @@ class NoticeController extends Controller{
             $extra['msg_type'] = $data['msg_type'];
             $extra['push_time'] = time();
             $extra['msg_no'] = $msg_no;
+            $extra['redirect_url'] = '';
             $object_push = A('Push');
-            $result = $object_push->pushMsgAlert(array('content'=>$data['content'],'extra'=>$extra));
+            $result = $object_push->pushMsgAlert(array('content'=>$data['content'],'extra'=>$extra,'object'=>$data['object']));
             //存储系统消息
             $users = M('UserLogin')->where(array('is_login'=>1,'token_exp'=>array('gt',time())))->field('uid')->select();
             foreach ($users as $key=>$value){
@@ -45,6 +46,7 @@ class NoticeController extends Controller{
                 $msg['is_read'] = 0 ;
                 $msg['remark_type'] = 1;
                 $msg['msg_no'] = $msg_no;
+                $msg['redirect_url'] = '';
                 $push_msg = M('PushMsg')->add($msg);
             }
         }

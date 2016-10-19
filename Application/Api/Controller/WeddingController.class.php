@@ -392,8 +392,9 @@ class WeddingController extends CommonController {
         $parent_data = $this->get_parent_data($data['parent_id']);
         $status = is_login($parent_data['uid']);
         $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
+        $resirect_url = M('SchoolWedding')->where(array('id'=>$parent_data['remark_id']))->field('redirect_url')->find();
         if ($status){
-            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['remark_id'],'push_time'=>time(),'msg_no'=>$msg_no),'type'=>1));
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['remark_id'],'push_time'=>time(),'msg_no'=>$msg_no,'redirect_url'=>$resirect_url['redirect_url']),'type'=>1));
     }
         $msg['from_uid'] = $data['uid'];
         $msg['from_username'] = $data['username'];
@@ -406,6 +407,7 @@ class WeddingController extends CommonController {
         $msg['is_read'] = 0 ;
         $msg['remark_type'] = 0;
         $msg['msg_no'] = $msg_no;
+        $msg['redirect_url'] = $resirect_url['redirect_url'];
         $push_msg = M('PushMsg')->add($msg);
 
     }
@@ -767,7 +769,7 @@ class WeddingController extends CommonController {
             $wedding_id_arr[] = $value['remark_id'];
         }
         if (!empty($wedding_id_arr)) {
-            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time')->select();
+            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time,redirect_url')->select();
             //头条和封面绑定
             $imgs_url = $this->get_imgs($wedding_id_arr, 'cover');
             foreach ($wedding as $key_wedding => $value_wedding) {
@@ -840,7 +842,7 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding_favorites.status'] = 1;
         $where['a.status'] = 1;
         $list = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
-            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
+            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,a.redirect_url,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
         $total = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
             ->where($where)->field('a.id,a.headline,a.brief,a.create_time')->count();
         if (empty($list)) {

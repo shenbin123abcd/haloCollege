@@ -14,7 +14,7 @@ class PushController extends Controller {
     private $app_key = 'eb9b8a1cc71a294e9225c211';
     private $master_secret = '4b0f11f62c881a49af4ddd98';
 
-    public function pushMsgAlert($msg=array('content'=>'','extra'=>array())) {
+    public function pushMsgAlert($msg=array('content'=>'','extra'=>array(),'object'=>'all')) {
         // 初始化
         $client = new \JPush($this->app_key, $this->master_secret, LOG_PATH . '/Api/jpush' . date('Ymd') . '.log');
         $platForm = array('ios', 'android');
@@ -34,15 +34,38 @@ class PushController extends Controller {
         $time_to_live = 3600;
         $override_msg_id = null;
         $apns_production = false;
-        $result = $client->push()->setPlatform($platForm)->addAllAudience()
-            //->addAlias('alias1')
-            //->addTag(array('tag1', 'tag2'))
-            //->setNotificationAlert('通知')
-            ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
-            ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
-            //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
-            ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
-            ->send();
+        if ($msg['object']=='adr'){
+            $result = $client->push()->setPlatform($platForm)->addAllAudience()
+                //->addAlias('alias1')
+                //->addTag(array('tag1', 'tag2'))
+                //->setNotificationAlert('通知')
+                ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
+                //->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
+                ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
+                ->send();
+        }elseif ($msg['object']=='ios'){
+            $result = $client->push()->setPlatform($platForm)->addAllAudience()
+                //->addAlias('alias1')
+                //->addTag(array('tag1', 'tag2'))
+                //->setNotificationAlert('通知')
+                //->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
+                ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
+                ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
+                ->send();
+        }else{
+            $result = $client->push()->setPlatform($platForm)->addAllAudience()
+                //->addAlias('alias1')
+                //->addTag(array('tag1', 'tag2'))
+                //->setNotificationAlert('通知')
+                ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
+                ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
+                ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
+                ->send();
+        }
+
 
         return $result;
         //    echo 'Result=' . json_encode($result);
