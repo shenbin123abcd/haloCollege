@@ -381,8 +381,11 @@ class PublicController extends CommonController {
      * 获取推送消息
     */
     public function getPushMsg(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $order = 'id DESC';
         $uid = $this->user['uid'];
-        $data = M('PushMsg')->where(array('to_uid'=>$uid))->select();
+        $data = M('PushMsg')->where(array('to_uid'=>$uid))->order($order)->page($page,$per_page)->select();
         $this->success('success',$data);
     }
 
