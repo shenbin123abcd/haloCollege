@@ -65,11 +65,17 @@ class PushController extends CommonController {
         $time_to_live = 3600;
         $override_msg_id = null;
         $apns_production = false;
-        $result = $client->push()->setPlatform($platForm)->addAlias($alias)//->addTag($tags)
+        //异常处理
+        try{
+            $result = $client->push()->setPlatform($platForm)->addAlias($alias)//->addTag($tags)
             //->setNotificationAlert('张虎')
             //->addAndroidNotification('Hi, android notification', 'notification title', 1, array("key1"=>"value1", "key2"=>"value2"))
             //->addIosNotification("Hi, iOS notification", 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category', array("key1"=>"value1", "key2"=>"value2"))
             ->setMessage('', '', '', $msg_extra)->setOptions($sendno, $time_to_live, $override_msg_id, $apns_production)->send();
+        }catch (\Exception $e){
+            $result = $e->getMessage();
+        }
+
         return $result;
         //echo 'Result=' . json_encode($result);
 
