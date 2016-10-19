@@ -1,15 +1,17 @@
 import ButtonGroup from '../components/Common.buttonGroup'
 let Link=ReactRouter.Link;
 var browserHistory=ReactRouter.browserHistory;
-import { fetchCourseStatusIfNeeded,receiveStatusPosts,buySuccessModal} from '../actions/buttonGroup'
+import { fetchCourseStatusIfNeeded,receiveStatusPosts,buySuccessModal,timeOutStart} from '../actions/buttonGroup'
 import {fetchCourseDetailIfNeeded} from '../actions/detail'
+
 
 var CommonButtonGroup= React.createClass({
     handleClick(e){
         const { dispatch ,idData}=this.props;
-        let btnType=$(e.target).data('type');
+        let btnType=e.type;
         let id= idData;
         let name='';
+
         if(btnType=="disable-choose-seat"){
             app.modal.alert({
                 pic:'disable-choose-seat',
@@ -17,6 +19,7 @@ var CommonButtonGroup= React.createClass({
                 btn:'我知道了',
             })
         }else if(btnType=="enroll-now"){
+            //alert(1);
             dispatch(buySuccessModal(true))
 
         }else if(btnType=='appointment-now'){
@@ -138,7 +141,8 @@ var CommonButtonGroup= React.createClass({
         dispatch(receiveStatusPosts(idData,1,true))
     },
     handleClose(e){
-        let btnType=$(e.target).data('type');
+        let btnType=e.type;
+
         const { dispatch,idData }=this.props;
         if(btnType=='appointment-close'){
             dispatch(receiveStatusPosts(idData,1,false));
@@ -146,10 +150,19 @@ var CommonButtonGroup= React.createClass({
             dispatch(buySuccessModal(false));
         }
     },
+    handleStart(time){
+        let {dispatch}=this.props;
+        this.timer=setTimeout(()=>dispatch(timeOutStart(time)),1000);
+    },
+    componentWillUnMount(){
+        this.timer && clearTimeout(this.timer);
+    },
     render(){
         let priceData=this.props.priceData;
         let idData=this.props.idData;
-        let {res,showModal,data,val}=this.props;
+        let {res,showModal,data,val,d,h,m,s,start_time}=this.props;
+
+        this.handleStart(start_time);
         return(
             <ButtonGroup
                 chooseSeat={data}
@@ -163,6 +176,11 @@ var CommonButtonGroup= React.createClass({
                 handleOpen={this.handleOpen}
                 showSuccessModal={val}
                 toBuySubmit={this.toBuySubmit}
+
+                d={d}
+                h={h}
+                m={m}
+                s={s}
             >
             </ButtonGroup>
         )
@@ -175,7 +193,12 @@ function mapStateToProps(state) {
     const {
         res,
         isFetching,
-        showModal
+        showModal,
+        d,
+        h,
+        m,
+        s,
+        start_time
     }=courseStatus;
     const {
         data
@@ -188,7 +211,12 @@ function mapStateToProps(state) {
         isFetching,
         showModal,
         data,
-        val
+        val,
+        d,
+        h,
+        m,
+        s,
+        start_time
     }
 
 }
