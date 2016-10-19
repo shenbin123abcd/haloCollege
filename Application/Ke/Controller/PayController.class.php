@@ -29,7 +29,7 @@ class PayController extends CommonController {
 
         // 创建订单
         $order = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>0))->find();
-        if (!empty($order) && $order['exp_time'] > time() && !empty($order['sign'])) {
+        if (!empty($order) && $order['exp_time'] > time() && !empty($order['sign']) && $order['price'] == $course['price']) {
             $this->success(array('config'=>unserialize($order['sign']), 'order_id'=>$order['order_no']));
         }else{
             $model->where(array('id'=>$order['id']))->save(array('status'=>2));
