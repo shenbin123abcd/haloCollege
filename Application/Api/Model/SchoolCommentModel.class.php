@@ -8,7 +8,7 @@ class SchoolCommentModel extends Model {
 		array('vid', 'require', '视频id错误！', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
 		array('vid', 'checkVid', '视频id错误！', self::MUST_VALIDATE, 'callback', self:: MODEL_INSERT),
 		array('content', 'require', '评论内容不能为空！', self::MUST_VALIDATE, 'regex', self:: MODEL_INSERT),
-		array('score', 'checkScore', '分数值错误！', self::MUST_VALIDATE, 'callback', self:: MODEL_INSERT)
+		//array('score', 'checkScore', '分数值错误！', self::MUST_VALIDATE, 'callback', self:: MODEL_INSERT)
 	);
 
 	//自动完成
