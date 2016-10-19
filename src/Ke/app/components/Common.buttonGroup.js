@@ -18,7 +18,17 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-        //const status=1;
+
+
+        let d=this.props.d;
+        let h=this.props.h;
+        let m=this.props.m;
+        let s=this.props.s;
+
+        h=h<10?'0'+h:h;
+        m=m<10?'0'+m:m;
+        s=s<10?'0'+s:s;
+
         let _this=this;
         function renderBottomBtnGroup(){
             if(status==1){
@@ -44,14 +54,14 @@ export default React.createClass({
                 }
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" data-type="disable-appointment-choose-seat" onClick={handleClick}>在线选座</div>
+                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:'disable-appointment-choose-seat'})}>在线选座</div>
                         <div className='enter-btn f-15 able'  onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
                         <div className="appointment-now-modal">
                             <Modal show={showModal}>
                                 <Modal.Body>
                                     <div className='modal-body-content'>
                                         <div className="content-pic">
-                                            <div className="close-btn" data-type='appointment-close' onClick={handleClose}>&times;</div>
+                                            <div className="close-btn" onClick={e=>handleClose({type:'appointment-close'})}>&times;</div>
                                             <img src={appointmentPic} alt=""/>
                                         </div>
                                         <form>
@@ -75,7 +85,7 @@ export default React.createClass({
             }else if(status==2){
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" data-type="appointment-choose-seat" onClick={handleClick}>在线选座</div>
+                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:"appointment-choose-seat"})}>在线选座</div>
                         <div className='enter-btn f-15 disable'>已预约课程（￥{price} /人）</div>
                     </div>
                 )
@@ -102,16 +112,36 @@ export default React.createClass({
                         )
                     }
                 }
+                let ifTimeoutShow=()=>{
+                    if(d!='no' && m!='no' && h!='no' &&s!='no'){
+                        $(".flex-bottom-btn").removeClass('sp');
+                        return(
+                            <div className='enter-btn f-15 able' onClick={e=>handleClick({type:'enroll-now'})}>
+                                <div className="btn-wrapper">
+                                    <div><span id="change-text">立即</span>报名（￥{price} /人）</div>
+                                    <div style={{letterSpacing:'1px'}}>{d}天{h}:{m}:{s}</div>
+                                </div>
+                            </div>
+                        )
+                    }else{
+                        $(".flex-bottom-btn").addClass('sp');
+                        return(
+                            <div className='enter-btn f-15 able sp' onClick={e=>handleClick({type:'enroll-now'})}>
+                                <span id="change-text">立即</span>报名（￥{price} /人）
+                            </div>
+                        )
+                    }
+                }
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" data-type="disable-choose-seat" onClick={handleClick}>在线选座</div>
-                        <div className='enter-btn f-15 able' data-type="enroll-now" onClick={handleClick}><span id="change-text">立即</span>报名（￥{price} /人）</div>
+                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:"disable-choose-seat"})}>在线选座</div>
+                        {ifTimeoutShow()}
                         <div className="appointment-now-modal">
                             <Modal show={showSuccessModal}>
                                 <Modal.Body>
                                     <div className='modal-body-content'>
                                         <div className="content-pic">
-                                            <div className="close-btn" data-type='buy-success-close' onClick={handleClose}>&times;</div>
+                                            <div className="close-btn" onClick={e=>handleClose({type:'buy-success-close'})}>&times;</div>
                                             <img src={buySuccessPic} alt=""/>
                                         </div>
                                         <form>

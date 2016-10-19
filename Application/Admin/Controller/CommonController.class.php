@@ -72,7 +72,7 @@ class CommonController extends Controller {
 		$this->_search($model,$where);
 		
 		$this->filter($where);
-		$totalRows = $model->where($where)->count();
+		$totalRows = $model->where($where)->count($model->getPk());
 
 		if($totalRows > 0){
 			$field = empty($_GET['_field']) ? $model->getPk() : $_GET['_field'];

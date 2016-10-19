@@ -106,6 +106,7 @@ var Branding=React.createClass({
       }
     },
     render(){
+        let screenHeight=window.screen.height;
         let renderStatus=()=>{
             let codeStyle,btnStyle='';
             if(this.state.codeStatus==false){
@@ -138,7 +139,7 @@ var Branding=React.createClass({
         }
         return(
             <div className="branding-wrapper">
-                <div className="pic-block">
+                <div className="pic-block" style={{height:screenHeight}}>
                     <img src={brandingPic} alt=""/>
                 </div>
                 <div className="item-list">
