@@ -5,6 +5,9 @@ import hopePic from '../images/hope-you.png'
 import wePic1 from '../images/we-pic1.png'
 import wePic2 from '../images/we-pic2.png'
 
+
+var browserHistory=ReactRouter.browserHistory;
+
 var Branding=React.createClass({
     getInitialState(){
       return{
@@ -94,8 +97,10 @@ var Branding=React.createClass({
                         timeOut:false,
                         count:60,
                     });
+                    hb.Cookies.set('agents_status',1);
                     hb.lib.weui.alert(res.info);
                   }else{
+                      hb.Cookies.set('agents_status',0);
                       hb.lib.weui.alert(res.info);
                   }
               },
