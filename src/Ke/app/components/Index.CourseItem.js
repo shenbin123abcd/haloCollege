@@ -37,6 +37,7 @@ const CourseItem = ({item}) => {
     let tagClass = classNames({
         'tag tag-gkk': item.cate=='公开课',
         'tag tag-pxy': item.cate=='培训营',
+        'tag tag-hzhb': item.cate=='合作伙伴',
     });
     let totalClass = classNames({
         'total total-gkk': item.cate=='公开课',

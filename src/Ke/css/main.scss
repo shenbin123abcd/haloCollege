@@ -5,6 +5,7 @@
 $ff_SimHei: Arial,Verdana,Tahoma,'Hiragino Sans GB',SimHei,SimSun,sans-serif;
 $gkk_color: #9692ff;
 $pxy_color: #16c2af;
+$hzhb_color: #38a2fc;
 
 body{
   font-size: 14px;
@@ -301,6 +302,9 @@ body {
         &-pxy{
           background-color: $pxy_color;
         }
+        &-hzhb{
+          background-color: $hzhb_color;
+        }
       }
 
     }
@@ -388,6 +392,9 @@ body {
         }
         &-pxy{
           background-color: $pxy_color;
+        }
+        &-hzhb{
+          background-color: $hzhb_color;
         }
       }
 

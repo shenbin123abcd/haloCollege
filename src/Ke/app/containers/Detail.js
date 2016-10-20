@@ -241,13 +241,6 @@ var DetailMiddle=React.createClass({
 
 var TuiJianBlock=React.createClass({
     render(){
-        let cookie=hb.Cookies.get('agents_status');
-        let is_active='';
-        if(cookie && cookie==1){
-            is_active='sign-num-block-right f-13 active'
-        }else{
-            is_active='sign-num-block-right f-13'
-        }
         let res=this.props.res;
         //console.log(res);
         if(res.iRet==1){
@@ -261,7 +254,7 @@ var TuiJianBlock=React.createClass({
                             </span>
                             <span>{res.data.nickname}</span>
                         </div>
-                        <div className={is_active}>
+                        <div className='sign-num-block-right f-13 active'>
                             申请成为推荐人
                             <i className="haloIcon haloIcon-right"></i>
                         </div>

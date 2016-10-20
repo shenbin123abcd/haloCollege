@@ -97,10 +97,8 @@ var Branding=React.createClass({
                         timeOut:false,
                         count:60,
                     });
-                    hb.Cookies.set('agents_status',1);
                     hb.lib.weui.alert(res.info);
                   }else{
-                      hb.Cookies.set('agents_status',0);
                       hb.lib.weui.alert(res.info);
                   }
               },
