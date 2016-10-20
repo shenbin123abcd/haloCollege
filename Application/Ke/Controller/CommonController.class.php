@@ -53,7 +53,7 @@ class CommonController extends Controller {
             cookie('halobear', null, -86400);
             $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode($_SERVER['HTTP_REFERER']); // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
             if (IS_AJAX) {
-                $this->ajaxReturn(array('iRet'=>-1,'info'=>'只能在微信中使用', 'data'=>$url));
+                $this->ajaxReturn(array('iRet'=>-1,'info'=>'未授权', 'data'=>$url));
             }else{
                 redirect($url);
             }
