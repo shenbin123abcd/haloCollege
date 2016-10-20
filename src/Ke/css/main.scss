@@ -128,7 +128,7 @@ body {
     width:40px;
     height:40px;
     img{
-      width: 17px;
+      width: 18px;
       transform: translate(-50%,-50%);
       margin-top:0;
       margin-left:0;
@@ -835,7 +835,7 @@ body {
     position:fixed;
     background: rgba(254, 89, 63, 0.9);
     right: 15px;
-    bottom: 135px;
+    bottom: 125px;
     height: 40px;
     width: 40px;
     text-align: center;
@@ -845,9 +845,11 @@ body {
 
     .haloIcon-kefu{
       color:#fff;
-      font-size:20px;
-      height:20px;
-      line-height: 20px;
+      font-size:22px;
+      height:22px;
+      line-height: 22px;
+      position: relative;
+      top:-2px;
     }
   }
 }
