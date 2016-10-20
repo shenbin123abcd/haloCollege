@@ -11,6 +11,7 @@ class CommonController extends Controller {
      */
     public function _initialize() {
         //cookie('halobear','MDk0YnhkNFJaWlA5cmVubkg3bmZBb2VoWVRFRjd6WkM5T05YZjdxUm91ZFJYTUdrSzlySURoOFNOWEY3M3FkMW9jNEo0a0FEZUVLR285UXU0bTQ2VVdhaDQ3emhKQkFtaHc=', 864000);
+        $this->user = get_user();
         if (!in_array(CONTROLLER_NAME, ['Public'])){
             $this->_checkCode();
             $this->_getWechatUser();
@@ -50,7 +51,7 @@ class CommonController extends Controller {
 
         if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
             cookie('halobear', null, -86400);
-            $url = 'http://ke.halobear.com/courses/wechat?url='; // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
+            $url = 'http://ke.halobear.com/courses/wechat?url=' . urlencode($_SERVER['HTTP_REFERER']); // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
             if (IS_AJAX) {
                 $this->ajaxReturn(array('iRet'=>-1,'info'=>'只能在微信中使用', 'data'=>$url));
             }else{
@@ -201,7 +202,6 @@ class CommonController extends Controller {
      * 用户信息
      */
     protected function _auth() {
-        $this->user = get_user();
         if (empty($this->user) && ($this->module_auth || in_array(ACTION_NAME, $this->action_auth))) {
             $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
             $this->ajaxReturn(array('iRet' => -1, 'info' => 'Access denied'));
