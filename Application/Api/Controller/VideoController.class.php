@@ -953,6 +953,24 @@ class VideoController extends CommonController {
     }
 
 
+    /**
+     * 上新视频列表
+    */
+    public function newVideos(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $push_time = I('push_time');
+        empty($push_time) && $this->error('参数错误！');
+        $today_start = strtotime(date('Y-m-d',$push_time));
+        $today_end = $today_start+24*60*60;
+        $where = array('create_time'=>array(array('egt',$today_start),array('lt',$today_end),'and'));
+        $data = D('SchoolVideo')->getListByCate($where,$page,$per_page);
+
+
+        $this->success('success', $data);
+    }
+
+
     //分类迁移（）
     public function changeCate(){
         $videos = M('SchoolVideo')->select();
