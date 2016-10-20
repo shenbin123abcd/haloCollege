@@ -19,7 +19,7 @@ class PushController extends CommonController {
         $client = new \JPush($this->app_key, $this->master_secret, LOG_PATH . '/Api/jpush' . date('Ymd') . '.log');
         $platForm = array('ios', 'android');
         $msg_content = $msg['content'];
-        $msg_title = "msg title1";
+        $msg_title = "";
         $msg_extra = $msg['extra'];
 
         $sendno = rand(100001, 999999);

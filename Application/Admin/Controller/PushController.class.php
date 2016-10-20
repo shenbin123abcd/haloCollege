@@ -19,7 +19,7 @@ class PushController extends Controller {
         $client = new \JPush($this->app_key, $this->master_secret, LOG_PATH . '/Api/jpush' . date('Ymd') . '.log');
         $platForm = array('ios', 'android');
         $msg_content = $msg['content'];
-        $msg_title = "msg title1";
+        $msg_title = "";
         $msg['extra']['content'] = $msg_content;
         $msg['extra']['from_username'] = '';
         $msg['extra']['from_uid'] = 0;
