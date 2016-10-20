@@ -57,6 +57,24 @@ class NoticeController extends Controller{
      * 通知首页
     */
     public function index(){
+        $alert = M('PushCate')->where(array('type'=>0))->getField('push_id,title');
+        $total = M('PushMsg')->where(array('remark_type'=>1))->count();
+        import("ORG.Util.Page");
+        $listRows =  50;
+        $page       = new \Think\Page($total,$listRows,$_GET);
+        //添加了3.1的$page->limit()
+        $limit=$page->limit();
+        $data = M('PushMsg')->where(array('remark_type'=>1))->limit($limit)->select();
+        foreach ($data as $key=>$value){
+            $data[$key]['type'] = $alert[$value['msg_type']];
+            $data[$key]['push_time'] = date('Y-m-d H:i:s',$value['push_time']);
+        }
+        $this->assign('list',$data);
+        $this->assign('page', $page->show());
+        $this->display();
+    }
+
+    public function add(){
         $alert = M('PushCate')->where(array('type'=>0))->select();
         $this->assign('alert_cate',$alert);
         $this->display();

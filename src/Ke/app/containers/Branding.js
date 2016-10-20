@@ -5,6 +5,9 @@ import hopePic from '../images/hope-you.png'
 import wePic1 from '../images/we-pic1.png'
 import wePic2 from '../images/we-pic2.png'
 
+
+var browserHistory=ReactRouter.browserHistory;
+
 var Branding=React.createClass({
     getInitialState(){
       return{

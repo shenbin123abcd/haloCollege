@@ -35,59 +35,12 @@ class WeddingController extends CommonController {
         if (empty($category_id)) {
             $this->error('参数错误！');
         }
-        $model = M('SchoolWedding');
-        $where['wtw_school_wedding.status'] = 1;
-        $where['wtw_school_wedding.category_id'] = $category_id;
-        $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
-            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
-            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
-            ->page($page, $per_page)->select();
-        //&amp转换为&
-        foreach ($list as $key=>$value){
-            $str = preg_replace('/&amp;/','&',$value['headline']);
-            $list[$key]['headline'] = $str;
-        }
-        if (empty($list)) {
-            $data['list'] = array();
-            $data['total'] = 0;
-            $this->success('内容为空！', $data);
-        }
-        //获取头条cover
-        foreach ($list as $key => $value) {
-            $wedding_id[] = $value['id'];
-        }
-        if (!empty($wedding_id)) {
-            $imgs_url = $this->get_imgs($wedding_id, 'cover');
-            foreach ($list as $key_list => $value_list) {
-                $list[$key_list]['imgs'] = array();
-                foreach ($imgs_url as $key_img => $value_img) {
-                    if ($value_list['id'] == $value_img['record_id']) {
-                        $list[$key_list]['imgs'][] = $imgs_url[$key_img];
-                    }
-                }
-            }
-        }
-        //获取访问总数、点赞总数、点赞状态、评论总数
-        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
-        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
-        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
-        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
-        foreach ($list as $key=>$value){
-            $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
-            $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
-            $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
-            if(empty($uid)){
-                $list[$key]['status_praise'] = -1;
-            }else{
-                $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
-            }
-        }
+        $data = $this->get_wedding_list(array(),$uid,$page,$per_page,$category_id);
 
-        $total = $model->where($where)->count();
-        $data['list'] = array_values($list);
-        $data['total'] = intval($total);
         $this->success('success', $data);
     }
+
+
 
     /**
      * 获取推荐头条列表
@@ -96,62 +49,10 @@ class WeddingController extends CommonController {
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $uid = $this->user['uid'];
-        $model = M('SchoolWedding');
-        $where['wtw_school_wedding.status'] = 1;
-        $where['wtw_school_wedding.is_recommend'] = 1;
-        $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
-            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
-            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
-            ->page($page, $per_page)->select();
-        //&amp转换为&
-        foreach ($list as $key=>$value){
-            $str = preg_replace('/&amp;/','&',$value['headline']);
-            $list[$key]['headline'] = $str;
-        }
-        if (empty($list)) {
-            $data['list'] = array();
-            $data['total'] = 0;
-            $this->success('内容为空！', $data);
-        }
-        //获取头条cover
-        foreach ($list as $key => $value) {
-            $wedding_id[] = $value['id'];
-        }
-        if (!empty($wedding_id)) {
-            $imgs_url = $this->get_imgs($wedding_id, 'cover');
-            foreach ($list as $key_list => $value_list) {
-                $list[$key_list]['imgs'] = array();
-                foreach ($imgs_url as $key_img => $value_img) {
-                    if ($value_list['id'] == $value_img['record_id']) {
-                        $list[$key_list]['imgs'][] = $imgs_url[$key_img];
-                    }
-                }
-            }
-        }
-        //获取访问总数、点赞总数、点赞状态、评论总数
-        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
-        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
-        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
-        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
-        foreach ($list as $key=>$value){
-            $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
-            $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
-            $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
-            if(empty($uid)){
-                $list[$key]['status_praise'] = -1;
-            }else{
-                $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
-            }
-        }
+        $data = $this->get_wedding_list(array(),$uid,$page,$per_page);
 
-        $total = $model->where($where)->count();
-        $data['list'] = array_values($list);
-        $data['total'] = intval($total);
         $this->success('success', $data);
     }
-
-
-
 
     /**
      * 婚礼头条详情
@@ -1345,6 +1246,136 @@ class WeddingController extends CommonController {
         }
         return $position;
 
+    }
+
+    /**
+     * 头条上新列表
+    */
+    public function newWeddings(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $push_time = I('push_time');
+        empty($push_time) && $this->error('参数错误！');
+        $today_start = strtotime(date('Y-m-d H:i:s',$push_time));
+        $today_end = $today_start+24*60*60;
+        $where = array('wtw_school_wedding.create_time'=>array(array('egt',$today_start),array('lt',$today_end),'and'),'wtw_school_wedding.status'=>1);
+
+        $uid = $this->user['uid'];
+        $model = M('SchoolWedding');
+
+        $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($where)
+            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
+            ->page($page, $per_page)->select();
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+        }
+        if (empty($list)) {
+            $data['list'] = array();
+            $data['total'] = 0;
+            $this->success('内容为空！', $data);
+        }
+        //获取头条cover
+        foreach ($list as $key => $value) {
+            $wedding_id[] = $value['id'];
+        }
+        if (!empty($wedding_id)) {
+            $imgs_url = $this->get_imgs($wedding_id, 'cover');
+            foreach ($list as $key_list => $value_list) {
+                $list[$key_list]['imgs'] = array();
+                foreach ($imgs_url as $key_img => $value_img) {
+                    if ($value_list['id'] == $value_img['record_id']) {
+                        $list[$key_list]['imgs'][] = $imgs_url[$key_img];
+                    }
+                }
+            }
+        }
+        //获取访问总数、点赞总数、点赞状态、评论总数
+        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
+        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
+        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
+        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+        foreach ($list as $key=>$value){
+            $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
+            $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
+            $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
+            if(empty($uid)){
+                $list[$key]['status_praise'] = -1;
+            }else{
+                $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
+            }
+        }
+
+        $total = $model->where($where)->count();
+        $data['list'] = array_values($list);
+        $data['total'] = intval($total);
+        $this->success('success', $data);
+
+    }
+
+    /**
+     * 获取视频列表
+     */
+    public function get_wedding_list($map,$uid,$page,$per_page,$category_id){
+        $model = M('SchoolWedding');
+        if (empty($category_id)){
+            $map['wtw_school_wedding.is_recommend'] = 1;
+        }else{
+            $map['wtw_school_wedding.category_id'] = $category_id;
+        }
+        $map['wtw_school_wedding.status'] = 1;
+        $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($map)
+            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
+            ->page($page, $per_page)->select();
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+        }
+        if (empty($list)) {
+            $data['list'] = array();
+            $data['total'] = 0;
+            $this->success('内容为空！', $data);
+        }
+        //获取头条cover
+        foreach ($list as $key => $value) {
+            $wedding_id[] = $value['id'];
+        }
+        if (!empty($wedding_id)) {
+            $imgs_url = $this->get_imgs($wedding_id, 'cover');
+            foreach ($list as $key_list => $value_list) {
+                $list[$key_list]['imgs'] = array();
+                foreach ($imgs_url as $key_img => $value_img) {
+                    if ($value_list['id'] == $value_img['record_id']) {
+                        $list[$key_list]['imgs'][] = $imgs_url[$key_img];
+                    }
+                }
+            }
+        }
+        //获取访问总数、点赞总数、点赞状态、评论总数
+        $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
+        $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
+        $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
+        $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+        foreach ($list as $key=>$value){
+            $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
+            $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
+            $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
+            if(empty($uid)){
+                $list[$key]['status_praise'] = -1;
+            }else{
+                $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
+            }
+        }
+
+        $total = $model->where($map)->count();
+        $data['list'] = array_values($list);
+        $data['total'] = intval($total);
+
+        return $data;
     }
 
 

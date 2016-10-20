@@ -19,7 +19,7 @@ class PushController extends Controller {
         $client = new \JPush($this->app_key, $this->master_secret, LOG_PATH . '/Api/jpush' . date('Ymd') . '.log');
         $platForm = array('ios', 'android');
         $msg_content = $msg['content'];
-        $msg_title = "msg title1";
+        $msg_title = "";
         $msg['extra']['content'] = $msg_content;
         $msg['extra']['from_username'] = '';
         $msg['extra']['from_uid'] = 0;
@@ -40,7 +40,7 @@ class PushController extends Controller {
                 //->addTag(array('tag1', 'tag2'))
                 //->setNotificationAlert('通知')
                 ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
-                //->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                //->addIosNotification($msg_content, 'iOS sound', '+1', true, 'iOS category',$msg_extra)
                 //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
                 ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
                 ->send();
@@ -50,7 +50,7 @@ class PushController extends Controller {
                 //->addTag(array('tag1', 'tag2'))
                 //->setNotificationAlert('通知')
                 //->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
-                ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                ->addIosNotification($msg_content, 'iOS sound', '+1', true, 'iOS category',$msg_extra)
                 //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
                 ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
                 ->send();
@@ -60,7 +60,7 @@ class PushController extends Controller {
                 //->addTag(array('tag1', 'tag2'))
                 //->setNotificationAlert('通知')
                 ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
-                ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+                ->addIosNotification($msg_content, 'iOS sound', '+1', true, 'iOS category',$msg_extra)
                 //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
                 ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
                 ->send();
