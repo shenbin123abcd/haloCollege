@@ -18,7 +18,8 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
-
+        const cate_id=this.props.cate_id
+        console.log(cate_id);
 
         let d=this.props.d;
         let h=this.props.h;
@@ -33,6 +34,7 @@ export default React.createClass({
         function renderBottomBtnGroup(){
             if(status==1){
                 const appointData=hb.store.get('ke-appoint-info');
+                let styleClass=''
                 let appointInfo=()=>{
                     if(appointData){
                         return(
@@ -52,10 +54,27 @@ export default React.createClass({
                         )
                     }
                 }
+                let render=()=>{
+                    if(cate_id==3){
+                        return(
+                            <div></div>
+                        )
+                    }else{
+                        return(
+                            <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:'disable-appointment-choose-seat'})}>在线选座</div>
+                        )
+                    }
+                }
+                if(cate_id==3){
+                    styleClass='enter-btn f-15 able sp width'
+                }else{
+                    styleClass='enter-btn f-15 able sp'
+                }
+
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:'disable-appointment-choose-seat'})}>在线选座</div>
-                        <div className='enter-btn f-15 able sp'  onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
+                        {render()}
+                        <div className={styleClass}  onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
                         <div className="appointment-now-modal">
                             <Modal show={showModal}>
                                 <Modal.Body>

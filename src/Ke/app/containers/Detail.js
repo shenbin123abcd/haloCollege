@@ -133,6 +133,7 @@ var Detail= React.createClass({
                 day:fetchData.day,
             };
 
+
             return(
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
@@ -146,6 +147,7 @@ var Detail= React.createClass({
                     <BottomBtn
                         priceData={fetchData.price}
                         idData={fetchData.id}
+                        cate_id={fetchData.cate_id}
                     >
                     </BottomBtn>
                     <Tel data={fetchData.tel}></Tel>

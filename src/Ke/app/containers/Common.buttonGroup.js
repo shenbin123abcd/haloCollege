@@ -173,7 +173,9 @@ var CommonButtonGroup= React.createClass({
     render(){
         let priceData=this.props.priceData;
         let idData=this.props.idData;
+        let cate_id=this.props.cate_id
         let {res,showModal,data,val,d,h,m,s,start_time}=this.props;
+
 
         this.handleStart(start_time);
         return(
@@ -189,6 +191,7 @@ var CommonButtonGroup= React.createClass({
                 handleOpen={this.handleOpen}
                 showSuccessModal={val}
                 toBuySubmit={this.toBuySubmit}
+                cate_id={cate_id}
 
                 d={d}
                 h={h}
