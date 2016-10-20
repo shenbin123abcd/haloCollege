@@ -190,7 +190,18 @@ var DetailTop=React.createClass({
                 </div>
             )
         }
+    }
 
+    let renderIsv=()=>{
+        if(data.cate_id==3){
+            return(
+                <div className="isv">{data.isv_name}</div>
+            )
+        }else{
+            return(
+                <div></div>
+            )
+        }
     }
 
     return(
@@ -198,11 +209,6 @@ var DetailTop=React.createClass({
         <div className="detail-bg">
           <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/750/h/380`} alt=""/>
           <div className="img-over-layer"></div>
-            {/*
-             <div className="sign-block">
-             <div className="sign-person f-9">西米 报名了！</div>
-             </div>
-            */}
             {renderDescHtml()}
         </div>
 
@@ -215,7 +221,7 @@ var DetailTop=React.createClass({
             </div>
             <div className="desc-bottom">
                 <div className="price"><span className="icon">￥</span>{data.price}/人</div>
-                <div className="isv">{data.isv_name}</div>
+                {renderIsv()}
             </div>
         </div>
       </div>
