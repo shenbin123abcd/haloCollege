@@ -31,7 +31,7 @@ class PushController extends CommonController {
             //->addTag(array('tag1', 'tag2'))
             //->setNotificationAlert('通知')
             ->addAndroidNotification($msg_content,$msg_title,1,$msg_extra)
-            ->addIosNotification($msg_content, 'iOS sound', \JPush::DISABLE_BADGE, true, 'iOS category',$msg_extra)
+            ->addIosNotification($msg_content, 'iOS sound', '+1', true, 'iOS category',$msg_extra)
             //->setMessage($msg_content, $msg_title, $msg_type, $msg_extra)
             ->setOptions($sendno,$time_to_live,$override_msg_id,$apns_production)
             ->send();
