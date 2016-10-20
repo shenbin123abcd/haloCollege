@@ -5,6 +5,7 @@ namespace Ke\Controller;
 class CoursesController extends CommonController {
     public function _initialize()
     {
+        $this->user = get_user();
         if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents'])){
             $this->_checkCode();
             $this->_getWechatUser();

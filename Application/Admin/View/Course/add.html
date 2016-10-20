@@ -42,6 +42,17 @@
 					</td>
 				</tr>
 				<tr>
+					<th>服务商</th>
+					<td>
+						<select name="isv_id">
+							<!--<option value="">请选择</option>-->
+							<volist name="isv" id="vo">
+								<option value="{$vo.id}">{$vo.title}</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<th>城市</th>
 					<td><input type="text" class="input length_5" name="city"></td>
 				</tr>

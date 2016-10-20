@@ -82,7 +82,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
 	public function detail($id){
-        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content')->find();
+        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content,isv_id')->find();
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
@@ -109,6 +109,9 @@ class CourseModel extends Model {
             }
             $data['content'] = htmlspecialchars_decode($data['content']);
             $data['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['cover_url'];
+
+            // 服务商
+            $data['isv_name'] = M('CourseIsv')->where(['id'=>$data['isv_id']])->getField('title');
         }
 
         return $data ? $data : array();

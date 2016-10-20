@@ -48,6 +48,16 @@
 					</td>
 				</tr>
 				<tr>
+					<th>服务商</th>
+					<td>
+						<select name="isv_id">
+							<volist name="isv" id="vo">
+								<option <eq name="data.isv_id" value="$vo.id">selected</eq> value="{$vo.id}">{$vo.title}</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<th>城市</th>
 					<td><input type="text" class="input length_5" name="city" value="{$data.city}"></td>
 				</tr>

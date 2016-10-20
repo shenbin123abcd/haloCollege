@@ -11,6 +11,12 @@ var CommonButtonGroup= React.createClass({
         let btnType=e.type;
         let id= idData;
 
+        if(!Modernizr.weixin){
+            hb.lib.weui.alert('请在微信中打开');
+            return false;
+        }
+
+
         if(btnType=="disable-choose-seat"){
             app.modal.alert({
                 pic:'disable-choose-seat',
@@ -37,7 +43,9 @@ var CommonButtonGroup= React.createClass({
             course_id:idData,
             phone:$.trim(e.phone),
             name:$.trim(e.name),
-        }
+        };
+
+        
         if(data.name==''){
             hb.lib.weui.alert('请填写姓名');
             return false;
@@ -56,6 +64,8 @@ var CommonButtonGroup= React.createClass({
                     hb.store.set('ke-appoint-info',data);
                     dispatch(receiveStatusPosts(idData,2,false))
                     hb.lib.weui.toast(res.info);
+                }else if(res.iRet==-1){
+                    window.location.href=res.data;
                 }else{
                     hb.lib.weui.alert(res.info);
                 }
@@ -126,6 +136,8 @@ var CommonButtonGroup= React.createClass({
                             },
                         });
                     }, 500);
+                }else if(res.iRet==-1){
+                    window.location.href=res.data;
                 }else{
                     hb.lib.weui.alert(res.info);
                 }
