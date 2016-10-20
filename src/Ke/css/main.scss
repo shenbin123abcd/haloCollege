@@ -5,6 +5,7 @@
 $ff_SimHei: Arial,Verdana,Tahoma,'Hiragino Sans GB',SimHei,SimSun,sans-serif;
 $gkk_color: #9692ff;
 $pxy_color: #16c2af;
+$hzhb_color: #38a2fc;
 
 body{
   font-size: 14px;
@@ -301,6 +302,9 @@ body {
         &-pxy{
           background-color: $pxy_color;
         }
+        &-hzhb{
+          background-color: $hzhb_color;
+        }
       }
 
     }
@@ -388,6 +392,9 @@ body {
         }
         &-pxy{
           background-color: $pxy_color;
+        }
+        &-hzhb{
+          background-color: $hzhb_color;
         }
       }
 
@@ -908,9 +915,35 @@ body {
     .detail-desc{
       padding:18px;
       background: #fff;
+      //display: flex;
+      align-items: center;
+      position: relative;
+      //justify-content: space-between;
+      .desc-top,.desc-bottom{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .desc-bottom{
+        .price{
+          font-size:18px;
+          color:#fe5a40;
+          .icon{
+            font-size:16px;
+          }
+        }
+        .isv{
+          font-size:11px;
+          color:#aaaaaa;
+        }
+      }
+
       .desc-content{
         color:#333333;
-
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-weight:700;
       }
       .desc-tag{
         width: 42px;
@@ -919,7 +952,8 @@ body {
         border-radius: 5px 0;
         color:#fff;
         text-align: center;
-        margin-top:5px;
+        //margin-top:-5px;
+        display: inline-block;
         &.open{
           background-color: #9692ff;
           box-shadow: 0 3px 4px rgba(150,146,255,.24);
@@ -927,6 +961,11 @@ body {
         &.training-camp{
           box-shadow: 0 3px 4px rgba(0,130,116,.24);
           background-color: #16c2af;
+        }
+        &.partner{
+          box-shadow: 0 3px 4px rgba(0, 124, 165, .24);
+          background-color: #38a2fc;
+          width:54px;
         }
       }
     }
@@ -960,18 +999,18 @@ body {
         }
         .tuijianren{
           display: inline-block;
-          width:30px;
-          height:30px;
+          width:28px;
+          height:28px;
           overflow: hidden;
           border-radius: 50%;
           background: #fff;
           vertical-align: middle;
-          margin-left:10px;
+          margin-right:10px;
           position:relative;
           border:1px solid #d7d7d7;
           .circle{
-            width:25px;
-            height:25px;
+            width:23px;
+            height:23px;
             overflow: hidden;
             border-radius: 50%;
             display: inline-block;
@@ -991,8 +1030,10 @@ body {
         color:#aaaaaa;
         position: relative;
         right:-8px;
+        &.active{
+          color:#fe5a40;
+        }
         .haloIcon{
-          color:#aaaaaa;
           position: relative;
           top:3px;
           font-size:20px;

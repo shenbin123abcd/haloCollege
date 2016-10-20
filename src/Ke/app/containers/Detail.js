@@ -137,7 +137,7 @@ var Detail= React.createClass({
                 <div className="detail-page">
                     <DetailTop topData={fetchData}></DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <TelBlock telData={fetchData.tel} res={res}></TelBlock>
+                    <TuiJianBlock telData={fetchData.tel} res={res}></TuiJianBlock>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
@@ -173,8 +173,10 @@ var DetailTop=React.createClass({
          let style='';
          if(data.cate_id==1){
              style='desc-tag f-10 open'
-         }else{
+         }else if(data.cate_id==2){
              style='desc-tag f-10 training-camp'
+         }else if(data.cate_id==3){
+             style='desc-tag f-10 partner'
          }
          return style
     }
@@ -205,12 +207,17 @@ var DetailTop=React.createClass({
         </div>
 
         <div className="detail-desc">
-          <div className="desc-content f-15">{data.title}</div>
-          <div className={styleCss()}>
-              {data.cate}
-          </div>
+            <div className="desc-top">
+                <div className="desc-content f-15">{data.title}</div>
+                <div className={styleCss()}>
+                    {data.cate}
+                </div>
+            </div>
+            <div className="desc-bottom">
+                <div className="price"><span className="icon">￥</span>{data.price}/人</div>
+                <div className="isv">{data.isv_name}</div>
+            </div>
         </div>
-
       </div>
     )
   }
@@ -232,7 +239,7 @@ var DetailMiddle=React.createClass({
 
 
 
-var TelBlock=React.createClass({
+var TuiJianBlock=React.createClass({
     render(){
         let res=this.props.res;
         //console.log(res);
@@ -242,13 +249,12 @@ var TelBlock=React.createClass({
                     <div className="sign-num-block clearfix">
                         <div className="tel-line"></div>
                         <div className="sign-num-block-left f-14">
-                            <span className="haloIcon haloIcon-great f-20"></span>
+                            <span className="tuijianren">
+                                <span className="circle"><img src={res.data.headimgurl} alt=""/></span>
+                            </span>
                             <span>{res.data.nickname}</span>
-                        <span className="tuijianren">
-                            <span className="circle"><img src={res.data.headimgurl} alt=""/></span>
-                        </span>
                         </div>
-                        <div className="sign-num-block-right f-13">
+                        <div className='sign-num-block-right f-13 active'>
                             申请成为推荐人
                             <i className="haloIcon haloIcon-right"></i>
                         </div>
