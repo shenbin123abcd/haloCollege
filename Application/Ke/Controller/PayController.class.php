@@ -27,6 +27,10 @@ class PayController extends CommonController {
         $count = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>1))->count();
         $count && $this->error('你已经报过名了，不能重复报名');
 
+        // 获取价格
+        $result = D('Course')->_getPrice($course['price'], $course['price_model']);
+        $course['price'] = $result['price'];
+
         // 创建订单
         $order = $model->where(array('wechat_id'=>$this->user['id'], 'course_id'=>$course_id, 'status'=>0))->find();
         if (!empty($order) && $order['exp_time'] > time() && !empty($order['sign']) && $order['price'] == $course['price']) {
