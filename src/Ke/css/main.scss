@@ -1244,8 +1244,8 @@ body {
 
         }
         img{
-          display:inline-block;
-          max-width:100%;
+          display:block;
+          width:100%;
           margin-bottom: 18px;
           &+br{
             display: none;
