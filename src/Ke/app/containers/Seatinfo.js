@@ -83,7 +83,12 @@ var Seatinfo = React.createClass({
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
                     <UserBox items={users}  course={course} />
-                    <BottomBtn  priceData={course.price} idData={routeParams.id} />
+                    <BottomBtn
+                        priceData={course.price}
+                        idData={routeParams.id}
+                        original_price={course.original_price}
+                        cate_id={course.cate_id}
+                    />
                 </div>
 
             </div>

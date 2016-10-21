@@ -21,10 +21,17 @@ export default React.createClass({
         const chooseSeat=this.props.chooseSeat;
         const cate_id=this.props.cate_id;
 
-        let d=this.props.d;
-        let h=this.props.h;
-        let m=this.props.m;
-        let s=this.props.s;
+        //let d=this.props.d;
+        //let h=this.props.h;
+        //let m=this.props.m;
+        //let s=this.props.s;
+
+        let d='no';
+        let h='no';
+        let m='no';
+        let s='no';
+
+
 
         h=h<10?'0'+h:h;
         m=m<10?'0'+m:m;

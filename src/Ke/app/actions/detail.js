@@ -38,10 +38,10 @@ function fetchCourseDetail(req) {
             .then(res=>{
                 //倒计时
 
-                let start_time=Date.parse(new Date(res.data.next_date));
+               /* let start_time=Date.parse(new Date(res.data.next_date));
                 if(start_time && start_time-new Date().getTime()>0){
                     dispatch(timeOutStart(start_time));
-                }
+                }*/
 
                 app.ajax(`/courses/getAgents`)
                     .then(res2=>{
