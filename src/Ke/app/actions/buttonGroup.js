@@ -39,10 +39,6 @@ function fetchCourseStatus(id){
         return app.ajax(`/courses/applyStatus?course_id=${id}`)
             .then(res=>{
                 dispatch(receiveStatusPosts(id,res.data,false));
-
-                //倒计时
-                res.start_time=1476883220
-                dispatch(timeOutStart(res.start_time));
                 if(res.data==41){
                     return app.ajax(`/courses/mySeat?course_id=${id}`)
                         .then(res=>{
@@ -72,22 +68,6 @@ export function fetchCourseStatusIfNeeded(req) {
 }
 
 
-//倒计时
-export const TIME_OUT_START='TIME_OUT_START'
-export const TIME_OUT_OVER='TIME_OUT_OVER'
-
-export function timeOutStart(time){
-    return{
-        type:'TIME_OUT_START',
-        time,
-    }
-}
-
-export function timeOutOver(){
-    return{
-        type:'TIME_OUT_OVER'
-    }
-}
 
 
 

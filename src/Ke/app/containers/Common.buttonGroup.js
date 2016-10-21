@@ -161,23 +161,20 @@ var CommonButtonGroup= React.createClass({
             dispatch(buySuccessModal(false));
         }
     },
-    handleStart(time){
-        let {dispatch}=this.props;
-        this.timer=setTimeout(()=>dispatch(timeOutStart(time)),1000);
-    },
-    componentWillUnmount(){
-        let {dispatch}=this.props;
-        this.timer && clearTimeout(this.timer);
-        dispatch(timeOutOver());
-    },
     render(){
         let priceData=this.props.priceData;
         let idData=this.props.idData;
         let cate_id=this.props.cate_id
-        let {res,showModal,data,val,d,h,m,s,start_time}=this.props;
+        let {res,showModal,data,val}=this.props;
+
+        let d=this.props.d;
+        let h=this.props.h;
+        let m=this.props.m;
+        let s=this.props.s;
+        let original_price=this.props.original_price;
 
 
-        this.handleStart(start_time);
+
         return(
             <ButtonGroup
                 chooseSeat={data}
@@ -192,6 +189,7 @@ var CommonButtonGroup= React.createClass({
                 showSuccessModal={val}
                 toBuySubmit={this.toBuySubmit}
                 cate_id={cate_id}
+                original_price={original_price}
 
                 d={d}
                 h={h}
@@ -210,11 +208,6 @@ function mapStateToProps(state) {
         res,
         isFetching,
         showModal,
-        d,
-        h,
-        m,
-        s,
-        start_time
     }=courseStatus;
     const {
         data
@@ -228,11 +221,6 @@ function mapStateToProps(state) {
         showModal,
         data,
         val,
-        d,
-        h,
-        m,
-        s,
-        start_time
     }
 
 }
