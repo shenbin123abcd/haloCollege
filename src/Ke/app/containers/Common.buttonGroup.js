@@ -161,18 +161,30 @@ var CommonButtonGroup= React.createClass({
             dispatch(buySuccessModal(false));
         }
     },
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props;
+        this.timer && clearTimeout(this.timer);
+        dispatch(timeOutOver());
+    },
+    handleStart(time){
+        let {dispatch}=this.props;
+        this.timer=setTimeout(()=>dispatch(timeOutStart(time)),1000);
+    },
     render(){
         let priceData=this.props.priceData;
         let idData=this.props.idData;
         let cate_id=this.props.cate_id
-        let {res,showModal,data,val}=this.props;
-
-        let d=this.props.d;
-        let h=this.props.h;
-        let m=this.props.m;
-        let s=this.props.s;
+        let start_time=Date.parse(new Date(this.props.start_time));
         let original_price=this.props.original_price;
 
+        let {res,showModal,data,val,d,h,m,s,}=this.props;
+
+        //console.log(start_time)
+        if(start_time && start_time-new Date().getTime()>0){
+            this.handleStart(start_time);
+        }
+
+        //console.log(d,h,m,s);
 
         return(
             <ButtonGroup
@@ -207,6 +219,11 @@ function mapStateToProps(state) {
         res,
         isFetching,
         showModal,
+
+        d,
+        h,
+        m,
+        s,
     }=courseStatus;
     const {
         data
@@ -220,6 +237,11 @@ function mapStateToProps(state) {
         showModal,
         data,
         val,
+
+        d,
+        h,
+        m,
+        s,
     }
 
 }
