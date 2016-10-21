@@ -174,7 +174,6 @@ var CommonButtonGroup= React.createClass({
         let original_price=this.props.original_price;
 
 
-
         return(
             <ButtonGroup
                 chooseSeat={data}

@@ -18,7 +18,6 @@ class PaymentController extends CommonController {
         $cate_id = intval(I('cate_id'));
         $pay_type = intval(I('pay_type'));
 
-
         !in_array($pay_type, [0, 1]) && $this->error('支付参数错误');
 
         // 检查开通分类

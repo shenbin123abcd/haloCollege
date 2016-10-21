@@ -64,7 +64,7 @@ class NoticeController extends Controller{
         $page       = new \Think\Page($total,$listRows,$_GET);
         //添加了3.1的$page->limit()
         $limit=$page->limit();
-        $data = M('PushMsg')->where(array('remark_type'=>1))->limit($limit)->select();
+        $data = M('PushMsg')->where(array('remark_type'=>1))->order('id DESC')->limit($limit)->select();
         foreach ($data as $key=>$value){
             $data[$key]['type'] = $alert[$value['msg_type']];
             $data[$key]['push_time'] = date('Y-m-d H:i:s',$value['push_time']);

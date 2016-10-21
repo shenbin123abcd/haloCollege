@@ -21,10 +21,17 @@ export default React.createClass({
         const chooseSeat=this.props.chooseSeat;
         const cate_id=this.props.cate_id;
 
-        let d=this.props.d;
-        let h=this.props.h;
-        let m=this.props.m;
-        let s=this.props.s;
+        //let d=this.props.d;
+        //let h=this.props.h;
+        //let m=this.props.m;
+        //let s=this.props.s;
+
+        let d='no';
+        let h='no';
+        let m='no';
+        let s='no';
+
+
 
         h=h<10?'0'+h:h;
         m=m<10?'0'+m:m;
@@ -170,6 +177,19 @@ export default React.createClass({
                         )
                     }
                 }
+                let render=()=>{
+                    if(cate_id==3){
+                        return(
+                            <div></div>
+                        )
+                    }else{
+                        return(
+                            <div className="choose-seat-btn f-15"
+                                 onClick={e=>handleClick({type:"disable-choose-seat"})}
+                            >在线选座</div>
+                        )
+                    }
+                }
 
                 //显示倒计时
                 let ifTimeoutShow=()=>{
@@ -197,7 +217,7 @@ export default React.createClass({
                 }
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:"disable-choose-seat"})}>在线选座</div>
+                        {render()}
                         {ifTimeoutShow()}
                         <div className="appointment-now-modal">
                             <Modal show={showSuccessModal}>
