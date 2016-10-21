@@ -142,8 +142,8 @@ var Branding=React.createClass({
         }
         return(
             <div className="branding-wrapper">
-                <div className="pic-block" style={{height:screenHeight}}>
-                    <img src={brandingPic} alt=""/>
+                <div className="pic-block" style={{height:'100%'}}>
+                    <img src={brandingPic} alt="" style={{height:'100%'}}/>
                 </div>
                 <div className="item-list">
                     <img src={itemPic} alt=""/>

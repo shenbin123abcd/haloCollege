@@ -5,7 +5,8 @@ namespace Ke\Controller;
 class CoursesController extends CommonController {
     public function _initialize()
     {
-        $this->user = get_user();
+        $halobear = cookie('halobear');
+        $this->user = $this->wcache($halobear);
         if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents'])){
             $this->_checkCode();
             $this->_getWechatUser();
@@ -107,7 +108,7 @@ class CoursesController extends CommonController {
         empty($course) && $this->error('课程编号错误');
 
         if (empty($this->user)){
-            $this->success($course['step'] == 0 ? 1 : 3);
+            $this->success($course['step'] == 0 ? 1 : 3, 'ads');
         }
 
         if ($course['step'] == 0) {

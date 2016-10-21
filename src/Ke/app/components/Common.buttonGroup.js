@@ -8,7 +8,8 @@ import { fetchCourseStatusIfNeeded,receiveStatusPosts } from '../actions/buttonG
 export default React.createClass({
     render:function(){
         const price=this.props.priceData;
-        const handleClick=this.props.handleClick;
+        let original_price=this.props.original_price
+        const handleClick=this.props.handleClick;s
         const handleSubmit=this.props.handleSubmit;
         const handleOpen=this.props.handleOpen;
         const handleClose=this.props.handleClose;
@@ -18,18 +19,42 @@ export default React.createClass({
         const id=this.props.idData;
         const status=this.props.status;
         const chooseSeat=this.props.chooseSeat;
+        const cate_id=this.props.cate_id;
+
+        //let d=this.props.d;
+        //let h=this.props.h;
+        //let m=this.props.m;
+        //let s=this.props.s;
+
+        let d='no';
+        let h='no';
+        let m='no';
+        let s='no';
 
 
-        let d=this.props.d;
-        let h=this.props.h;
-        let m=this.props.m;
-        let s=this.props.s;
 
         h=h<10?'0'+h:h;
         m=m<10?'0'+m:m;
         s=s<10?'0'+s:s;
 
         let _this=this;
+        let styleClass='';
+
+        //合作伙伴
+        if(cate_id==3){
+            if(d!='no' && m!='no' && h!='no' &&s!='no'){
+                styleClass='enter-btn f-15 able width'
+            }else{
+                styleClass='enter-btn f-15 able sp width'
+            }
+        }else{
+            if(d!='no' && m!='no' && h!='no' &&s!='no'){
+                styleClass='enter-btn f-15 able'
+            }else{
+                styleClass='enter-btn f-15 able sp'
+            }
+        }
+
         function renderBottomBtnGroup(){
             if(status==1){
                 const appointData=hb.store.get('ke-appoint-info');
@@ -52,10 +77,50 @@ export default React.createClass({
                         )
                     }
                 }
+
+
+                let render=()=>{
+                    if(cate_id==3){
+                        return(
+                            <div></div>
+                        )
+                    }else{
+                        return(
+                            <div className="choose-seat-btn f-15"
+                                 onClick={e=>handleClick({type:'disable-appointment-choose-seat'})}
+                            >在线选座</div>
+                        )
+                    }
+                }
+
+                //显示倒计时
+                let ifTimeoutShow=()=>{
+                    if(d!='no' && m!='no' && h!='no' &&s!='no'){
+                        return(
+                            <div className={styleClass} onClick={handleOpen}>
+                                <div className="btn-wrapper">
+                                    <span id="appointment-text">预约课程</span>（￥{price} /人）
+                                    <div style={{letterSpacing:'1px'}}>
+                                        <span className="haloIcon haloIcon-timeout"></span>
+                                        {d}天{h}:{m}:{s}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div className={styleClass} onClick={handleOpen}>
+                                <span id="appointment-text">预约课程</span>（￥{original_price} /人）
+                            </div>
+                        )
+                    }
+                }
+
+
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:'disable-appointment-choose-seat'})}>在线选座</div>
-                        <div className='enter-btn f-15 able sp'  onClick={handleOpen}><span id="appointment-text">预约课程</span>（￥{price} /人）</div>
+                        {render()}
+                        {ifTimeoutShow()}
                         <div className="appointment-now-modal">
                             <Modal show={showModal}>
                                 <Modal.Body>
@@ -112,29 +177,47 @@ export default React.createClass({
                         )
                     }
                 }
+                let render=()=>{
+                    if(cate_id==3){
+                        return(
+                            <div></div>
+                        )
+                    }else{
+                        return(
+                            <div className="choose-seat-btn f-15"
+                                 onClick={e=>handleClick({type:"disable-choose-seat"})}
+                            >在线选座</div>
+                        )
+                    }
+                }
+
+                //显示倒计时
                 let ifTimeoutShow=()=>{
                     if(d!='no' && m!='no' && h!='no' &&s!='no'){
                         $(".flex-bottom-btn").removeClass('sp');
                         return(
-                            <div className='enter-btn f-15 able' onClick={e=>handleClick({type:'enroll-now'})}>
+                            <div className={styleClass} onClick={e=>handleClick({type:'enroll-now'})}>
                                 <div className="btn-wrapper">
                                     <div><span id="change-text">立即</span>报名（￥{price} /人）</div>
-                                    <div style={{letterSpacing:'1px'}}>{d}天{h}:{m}:{s}</div>
+                                    <div style={{letterSpacing:'1px'}}>
+                                        <span className="haloIcon haloIcon-timeout"></span>
+                                        {d}天{h}:{m}:{s}
+                                    </div>
                                 </div>
                             </div>
                         )
                     }else{
                         $(".flex-bottom-btn").addClass('sp');
                         return(
-                            <div className='enter-btn f-15 able sp' onClick={e=>handleClick({type:'enroll-now'})}>
-                                <span id="change-text">立即</span>报名（￥{price} /人）
+                            <div className={styleClass} onClick={e=>handleClick({type:'enroll-now'})}>
+                                <span id="change-text">立即</span>报名（￥{original_price} /人）
                             </div>
                         )
                     }
                 }
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:"disable-choose-seat"})}>在线选座</div>
+                        {render()}
                         {ifTimeoutShow()}
                         <div className="appointment-now-modal">
                             <Modal show={showSuccessModal}>

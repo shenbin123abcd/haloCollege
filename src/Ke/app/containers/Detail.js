@@ -2,7 +2,7 @@ import playBtn from '../images/play-btn.png'
 import weixinPic from '../images/weixin.jpg'
 import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'
-import {fetchCourseDetailIfNeeded,initial} from '../actions/detail'
+import {fetchCourseDetailIfNeeded,initial,timeOutStart,timeOutOver} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 import { fetchCourseIfNeeded,setCurrentMonth ,resetMonth} from '../actions'
 
@@ -27,66 +27,19 @@ var Detail= React.createClass({
     componentWillUnmount(){
         const { dispatch ,routeParams} = this.props
         dispatch(initial())
+        this.timer && clearTimeout(this.timer);
+        dispatch(timeOutOver());
     },
     formatContent(str){
         return str.replace(/\r\n|\r/g,'')
     },
-    componentWillReceiveProps : function(nextProps) {
-        //let {dispatch}=this.props;
-        //if(nextProps.data){
-        //    if(!this.props.data){
-        //        dispatch(setCurrentMonth({
-        //            year:nextProps.data.data.month.substring(0,4),
-        //            month:nextProps.data.data.month.substring(4,6),
-        //        }));
-        //    }else if(nextProps.data.month!=this.props.data.month){
-        //        dispatch(setCurrentMonth({
-        //            year:nextProps.data.data.month.substring(0,4),
-        //            month:nextProps.data.data.month.substring(4,6),
-        //        }));
-        //    }
-        //    if(document.title!=nextProps.data.data.title){
-        //        document.title=nextProps.data.data.title;
-        //        if(Modernizr.weixin&&Modernizr.ios){
-        //            hb.hack.setTitle(document.title);
-        //        }
-        //    }
-        //}
-
-
-        // console.log(1,this.props.data,nextProps.data);
-        // console.log(2,app.wechat.getShareDate());
-
-        //if(nextProps.data){
-        //    // console.log(app.wechat.getShareDate())
-        //    if(!this.props.data){
-        //        app.wechat.init({
-        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-        //            link : window.location.href,
-        //        });
-        //    }else if(this.props.data.data.id!=nextProps.data.data.id){
-        //        app.wechat.init({
-        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-        //            link : window.location.href,
-        //        });
-        //    }else if(!_.isEqual(_.omit(app.wechat.getShareDate(),['logo']),{
-        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-        //            link : window.location.href,
-        //        })){
-        //        app.wechat.init({
-        //            title: `${app.util.formatTitle(nextProps.data.data.title)}`,
-        //            content: `时间：${nextProps.data.data.start_date}，地点：${nextProps.data.data.place}，讲师介绍：${nextProps.data.data.guest.content}`,
-        //            link : window.location.href,
-        //        });
-        //    }
-        //}
+    handleStart(time){
+        let {dispatch}=this.props;
+        this.timer=setTimeout(()=>dispatch(timeOutStart(time)),1000);
     },
-  isWechatInit:false,
+    isWechatInit:false,
   render() {
-    let {data,isFetching,dispatch,res,courseDetail}=this.props;
+    let {data,isFetching,dispatch,res,d,h,m,s,start_time}=this.props;
     let renderDetailPage=()=>{
         if(!data){
             var isNull=true
@@ -110,7 +63,6 @@ var Detail= React.createClass({
                 link=window.location.href;
             }
 
-
             dispatch(setCurrentMonth({
                 year:data.data.month.substring(0,4),
                 month:data.data.month.substring(4,6),
@@ -133,11 +85,21 @@ var Detail= React.createClass({
                 day:fetchData.day,
             };
 
+            //倒计时
+            this.handleStart(start_time);
+
             return(
                 <div className="detail-page">
-                    <DetailTop topData={fetchData}></DetailTop>
+                    <DetailTop
+                        topData={fetchData}
+                        d={d}
+                        h={h}
+                        m={m}
+                        s={s}
+                    >
+                    </DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
-                    <TuiJianBlock telData={fetchData.tel} res={res}></TuiJianBlock>
+                    <TuiJianBlock data={fetchData} res={res}></TuiJianBlock>
                     <ClassDesc classData={classData} cateData={fetchData.cate}></ClassDesc>
                     <TeacherDesc teacherData={fetchData.guest.content} ifShow={fetchData.cate_id}></TeacherDesc>
                     <DetailContent contentData={fetchData}></DetailContent>
@@ -146,6 +108,14 @@ var Detail= React.createClass({
                     <BottomBtn
                         priceData={fetchData.price}
                         idData={fetchData.id}
+                        cate_id={fetchData.cate_id}
+
+                        d={d}
+                        h={h}
+                        m={m}
+                        s={s}
+                        start_time={start_time}
+                        original_price={fetchData.original_price}
                     >
                     </BottomBtn>
                     <Tel data={fetchData.tel}></Tel>
@@ -169,6 +139,10 @@ var Detail= React.createClass({
 var DetailTop=React.createClass({
   render(){
     const data=this.props.topData;
+    let d=this.props.d;
+    let h=this.props.h;
+    let s=this.props.s;
+
     let styleCss=()=>{
          let style='';
          if(data.cate_id==1){
@@ -190,19 +164,65 @@ var DetailTop=React.createClass({
                 </div>
             )
         }
-
     }
+
+    let renderIsv=()=>{
+        if(data.cate_id==3){
+            return(
+                <div className="isv">{data.isv_name}</div>
+            )
+        }else{
+            return(
+                <div></div>
+            )
+        }
+    }
+
+    let ifShowOrPrice=()=>{
+        if(data.next_date && d!='no' && h!='no' && s!='no'){
+            return(
+                <div className="price">
+                    <span className="icon">￥</span>{data.price}/人
+                    <span style={{
+                        color:'#aaaaaa',
+                        fontSize:'.26rem',
+                        marginLeft:'10px',
+                        textDecoration:'line-through',
+                    }}>
+                        ￥{data.original_price}/人
+                    </span>
+                </div>
+            )
+        }else{
+            return(
+                <div className="price">
+                    <span className="icon">￥</span>{data.original_price}/人
+                </div>
+            )
+        }
+    }
+
+    let ifShowText=()=>{
+        if(data.next_date && d!='no' && h!='no' && s!='no'){
+            return(
+                <div className="bottom-text" style={{color:'#666666',fontSize:'.22rem'}}>
+                    08月26日恢复原价 ¥880/人
+                </div>
+            )
+        }else{
+            return(
+                <div></div>
+            )
+        }
+    }
+
+
 
     return(
       <div className="detail-top">
         <div className="detail-bg">
           <img  className='bg-img' src={`${data.cover_url}?imageView2/1/w/750/h/380`} alt=""/>
           <div className="img-over-layer"></div>
-            {/*
-             <div className="sign-block">
-             <div className="sign-person f-9">西米 报名了！</div>
-             </div>
-            */}
             {renderDescHtml()}
         </div>
 
@@ -214,9 +234,10 @@ var DetailTop=React.createClass({
                 </div>
             </div>
             <div className="desc-bottom">
-                <div className="price"><span className="icon">￥</span>{data.price}/人</div>
-                <div className="isv">{data.isv_name}</div>
+                {ifShowOrPrice()}
+                {renderIsv()}
             </div>
+            {ifShowText()}
         </div>
       </div>
     )
@@ -241,9 +262,10 @@ var DetailMiddle=React.createClass({
 
 var TuiJianBlock=React.createClass({
     render(){
+        let cate_id=this.props.data.cate_id;
         let res=this.props.res;
-        //console.log(res);
-        if(res.iRet==1){
+        //console.log(cate_id);
+        if(res.iRet==1 && cate_id!=3){
             return(
                 <Link className="tel-block clearfix" to={`/course/branding`}>
                     <div className="sign-num-block clearfix">
