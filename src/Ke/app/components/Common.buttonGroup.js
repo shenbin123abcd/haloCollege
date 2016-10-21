@@ -170,6 +170,19 @@ export default React.createClass({
                         )
                     }
                 }
+                let render=()=>{
+                    if(cate_id==3){
+                        return(
+                            <div></div>
+                        )
+                    }else{
+                        return(
+                            <div className="choose-seat-btn f-15"
+                                 onClick={e=>handleClick({type:"disable-choose-seat"})}
+                            >在线选座</div>
+                        )
+                    }
+                }
 
                 //显示倒计时
                 let ifTimeoutShow=()=>{
@@ -197,7 +210,7 @@ export default React.createClass({
                 }
                 return(
                     <div className="flex-bottom-btn">
-                        <div className="choose-seat-btn f-15" onClick={e=>handleClick({type:"disable-choose-seat"})}>在线选座</div>
+                        {render()}
                         {ifTimeoutShow()}
                         <div className="appointment-now-modal">
                             <Modal show={showSuccessModal}>
