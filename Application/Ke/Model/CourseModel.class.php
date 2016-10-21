@@ -113,6 +113,7 @@ class CourseModel extends Model {
             // 服务商
             $data['isv_name'] = M('CourseIsv')->where(['id'=>$data['isv_id']])->getField('title');
             $result = $this->_getPrice($data['price'], $data['price_model']);
+            $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
             $data['next_date'] = $result['date'];
         }
@@ -211,6 +212,7 @@ class CourseModel extends Model {
             }
 
             $result = $this->_getPrice($data['price'], $data['price_model']);
+            $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
             $data['next_date'] = $result['date'];
         }
