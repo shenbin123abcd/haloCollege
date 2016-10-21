@@ -395,7 +395,7 @@ class CommonController extends Controller {
 
 	//获取上传TOKEN
 	public function getToken(){
-		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,'http://college-koala.halobear.com/public/qiniuUpload');
+		$token = make_qiniu_token('crmpub',CONTROLLER_NAME,C('CALLBACK_URL').'/public/qiniuUpload');
 		$this->ajaxReturn($token,'JSON');
 	}
 

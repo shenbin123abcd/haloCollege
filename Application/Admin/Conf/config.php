@@ -20,6 +20,9 @@ return array(
 	'USER_AUTH_GATEWAY'		=>	'Public/login',		//认证网关
 	'SAVE_ACCESS_NAME'		=>	'sys_access', //权限保存唯一名称
 
-	'TAGLIB_PRE_LOAD'   => 'lists,form'
+	'TAGLIB_PRE_LOAD'   => 'lists,form',
+
+   //编辑器上传图片回调地址
+	'CALLBACK_URL'  =>'http://college-koala.halobear.com',
 );
 ?>
