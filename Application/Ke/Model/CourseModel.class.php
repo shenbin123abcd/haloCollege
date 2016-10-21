@@ -82,7 +82,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
 	public function detail($id){
-        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content,isv_id')->find();
+        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content,isv_id,price_model')->find();
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
@@ -112,6 +112,9 @@ class CourseModel extends Model {
 
             // 服务商
             $data['isv_name'] = M('CourseIsv')->where(['id'=>$data['isv_id']])->getField('title');
+            $result = $this->_getPrice($data['price'], $data['price_model']);
+            $data['price'] = $result['price'];
+            $data['next_date'] = $result['date'];
         }
 
         return $data ? $data : array();
@@ -186,7 +189,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
     public function getInfo($course_id){
-        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,cate_id,start_date,price,total,num,place,day')->find();
+        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,cate_id,start_date,price,total,num,place,day,price_model')->find();
         if($data){
             if ($this->getStep($course_id)){
                 //if ($data['day'] > 1){
@@ -206,6 +209,10 @@ class CourseModel extends Model {
             if (!empty($data['guest'])){
                 $data['guest']['avatar_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['guest']['avatar_url'];
             }
+
+            $result = $this->_getPrice($data['price'], $data['price_model']);
+            $data['price'] = $result['price'];
+            $data['next_date'] = $result['date'];
         }
 
         return $data ? $data : array();
@@ -256,6 +263,36 @@ class CourseModel extends Model {
             $start_date = date('m月d日', $time);
         }
         return $start_date;
+    }
+
+    public function _getPrice($price, $price_model){
+        $date = '';
+        if(!empty($price_model)){
+            $price_model = json_decode(html_entity_decode($price_model), 1);
+            $today = strtotime(date('Y-m-d'));
+            $temp = $temp2 = [];
+            foreach ($price_model AS $value){
+                if (strtotime($value['date']) > $today){
+                    $temp[strtotime($value['date'])] = ['price'=>$value['price'], 'date'=>$value['date']];
+                }else{
+                    $temp2[strtotime($value['date'])] = ['price'=>$value['price'], 'date'=>$value['date']];
+                }
+            }
+
+            if ($temp){
+                ksort($temp);
+                list($index, $date_arr) = each($temp);
+                $date = $date_arr['date'];
+            }
+
+            if ($temp2){
+                krsort($temp2);
+                list($index, $price_arr) = each($temp2);
+                $price = $price_arr['price'];
+            }
+
+        }
+        return ['price'=>$price, 'date'=>$date];
     }
 }
 

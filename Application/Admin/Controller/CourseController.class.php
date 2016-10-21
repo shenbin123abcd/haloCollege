@@ -27,5 +27,32 @@ class CourseController extends CommonController {
         $this->guest_name = M('SchoolGuests')->where(array('id'=>$guset_id))->getField('title');
     }
 
+    public function edit(){
+        $model = $this->model();
+        $pk = $model->getPk();
+        $data = $model->where(array($pk=>$_GET[$pk]))->find();
+        empty($data) && $this->error('查询数据失败！');
+        $data['price_model'] = json_decode(html_entity_decode($data['price_model']), 1);
+        $this->assign('data',$data);
+        $this->display();
+    }
+
+    public function _before_insert(){
+        $price_mod = '';
+        foreach ($_POST['price_model'] as $key=>$item) {
+            foreach ($item AS $k=>$v){
+                if (intval($v) > 0){
+                    $price_mod[$k][$key] = $v;
+                }
+            }
+        }
+
+        $_POST['price_model'] = $price_mod ? json_encode($price_mod) : '';
+//        $this->error('error', $price_mod);
+    }
+
+    public function _before_update(){
+        $this->_before_insert();
+    }
 
 }

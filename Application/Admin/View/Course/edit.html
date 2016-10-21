@@ -70,6 +70,23 @@
 					<td><input type="number" class="input length_5" name="price" value="{$data.price}"></td>
 				</tr>
 				<tr>
+					<th>阶梯价格</th>
+					<td class="model-price">
+                        <empty name="data.price_model">
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期"><input placeholder="价格"  type="number" class="input length_2" name="price_model[price][]"> <a href="javascript:;" class="add">新增</a></div>
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期"><input placeholder="价格"  type="number" class="input length_2" name="price_model[price][]"></div>
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期"><input placeholder="价格"  type="number" class="input length_2" name="price_model[price][]"></div>
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期"><input placeholder="价格"  type="number" class="input length_2" name="price_model[price][]"></div>
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期"><input placeholder="价格"  type="number" class="input length_2" name="price_model[price][]"></div>
+                            <else/>
+						<volist name="data.price_model" id="vo">
+                            <div class="price-item"><input type="text" class="input length_3 J_date" name="price_model[date][]" placeholder="选择日期" value="{$vo.date}"><input placeholder="价格" value="{$vo.price}"  type="number" class="input length_2" name="price_model[price][]">
+                                <eq name="key" value="0"><a href="javascript:;" class="add">新增</a></eq></div>
+                        </volist>
+                        </empty>
+						</td>
+				</tr>
+				<tr>
 					<th>场地</th>
 					<td><input type="text" class="input length_5" name="place" value="{$data.place}"></td>
 				</tr>
