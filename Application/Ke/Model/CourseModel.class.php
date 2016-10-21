@@ -116,6 +116,7 @@ class CourseModel extends Model {
             $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
             $data['next_date'] = $result['date'];
+            $data['next_price'] = $result['next_price'];
         }
 
         return $data ? $data : array();
@@ -269,6 +270,7 @@ class CourseModel extends Model {
 
     public function _getPrice($price, $price_model){
         $date = '';
+        $next_price = 0;
         if(!empty($price_model)){
             $price_model = json_decode(html_entity_decode($price_model), 1);
             $today = strtotime(date('Y-m-d'));
@@ -285,6 +287,7 @@ class CourseModel extends Model {
                 ksort($temp);
                 list($index, $date_arr) = each($temp);
                 $date = $date_arr['date'];
+                $next_price = $date_arr['price'];
             }
 
             if ($temp2){
@@ -294,7 +297,7 @@ class CourseModel extends Model {
             }
 
         }
-        return ['price'=>$price, 'date'=>$date];
+        return ['price'=>$price, 'date'=>$date, 'next_price'=>$next_price];
     }
 }
 
