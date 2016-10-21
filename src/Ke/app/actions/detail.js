@@ -36,6 +36,13 @@ function fetchCourseDetail(req) {
         dispatch(requestDetailPosts(req))
         return app.ajax(`/courses/detail?id=${req}`)
             .then(res=>{
+                //倒计时
+
+                let start_time=Date.parse(new Date(res.data.next_date));
+                if(start_time && start_time-new Date().getTime()>0){
+                    dispatch(timeOutStart(start_time));
+                }
+
                 app.ajax(`/courses/getAgents`)
                     .then(res2=>{
                         dispatch(getAgents(res2))
@@ -59,6 +66,23 @@ export function fetchCourseDetailIfNeeded(req) {
         if (shouldFetchCourseDetail(getState())) {
             return dispatch(fetchCourseDetail(req))
         }
+    }
+}
+
+//倒计时
+export const TIME_OUT_START='TIME_OUT_START'
+export const TIME_OUT_OVER='TIME_OUT_OVER'
+
+export function timeOutStart(time){
+    return{
+        type:'TIME_OUT_START',
+        time,
+    }
+}
+
+export function timeOutOver(){
+    return{
+        type:'TIME_OUT_OVER'
     }
 }
 
