@@ -108,7 +108,10 @@ class PayController extends CommonController {
                     $this->_notice($order['course_id'], $phone);
 
                     // 返佣
-                    $this->_agentsNotice($order);
+                    $cate_id = M('Course')->where(array('id'=>$order['course_id']))->getField('cate_id');
+                    if ($cate_id != 3){
+                        $this->_agentsNotice($order);
+                    }
 
                     //微信通知
                     $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',$order['course_id'],$order['wechat_id'],$this->user['username']);

@@ -174,6 +174,8 @@ class PaymentController extends CommonController {
                         case 'video':
                             $this->_payVideoSuccess($object);
                             break;
+                        default :
+                            $this->_paySuccess($object);
                     }
                 }
 

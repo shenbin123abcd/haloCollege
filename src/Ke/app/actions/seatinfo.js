@@ -30,8 +30,11 @@ function fetchData(req) {
                 course_id: req
             }
         }).then(res=> {
-            dispatch(initSeats(res.data.seat))
-            return dispatch(receiveData(req, res))
+            app.ajax(`/courses/detail?id=${req}`).then((res2)=>{
+                res.data.course.next_date=res2.data.next_date;
+                dispatch(initSeats(res.data.seat))
+                dispatch(receiveData(req, res))
+            })
         });
 
         // return fetch(`/courses/seatInfo?${$.param({

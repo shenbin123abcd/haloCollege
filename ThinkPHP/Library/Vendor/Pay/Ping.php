@@ -20,7 +20,7 @@ class Ping {
 
     public function __construct() {
         // 设置 API Key
-        Pingpp::setApiKey($this->apiTestKey);
+        Pingpp::setApiKey($this->apiLiveKey);
 
         // 设置请求签名密钥
         Pingpp::setPrivateKeyPath(VENDOR_PATH.'Pay/ping/ping_rsa_private_key.pem');

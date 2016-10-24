@@ -77,6 +77,8 @@ var Seatinfo = React.createClass({
         if (isFetching||isNull) {
             return <PageLoading />
         }
+
+        console.log(course.next_date);
         return (
             <div ref="dragContainer" className="seatinfo-wrapper">
                 <div className="seats-wrapper">
@@ -88,6 +90,8 @@ var Seatinfo = React.createClass({
                         idData={routeParams.id}
                         original_price={course.original_price}
                         cate_id={course.cate_id}
+
+                        start_time={course.next_date}
                     />
                 </div>
 

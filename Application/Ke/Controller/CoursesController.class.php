@@ -130,7 +130,8 @@ class CoursesController extends CommonController {
             }
         }
 
-        $this->success($ret);
+        $result = D('Course')->_getPrice($course['price'], $course['price_model']);
+        $this->success($ret, $result['date']);
     }
 
     public function mySeat() {

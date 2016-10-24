@@ -2,7 +2,7 @@ import playBtn from '../images/play-btn.png'
 import weixinPic from '../images/weixin.jpg'
 import BottomBtn from './Common.buttonGroup'
 import PageLoading  from '../components/Common.Pageloading'
-import {fetchCourseDetailIfNeeded,initial,timeOutStart,timeOutOver} from '../actions/detail'
+import {fetchCourseDetailIfNeeded,initial} from '../actions/detail'
 import {fetchCourseStatusIfNeeded} from '../actions/buttonGroup'
 import { fetchCourseIfNeeded,setCurrentMonth ,resetMonth} from '../actions'
 
@@ -27,8 +27,8 @@ var Detail= React.createClass({
     componentWillUnmount(){
         const { dispatch ,routeParams} = this.props
         dispatch(initial())
-        this.timer && clearTimeout(this.timer);
-        dispatch(timeOutOver());
+        //this.timer && clearTimeout(this.timer);
+        //dispatch(timeOutOver());
     },
     formatContent(str){
         return str.replace(/\r\n|\r/g,'')
@@ -39,7 +39,7 @@ var Detail= React.createClass({
     },
     isWechatInit:false,
   render() {
-    let {data,isFetching,dispatch,res,d,h,m,s,start_time}=this.props;
+    let {data,isFetching,dispatch,res}=this.props;
     let renderDetailPage=()=>{
         if(!data){
             var isNull=true
@@ -86,16 +86,15 @@ var Detail= React.createClass({
             };
 
             //倒计时
-            this.handleStart(start_time);
+            //this.handleStart(start_time);
+
+            let start_time=data.data.next_date
+            //console.log(start_time);
 
             return(
                 <div className="detail-page">
                     <DetailTop
                         topData={fetchData}
-                        d={d}
-                        h={h}
-                        m={m}
-                        s={s}
                     >
                     </DetailTop>
                     <DetailMiddle middleData={fetchData}></DetailMiddle>
@@ -110,10 +109,6 @@ var Detail= React.createClass({
                         idData={fetchData.id}
                         cate_id={fetchData.cate_id}
 
-                        d={d}
-                        h={h}
-                        m={m}
-                        s={s}
                         start_time={start_time}
                         original_price={fetchData.original_price}
                     >
@@ -139,9 +134,6 @@ var Detail= React.createClass({
 var DetailTop=React.createClass({
   render(){
     const data=this.props.topData;
-    let d=this.props.d;
-    let h=this.props.h;
-    let s=this.props.s;
 
     let styleCss=()=>{
          let style='';
@@ -179,7 +171,8 @@ var DetailTop=React.createClass({
     }
 
     let ifShowOrPrice=()=>{
-        if(data.next_date && d!='no' && h!='no' && s!='no'){
+        if(data.next_date && Date.parse(new Date(data.next_date))-new Date().getTime()>0
+        ){
             return(
                 <div className="price">
                     <span className="icon">￥</span>{data.price}/人
@@ -202,11 +195,17 @@ var DetailTop=React.createClass({
         }
     }
 
+    let m=data.next_date.split('-')[1];
+    let d=data.next_date.split('-')[2];
+
+    m=m<10?'0'+m:m;
+    d=d<10?'0'+d:d;
+
     let ifShowText=()=>{
-        if(data.next_date && d!='no' && h!='no' && s!='no'){
+        if(data.next_date && Date.parse(new Date(data.next_date))-new Date().getTime()>0){
             return(
                 <div className="bottom-text" style={{color:'#666666',fontSize:'.22rem'}}>
-                    08月26日恢复原价 ¥880/人
+                    {m}月{d}日恢复原价 ¥{data.original_price}/人
                 </div>
             )
         }else{
