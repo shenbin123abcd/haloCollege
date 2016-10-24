@@ -48,6 +48,8 @@ class PaymentController extends CommonController {
             $order['type'] = 0;
             $order['status'] = 0;
             $order['sign'] = '';
+            $order['username'] = $this->user['username'];
+            $order['phone'] = $this->user['phone'];
 
             $order_id = $model->add($order);
 
@@ -116,6 +118,8 @@ class PaymentController extends CommonController {
             $order['status'] = 0;
             $order['sign'] = '';
             $order['vid'] = $vid;
+            $order['username'] = $this->user['username'];
+            $order['phone'] = $this->user['phone'];
 
             $order_id = $model->add($order);
 
