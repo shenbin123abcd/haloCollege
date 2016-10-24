@@ -173,6 +173,7 @@ var DetailTop=React.createClass({
     let ifShowOrPrice=()=>{
         if(data.next_date && Date.parse(new Date(data.next_date))-new Date().getTime()>0
         ){
+            //console.log((new Date(data.next_date))-new Date().getTime());
             return(
                 <div className="price">
                     <span className="icon">￥</span>{data.price}/人
@@ -246,14 +247,25 @@ var DetailTop=React.createClass({
 var DetailMiddle=React.createClass({
   render(){
     const data=this.props.middleData;
-    return (
-      <Link to={`/course/seatinfo_${data.id}`} className="deatil-middle">
-        <div className="sign-num-block clearfix">
-          <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
-          <div className="sign-num-block-right f-13">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
-        </div>
-      </Link>
-    )
+      if(data.cate_id==3){
+          return(
+              <div className="deatil-middle">
+                  <div className="sign-num-block clearfix">
+                      <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
+                      <div className="sign-num-block-right f-13">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
+                  </div>
+              </div>
+          )
+      }else{
+          return(
+              <Link to={`/course/seatinfo_${data.id}`} className="deatil-middle">
+                  <div className="sign-num-block clearfix">
+                      <div className="sign-num-block-left f-14"><span className="haloIcon haloIcon-user f-20"></span>已报名{data.num}人</div>
+                      <div className="sign-num-block-right f-13">名额仅剩 {data.last_num}个<i className="haloIcon haloIcon-right"></i></div>
+                  </div>
+              </Link>
+          )
+      }
   }
 })
 
