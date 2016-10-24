@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('num DESC,start_date ASC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('num DESC,start_date ASC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day,price_model')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
@@ -23,14 +23,13 @@ class CourseModel extends Model {
                 $list[$key]['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $value['cover_url'];
                 $list[$key]['cate'] = $cate[$value['cate_id']];
                 $list[$key]['last_num'] = $value['total'] - $value['num'];
+                $result = $this->_getPrice($value['price'], $value['price_model']);
+                $list[$key]['price'] = $value['total'] - $value['num'];
+                $list[$key]['original_price'] = $value['price'];
+                $list[$key]['price'] = $result['price'];
+                unset($list[$key]['price_model']);
 
                 if ($this->getStep($value['id'])){
-                    //if ($value['day'] > 1){
-                    //    $end_date = $value['start_date'] + ($value['day'] - 1) * 86400;
-                    //    $list[$key]['start_date'] = date('m月d', $value['start_date']) . '-' . date('d日', $end_date);
-                    //}else{
-                    //    $list[$key]['start_date'] = date('m月d', $value['start_date']);
-                    //}
                     $list[$key]['start_date'] = $this->_parseDate($value['start_date'], $value['day']);
                 }else{
                     $list[$key]['start_date'] = date('m月', $value['start_date']);
@@ -116,7 +115,8 @@ class CourseModel extends Model {
             $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
             $data['next_date'] = $result['date'];
-            $data['next_price'] = $result['next_price'];
+//            $data['next_price'] = $result['next_price'];
+            unset($data['price_model']);
         }
 
         return $data ? $data : array();
