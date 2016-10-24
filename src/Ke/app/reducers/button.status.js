@@ -28,6 +28,7 @@ export default (state = {
                 showModal:action.showModal,
             })
         case TIME_OUT_START:
+            //console.log(action);
             let start_time=action.time;
             const ts = (start_time-new Date().getTime())/1000;
             if(ts>0) {

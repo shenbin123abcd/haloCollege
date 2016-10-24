@@ -31,7 +31,7 @@ function fetchData(req) {
             }
         }).then(res=> {
             app.ajax(`/courses/detail?id=${req}`).then((res2)=>{
-                res.data.course.next_date=res2.data.next_date;
+                res.data.course.tel=res2.data.tel;
                 dispatch(initSeats(res.data.seat))
                 dispatch(receiveData(req, res))
             })
