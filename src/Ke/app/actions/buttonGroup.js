@@ -38,6 +38,12 @@ function fetchCourseStatus(id){
         dispatch(requestStatusPosts(id))
         return app.ajax(`/courses/applyStatus?course_id=${id}`)
             .then(res=>{
+                if(res.info){
+                    let start_time=Date.parse(new Date(res.info));
+                    if(start_time-new Date().getTime()>0){
+                        dispatch(timeOutStart(start_time));
+                    }
+                }
                 dispatch(receiveStatusPosts(id,res.data,false));
                 if(res.data==41){
                     return app.ajax(`/courses/mySeat?course_id=${id}`)

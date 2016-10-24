@@ -78,13 +78,16 @@ var Seatinfo = React.createClass({
             return <PageLoading />
         }
 
-        console.log(course.next_date);
+        //console.log(course.tel);
         return (
             <div ref="dragContainer" className="seatinfo-wrapper">
                 <div className="seats-wrapper">
                     <SeatBox items={items} isFetching={isFetching}
                              renderItem={this.renderSeatRow} />
                     <UserBox items={users}  course={course} />
+                    <a className='tel-fixed' href={`tel:${course.tel}`}>
+                        <span className="haloIcon haloIcon-kefu"></span>
+                    </a>
                     <BottomBtn
                         priceData={course.price}
                         idData={routeParams.id}
