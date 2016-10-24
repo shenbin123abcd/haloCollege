@@ -51,8 +51,9 @@ const CourseItem = ({item}) => {
     }else{
         link=`/course/detail_${item.id}`;
     }
+    console.log(item.original_price>item.price);
     let renderPrice=()=>{
-        if(item.original_price>item.price){
+        if(parseInt(item.original_price)>parseInt(item.price)){
             return(
                 <div className="price">
                     <span>¥{item.price}/人</span>
