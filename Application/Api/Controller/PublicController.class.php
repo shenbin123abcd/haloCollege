@@ -84,7 +84,7 @@ class PublicController extends CommonController {
             $key = get_avatar($user['id'], 'middle', 0);
             $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/public/qiniuUpload', $key);
 
-            $model->where(array('id' => $user['id']))->save(array('last_time' => time(), 'login_ip' => get_client_ip()));
+            $model->where(array('phone' => $user['phone']))->save(array('last_time' => time(), 'login_ip' => get_client_ip(),'uid'=>$user['uid']));
 
 
             $token = jwt_encode($user);
@@ -116,6 +116,7 @@ class PublicController extends CommonController {
 
             // Log::write(var_export($result));
             if ($result['iRet'] == 1) {
+                $_POST['uid']=!empty($result['data']) ? $result['data'] : 0;
                 // 产生用户标识
                 $id = $model->add();
                 $user = array('id' => $result['data'], 'username' => I('username'), 'phone' => I('phone'));
