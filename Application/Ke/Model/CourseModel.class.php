@@ -287,14 +287,15 @@ class CourseModel extends Model {
                 ksort($temp);
                 list($index, $date_arr) = each($temp);
                 $date = $date_arr['date'];
-                $next_price = $date_arr['price'];
+//                $next_price = $date_arr['price'];
+                $price = $date_arr['price'];
             }
 
-            if ($temp2){
-                krsort($temp2);
-                list($index, $price_arr) = each($temp2);
-                $price = $price_arr['price'];
-            }
+//            if ($temp2){
+//                krsort($temp2);
+//                list($index, $price_arr) = each($temp2);
+//                $price = $price_arr['price'];
+//            }
 
         }
         return ['price'=>$price, 'date'=>$date, 'next_price'=>$next_price];
