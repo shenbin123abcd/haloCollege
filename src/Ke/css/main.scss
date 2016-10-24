@@ -345,6 +345,12 @@ body {
       .price{
         color: $mainColor;
         font-size: 0.28rem;
+        .original-price{
+          color: rgb(170, 170, 170);
+          font-size: 0.24rem;
+          margin-left: 10px;
+          text-decoration: line-through;
+        }
       }
       .available{
         color: #666;

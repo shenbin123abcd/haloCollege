@@ -51,6 +51,22 @@ const CourseItem = ({item}) => {
     }else{
         link=`/course/detail_${item.id}`;
     }
+    let renderPrice=()=>{
+        if(item.original_price>item.price){
+            return(
+                <div className="price">
+                    <span>¥{item.price}/人</span>
+                    <span className="original-price">¥{item.original_price}/人</span>
+                </div>
+            )
+        }else{
+            return(
+                <div className="price">
+                    <span>¥{item.price}/人</span>
+                </div>
+            )
+        }
+    }
     return (
         <Link to={link}  className="item">
             <div className="img-box">
@@ -73,9 +89,7 @@ const CourseItem = ({item}) => {
                         </div>
                     </div>
                     <div className="des-inner-2">
-                        <div className="price">
-                            ¥{item.price}/人
-                        </div>
+                        {renderPrice()}
                         <div className="available">
                             名额仅剩:{item.last_num}
                         </div>
