@@ -20,25 +20,10 @@
 					<th>地址</th>
 					<td><input type="text" class="input length_5" name="url"></td>
 				</tr>
-				<!-- <tr>
-					<th>时长</th>
-					<td><input type="text" class="input length_5" name="times"></td>
-				</tr> -->
 				<tr>
 					<th>封面</th>
 					<td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="cover"></td>
 				</tr>
-				<!-- <tr>
-					<th>嘉宾</th>
-					<td>
-						<select name="guests_id">
-							<option value="">请选择</option>
-							<volist name="gudests" id="vo">
-								<option value="{$vo.id}">{$vo.title}</option>
-							</volist>
-						</select>
-					</td>
-				</tr> -->
 				<tr>
 					<th>嘉宾</th>
 					<td>
@@ -55,44 +40,8 @@
 						<volist name="category" id="vo">
 							<label><input name="category[]" data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.title}</span></label>
 						</volist>
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="1"><span>管理类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="2"><span>策划类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="3"><span>营销类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="4"><span>主持类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="5"><span>其它类</span></label>-->
 					</td>
-					<!--<td>-->
-						<!--<select class="cate" name="cate1">-->
-							<!--<option value="">请选择</option>-->
-							<!--<volist name="cate1" id="vo">-->
-								<!--<option value="{$vo.id}">{$vo.title}</option>-->
-							<!--</volist>-->
-						<!--</select>-->
-						<!--<input type="hidden" name="cate1_title">-->
-					<!--</td>-->
 				</tr>
-				<!--<tr>-->
-					<!--<th></th>-->
-					<!--<td>-->
-						<!--<select class="cate" name="cate2">-->
-							<!--<option value="">请选择</option>-->
-							<!--<volist name="cate2" id="vo">-->
-								<!--<option value="{$vo.id}">{$vo.title}</option>-->
-							<!--</volist>-->
-						<!--</select>-->
-						<!--<input type="hidden" name="cate2_title">-->
-					<!--</td>-->
-				<!--</tr>-->
-				<!--<tr>-->
-					<!--<th></th>-->
-					<!--<td>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="1"><span>管理类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="2"><span>策划类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="3"><span>营销类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="4"><span>主持类</span></label>-->
-						<!--<label><input name="cate3[]" data-xid="J_check_6" class="J_check" type="checkbox" value="5"><span>其它类</span></label>-->
-					<!--</td>-->
-				<!--</tr>-->
 				<tr>
 					<th>排序</th>
 					<td><input type="number" class="input length_5" name="sort" value="0"><p>数值越大越靠前</p></td>

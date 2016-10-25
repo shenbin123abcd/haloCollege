@@ -47,7 +47,7 @@ class SchoolGuestsController extends CommonController {
 	 */
 	public function getCompanyList() {
 		$name = I('company');
-		$where = array('name' =>$name,'filter[store_id]' => 0);
+		$where = array('name' =>$name);
 		$result = $this->company($where);
 		if (!empty($result['data']['data'])) {
 			foreach ($result['data']['data'] as $key => $value) {
@@ -69,6 +69,13 @@ class SchoolGuestsController extends CommonController {
 		return $result;
 	}
 
+	//通过公司id获得公司详情
+	public function company_id($company_id) {
+		$api = C('AUTH_API_URL') . 'company/' .$company_id;
+		$result = curl_get($api);
+		return $result;
+	}
+
 	/**
 	 * 获取公司logo及公司id未关联的做标记
 	*/
@@ -78,19 +85,14 @@ class SchoolGuestsController extends CommonController {
 		}
 		$company_ids = array_unique($company_ids);
 		if (!empty($company_ids)){
-			$where = array('id' =>array('in',$company_ids),'filter[store_id]' => 0);
-			$result = $this->company($where);
-			if (!empty($result['data']['data'])) {
-				foreach ($result['data']['data'] as $key => $value) {
-					$list[$value['id']] = $value['logo'];
-				}
-			} else {
-				$list = array();
+			foreach ($company_ids as $value){
+				$result = $this->company_id($value);
+				$list[$value] =$result['data']['logo'][0]['file_path'];
 			}
 			foreach ($data as $key=>$value){
 				$url = 'http://7ktsyl.com2.z0.glb.qiniucdn.com/';
 				$data[$key]['company_logo'] = !empty($list[$value['company_id']]) ? '<img'.' '.'style='.'width:100px;height:100px'.' '.'src='.$url.$list[$value['company_id']].' '.'/>' : '<b style="color: red">未上传</b>';
-			//	未关联公司id的公司名做标记				
+			//	未关联公司id的公司名做标记
 				$data[$key]['company'] = $value['company_id']==0 ? '<b'.' '.'style='.'color:red>'.$value['company'].'</b>' : $value['company'];
 			}
 

@@ -24,9 +24,9 @@
 					<th>公司</th>
 					<td>
 						<div class="fl">
-							<div id="J_search_suggestion" class="forum_search_pop" style="display:none;margin-top:25px;"></div>
+							<div id="J_search_suggestion" class="forum_search_pop" style="display:none;margin-top:25px;width: 290px"></div>
 						</div>
-						<input id="J_search_input" class="input length_3 mr10" name="company" autoComplete="off" type="text">
+						<input id="J_search_input" class="input length_3 mr10" name="company" autoComplete="off" type="text" style="width: 290px">
 						<input type="hidden" name="company_id">
 					</td>
 				</tr>
@@ -185,7 +185,7 @@
 					if(data.state === 'success') {
 						var push_html = [];
 						$.each(data.data, function(i, o){
-							push_html.push('<li class="item" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
+							push_html.push('<li class="item" style="width: 290px" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
 						});console.log(push_html);
 						suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
 					}else{
