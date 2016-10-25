@@ -32,7 +32,7 @@ class SchoolGuestsController extends CommonController {
 				$data[$key]['is_headimg'] = '<b style="color: red">未上传</b>';
 			}else{
 				$url = 'http://7xopel.com2.z0.glb.clouddn.com/'.$value['avatar_url'];
-				$data[$key]['is_headimg'] = '<img'.' '.'style='.'width:300px;height:100px'.' '.'src='.$url.' '.'/>';
+				$data[$key]['is_headimg'] = '<img'.' '.'style='.'width:100px;height:100px'.' '.'src='.$url.' '.'/>';
 			}
 			if ($value['position']==''){
 				$data[$key]['position'] = '<b style="color: red">无职务</b>';
@@ -70,7 +70,7 @@ class SchoolGuestsController extends CommonController {
 	}
 
 	/**
-	 * 获取公司logo
+	 * 获取公司logo及公司id未关联的做标记
 	*/
 	public function get_company_logo($data){
 		foreach ($data as $key=>$value){
@@ -88,8 +88,10 @@ class SchoolGuestsController extends CommonController {
 				$list = array();
 			}
 			foreach ($data as $key=>$value){
-				$url = 'http://7xopel.com2.z0.glb.clouddn.com/';
-				$data[$key]['company_logo'] = !empty($list[$value['company_id']]) ? '<img'.' '.'style='.'width:300px;height:100px'.' '.'src='.$url.$list[$value['company_id']].' '.'/>' : '<b style="color: red">未上传</b>';
+				$url = 'http://7ktsyl.com2.z0.glb.qiniucdn.com/';
+				$data[$key]['company_logo'] = !empty($list[$value['company_id']]) ? '<img'.' '.'style='.'width:100px;height:100px'.' '.'src='.$url.$list[$value['company_id']].' '.'/>' : '<b style="color: red">未上传</b>';
+			//	未关联公司id的公司名做标记				
+				$data[$key]['company'] = $value['company_id']==0 ? '<b'.' '.'style='.'color:red>'.$value['company'].'</b>' : $value['company'];
 			}
 
 		}

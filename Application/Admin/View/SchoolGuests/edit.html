@@ -191,7 +191,7 @@
 					if(data.state === 'success') {
 						var push_html = [];
 						$.each(data.data, function(i, o){
-							push_html.push('<li class="item" data-id='+ o.id +'>'+ o.name +' | '+ o.region_name +'</li>');
+							push_html.push('<li class="item" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
 						});console.log(push_html);
 						suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
 					}else{
