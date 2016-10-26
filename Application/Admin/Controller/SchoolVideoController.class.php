@@ -41,6 +41,8 @@ class SchoolVideoController extends CommonController {
 		$this->gudests = M('SchoolGuests')->where(array('status'=>1))->select();
 		$this->category = M('SchoolCate')->where(array('type'=>1,'status'=>1))->select();
 		$this->charge_standard = M('VideoChargeStandard')->where(array('status'=>1))->select();
+		//公开课花絮列表
+		$this->course = $this->get_course_list();
 		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
 		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
 	}
@@ -57,6 +59,17 @@ class SchoolVideoController extends CommonController {
 		$_POST['create_time'] = time();
 		$_POST['update_time'] = time();
 		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
+
+	}
+
+	//公开课表单信息验证
+	public function check_course_info(){
+		empty($_POST['course_city']) && $this->error('公开课的城市不能为空！');
+		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
+		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
+		if($_POST['course_type']==2){
+			empty($_POST['course_parent_id']) && $this->error('请为该公开课的子视频选择花絮！');
+		}
 	}
 
 	//获取视频分类名称
@@ -82,6 +95,8 @@ class SchoolVideoController extends CommonController {
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);
+		//公开课表单信息验证
+		in_array(4,$_POST['category']) && $this->check_course_info();
 		$_POST['category'] = empty($_POST['category']) ? '' : implode(',', $_POST['category']);
 		$_POST['charge_standard'] = empty($_POST['charge_standard']) ? '' : implode(',', $_POST['charge_standard']);
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
@@ -207,5 +222,15 @@ class SchoolVideoController extends CommonController {
 				$this->error('状态修改失败！');
 			}
 		}
+	}
+
+    //获取公开课视频花絮列表
+	public function get_course_list(){
+		$where['category'] = array('in',array(4));
+		$where['course_type'] = 1;
+		$where['status'] = 1;
+		$curses = M('SchoolVideo')->where($where)->field('id,title,course_city,course_date')->select();
+
+		return $curses;
 	}
 }

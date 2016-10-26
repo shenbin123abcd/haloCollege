@@ -412,6 +412,13 @@ class PublicController extends CommonController {
         }
     }
 
+    /**
+     * 专为IOS写的判断app是否在审核中的状态返回接口
+    */
+    public function checkStatus(){
+        $this->success('success',array('status'=>1));
+    }
+
 
 
 
