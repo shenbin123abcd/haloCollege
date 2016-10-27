@@ -18,7 +18,7 @@
 	<form action="__URL__/index" method="get">
 		<div class="search_type cc mb10">
 			<label>会员类型：</label>
-			<select name="cate">
+			<select name="cate">s
 				<option value="">请选择</option>
 				<volist name="member_cate" id="vo">
 					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo.id">selected</eq>>{$vo.title}</option>
@@ -38,7 +38,7 @@
 					<option value="{$key}" <eq name="Think.request.pay_type" value="$key">selected</eq>>{$vo}</option>
 				</volist>
 			</select>
-			<button type="submit" class="btn">搜索</button>
+			<button type="submit" class="btn">搜索</button>总计金额：<input value="{$list.money_total}">元
 		</div>
 	</form>
 	<!--/搜索-->

@@ -48,8 +48,7 @@ class SchoolVideoController extends CommonController {
 		$this->course = $this->get_course_list();
 		//金熊奖花絮列表
 		$this->gold_match = $this->get_gold_award();
-		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
-		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
+
 	}
 	
 	public function _before_insert(){
@@ -74,6 +73,15 @@ class SchoolVideoController extends CommonController {
 		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
 		if($_POST['course_type']==2){
 			empty($_POST['course_parent_id']) && $this->error('请为该公开课的子视频选择花絮！');
+		}
+	}
+
+	//金熊奖表单信息验证
+	public function check_gold_award_info(){
+		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
+		empty($_POST['match_type']) && $this->error('请选择该视频是花絮还是子视频！');
+		if($_POST['match_type']==2){
+			empty($_POST['match_parent_id']) && $this->error('请为该金熊奖子视频选择花絮！');
 		}
 	}
 
@@ -102,6 +110,8 @@ class SchoolVideoController extends CommonController {
 		$_POST['times'] = format_duration($ret['format']['duration']);
 		//公开课表单信息验证
 		in_array(4,$_POST['category']) && $this->check_course_info();
+		//金熊奖表单信息验证
+		in_array(3,$_POST['category']) && $this->check_gold_award_info();
 		$_POST['category'] = empty($_POST['category']) ? '' : implode(',', $_POST['category']);
 		$_POST['charge_standard'] = empty($_POST['charge_standard']) ? '' : implode(',', $_POST['charge_standard']);
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
@@ -234,6 +244,7 @@ class SchoolVideoController extends CommonController {
 		$where['category'] = array('in',array(4));
 		$where['course_type'] = 1;
 		$where['status'] = 1;
+		$where['id'] = array('neq',$_REQUEST['id']);
 		$curses = M('SchoolVideo')->where($where)->field('id,title,course_city,course_date')->select();
 
 		return $curses;
@@ -244,6 +255,7 @@ class SchoolVideoController extends CommonController {
 		$where['category'] = array('in',array(3));
 		$where['course_type'] = 1;
 		$where['status'] = 1;
+		!empty($_REQUEST['id']) && $where['id'] = array('neq',$_REQUEST['id']);
 		$gold_ward = M('SchoolVideo')->where($where)->field('id,title,course_city,course_date')->select();
 
 		return $gold_ward;
