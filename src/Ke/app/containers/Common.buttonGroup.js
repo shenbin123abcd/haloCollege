@@ -75,7 +75,7 @@ var CommonButtonGroup= React.createClass({
         //        hb.lib.weui.alert(error);
         //    }
         //})
-        app.ajax('/courses/reserve',data).then((res)=>{
+        app.ajax({url:'/courses/reserve',data:data,type:"POST"}).then((res)=>{
             if(res.iRet==1){
                 hb.store.set('ke-appoint-info',data);
                 dispatch(receiveStatusPosts(idData,2,false))
@@ -113,7 +113,7 @@ var CommonButtonGroup= React.createClass({
             return false;
         }
         //hb.store.set('ke-buy-info',data);
-        app.ajax('/courses/apply',data).then((res)=>{
+        app.ajax({url:'/courses/apply',data:data,type:"POST"}).then((res)=>{
             if(res.iRet==1) {
                 hb.store.set('ke-buy-info',data);
                 dispatch(buySuccessModal(false));
