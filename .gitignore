@@ -33,3 +33,5 @@
 
 
 .DS_Store
+/Application/Admin/View/Ueditor/ueditor.html
+/Application/Admin/Controller/UeditorController.class.php

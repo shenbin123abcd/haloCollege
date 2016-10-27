@@ -11,7 +11,7 @@ use Think\Controller;
 class PublicController extends CommonController {
 
     protected $module_auth = 0;
-    protected $action_auth = array('loginStatus','getPushMsg','readedStatus');
+    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat');
 
     /**
      * 七牛上传回调 --非编辑器
@@ -84,7 +84,7 @@ class PublicController extends CommonController {
             $key = get_avatar($user['id'], 'middle', 0);
             $avatar_token = make_qiniu_token_headimg('haloavatar', 'avatar', 'http://college.halobear.com/public/qiniuUpload', $key);
 
-            $model->where(array('id' => $user['id']))->save(array('last_time' => time(), 'login_ip' => get_client_ip()));
+            $model->where(array('phone' => $user['phone']))->save(array('last_time' => time(), 'login_ip' => get_client_ip(),'uid'=>$user['uid']));
 
 
             $token = jwt_encode($user);
@@ -116,6 +116,7 @@ class PublicController extends CommonController {
 
             // Log::write(var_export($result));
             if ($result['iRet'] == 1) {
+                $_POST['uid']=!empty($result['data']) ? $result['data'] : 0;
                 // 产生用户标识
                 $id = $model->add();
                 $user = array('id' => $result['data'], 'username' => I('username'), 'phone' => I('phone'));
@@ -409,6 +410,75 @@ class PublicController extends CommonController {
         }else{
             $this->error('不存在该条消息！');
         }
+    }
+
+    /**
+     * 专为IOS写的判断app是否在审核中的状态返回接口
+    */
+    public function checkStatus(){
+        $this->success('success',array('status'=>1));
+    }
+
+    /**
+     * 学院用户id和微信id关联
+    */
+    public function wechatUnion(){
+        $union_id = I('union_id');
+        empty($union_id) && $this->error('参数错误！');
+        $uid = $this->user['uid'];
+        $wechat_id = M('WechatAuth')->where(array('unionid'=>$union_id))->getField('unionid,id');
+        empty($wechat_id) && $this->error('参数错误！');
+        $data['college_uid'] = $uid;
+        $data['unionid'] = $union_id;
+        $data['wechat_id'] = $wechat_id[$union_id];
+        $union = M('CollegeWechatUnion')->where(array('college_uid'=>$data['college_uid'],'unionid'=>$data['unionid'],'wechat_id'=>$data['wechat_id']))->count();
+        !empty($union) && $this->success('您已经关联过了！');
+        $id = M('CollegeWechatUnion')->add($data);
+        if ($id){
+            $this->success('关联成功！');
+        }else{
+            $this->error('关联失败！');
+        }
+    }
+
+    /**
+     * 解除微信绑定
+    */
+    public function unbindWechat(){
+        $union_id = I('union_id');
+        empty($union_id) && $this->error('参数错误！');
+        $uid = $this->user['uid'];
+        $bind = M('CollegeWechatUnion')->where(array('college_uid'=>$uid,'unionid'=>$union_id))->count();
+        if ($bind){
+            $result = M('CollegeWechatUnion')->where(array('college_uid'=>$uid,'unionid'=>$union_id))->delete();
+            if ($result!==false){
+                $this->success('解除绑定成功！');
+            }else{
+                $this->error('解除绑定失败！');
+            }
+        }else{
+            $this->success('该账号未曾被微信授权绑定！');
+        }
+
+    }
+
+    /**
+     * 我的报名课程列表
+    */
+    public function myCourseList(){
+        $uid = $this->user['uid'];
+        $wechat_ids = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,wechat_id')->select();
+        foreach ($wechat_ids as $key=>$value){
+            $wechat_id_arr[] = $value['wechat_id'];
+        }
+        if (!empty($wechat_id_arr)){
+            $courses = M('CourseReserve')->where(array('wechat_id'=>array('in',$wechat_id_arr),'status'=>1))->select();
+        }else{
+            $courses = array();
+        }
+
+         $data['courses'] = $courses;
+        $this->success('success',$data);
     }
 
 

@@ -18,27 +18,34 @@
 	<form action="__URL__/index" method="get">
 		<div class="search_type cc mb10">
 			<label>会员类型：</label>
-			<select name="cate">
+			<select name="cate">s
 				<option value="">请选择</option>
 				<volist name="member_cate" id="vo">
-					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo['id']">selected</eq>>{$vo.title}</option>
+					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo.id">selected</eq>>{$vo.title}</option>
 				</volist>
 			</select>
 			<label>支付状态：</label>
 			<select name="status">
 				<option value="">请选择</option>
 				<volist name="pay_status" id="vo">
-					<option value="{$key}" <eq name="Think.request.status" value="{$key}">selected</eq>>{$vo}</option>
+					<option value="{$key}" <eq name="Think.request.status" value="$key">selected</eq>>{$vo}</option>
 				</volist>
 			</select>
-			<button type="submit" class="btn">搜索</button>
+			<label>支付方式：</label>
+			<select name="pay_type">
+				<option value="">请选择</option>
+				<volist name="pay_types" id="vo">
+					<option value="{$key}" <eq name="Think.request.pay_type" value="$key">selected</eq>>{$vo}</option>
+				</volist>
+			</select>
+			<button type="submit" class="btn">搜索</button>总计金额：<input value="{$list.money_total}">元
 		</div>
 	</form>
 	<!--/搜索-->
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:uid,title:UID,width:60}{field:username,title:用户名,width:120}{field:phone,title:电话,width:120}{field:body,title:会员类型,width:120}{field:pay_type,title:支付方式,width:120}{field:pay_time,title:购买时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,width:60}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:uid,title:UID,width:60}{field:username,title:用户名,width:120}{field:phone,title:电话,width:120}{field:body,title:会员类型,width:120}{field:pay_type,title:支付方式,width:120}{field:pay_time,title:购买时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:create_time,title:订单创建时间,func:date='y-m-d H#i'/###,width:120,order:desc}{field:status,title:状态,width:60}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">

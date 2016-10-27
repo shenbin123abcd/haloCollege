@@ -37,6 +37,9 @@ class SchoolWeddingController extends CommonController {
 
     public function _before_add() {
         $category = M('SchoolWeddingCategory')->where("status=1")->field('id,name')->select();
+        //作者类型
+        $auther_type = array('1'=>'熊小哥','2'=>'公司','3'=>'嘉宾');
+        $this->assign('auther_type', $auther_type);
         $this->assign('category', $category);
         $this->token = $this->qiniu('crmpub', 'SchoolWeddingCover');
 

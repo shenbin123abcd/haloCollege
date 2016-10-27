@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/kindeditor.js"></script>
 <script type="text/javascript" src="__PUBLIC__/Admin/Js/kindeditor/lang/zh_CN.js"></script>
 <link href="__PUBLIC__/Admin/Js/ThinkBox/css/ThinkBox.css" rel="stylesheet" />
+	<link href="__PUBLIC__/Admin/Js/kindeditor/plugins/bockquote/bockquote.css" rel="stylesheet" />
 <script type="text/javascript" src="__PUBLIC__/Admin/Js/ThinkBox/jquery.ThinkBox.js"></script>
 <script type="text/javascript" src="__PUBLIC__/Admin/Js/jquery.form.js"></script>
 <script type="text/javascript">
@@ -37,9 +38,14 @@
 						height:400,
 						newlineTag: 'p',
 						items : [
-							'source','preview', '|','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-							'insertunorderedlist', '|', 'emoticons', 'image','baidumap', 'link','fullscreen']
+							'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+							'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+							'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+							'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+							'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+							'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+							'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+							'anchor', 'link', 'unlink', '|', 'about','bockquote']
 					});
 		});
 	});
