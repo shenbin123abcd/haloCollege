@@ -28,10 +28,13 @@ class MemberOrderController extends CommonController{
         foreach ($data as $key=>$value){
             $data[$key]['pay_type'] = $pay_type[$value['pay_type']];
             $data[$key]['status'] = $status_arr[$value['status']];
-            $money_total +=$value['price'];
+            if ($value['price']>1){
+                $money_total +=$value['price'];
+            }
+
         }
         $data['money_total'] = $money_total;
-        
+
     }
 
     public function _before_index(){
