@@ -61,12 +61,13 @@
 						</volist>
 					</td>
 				</tr>
+
 				<tr id="course_info" style="display: none">
 					<th>公开课信息</th>
-					<td><label>城市</label><input type="text" class="input length_5" name="course_city" value="{$data.course_city}"></td>
-					<td><label>上课日期</label><input type="text" class="input length_5 J_date" name="course_date" value="{$data.course_date}"></td>
+					<td><label>城市</label><input type="text" class="input length_5" name="course_city"></td>
+					<td><label>上课日期</label><input type="text" class="input length_5 J_date" name="course_date"></td>
 					<td><label>花絮/子视频</label>
-						<select name="course_type">
+						<select name="course_type" id="course_type">
 							<option value="">请选择</option>
 							<option value="1" <eq name="data.course_type" value="1">selected</eq>>公开课花絮</option>
 							<option value="2" <eq name="data.course_type" value="2">selected</eq>>公开课子视频</option>
@@ -77,11 +78,33 @@
 						<select name="course_parent_id" >
 							<option value="">请选择</option>
 							<volist name="course" id="vo">
-								<option value="{$vo.id}" <eq name="data.course_parent_id" value="$vo.id">selected</eq>>{$vo.title}</option>
+								<option value="{$vo.id}" <eq name="data.course_parent_id" value="$vo.id">selected</eq>>{$vo.course_city}|{$vo.course_date}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
 				</tr>
+
+				<tr id="gold_award_info" style="display: none">
+					<th>金熊奖信息</th>
+					<td><label>年份</label><input type="text" class="input length_5 J_date" name="course_date"></td>
+					<td><label>花絮/子视频</label>
+						<select name="course_type" id="gold_award_type">
+							<option value="">请选择</option>
+							<option value="1" <eq name="data.course_type" value="1">selected</eq>>金熊奖花絮</option>
+							<option value="2" <eq name="data.course_type" value="2">selected</eq>>金熊奖分赛视频</option>
+						</select>
+					</td>
+					<td id="gold_award_sub_match" style="display: none">
+						<label>分赛类型</label>
+						<select name="course_parent_id" >
+							<option value="">请选择</option>
+							<volist name="gold_match" id="vo">
+								<option value="{$vo.id}" <eq name="data.course_parent_id" value="$vo.id">selected</eq>>{$vo.course_date}|{$vo.title}</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+
 				<tr>
 					<th>排序</th>
 					<td><input type="number" class="input length_5" name="sort" value="{$data.sort}"><p>数值越大越靠前</p></td>
@@ -164,40 +187,54 @@
 <!--唤起公开课信息编辑框-->
 <script>
 	$(document).ready(function(){
+        //根据条件判断默认唤起的窗口
 		var category = $('input[checked]').val();
 		if (category==4){
 			$('#course_info').show();
+		}else if(category==3){
+			$('#gold_award_info').hide();
 		}else {
-			$('#course_info').hide();
-		}
 
-		var course_type = $('select[name=course_type]').val();
-		if (course_type==2){
-			$('#course_sub_parent').show();
-		}else {
-			$('#course_sub_parent').hide();
 		}
 
 		$('input[type=checkbox]').change(function(){
 			var check = $(this).prop('checked');
 			if (check){
 				var cate = $(this).val();
-				//被选中并且是婚礼公开课时唤起
+				//被选中并且是婚礼公开课或策划比赛（金熊奖比赛）时唤起
 				if (cate==4){
 					$('#course_info').show();
+				}else if(cate==3){
+					$('#gold_award_info').show();
 				}
 			}else {
-				$('#course_info').hide();
+				var value = $(this).val();
+				if(value==4){
+					$('#course_info').hide();
+				}else if(value==3){
+					$('#gold_award_info').hide();
+				}
 			}
 		});
-		//子视频分类窗口唤起
-		$('select[name=course_type]').change(function(){
+		//公开课子视频窗口
+		$('#course_type').change(function(){
 			var course_type = $(this).val();
 			if (course_type==2){
 				$('#course_sub_parent').show();
 			}else {
 				$('#course_sub_parent').hide();
 			}
+
+		});
+		//金熊奖子视频窗口
+		$('#gold_award_type').change(function(){
+			var gold_award_type = $(this).val();
+			if (gold_award_type==2){
+				$('#gold_award_sub_match').show();
+			}else {
+				$('#gold_award_sub_match').hide();
+			}
+
 		});
 
 	});

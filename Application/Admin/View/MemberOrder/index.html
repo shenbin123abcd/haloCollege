@@ -21,14 +21,21 @@
 			<select name="cate">
 				<option value="">请选择</option>
 				<volist name="member_cate" id="vo">
-					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo['id']">selected</eq>>{$vo.title}</option>
+					<option value="{$vo.id}" <eq name="Think.request.cate" value="$vo.id">selected</eq>>{$vo.title}</option>
 				</volist>
 			</select>
 			<label>支付状态：</label>
 			<select name="status">
 				<option value="">请选择</option>
 				<volist name="pay_status" id="vo">
-					<option value="{$key}" <eq name="Think.request.status" value="{$key}">selected</eq>>{$vo}</option>
+					<option value="{$key}" <eq name="Think.request.status" value="$key">selected</eq>>{$vo}</option>
+				</volist>
+			</select>
+			<label>支付方式：</label>
+			<select name="pay_type">
+				<option value="">请选择</option>
+				<volist name="pay_types" id="vo">
+					<option value="{$key}" <eq name="Think.request.pay_type" value="$key">selected</eq>>{$vo}</option>
 				</volist>
 			</select>
 			<button type="submit" class="btn">搜索</button>

@@ -11,6 +11,9 @@ class SchoolVideoController extends CommonController {
 			$map['_string'] = 'FIND_IN_SET(' . $_REQUEST['category']. ',category)';
 			unset($map['category']);
 		}
+		if (!empty($_REQUEST['guests'])){
+			unset($map['guests']);
+		}
 	}
 
 	public function _join(&$data){
@@ -43,6 +46,8 @@ class SchoolVideoController extends CommonController {
 		$this->charge_standard = M('VideoChargeStandard')->where(array('status'=>1))->select();
 		//公开课花絮列表
 		$this->course = $this->get_course_list();
+		//金熊奖花絮列表
+		$this->gold_match = $this->get_gold_award();
 		//$this->cate1 = M('SchoolCate')->where(array('type'=>1))->select();
 		//$this->cate2 = M('SchoolCate')->where(array('type'=>2))->select();
 	}
@@ -232,5 +237,15 @@ class SchoolVideoController extends CommonController {
 		$curses = M('SchoolVideo')->where($where)->field('id,title,course_city,course_date')->select();
 
 		return $curses;
+	}
+
+	//获取金熊奖视频花絮列表
+	public function get_gold_award(){
+		$where['category'] = array('in',array(3));
+		$where['course_type'] = 1;
+		$where['status'] = 1;
+		$gold_ward = M('SchoolVideo')->where($where)->field('id,title,course_city,course_date')->select();
+
+		return $gold_ward;
 	}
 }
