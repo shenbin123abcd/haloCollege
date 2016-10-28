@@ -279,7 +279,7 @@ var TuiJianBlock=React.createClass({
         if(res.iRet==1 && cate_id!=3){
             return(
                 <Link className="tel-block clearfix" to={`/course/branding`}>
-                    <div className="sign-num-block clearfix">
+                    <div className="sign-num-block clearfix sp">
                         <div className="tel-line"></div>
                         <div className="sign-num-block-left f-14">
                             <span className="tuijianren">

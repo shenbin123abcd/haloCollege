@@ -995,6 +995,7 @@ body {
     }
   }
 
+
   .deatil-middle,.tel-block{
     padding:10px 18px;
     background: #fff;
@@ -1012,6 +1013,12 @@ body {
       transform:scale(1,.5);
     }
     .sign-num-block{
+      &.sp{
+        .sign-num-block-left{
+          top:4px;
+          position: relative;
+        }
+      }
       .sign-num-block-left{
         float:left;
         color:#333333;
@@ -1019,22 +1026,23 @@ body {
           color:#999999;
           position: relative;
           top:2px;
-          left:-2px;
+          //left:-2px;
+          margin-right:4px;
         }
         .tuijianren{
           display: inline-block;
-          width:28px;
-          height:28px;
+          width:22.5px;
+          height:22.5px;
           overflow: hidden;
           border-radius: 50%;
           background: #fff;
           vertical-align: middle;
-          margin-right:10px;
+          margin-right:5px;
           position:relative;
           border:1px solid #d7d7d7;
           .circle{
-            width:23px;
-            height:23px;
+            width:20px;
+            height:20px;
             overflow: hidden;
             border-radius: 50%;
             display: inline-block;
@@ -1044,7 +1052,7 @@ body {
             transform: translate(-50%,-50%);
             img{
               width:100%;
-
+              height:100%;
             }
           }
         }
@@ -1056,6 +1064,7 @@ body {
         right:-8px;
         &.active{
           color:#fe5a40;
+          top:-3px;
         }
         .haloIcon{
           position: relative;
