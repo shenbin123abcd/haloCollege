@@ -5,11 +5,13 @@ namespace Ke\Controller;
 class CoursesController extends CommonController {
     public function _initialize()
     {
-        $halobear = cookie('halobear');
-        $this->user = $this->wcache($halobear);
+        $halobear = cookie('wx_auth');
+//        $this->user = $this->wcache($halobear);
+        $this->user = $this->getUser($halobear);
         if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents'])){
             $this->_checkCode();
-            $this->_getWechatUser();
+//            $this->_getWechatUser();
+            $this->_getWechatUserByLocal();
         }
     }
 
@@ -298,5 +300,16 @@ class CoursesController extends CommonController {
         }else{
             $this->success($user);
         }
+    }
+
+    public function setLogin(){
+        $auth = cookie('wx_auth');
+        $this->getUser($auth);
+        $this->success();
+    }
+
+    public function test(){
+        write_log('test', var_export($this->user, 1));
+
     }
 }
