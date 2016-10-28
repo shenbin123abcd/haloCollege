@@ -14,9 +14,50 @@ class CommonController extends Controller {
         $this->user = get_user();
         if (!in_array(CONTROLLER_NAME, ['Public'])){
             $this->_checkCode();
-            $this->_getWechatUser();
+
+            $this->_getWechatUserByLocal();
+//            $this->_getWechatUser();
         }
     }
+
+    public function _getWechatUserByLocal(){
+        $auth = cookie('wx_auth');
+        $this->user = $this->getUser($auth);
+
+        if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
+            cookie('halobear', null, -86400);
+            $back = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : 'http://' . $_SERVER['HTTP_HOST'];
+
+            $url = 'http://wechat.halobear.com/?back=' . urlencode($back); // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
+            if (IS_AJAX) {
+                $this->ajaxReturn(array('iRet'=>-1,'info'=>'未授权', 'data'=>$url));
+            }else{
+                redirect($url);
+            }
+        }
+    }
+
+    protected function getUser($auth){
+//        $_GET['wechat_code'] = 'NS8zSmdyc2dROVhqbnMybU9tOGxYTlA3bWs2eWpZNzdTUU9xSjBTVEg4WE56M3ppbjZheDQzaFkraXhyZ0MwR1h3WkFzVks3aVFMdUM0bjd0VGVSWVBwUXVBZFlPd0IxZjV6dmJmbmFhQm03bVVqam5GS1pIZkJjTmRpRUJDSkZTSWQ5cGM2K1FNLzVKSmRERHN5UXkrM2pkeldNNkNkbk5vb2tnWFNHaUk4PQ%3D%3D';
+        $model = M('WechatAuth');
+        if (isset($_GET['wechat_code']) && !empty($_GET['wechat_code'])){
+            $code = decrypt(base64_decode(urldecode($_GET['wechat_code'])), C('WECHAT_AUTH_KEY'));
+            if (!empty($code) && !empty($code['openid'])){
+                $user = $model->where(['openid'=>$code['openid']])->find();
+            }
+            empty($user) && $this->error('微信登录失败，请稍候再试');
+            cookie('wx_auth', md5($code['openid']), 8640000);
+        }else{
+            // 获取用户信息
+            $user = session('wechat_user2');
+            if (empty($user)) {
+                $user = $model->where(array('ck'=>$auth))->find();
+            }
+        }
+        session('wechat_user2', $user);
+        return $user;
+    }
+
 
     protected function _checkCode(){
         $code = I('code');
@@ -89,6 +130,7 @@ class CommonController extends Controller {
                 'province'=> $cv['user']['province'],
                 'country'=> $cv['user']['country'],
                 'headimgurl'=> $cv['user']['headimgurl'],
+                'unionid'=> $cv['user']['unionid'],
             );
             if ($auth) {
                 $model->where(array('id'=>$auth['id']))->save($user);

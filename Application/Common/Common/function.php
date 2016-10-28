@@ -52,10 +52,12 @@ function word_time($time) {
 
 /**
  * 加密函数
- * @param string data
+ * @param array $data
+ * @param string $key
  * @return string 加密后的字符串
  */
-function encrypt($data, $key) {
+function encrypt($data, $key = '#$iojwefap') {
+    $data = serialize($data);
     $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
     $iv = substr($key, 0, 16);
     mcrypt_generic_init($td, $key, $iv);
@@ -69,15 +71,17 @@ function encrypt($data, $key) {
     $encrypted = mcrypt_generic($td, $data);
     mcrypt_generic_deinit($td);
 
-    return $encrypted;
+    return base64_encode($encrypted);
 }
 
 /**
  * 解密函数
- * @param string data 加密过的字符串
+ * @param string $data 加密过的字符串
+ * @param string $key 加密key
  * @return string 解密后的字符串
  */
-function decrypt($data, $key) {
+function decrypt($data, $key = '#$iojwefap') {
+    $data = base64_decode($data);
     $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
     $iv = substr($key, 0, 16);
     mcrypt_generic_init($td, $key, $iv);
@@ -85,7 +89,7 @@ function decrypt($data, $key) {
     mcrypt_generic_deinit($td);
     mcrypt_module_close($td);
 
-    return rtrim($data, substr($data, -1));
+    return unserialize(rtrim($data, substr($data, -1)));
 }
 
 /**
