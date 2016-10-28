@@ -76,20 +76,37 @@
 
 				<tr id="gold_award_info" style="display: none">
 					<th>金熊奖信息</th>
-					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date"></td>
-					<td><label>花絮/子视频</label>
+					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" style="width: 20%"></td>
+					<td  style="width: 20%"><label>花絮/子视频</label>
 						<select name="match_type" id="gold_award_type">
 							<option value="">请选择</option>
 							<option value="1">金熊奖花絮</option>
 							<option value="2">金熊奖分赛视频</option>
 						</select>
 					</td>
-					<td id="gold_award_sub_match" style="display: none">
-						<label>分赛类型</label>
+					<td id="gold_award_sub_match" style="display: none;width: 20%">
+						<label>花絮</label>
 						<select name="match_parent_id" >
 							<option value="">请选择</option>
 							<volist name="gold_match" id="vo">
 								<option value="{$vo.id}" >{$vo.course_date}|{$vo.title}</option>
+							</volist>
+						</select>
+					</td>
+					<td id="match_level" style="width: 20%;display: none">
+						<label>分赛阶段</label>
+						<select name="match_level" >
+							<option value="">请选择</option>
+							<option value="1">初赛</option>
+							<option value="2">决赛</option>
+						</select>
+					</td>
+					<td style="width: 20%">
+						<label>金熊奖栏目</label>
+						<select name="gold_award_id" >
+							<option value="">请选择</option>
+							<volist name="gold_awards" id="vo">
+								<option value="{$vo.id}" >{:date('Y',$vo.date)}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -208,8 +225,10 @@
 			var gold_award_type = $(this).val();
 			if (gold_award_type==2){
 				$('#gold_award_sub_match').show();
+				$('#match_level').show();
 			}else {
 				$('#gold_award_sub_match').hide();
+				$('#match_level').hide();
 			}
 
 		});

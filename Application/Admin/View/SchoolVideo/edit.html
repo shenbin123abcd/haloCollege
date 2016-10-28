@@ -65,7 +65,7 @@
 				<tr id="course_info" style="display: none">
 					<th>公开课信息</th>
 					<td><label>城市</label><input type="text" class="input length_5" name="course_city" value="{$data.course_city}"></td>
-					<td><label>上课日期</label><input type="text" class="input length_5 J_date" name="course_date" value="{$data.course_date}"></td>
+					<td><label>上课日期</label><input type="text" class="input length_5 J_date" name="course_date" value="{:date('Y-m-d', $data['course_date'])}"></td>
 					<td><label>花絮/子视频</label>
 						<select name="course_type" id="course_type">
 							<option value="">请选择</option>
@@ -86,7 +86,7 @@
 
 				<tr id="gold_award_info" style="display: none">
 					<th>金熊奖信息</th>
-					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{$data.match_date}"></td>
+					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{:date('Y-m-d', $data['matchdate'])}"></td>
 					<td><label>花絮/子视频</label>
 						<select name="match_type" id="gold_award_type">
 							<option value="">请选择</option>
@@ -95,11 +95,28 @@
 						</select>
 					</td>
 					<td id="gold_award_sub_match" style="display: none">
-						<label>分赛类型</label>
+						<label>花絮</label>
 						<select name="match_parent_id" >
 							<option value="">请选择</option>
 							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{$vo.course_date}|{$vo.title}</option>
+								<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{:date('Y',$vo.date)}|{$vo.title}</option>
+							</volist>
+						</select>
+					</td>
+					<td id="match_level" style="width: 20%;display: none">
+						<label>分赛阶段</label>
+						<select name="match_level" >
+							<option value="">请选择</option>
+							<option value="1" <eq name="data.match_level" value="1">selected</eq>>初赛</option>
+							<option value="2" <eq name="data.match_level" value="2">selected</eq>>决赛</option>
+						</select>
+					</td>
+					<td>
+						<label>金熊奖栏目</label>
+						<select name="gold_award_id" >
+							<option value="">请选择</option>
+							<volist name="gold_awards" id="vo">
+								<option value="{$vo.id}" <eq name="data.gold_award_id" value="$vo.id">selected</eq>>{:date('Y',$vo.date)}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -200,6 +217,8 @@
 			var type = $('#gold_award_type').val();
 			if (type==2){
 				$('#gold_award_sub_match').show();
+				$('#match_level').show();
+
 			}
 		}
 
@@ -241,8 +260,10 @@
 			var gold_award_type = $(this).val();
 			if (gold_award_type==2){
 				$('#gold_award_sub_match').show();
+				$('#match_level').show();
 			}else {
 				$('#gold_award_sub_match').hide();
+				$('#match_level').hide();
 			}
 
 		});

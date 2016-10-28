@@ -11,7 +11,7 @@ use Think\Controller;
 class PublicController extends CommonController {
 
     protected $module_auth = 0;
-    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat');
+    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat','courseTwoBarCodes');
 
     /**
      * 七牛上传回调 --非编辑器
@@ -416,23 +416,23 @@ class PublicController extends CommonController {
      * 专为IOS写的判断app是否在审核中的状态返回接口
     */
     public function checkStatus(){
-        $this->success('success',array('status'=>0));
+        $this->success('success',array('status'=>1));
     }
 
     /**
-     * 学院用户id和微信id关联
+     * 学院用户id和微信绑定
     */
     public function wechatUnion(){
         $union_id = I('union_id');
         empty($union_id) && $this->error('参数错误！');
         $uid = $this->user['uid'];
         $wechat_id = M('WechatAuth')->where(array('unionid'=>$union_id))->getField('unionid,id');
-        empty($wechat_id) && $this->error('参数错误！');
+        //empty($wechat_id) && $this->error('参数错误！');
         $data['college_uid'] = $uid;
         $data['unionid'] = $union_id;
-        $data['wechat_id'] = $wechat_id[$union_id];
-        $union = M('CollegeWechatUnion')->where(array('college_uid'=>$data['college_uid'],'unionid'=>$data['unionid'],'wechat_id'=>$data['wechat_id']))->count();
-        !empty($union) && $this->success('您已经关联过了！');
+        $data['wechat_id'] = !empty($wechat_id[$union_id]) ? $wechat_id[$union_id] : 0;
+        $union = M('CollegeWechatUnion')->where(array('college_uid'=>$data['college_uid']))->count();
+        !empty($union) && $this->success('您已经微信绑定过了！');
         $id = M('CollegeWechatUnion')->add($data);
         if ($id){
             $this->success('关联成功！');
@@ -445,12 +445,10 @@ class PublicController extends CommonController {
      * 解除微信绑定
     */
     public function unbindWechat(){
-        $union_id = I('union_id');
-        empty($union_id) && $this->error('参数错误！');
         $uid = $this->user['uid'];
-        $bind = M('CollegeWechatUnion')->where(array('college_uid'=>$uid,'unionid'=>$union_id))->count();
+        $bind = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->count();
         if ($bind){
-            $result = M('CollegeWechatUnion')->where(array('college_uid'=>$uid,'unionid'=>$union_id))->delete();
+            $result = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->delete();
             if ($result!==false){
                 $this->success('解除绑定成功！');
             }else{
@@ -466,20 +464,95 @@ class PublicController extends CommonController {
      * 我的报名课程列表
     */
     public function myCourseList(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
         $uid = $this->user['uid'];
-        $wechat_ids = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,wechat_id')->select();
-        foreach ($wechat_ids as $key=>$value){
-            $wechat_id_arr[] = $value['wechat_id'];
+        $bind_info = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,unionid,wechat_id')->find();
+        if (!empty($bind_info)){
+            if ($bind_info['wechat_id']==0){
+                $this->check_wechat_id($bind_info);
+            }
+            $bind_info_new = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,unionid,wechat_id')->find();
+            $reserve = M('CourseReserve')->where(array('wechat_id'=>$bind_info_new['wechat_id'],'status'=>1))->select();
+        }else{
+            $reserve = array();
         }
-        if (!empty($wechat_id_arr)){
-            $courses = M('CourseReserve')->where(array('wechat_id'=>array('in',$wechat_id_arr),'status'=>1))->select();
+        $courses = $this->get_course_list($reserve,$page,$per_page);
+        $data['courses'] = $courses;
+        $data['url'] = 'http://ke.halobear.com/course/index';
+        $this->success('success',$data);
+    }
+
+    /**
+     * 返回检查用户是否写入有效wechat_id
+    */
+    public function check_wechat_id($bind_info){
+        $wechat_id = M('WechatAuth')->where(array('unionid'=>$bind_info['unionid']))->getField('unionid,id');
+        $bind_info['wechat_id'] = !empty($wechat_id) ? $wechat_id : 0;
+        $result = M('CollegeWechatUnion')->save($bind_info);
+    }
+
+    /**
+     * 获取课程列表
+    */
+    public function get_course_list($reserve,$page,$per_page){
+        foreach ($reserve as $key=>$value){
+            $course_type [$value['course_id']] =$value['type'];
+            $course_id [] =$value['course_id'];
+        }
+        if (!empty($course_id)){
+            $courses = M('Course')->where(array('id'=>array('in',$course_id),'status'=>1))->page($page,$per_page)->field('id,title,guest_id,city,start_date,cover_url,end_date')->select();
+        }else{
+            $courses =array();
+        }
+        if (!empty($courses)){
+            foreach ($courses as $key=>$value){
+                 $guests_id[] =$value['guest_id'];
+                $courses[$key]['type'] = $course_type[$value['id']];
+            }
+            $guests_id = array_unique($guests_id);
+            $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
+            foreach ($courses as $key => $value) {
+                $courses[$key]['guests'] = $guests[$value['guest_id']];
+                $courses[$key]['cover_url'] = C('IMG_URL') . $value['cover_url'];
+            }
         }else{
             $courses = array();
         }
 
-         $data['courses'] = $courses;
-        $this->success('success',$data);
+        return $courses;
+
     }
+
+    /**
+     * 获取课程的二维码unionid
+    */
+    public function courseTwoBarCodes(){
+        $uid = $this->user['uid'];
+        $unionid = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->getField('unionid');
+        empty($unionid) && $this->error('该账号还未绑定微信,请先授权微信绑定！',$data ='');
+        $key = 'halobearcollege';
+        //过期时间十分钟
+        $expire = 600;
+        $unionid_encode = think_encrypt($unionid,$key,$expire);
+        $data['unionid_encode'] = $unionid_encode;
+
+        $this->success('success',$data);
+
+    }
+
+    /**
+     * 二维码unionid解密
+     */
+    public function unionid_decode($unionid_encode){
+        $key = 'halobearcollege';
+        $unionid = think_decrypt($unionid_encode,$key);
+
+        return $unionid;
+    }
+
+
+
 
 
 
