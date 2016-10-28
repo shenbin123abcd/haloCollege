@@ -56,24 +56,37 @@ var CommonButtonGroup= React.createClass({
             hb.lib.weui.alert('请填写手机号码');
             return false;
         }
-        $.ajax({
-            url:'/courses/reserve',
-            data:data,
-            success:function(res){
-                if(res.iRet==1){
-                    hb.store.set('ke-appoint-info',data);
-                    dispatch(receiveStatusPosts(idData,2,false))
-                    hb.lib.weui.toast(res.info);
-                }else if(res.iRet==-1){
-                    window.location.href=res.data;
-                }else{
-                    hb.lib.weui.alert(res.info);
-                }
-
-            },
-            error:function(error){
-                hb.lib.weui.alert(error);
+        //$.ajax({
+        //    url:'/courses/reserve',
+        //    data:data,
+        //    success:function(res){
+        //        if(res.iRet==1){
+        //            hb.store.set('ke-appoint-info',data);
+        //            dispatch(receiveStatusPosts(idData,2,false))
+        //            hb.lib.weui.toast(res.info);
+        //        }else if(res.iRet==-1){
+        //            window.location.href=res.data;
+        //        }else{
+        //            hb.lib.weui.alert(res.info);
+        //        }
+        //
+        //    },
+        //    error:function(error){
+        //        hb.lib.weui.alert(error);
+        //    }
+        //})
+        app.ajax({url:'/courses/reserve',data:data,type:"POST"}).then((res)=>{
+            if(res.iRet==1){
+                hb.store.set('ke-appoint-info',data);
+                dispatch(receiveStatusPosts(idData,2,false))
+                hb.lib.weui.toast(res.info);
+            }else if(res.iRet==-1){
+                window.location.href=res.data;
+            }else{
+                hb.lib.weui.alert(res.info);
             }
+        },()=>{
+            hb.lib.weui.alert(error);
         })
     },
     toBuySubmit(e){
@@ -100,52 +113,93 @@ var CommonButtonGroup= React.createClass({
             return false;
         }
         //hb.store.set('ke-buy-info',data);
-        $.ajax({
-            url:'/courses/apply',
-            data:data,
-            success:function(res){
-                if(res.iRet==1) {
-                    hb.store.set('ke-buy-info',data);
-                    dispatch(buySuccessModal(false));
-                    let data2 = {
-                        course_id: id,
-                    };
-                    name = 'course' + id;
-                    let path = hb.location.url('path');
-                    setTimeout(function () {
-                        app.pay.callPay(name).callpay({
-                            url: '/pay/course',
-                            data: data2,
-                            onSuccess: function (res) {
-                                dispatch(receiveStatusPosts(id, 40, false));
-                                app.modal.confirm({
-                                    pic: 'able-seat',
-                                    content: '报名成功，是否前去选座？',
-                                    leftBtn: '稍等片刻',
-                                    rightBtn: '前去选座'
-                                }).then(function () {
-                                    browserHistory.push(`/course/selectseat_${id}`);
-                                }, function () {
-                                    if (path.indexOf('/course/detail_') > -1) {
-                                        dispatch(fetchCourseDetailIfNeeded(id));
-                                    }
-                                })
-                            },
-                            onFail: function (res) {
-                                hb.lib.weui.alert(res);
-                            },
-                        });
-                    }, 500);
-                }else if(res.iRet==-1){
-                    window.location.href=res.data;
-                }else{
-                    hb.lib.weui.alert(res.info);
-                }
-            },
-            error:function(error){
-                hb.lib.weui.alert(error);
+        app.ajax({url:'/courses/apply',data:data,type:"POST"}).then((res)=>{
+            if(res.iRet==1) {
+                hb.store.set('ke-buy-info',data);
+                dispatch(buySuccessModal(false));
+                let data2 = {
+                    course_id: id,
+                };
+                name = 'course' + id;
+                let path = hb.location.url('path');
+                setTimeout(function () {
+                    app.pay.callPay(name).callpay({
+                        url: '/pay/course',
+                        data: data2,
+                        onSuccess: function (res) {
+                            dispatch(receiveStatusPosts(id, 40, false));
+                            app.modal.confirm({
+                                pic: 'able-seat',
+                                content: '报名成功，是否前去选座？',
+                                leftBtn: '稍等片刻',
+                                rightBtn: '前去选座'
+                            }).then(function () {
+                                browserHistory.push(`/course/selectseat_${id}`);
+                            }, function () {
+                                if (path.indexOf('/course/detail_') > -1) {
+                                    dispatch(fetchCourseDetailIfNeeded(id));
+                                }
+                            })
+                        },
+                        onFail: function (res) {
+                            hb.lib.weui.alert(res);
+                        },
+                    });
+                }, 500);
+            }else if(res.iRet==-1){
+                window.location.href=res.data;
+            }else{
+                hb.lib.weui.alert(res.info);
             }
+        },()=>{
+            hb.lib.weui.alert(error);
         })
+        //$.ajax({
+        //    url:'/courses/apply',
+        //    data:data,
+        //    success:function(res){
+        //        if(res.iRet==1) {
+        //            hb.store.set('ke-buy-info',data);
+        //            dispatch(buySuccessModal(false));
+        //            let data2 = {
+        //                course_id: id,
+        //            };
+        //            name = 'course' + id;
+        //            let path = hb.location.url('path');
+        //            setTimeout(function () {
+        //                app.pay.callPay(name).callpay({
+        //                    url: '/pay/course',
+        //                    data: data2,
+        //                    onSuccess: function (res) {
+        //                        dispatch(receiveStatusPosts(id, 40, false));
+        //                        app.modal.confirm({
+        //                            pic: 'able-seat',
+        //                            content: '报名成功，是否前去选座？',
+        //                            leftBtn: '稍等片刻',
+        //                            rightBtn: '前去选座'
+        //                        }).then(function () {
+        //                            browserHistory.push(`/course/selectseat_${id}`);
+        //                        }, function () {
+        //                            if (path.indexOf('/course/detail_') > -1) {
+        //                                dispatch(fetchCourseDetailIfNeeded(id));
+        //                            }
+        //                        })
+        //                    },
+        //                    onFail: function (res) {
+        //                        hb.lib.weui.alert(res);
+        //                    },
+        //                });
+        //            }, 500);
+        //        }else if(res.iRet==-1){
+        //            window.location.href=res.data;
+        //        }else{
+        //            hb.lib.weui.alert(res.info);
+        //        }
+        //    },
+        //    error:function(error){
+        //        hb.lib.weui.alert(error);
+        //    }
+        //})
     },
     handleOpen(){
         const { dispatch,idData }=this.props;
