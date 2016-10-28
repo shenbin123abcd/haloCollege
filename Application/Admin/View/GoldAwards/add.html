@@ -17,10 +17,6 @@
 					<td><input type="text" class="input length_5" name="title"></td>
 				</tr>
 				<tr>
-					<th>地址</th>
-					<td><input type="text" class="input length_5" name="url"></td>
-				</tr>
-				<tr>
 					<th>封面</th>
 					<td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="cover"></td>
 				</tr>
@@ -35,126 +31,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th>公司</th>
-					<td>
-						<div class="fl">
-							<div id="J_search_suggestion_company" class="forum_search_pop" style="display:none;margin-top:25px;width: 290px"></div>
-						</div>
-						<input id="J_search_input_company" class="input length_3 mr10" name="company" autoComplete="off" type="text" style="width: 290px">
-						<input type="hidden" name="company_id">
-					</td>
-				</tr>
-				<tr>
-					<th>分类</th>
-					<td>
-						<volist name="category" id="vo">
-							<label><input name="category[]" data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.title}</span></label>
-						</volist>
-					</td>
-				</tr>
-				<tr id="course_info" style="display: none">
-					<th>公开课信息</th>
-					<td><label>城市</label><input type="text" class="input length_5" name="course_city"></td>
-					<td><label>上课日期</label><input type="text" class="input length_5 J_date" name="course_date"></td>
-					<td><label>花絮/子视频</label>
-						<select name="course_type" id="course_type">
-							<option value="">请选择</option>
-							<option value="1">公开课花絮</option>
-							<option value="2">公开课子视频</option>
-						</select>
-					</td>
-					<td id="course_sub_parent" style="display: none">
-						<label>子视频分类</label>
-						<select name="course_parent_id" >
-							<option value="">请选择</option>
-							<volist name="course" id="vo">
-								<option value="{$vo.id}" >{$vo.course_city}|{$vo.course_date}|{$vo.title}</option>
-							</volist>
-						</select>
-					</td>
-				</tr>
-
-				<tr id="gold_award_info" style="display: none">
-					<th>金熊奖信息</th>
-					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date"></td>
-					<td><label>花絮/子视频</label>
-						<select name="match_type" id="gold_award_type">
-							<option value="">请选择</option>
-							<option value="1">金熊奖花絮</option>
-							<option value="2">金熊奖分赛视频</option>
-						</select>
-					</td>
-					<td id="gold_award_sub_match" style="display: none">
-						<label>分赛类型</label>
-						<select name="match_parent_id" >
-							<option value="">请选择</option>
-							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" >{$vo.course_date}|{$vo.title}</option>
-							</volist>
-						</select>
-					</td>
-				</tr>
-
-				<tr>
-					<th>排序</th>
-					<td><input type="number" class="input length_5" name="sort" value="0"><p>数值越大越靠前</p></td>
-				</tr>
-				<tr>
-					<th>是否需要登录<br><b style="color: red">若选“是”，登录后才能观看！</b></th>
-					<td>
-						<select name="auth">
-							<option value="0">否</option>
-							<option value="1">是</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>是否设为热门<br><b style="color: red">若选“是”，该视频将出现在热门视频列表！</b></th>
-					<td>
-						<select name="is_hot">
-							<option value="0">否</option>
-							<option value="1">是</option>
-						</select>
-					</td>
-				</tr>
-				<tr >
-					<th>封面（大图）</th>
-					<td><input type="file" data-type="qiniu" data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="big_cover"></td>
-				</tr>
-				<tr>
-					<th>是否设为推荐<br><b style="color: red">若选“是”，视频将出现在列表首页！</b></th>
-					<td>
-						<select name="is_recommend">
-							<option value="0">否</option>
-							<option value="1">是</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>是否为会员专享<br><b style="color: red">若选“是”，只有会员才能观看！</b></th>
-					<td>
-						<select name="is_vip">
-							<option value="0">否</option>
-							<option value="1">是</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>收费标准</th>
-					<td>
-						<volist name="charge_standard" id="vo">
-							<label><input name="charge_standard[]" data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.price}元({$vo.note})</span></label>
-						</volist>
-					</td>
-				</tr>
-				<tr>
-					<th>保存<br><b style="color: red">若选“是”，视频只被保存在数据库，不会被马上发布到app！</b></th>
-					<td>
-						<select name="conserve">
-							<option value="0">否</option>
-							<option value="1">是</option>
-						</select>
-					</td>
+					<th>时间</th>
+					<td><input type="text" class="input length_5 J_date" name="date"></td>
 				</tr>
 			</table>
 		</div>
