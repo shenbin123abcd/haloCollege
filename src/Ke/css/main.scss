@@ -324,7 +324,10 @@ body {
     }
     .des-inner-1{
       float: left;
-      width: 5.4rem;
+      width: 5.1rem;
+      &.sp{
+        width:4rem;
+      }
     }
     .des-inner-2{
       float: right;

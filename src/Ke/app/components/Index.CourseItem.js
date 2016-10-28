@@ -51,7 +51,7 @@ const CourseItem = ({item}) => {
     }else{
         link=`/course/detail_${item.id}`;
     }
-    console.log(item.original_price>item.price);
+    //console.log(item.original_price>item.price);
     let renderPrice=()=>{
         if(parseInt(item.original_price)>parseInt(item.price)){
             return(
@@ -68,6 +68,12 @@ const CourseItem = ({item}) => {
             )
         }
     }
+    let des_inner_style='';
+    if(parseInt(item.original_price)>parseInt(item.price)){
+        des_inner_style='des-inner-1 sp'
+    }else{
+        des_inner_style='des-inner-1'
+    }
     return (
         <Link to={link}  className="item">
             <div className="img-box">
@@ -81,7 +87,7 @@ const CourseItem = ({item}) => {
             </div>
             <div className="content-box">
                 <div className="des-box cf">
-                    <div className="des-inner-1">
+                    <div className={des_inner_style}>
                         <div className="title">
                             {item.title}
                         </div>

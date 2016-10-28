@@ -6,7 +6,7 @@ return array(
 	'TMPL_TEMPLATE_SUFFIX'  => '.html',
 	'URL_HTML_SUFFIX' => 'html|json',
 	'APP_GROUP_MODE'	=>	1,
-	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin', 'Ke'),
+	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin', 'Ke', 'Wechat'),
 	'DEFAULT_MODULE'    =>    'Home',
 	
 	'LOAD_EXT_CONFIG'=>array('KE'=>'ke', 'USER'=>'user'),
@@ -17,6 +17,7 @@ return array(
     'IMG_URL' => 'http://7xopel.com2.z0.glb.qiniucdn.com/',
     'AVATAR_URL' => 'http://7kttnj.com2.z0.glb.qiniucdn.com/',
     'AUTH_API_URL'=>'http://api-test.weddingee.com/',
+    'WECHAT_AUTH_KEY'=>'TEMmnbjsod223DD!@#4567',
 
     'URL_ROUTER_ON'   => true, 	
     'URL_ROUTE_RULES'=>array(
@@ -28,6 +29,7 @@ return array(
 	'APP_SUB_DOMAIN_RULES'    =>    array(   
 		'koala-college'        => 'Admin',
 		'ke'        => 'Ke',
+		'wechat'    => 'Wechat',
 	),
 
 
@@ -43,12 +45,5 @@ return array(
 
 	'QINIU_AK' => 'm_bQ6vCqK-1n_myddynLMQxg0rxw3YqRptv5D7_i',
 	'QINIU_SK' => 'EH7AQcudIK47egCwYGzrSFVnutvuCYedfr0Lyl3d',
-
-	//友盟ak和secret
-	'IOS_AK'=>'57624435e0f55ab83b000868',
-	'IOS_SECRET'=>'f1040c987c3ca653985b4c486e560b67',
-	'ANDROID_AK'=>'57624411e0f55ab83b000848',
-	'ANDROID_SECRET'=>'65115406623996afcc0a14f2e4d00c7f',
-
 
 );

@@ -237,7 +237,7 @@ class CourseModel extends Model {
      * @return mixed
      */
     public function isReserve($course_id, $type = 0){
-        $uid = session('wechat_user.id');
+        $uid = session('wechat_user2.id');
         $reserve = M('CourseReserve')->where(array('wechat_id'=>$uid, 'course_id'=>$course_id, 'type'=>$type, 'status'=>1))->count();
 
         return $reserve;
@@ -249,7 +249,7 @@ class CourseModel extends Model {
      * @return mixed
      */
     public function isSubmitApply($course_id){
-        $uid = session('wechat_user.id');
+        $uid = session('wechat_user2.id');
         $reserve = M('CourseReserve')->where(array('wechat_id'=>$uid, 'course_id'=>$course_id, 'type'=>1))->count();
 
         return $reserve;
