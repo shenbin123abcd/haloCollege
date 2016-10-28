@@ -1277,7 +1277,7 @@ class WeddingController extends CommonController {
         $map['wtw_school_wedding.status'] = 1;
         $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($map)
             ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
-            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url,wtw_school_wedding.auther_type,wtw_school_wedding.auther_id,wtw_school_wedding.auther_name")
             ->page($page, $per_page)->select();
         //&amp转换为&
         foreach ($list as $key=>$value){

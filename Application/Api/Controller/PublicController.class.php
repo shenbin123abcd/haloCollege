@@ -551,6 +551,21 @@ class PublicController extends CommonController {
         return $unionid;
     }
 
+    /**
+     * 研习社分享页面
+    */
+    public function sharePage(){
+        $model = M('Banner');
+        $data = $model->where(array('id'=>18))->field('title,desc,banner_url as img,redirect_url_id as url,type,subimg_url as subimg')->find();
+        if (!empty($data)){
+            $data['img'] = 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['img'];
+            $data['subimg'] = empty($value['subimg']) ? '' : 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['subimg'];
+        }     
+
+
+        $this->success('success', $data);
+    }
+
 
 
 
