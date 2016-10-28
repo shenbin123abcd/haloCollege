@@ -416,7 +416,7 @@ class PublicController extends CommonController {
      * 专为IOS写的判断app是否在审核中的状态返回接口
     */
     public function checkStatus(){
-        $this->success('success',array('status'=>1));
+        $this->success('success',array('status'=>0));
     }
 
     /**
@@ -560,7 +560,7 @@ class PublicController extends CommonController {
         if (!empty($data)){
             $data['img'] = 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['img'];
             $data['subimg'] = empty($value['subimg']) ? '' : 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['subimg'];
-        }     
+        }
 
 
         $this->success('success', $data);
