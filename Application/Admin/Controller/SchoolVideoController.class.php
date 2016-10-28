@@ -48,6 +48,8 @@ class SchoolVideoController extends CommonController {
 		$this->course = $this->get_course_list();
 		//金熊奖花絮列表
 		$this->gold_match = $this->get_gold_award();
+	    //金熊奖栏目信息列表
+		$this->gold_awards = M('GoldAwards')->where(array('status'=>1))->select();
 
 	}
 	

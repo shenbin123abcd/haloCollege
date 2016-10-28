@@ -20,12 +20,14 @@ class CourseModel extends CommonModel{
         array('price', 'require', '请填写价格！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
         array('place', 'require', '请填写场地！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
         array('start_date', 'require', '请选择上课日期！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
+        array('end_date', 'require', '请选择上课日期！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
         array('content', 'require', '请填写内容！', self::MUST_VALIDATE, 'regex', self:: MODEL_BOTH),
     );
 
     //自动完成
     protected $_auto = array(
         array('start_date', 'strtotime', self::MODEL_BOTH, 'function'),
+        array('end_date', 'strtotime', self::MODEL_BOTH, 'function'),
         array('guest_id', 'getGuest', self::MODEL_BOTH, 'callback'),
         array('total', 'getTotal', self::MODEL_BOTH, 'callback'),
         array('create_time', 'time', self::MODEL_INSERT, 'function'),
