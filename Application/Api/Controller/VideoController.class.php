@@ -235,6 +235,30 @@ class VideoController extends CommonController {
         empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
     }
 
+    /**
+     * 公开课视频详情页获取子视频列表
+    */
+    public function openCourseList(){
+        $vid = I('vid');
+        empty($vid) && $this->error('参数错误！');
+        $model = M('SchoolVideo');
+        //判断是不是花絮
+        $count = $model->where(array('id'=>$vid,'status'=>1,'_string'=>'FIND_IN_SET(' .'4'. ',category)','course_type'=>1))->count();
+        if ($count){
+            $sub_videos = $model->where(array('_string'=>'FIND_IN_SET(' .'4'. ',category)','status'=>1,'course_type'=>2,'course_parent_id'=>$vid))
+                                ->field('id,title,guests_id')->select();        
+        }else{
+            $sub_videos = array();
+        }
+        //获取嘉宾信息
+        if (!empty($sub_videos)){            
+           $sub_videos = D('SchoolVideo')->getGuests($sub_videos);
+        }
+        $data['sub_videos'] = $sub_videos;
+
+        $this->success('success',$data);
+    }
+
 
     /**
      * 视频详情无需登录
