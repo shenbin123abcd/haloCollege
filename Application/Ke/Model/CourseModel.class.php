@@ -81,7 +81,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
 	public function detail($id){
-        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,end_date,price,total,num,place,day,content,isv_id,price_model,is_fx')->find();
+        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,end_date,price,total,num,place,day,content,isv_id,price_model')->find();
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
@@ -110,7 +110,9 @@ class CourseModel extends Model {
             $data['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['cover_url'];
 
             // 服务商
-            $data['isv_name'] = M('CourseIsv')->where(['id'=>$data['isv_id']])->getField('title');
+            $isv = M('CourseIsv')->where(['id'=>$data['isv_id']])->field('title,is_fx')->find();
+            $data['isv_name'] = $isv['title'];
+            $data['is_fx'] = $isv['is_fx'];
             $result = $this->_getPrice($data['price'], $data['price_model']);
             $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
