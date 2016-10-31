@@ -34,4 +34,31 @@ class PublicController extends CommonController {
         }
     }
 
+    // 检票
+    public function userInfo(){
+        $code = I('code');
+        $key = 'halobearcollege';
+        $unionid = think_decrypt($code,$key);
+
+        empty($unionid) && $this->error('二维码错误');
+        $wechat_id = M('WechatAuth')->where(['unionid'=>$unionid])->getField('id');
+
+        empty($wechat_id) && $this->error('用户不存在');
+
+        // 课程
+        $today = strtotime(date('Y-m-d'));
+        $course = M('Course')->where(['start_date'=>$today, 'cate_id'=>['in', [1,2]]])->find();
+
+        empty($course) && $this->error('暂无课程');
+
+        $reserve = M('CourseReserve')->where(['wechat_id'=>$wechat_id, 'course_id'=>$course['id']])->field('name,phone,avatar_url,company')->find();
+
+        empty($reserve) && $this->error('用户尚未购买课程（'. $course['title'] .'）');
+
+        $reserve['avatar_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/'. $reserve['avatar_url'] .'?imageView/1/w/260/q/85';
+        $reserve['course'] = $course['title'];
+
+        $this->success($reserve);
+    }
+
 }
