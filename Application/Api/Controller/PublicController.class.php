@@ -11,7 +11,7 @@ use Think\Controller;
 class PublicController extends CommonController {
 
     protected $module_auth = 0;
-    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat','courseTwoBarCodes');
+    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat','courseTwoBarCodes','getBindStatus');
 
     /**
      * 七牛上传回调 --非编辑器
@@ -560,11 +560,40 @@ class PublicController extends CommonController {
         if (!empty($data)){
             $data['img'] = 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['img'];
             $data['subimg'] = empty($value['subimg']) ? '' : 'http://7xopel.com2.z0.glb.clouddn.com/'.$data['subimg'];
-        }     
+        }
 
 
         $this->success('success', $data);
     }
+
+    /**
+     * 获取用户微信授权绑定的状态
+    */
+    public function getBindStatus(){
+        $uid = $this->user['uid'];
+        $unionid = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->getField('unionid');
+        $data['unionid']= empty($unionid) ? '' : $unionid;
+
+        $this->success('success',$data);
+    }
+
+    /**
+     * 获取版本审核状态
+    */
+    public function versionStatus(){
+        $version = I('version');
+        empty($version) && $this->error('参数错误！');
+        $status = M('IosVersion')->where(array('version'=>$version))->getField('version,status');
+        if (!empty($status)){
+            $data['status'] = $status[$version];
+        }else{
+            $data['status'] = -1;
+        }
+
+        $this->success('success',$data);
+
+    }
+
 
 
 
