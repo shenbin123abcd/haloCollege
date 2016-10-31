@@ -157,7 +157,8 @@ class SchoolVideoModel extends Model{
         // 访问数
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
-        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,url,cover_url,guests_id,views,times,is_vip,auth,category,charge_standard')->find();
+        $data['video'] = $this->where(array('id'=>$id, 'status'=>1))
+            ->field('id,title,url,cover_url,guests_id,views,times,is_vip,auth,category,charge_standard,company_id,course_city,course_date')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
@@ -178,6 +179,9 @@ class SchoolVideoModel extends Model{
 
             // 嘉宾头像
             $data['guests']['avatar_url'] = $data['guests']['avatar_url'] ? C('IMG_URL'). $data['guests']['avatar_url'] : '';
+
+            //公司信息
+            $data['company'] = $this->company_detail($data['video']['company_id']);
 
             //评论数
             $data['video']['count_comment'] = intval(M('SchoolComment')->where(array('vid'=>$id,'status'=>1))->count());
@@ -215,6 +219,21 @@ class SchoolVideoModel extends Model{
     }
 
     /**
+     * 根据id获取公司详情
+    */
+    public function company_detail($company_id){
+        $url = 'http://7ktsyl.com2.z0.glb.qiniucdn.com/';
+        $company = company_id($company_id);
+        $company_base_info['id'] =  $company['data']['id'];
+        $company_base_info['name'] =  $company['data']['name'];
+        $company_base_info['description'] =  $company['data']['description'];
+        $company_base_info['logo'] =  $url.$company['data']['logo'][0]['file_path'];
+
+        return $company_base_info;
+    }
+
+
+    /**
      * 判断视频类型
     */
     public function getVideoType($video,$uid){
@@ -230,6 +249,25 @@ class SchoolVideoModel extends Model{
         }
         $video['remark_video_type'] = $remark;
         return $video;
+    }
+
+    /**
+     * 获取嘉宾信息
+    */
+    public function getGuests($sub_videos){
+        foreach ($sub_videos as $key=>$value){
+            $guests_id[] = $value['guests_id'];
+        }
+        if (!empty($guests_id)){
+            $guests = M('SchoolGuests')->where(array('id'=>array('in',$guests_id),'status'=>1))->getField('id,title,position');
+        }else{
+            $guests = array();
+        }
+        foreach ($sub_videos as $key=>$value){
+            $sub_videos[$key]['guest'] = $guests[$value['guests_id']];
+        }
+
+        return  $sub_videos;
     }
 
 
