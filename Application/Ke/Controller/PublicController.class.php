@@ -61,4 +61,27 @@ class PublicController extends CommonController {
         $this->success($reserve);
     }
 
+    /**
+     * 错误返回
+     * @param string $info
+     * @param string $error
+     */
+    protected function error($info = '网络繁忙请稍候再试', $error = '') {
+        $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
+        $this->ajaxReturn(array('iRet' => 0, 'info' => $info, 'error' => $error), $type);
+    }
+
+    /**
+     * 成功返回
+     * @param string $info
+     * @param array  $data
+     */
+    protected function success($data = array(), $info = '成功') {
+        $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
+        $this->ajaxReturn(array('iRet' => 1, 'info' => $info, 'data' => $data), $type);
+    }
+
+    public function test(){
+        echo think_encrypt('ofC7IvtLwuypAw4paKODSA2q-a4Q','halobearcollege', 864000);
+    }
 }
