@@ -45,7 +45,7 @@
 	<!--列表-->
 	<form class="J_ajaxForm" action="" method="post">
 		<div class="table_list">
-			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:isv_id,title:服务商,width:180,order:desc}{field:title,title:标题,width:200}{field:city,title:城市,width:150}{field:create_time,title:开始日期,func:date='y-m-d'/###,width:120}{field:day,title:天数,width:60}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
+			<lists:list box="id" name="list" show="{field:id,title:编号,width:60}{field:isv_id,title:服务商,width:180,order:desc}{field:title,title:标题,width:200,url:/CourseReserve/index/status/1/type/1/course_id/$id}{field:city,title:城市,width:150}{field:create_time,title:开始日期,func:date='y-m-d'/###,width:120}{field:day,title:天数,width:60}{field:create_time,title:创建时间,func:date='y-m-d H#i'/###,width:120}{field:status,title:状态,width:60,func:get_status}{{title:操作,text:编辑,url:__URL__/edit/id/$id}}"/>
 			<div class="p10"></div>
 		</div>
 		<div class="btn_wrap">

@@ -25,7 +25,9 @@ class CourseReserveController extends CommonController {
         }
     }
     
-    
-     
+    public function _before_edit(){
+        $this->token = $this->qiniu('crmpub', 'ke/avatar');
+    }
+
 
 }
