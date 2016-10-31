@@ -1,33 +1,49 @@
 <div class="wrap">
-<div class="nav">
-	<div class="return"><a href="__URL__/index/pid/{$Think.get.pid}">返回上一级</a></div>
-</div>
+    <div class="nav">
+        <div class="return"><a href="javascript:window.history.back();">返回上一级</a></div>
+    </div>
 
-<form id="J_rigths_form" class="J_ajaxForm" action="__URL__/update" method="post" enctype="multipart/form-data">
-<div class="J_tabs_contents">
-	<div>
-		<div class="h_a">编辑</div>
-		<div class="table_full">
-			<table width="100%">
-				<col class="th" />
-				<col width="400" />
-				<col />
-				<tr>
-					<th>备注</th>
-					<td>
-						<textarea class="textarea" name="remark" cols="30" rows="10">{$data.content}</textarea>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+    <form id="J_rigths_form" class="J_ajaxForm" action="__URL__/update" method="post" enctype="multipart/form-data">
+        <div class="J_tabs_contents">
+            <div>
+                <div class="h_a">编辑</div>
+                <div class="table_full">
+                    <table width="100%">
+                        <col class="th"/>
+                        <col width="400"/>
+                        <col/>
+                        <tr>
+                            <th>头像</th>
+                            <td>
+                                <input type="file" data-type="qiniu"
+                                       data-base-url="http://7xopel.com2.z0.glb.qiniucdn.com" name="avatar">
+                                <input type="hidden" name="avatar_url" value="{$data.avatar_url}">
+                                <notempty name="data.avatar_url">
+                                    <div>
+                                        <img src="http://7xopel.com2.z0.glb.qiniucdn.com/{$data.avatar_url}?imageView/1/w/246/h/185/q/85"
+                                             alt="">
+                                    </div>
+                                </notempty>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>备注</th>
+                            <td>
+                                <textarea class="textarea" name="remark" cols="30" rows="10">{$data.content}</textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
-<div class="btn_wrap">
-	<div class="btn_wrap_pd">
-		<input type="hidden" name="id" value="{$data.id}">
-		<input type="hidden" name="qiniu_token" value="{$token}">
-		<button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交</button>
-	</div>
-</div>
-</form>
+            <div class="btn_wrap">
+                <div class="btn_wrap_pd">
+                    <input type="hidden" name="id" value="{$data.id}">
+                    <input type="hidden" name="qiniu_token" value="{$token}">
+                    <button type="submit" class="btn btn_submit mr20 J_ajax_submit_btn" id="J_rights_form_btn">提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

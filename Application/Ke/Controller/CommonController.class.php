@@ -79,7 +79,8 @@ class CommonController extends Controller {
         $jssdk = new \Org\Util\Jssdk("wxb43a4c82b5203c21", "70f8e2b10b41fba0176013f4526edf7b", urldecode(I('url')));
         $signPackage = $jssdk->GetSignPackage();
         unset($signPackage['rawString']);
-        $this->ajaxReturn($signPackage);
+        $type = !empty($_GET['callback']) ? 'jsonp' : 'json';
+        $this->ajaxReturn($signPackage, $type);
     }
 
     /**

@@ -14,7 +14,7 @@ class CourseModel extends Model {
      * @return array
      */
     public function getList($month){
-        $list = $this->where(array('status'=>1, 'month'=>$month))->order('num DESC,start_date ASC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,price,total,num,day,price_model')->select();
+        $list = $this->where(array('status'=>1, 'month'=>$month))->order('num DESC,start_date ASC')->field('id,title,cover_url,cate_id,guest_id,city,start_date,end_date,price,total,num,day,price_model')->select();
 
         if (!empty($list)){
             $cate = C('KE.COURSE_CATE');
@@ -30,7 +30,7 @@ class CourseModel extends Model {
                 unset($list[$key]['price_model']);
 
                 if ($this->getStep($value['id'])){
-                    $list[$key]['start_date'] = $this->_parseDate($value['start_date'], $value['day']);
+                    $list[$key]['start_date'] = $this->_parseDate($value['start_date'], $value['day'], $value['end_date']);
                 }else{
                     $list[$key]['start_date'] = date('m月', $value['start_date']);
                 }
@@ -81,7 +81,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
 	public function detail($id){
-        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,price,total,num,place,day,content,isv_id,price_model')->find();
+        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,end_date,price,total,num,place,day,content,isv_id,price_model')->find();
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
@@ -94,7 +94,7 @@ class CourseModel extends Model {
                 //}else{
                 //    $data['start_date'] = date('Y.m.d', $data['start_date']);
                 //}
-                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day']);
+                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day'], $data['end_date']);
             }else{
                 $data['start_date'] = date('Y.m', $data['start_date']);
             }
@@ -110,7 +110,9 @@ class CourseModel extends Model {
             $data['cover_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/' . $data['cover_url'];
 
             // 服务商
-            $data['isv_name'] = M('CourseIsv')->where(['id'=>$data['isv_id']])->getField('title');
+            $isv = M('CourseIsv')->where(['id'=>$data['isv_id']])->field('title,is_fx')->find();
+            $data['isv_name'] = $isv['title'];
+            $data['is_fx'] = $isv['is_fx'];
             $result = $this->_getPrice($data['price'], $data['price_model']);
             $data['original_price'] = $data['price'];
             $data['price'] = $result['price'];
@@ -191,7 +193,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
     public function getInfo($course_id){
-        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,cate_id,start_date,price,total,num,place,day,price_model')->find();
+        $data = $this->where(array('id'=>$course_id, 'status'=>1))->field('id,title,guest_id,city,cate_id,start_date,end_date,price,total,num,place,day,price_model')->find();
         if($data){
             if ($this->getStep($course_id)){
                 //if ($data['day'] > 1){
@@ -200,7 +202,7 @@ class CourseModel extends Model {
                 //}else{
                 //    $data['start_date'] = date('m月d', $data['start_date']);
                 //}
-                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day']);
+                $data['start_date'] = $this->_parseDate($data['start_date'], $data['day'], $data['end_date']);
             }else{
                 $data['start_date'] = date('m月', $data['start_date']);
             }
@@ -255,9 +257,12 @@ class CourseModel extends Model {
         return $reserve;
     }
 
-    public function _parseDate($time, $day){
+    public function _parseDate($time, $day, $end_date){
         if ($day > 1){
-            $end_date = $time + ($day - 1) * 86400;
+            if (empty($end_date)){
+                $end_date = $time + ($day - 1) * 86400;
+            }
+
             $format = date('m', $time) != date('m', $end_date) ? 'm月d日' : 'd日';
 
 

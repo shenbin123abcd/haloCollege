@@ -273,10 +273,10 @@ var DetailMiddle=React.createClass({
 
 var TuiJianBlock=React.createClass({
     render(){
-        let cate_id=this.props.data.cate_id;
+        let is_fx=this.props.data.is_fx;
         let res=this.props.res;
-        //console.log(cate_id);
-        if(res.iRet==1 && cate_id!=3){
+        console.log(res);
+        if(res.iRet==1 && is_fx==1){
             return(
                 <Link className="tel-block clearfix" to={`/course/branding`}>
                     <div className="sign-num-block clearfix sp">
