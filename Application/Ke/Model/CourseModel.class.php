@@ -81,7 +81,7 @@ class CourseModel extends Model {
      * @return array|mixed
      */
 	public function detail($id){
-        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,end_date,price,total,num,place,day,content,isv_id,price_model')->find();
+        $data = $this->where(array('id'=>$id, 'status'=>1))->field('id,title,cover_url,guest_id,cate_id,city,start_date,end_date,price,total,num,place,day,content,isv_id,price_model,is_fx')->find();
         if($data){
             $cate = C('KE.COURSE_CATE');
             $data['cate'] = $cate[$data['cate_id']];
