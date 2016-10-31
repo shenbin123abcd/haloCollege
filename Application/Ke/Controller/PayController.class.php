@@ -108,10 +108,9 @@ class PayController extends CommonController {
                     $this->_notice($order['course_id'], $phone);
 
                     // 返佣
-                    $cate_id = M('Course')->where(array('id'=>$order['course_id']))->getField('cate_id');
-                    if ($cate_id != 3){
-                        $this->_agentsNotice($order);
-                    }
+//                    $cate_id = M('Course')->where(array('id'=>$order['course_id']))->getField('cate_id');
+//                    if ($cate_id != 3){}
+                    $this->_agentsNotice($order);
 
                     //微信通知
                     $this->_wechat_notice('DV7UGPfq2Wt7FhHUmaLa_x6IYmFus4k0AyPJ535dR2A',$order['course_id'],$order['wechat_id'],$this->user['username']);
@@ -290,10 +289,22 @@ class PayController extends CommonController {
             return;
         }
 
+        // 服务商信息
+        $isv_id = M('Course')->where(array('id'=>$order['course_id']))->getField('isv_id');
+        write_log('agents', M()->_sql());
+        $isv = M('CourseIsv')->where(['id'=>$isv_id])->field('fx_percent,is_fx')->find();
+        write_log('agents', M()->_sql());
+        if (empty($isv) || $isv['is_fx'] == 0 || $isv['fx_percent'] == 0){
+            return;
+        }
+
+        // 分成比例 最小不能小于1%
+        $percent = max(0.01, $isv['fx_percent'] / 100);
+
         $course = M('Course')->where(array('id'=>$order['course_id']))->find();
         $course_reserve = M('CourseReserve')->where(array('course_id'=>$order['course_id'],'wechat_id'=>$order['wechat_id']))->find();
         $agents = M('CourseAgents')->where(['code'=>$order['code']])->find();
-        $amount  = number_format($order['price'] * 0.1, 2, '.', '');
+        $amount  = number_format($order['price'] * $percent, 2, '.', '');
 
         // 记录
         $balance = $agents['balance'] + $amount;
