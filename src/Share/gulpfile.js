@@ -20,7 +20,8 @@ var appConfig = {
     domain:'',
     devDomain:'koubei-dashboard.hx.com',
     productionDomain:'koubei-dashboard.halobear.com',
-    defaultCDNBase:'/',
+    defaultCDNBase:'/Public/Share',
+    defaultDevCDNBase:'/',
     port:gulpConfig.port,
 };
 
@@ -127,7 +128,7 @@ gulp.task('fakedata', function (cb) {
 })
 
 gulp.task('copy:build',['build'], function (cb) {
-    return gulp.src([`${appConfig.themeDist}/**/*`,[`!${appConfig.themeDist}/index.html`]])
+    return gulp.src([`${appConfig.themeDist}/**/*`,`!${appConfig.themeDist}/index.html`])
         .pipe(gulp.dest(`${appConfig.themeProductDist}/`))
 });
 
@@ -139,11 +140,11 @@ gulp.task('copy:build:view',['build'], function (cb) {
 
 gulp.task('after:build',['copy:build','copy:build:view'], function (cb) {
     return gulp.src(__filename)
-        .pipe(plugins.open({uri: `http://koubei.hx.com/app/?item_id=38&shop_id=&merchant_pid=`}))
-        .pipe(plugins.open({uri: `http://${devip()[0]}:${appConfig.port}/app/index?item_id=38&shop_id=&merchant_pid=`}));
+        .pipe(plugins.open({uri: `http://share-college.hx.com/`}))
+        .pipe(plugins.open({uri: `http://${devip()[0]}:${appConfig.port}/`}));
 });
 
-gulp.task('build',['sass','images','devServer'], function () {
+gulp.task('build',['sass','images','devServer','webpackWithImage','copy:js:react:bundle'], function () {
     var htmlFilter = plugins.filter('**/*.html',{restore: true});
     var jsFilter = plugins.filter('**/*.js',{restore: true});
     var jsAppFilter = plugins.filter(`**/hb.drag.js`,{restore: true});
@@ -154,6 +155,7 @@ gulp.task('build',['sass','images','devServer'], function () {
     var manifestJs = gulp.src("tmp/images/rev-manifest.json");
     var manifestJsVendor = gulp.src("tmp/vendor/rev-manifest.json");
     return gulp.src('src/index.html')
+        .pipe(plugins.injectString.replace(`;window.appConfig={};`, `;window.appConfig={production:true};`))
         .pipe(plugins.useref())
         // .pipe(jsVendorFilter)
         // .pipe(plugins.rev())
@@ -187,7 +189,6 @@ gulp.task('build',['sass','images','devServer'], function () {
             presets: ['es2015']
         }))
         .pipe(plugins.uglify())
-        .pipe(plugins.header(`;appConfig.production=true;`))
         .pipe(gulp.dest(`${appConfig.themeDist}`))
         .pipe(jsFilter.restore)
         .pipe(cssFilter)
