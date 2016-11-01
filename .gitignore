@@ -32,6 +32,15 @@
 /src/Uc/tmp
 
 
+/Public/Share/*
+/Application/Share/View/Index/*.html
+/src/Share/tmp
+/src/Share/src/css/main.css
+/src/Share/src/css/main.css.map
+/src/Share/src/js/bundle.js
+/src/Share/src/js/bundle.js.map
+
+
 .DS_Store
 /Application/Admin/View/Ueditor/ueditor.html
 /Application/Admin/Controller/UeditorController.class.php
