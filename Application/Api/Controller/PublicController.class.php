@@ -11,7 +11,8 @@ use Think\Controller;
 class PublicController extends CommonController {
 
     protected $module_auth = 0;
-    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion','myCourseList','unbindWechat','courseTwoBarCodes','getBindStatus');
+    protected $action_auth = array('loginStatus','getPushMsg','readedStatus','wechatUnion'
+    ,'myCourseList','unbindWechat','courseTwoBarCodes','getBindStatus');
 
     /**
      * 七牛上传回调 --非编辑器
@@ -525,30 +526,37 @@ class PublicController extends CommonController {
     }
 
     /**
-     * 获取课程的二维码unionid
+     * 获取课程的二维码unionid和用户信息
     */
     public function courseTwoBarCodes(){
+        $url = 'http://7xopel.com2.z0.glb.qiniucdn.com/';
         $uid = $this->user['uid'];
-        $unionid = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->getField('unionid');
-        empty($unionid) && $this->error('该账号还未绑定微信,请先授权微信绑定！',$data ='');
+        $union = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('unionid,wechat_id')->find();
+        empty($union) && $this->error('该账号还未绑定微信,请先授权微信绑定！',$data ='');
+        //获取用户信息
+        $course_reserve = M('CourseReserve')->where(array('wechat_id'=>$union['wechat_id']))->field('name,company,avatar_url')->find();
+        $course_reserve['name'] = $course_reserve['name'] ? $course_reserve['name'] : '';
+        $course_reserve['company'] = $course_reserve['company'] ? $course_reserve['company'] : '';
+        $course_reserve['avatar_url'] = $course_reserve['avatar_url'] ? $url.$course_reserve['avatar_url'] : '';
+        $course_reserve['unionid_encode'] = $union['unionid'];
         $key = 'halobearcollege';
         //过期时间十分钟
         $expire = 600;
-        $unionid_encode = think_encrypt($unionid,$key,$expire);
-        $data['unionid_encode'] = $unionid_encode;
+        $course_reserve['unionid_encode'] = think_encrypt($course_reserve['unionid_encode'],$key,$expire);
 
-        $this->success('success',$data);
+        $this->success('success',$course_reserve);
 
     }
 
     /**
-     * 二维码unionid解密
+     * 二维码解密
      */
-    public function unionid_decode($unionid_encode){
+    public function unionid_decode($data){
         $key = 'halobearcollege';
-        $unionid = think_decrypt($unionid_encode,$key);
+        $data_json = think_decrypt($data,$key);
+        $data_arr= json_decode($data_json);
 
-        return $unionid;
+        return $data_arr;
     }
 
     /**
@@ -593,6 +601,119 @@ class PublicController extends CommonController {
         $this->success('success',$data);
 
     }
+
+    /**
+     * 嘉宾个人主页
+    */
+    public function personalHomePage(){
+        $guest_id = I('guest_id');
+        empty($guest_id) && $this->error('参数错误！');
+        $uid = $this->user['uid'];
+        $page = 1;
+        $per_page = 3;
+        $guest = M('SchoolGuests')->where(array('id'=>$guest_id,'status'=>1))->find();
+        empty($guest) && $this->error('嘉宾不存在！');
+        $guest['avatar_url'] = $guest['avatar_url'] ? C('IMG_URL').$guest['avatar_url'] : '';
+        //公司信息
+        if (!empty($guest['company_id'])){
+            $companys = company_id($guest['company_id']);
+            $company['id'] = $companys['data']['id'];
+            $company['name'] = $companys['data']['name'];
+        }else{
+            $company = null;
+        }
+
+        //热文列表
+        $article_where = array('wtw_school_wedding.auther_type'=>array('in',array(1,3)),'wtw_school_wedding.auther_id'=>$guest_id);
+        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        //视频列表
+        $video_where = array('guests_id'=>$guest_id);
+        $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
+        $data['guest'] = $guest;
+        $data['company'] = $company;
+        $data['articles'] = $articles;
+        $data['videos'] = $videos;
+
+        $this->success('success',$data);
+
+    }
+
+    /**
+     * 公司主页
+    */
+    public function companyHomePage(){
+        $url = 'http://7ktsyl.com2.z0.glb.qiniucdn.com/';
+        $company_id = I('company_id');
+        empty($company_id) && $this->error('参数错误！');
+        $uid = $this->user['uid'];
+        $page = 1;
+        $per_page = 3;
+        //公司信息
+        $data_company = company_id($company_id);
+        empty($data_company) && $this->error('公司不存在！');
+        $company['id'] = $data_company['data']['id'];
+        $company['name'] = $data_company['data']['name'];
+        $company['description'] = $data_company['data']['description'];
+        $company['logo'] = $data_company['data']['logo'][0]['file_path'] ? $url.$data_company['data']['logo'][0]['file_path'] : '';
+        //公司成员
+        $member_where = array('company_id'=>$company_id);
+        $members = $this->get_guests($member_where);
+        //热文列表
+        $article_where = array('wtw_school_wedding.auther_type'=>2,'wtw_school_wedding.auther_id'=>$company_id);
+        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        //视频列表
+        $video_where = array('company_id'=>$company_id);
+        $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
+
+        $data['company'] = $company;
+        $data['members'] = $members;
+        $data['articles'] = $articles;
+        $data['videos'] = $videos;
+
+        $this->success('success',$data);
+    }
+
+    /**
+     * 获取嘉宾
+    */
+    public function get_guests($map){
+        $map['status'] = 1;
+        $guests = M('SchoolGuests')->where($map)->select();
+        if (!empty($guests)){
+            foreach ($guests as $key=>$value){
+                $guests[$key]['avatar_url'] = $guests[$key]['avatar_url'] ? C('IMG_URL').$guests[$key]['avatar_url'] : '';
+            }
+        }else{
+            $guests = array();
+        }
+
+        return $guests;
+    }
+
+    /**
+     * 金熊奖主页
+    */
+    public function awardsHomePage(){
+        $vid = I('vid');
+        empty($vid) && $this->error('参数错误！');
+        $video = D('SchoolVideo')->getDetail($vid);
+        $video_feature = $video['video'];
+        $award_base_info = M('GoldAwards')->where(array('id'=>$video_feature['gold_award_id'],'status'=>1))->find();
+        $award_base_info['cover_url'] = $award_base_info['cover_url'] ? C('IMG_URL').$award_base_info['cover_url'] : '';
+        $match_first_where = array('match_type'=>2,'match_parent_id'=>$vid,'match_level'=>1);
+        $match_first = D('SchoolVideo')->getListByCate($match_first_where,1,3);
+        $match_final_where = array('match_type'=>2,'match_parent_id'=>$vid,'match_level'=>2);
+        $match_final = D('SchoolVideo')->getListByCate($match_final_where,1,3);
+
+        $data['gold_award'] = $award_base_info;
+        $data['video_feature'] = $video_feature;
+        $data['match_first'] = $match_first;
+        $data['match_final'] = $match_final;
+
+        $this->success('success',$data);
+    }
+
+
 
 
 

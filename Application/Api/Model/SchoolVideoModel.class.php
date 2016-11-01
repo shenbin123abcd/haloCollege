@@ -69,7 +69,7 @@ class SchoolVideoModel extends Model{
     /**
      * 获取视频列表(V2)
     */
-    public function getListByCate($map=array(),$page,$per_page,$is_recommend){        
+    public function getListByCate($map=array(),$page,$per_page,$is_recommend){
         $map['status'] =1;
         $order = 'sort DESC,create_time DESC';
         if(!empty($is_recommend)){
@@ -158,7 +158,7 @@ class SchoolVideoModel extends Model{
        $result =  $this->where(array('id'=>$id, 'status'=>1))->setInc('views');
 
         $data['video'] = $this->where(array('id'=>$id, 'status'=>1))
-            ->field('id,title,url,cover_url,guests_id,views,times,is_vip,auth,category,charge_standard,company_id,course_city,course_date')->find();
+            ->field('id,title,description,url,cover_url,guests_id,views,times,is_vip,auth,category,cate_title,charge_standard,company_id,course_city,course_date,gold_award_id')->find();
         if($data['video']){
             // 视频私有地址
             Vendor('Qiniu.Auth');
@@ -211,6 +211,11 @@ class SchoolVideoModel extends Model{
 
             //判断视频类型
             $data['video'] = $this->getVideoType($data['video'],$user['id']);
+
+           //解析视频分类名
+            $category = $data['video']['category'] ? explode(',',$data['video']['category']) : array();
+            $cate_title = $data['video']['cate_title'] ? explode(',',$data['video']['cate_title']) : array();
+            $data['video']['cate'] = array_combine($category,$cate_title);
         }else{
             $data = array();
         }
@@ -223,11 +228,15 @@ class SchoolVideoModel extends Model{
     */
     public function company_detail($company_id){
         $url = 'http://7ktsyl.com2.z0.glb.qiniucdn.com/';
-        $company = company_id($company_id);
-        $company_base_info['id'] =  $company['data']['id'];
-        $company_base_info['name'] =  $company['data']['name'];
-        $company_base_info['description'] =  $company['data']['description'];
-        $company_base_info['logo'] =  $url.$company['data']['logo'][0]['file_path'];
+        if (!empty($company_id)){
+            $company = company_id($company_id);
+            $company_base_info['id'] =  $company['data']['id'];
+            $company_base_info['name'] =  $company['data']['name'];
+            $company_base_info['description'] =  $company['data']['description'];
+            $company_base_info['logo'] =  $url.$company['data']['logo'][0]['file_path'];
+        }else{
+            $company_base_info = null;
+        }
 
         return $company_base_info;
     }

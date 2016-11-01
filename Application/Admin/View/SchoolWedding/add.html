@@ -45,6 +45,7 @@
                             <th>分类</th>
                             <td>
                                 <select name="category_id" id="category_id">
+                                    <option value="">请选择</option>
                                     <volist name="category" id="vo">
                                         <option value="{$vo.id}">{$vo.name}</option>
                                     </volist>
@@ -114,7 +115,7 @@
 
 </script>
 <!--/选择跳转到h5页面，编辑框隐藏-->
-<!--公司搜索-->
+<!--公司和嘉宾搜索-->
 <script>
     $(function(){
         $('.cate').change(function() {
@@ -123,8 +124,8 @@
         });
 
         $('#J_search_suggestion').on('click', 'li', function(){
-            $('input[name=company_id]').val($(this).data('id'));
-            $('input[name=company]').val($(this).text());
+            $('input[name=auther_id]').val($(this).data('id'));
+            $('input[name=auther_name]').val($(this).text());
         })
 
         /*
@@ -238,27 +239,46 @@
 
         //搜索查询显示函数
         function search_suggestion(search_data) {
+            var auther_type = $('select[name=auther_type]').val();
+
             input_val = search_data; //把搜索值赋给input_val，用于比较搜索值
             var search_text = $.trim(search_data.replace(/[^\x00-\xff]/g, "**")); //搜索内容首尾去空格，且每1个汉字转由两个*符号替代
 
             if(search_text.length >= 2) {
                 //搜索内容大于2个字符，提交查询
+                if (auther_type==1 || auther_type==3){
+                    $.post('/SchoolVideo/search', {'guests':search_data}, function(data) {
 
-                $.post('__URL__/getCompanyList', {'company':search_data}, function(data) {
+                        if(data.state === 'success') {
+                            var push_html = [];
+                            $.each(data.data, function(i, o){
+                                push_html.push('<li class="item" data-id='+ o.id +'>'+ o.title +'</li>');
+                            });console.log(push_html);
+                            suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
+                        }else{
+                            suggestion_list.fadeOut('fast', function(){
+                                $(this).empty();
+                            });
+                        }
 
-                    if(data.state === 'success') {
-                        var push_html = [];
-                        $.each(data.data, function(i, o){
-                            push_html.push('<li class="item" style="width: 290px" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
-                        });console.log(push_html);
-                        suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
-                    }else{
-                        suggestion_list.fadeOut('fast', function(){
-                            $(this).empty();
-                        });
-                    }
+                    }, 'json');
+                }else {
+                    $.post('/SchoolGuests/getCompanyList', {'company':search_data}, function(data) {
 
-                }, 'json');
+                        if(data.state === 'success') {
+                            var push_html = [];
+                            $.each(data.data, function(i, o){
+                                push_html.push('<li class="item" style="width: 290px" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
+                            });console.log(push_html);
+                            suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
+                        }else{
+                            suggestion_list.fadeOut('fast', function(){
+                                $(this).empty();
+                            });
+                        }
+
+                    }, 'json');
+                }
 
             }else{
                 //搜索内容大于2个字符，隐藏并清空下拉匹配
@@ -271,5 +291,5 @@
     });
 
 </script>
-<!--公司搜索/-->
+<!--公司和嘉宾搜索/-->
 

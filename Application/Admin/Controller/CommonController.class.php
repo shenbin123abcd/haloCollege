@@ -167,7 +167,7 @@ class CommonController extends Controller {
 			$record = $model->save($data);
 			if (!empty($_POST['attach_id'])) {
 				$data = array('record_id' => $data['id']);//, 'module' => CONTROLLER_NAME
-				D('Attach')->where(array('id' => array('in', trim($_POST['attach_id'], ',,'))))->save($data);
+				D('Attach')->where(array('id' => array('in', trim($_POST['attach_id'], ','))))->save($data);
 			}
 
 			if (!empty($_POST['attach_editor_id'])) {
