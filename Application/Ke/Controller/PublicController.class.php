@@ -57,6 +57,16 @@ class PublicController extends CommonController {
 
         $reserve['avatar_url'] = 'http://7xopel.com2.z0.glb.qiniucdn.com/'. $reserve['avatar_url'] .'?imageView/1/w/260/q/85';
         $reserve['course'] = $course['title'];
+        $reserve['course_id'] = $course['id'];
+        $reserve['wechat_id'] = $wechat_id;
+
+        // 座位信息
+        $seat = M('courseRecord')->where(['course_id'=>$course['id'], 'wechat_id'=>$wechat_id])->getField('seat_no');
+        $reserve['seat'] = '未选座';
+        if (!empty($seat)){
+            $temp = explode(',', $seat);
+            $reserve['seat'] = $temp[0] . '排'. $temp[1] .'座';
+        }
 
         $this->success($reserve);
     }
@@ -82,6 +92,7 @@ class PublicController extends CommonController {
     }
 
     public function test(){
-        echo think_encrypt('ofC7IvtLwuypAw4paKODSA2q-a4Q','halobearcollege', 864000);
+        echo think_encrypt('ofC7IvqAxUIlpNHeeybAQsZwAads','halobearcollege', 864000);
+        echo '<br>';
     }
 }
