@@ -7,6 +7,7 @@
 		//getComment();
 	}
 
+
 	function contentService(data){
 		var deferred=$.Deferred();
 		$.ajax({
@@ -62,7 +63,6 @@
 			var D=getdate(res.create_time).D;
 			var headingStr="";
 			var picHtml="";
-
 			headingStr=`
 				<div class="title f-19" >${res.headline}</div>
 				<div class="date f-15" >
@@ -79,9 +79,18 @@
 				})
 			}
 			
-			
-			$("#toutiao-header").empty().html(headingStr);
-			$("#toutiao-content").empty().html(res.content);
+			$("#toutiao-header-wrapper").html(`
+				<div class='toutiao-header' id="toutiao-header">
+					${headingStr}
+				</div>
+			`);
+			$("#toutiao-body-wrapper").html(`
+				<div class="toutiao-body">
+					<div class="desc-block" id="toutiao-content" style="overflow: hidden;word-wrap:break-word;">
+						${res.content}
+					</div>
+				</div>
+			`)
 			$("#toutiao-body-pic").empty().html(picHtml);
 			$("#toutiao-brief").empty().text(res.brief);
 			lazyLoad();
@@ -108,7 +117,6 @@
 			res.comment.forEach(function(n,i){
 				n.create_time=parseInt(n.create_time)*1000;
 				var momentDate=getdate(n.create_time).momentDate;
-				console.log(new Date(n.create_time))
 				if(!n.parent_reply){
 					htmlStr=`
 						<div class="item">
@@ -163,7 +171,15 @@
 					`;
 				}
 				htmlAll+=htmlStr;
-				$("#comment-list").empty().html(htmlAll);
+				//$("#comment-list").empty().html(htmlAll);
+				$("#comment-block").html(`
+					<div class="comment-block">
+						<div class="title f-16">最新评论</div>
+						<div class="comment-list" id="comment-list">
+							${htmlAll}
+						</div>
+					</div>
+				`)
 			})
 		},function(error){
 			$(".comment-block").hide();
@@ -187,7 +203,6 @@
 			var htmlAll='';
 			res.comment.forEach(function(n,i){
 				n.create_time=parseInt(n.create_time)*1000;
-				console.log(new Date(n.create_time))
 				var momentDate=getdate(n.create_time).momentDate;
 				if(n.type=="comment"){
 					htmlStr+=`
@@ -275,6 +290,9 @@
 		$("[close-btn]").on('click',function(e){
 			e.preventDefault();
 			$("#dowload-block").remove();
+			$('#comment-block').css({
+				'padding-bottom':0
+			})
 		})
 	}
 

@@ -65,6 +65,9 @@ body{
 }
 .f-15{
   font-size:15px;
+  @include media("<=ip5"){
+    font-size:13px;
+  }
 }
 .f-16{
   font-size:16px;
@@ -952,6 +955,9 @@ body {
         .price{
           font-size:18px;
           color:#fe5a40;
+          @include media("<=ip5"){
+            font-size:15px;
+          }
           .icon{
             font-size:16px;
           }
