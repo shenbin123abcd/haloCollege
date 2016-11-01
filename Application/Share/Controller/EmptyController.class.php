@@ -1,5 +1,5 @@
 <?php
-namespace Home\Controller;
+namespace Share\Controller;
 use Think\Controller;
 class EmptyController extends Controller{
     public function index(){
