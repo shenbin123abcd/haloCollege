@@ -1270,7 +1270,7 @@ class WeddingController extends CommonController {
     }
 
     /**
-     * 获取视频列表
+     * 获取热文列表
      */
     public function get_wedding_list($map,$uid,$page,$per_page){
         $model = M('SchoolWedding');

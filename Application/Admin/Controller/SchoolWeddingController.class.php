@@ -38,11 +38,10 @@ class SchoolWeddingController extends CommonController {
     public function _before_add() {
         $category = M('SchoolWeddingCategory')->where("status=1")->field('id,name')->select();
         //作者类型
-        $auther_type = array('1'=>'熊小哥','2'=>'公司','3'=>'嘉宾');
+        $auther_type = array('0'=>'请选择','1'=>'熊小哥','2'=>'公司','3'=>'嘉宾');
         $this->assign('auther_type', $auther_type);
         $this->assign('category', $category);
         $this->token = $this->qiniu('crmpub', 'SchoolWeddingCover');
-
 
     }
 
@@ -85,7 +84,9 @@ class SchoolWeddingController extends CommonController {
         foreach ($attach as $key => $value) {
             $attach[$key]['src'] = 'http://7xopel.com2.z0.glb.clouddn.com/' . $value['savename'];
         }
+
         $this->attach = $attach;
+
     }
 
     /**
@@ -179,6 +180,8 @@ class SchoolWeddingController extends CommonController {
         }
 
     }
+
+
     
     
     

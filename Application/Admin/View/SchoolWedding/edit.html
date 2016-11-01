@@ -56,8 +56,9 @@
                             <th>分类</th>
                             <td>
                                 <select name="category_id" id="category_id">
+                                    <option value="">请选择</option>
                                     <volist name="category" id="vo">
-                                        <option value="{$vo.id}">{$vo.name}</option>
+                                        <option value="{$vo.id}" <eq name="data.category_id" value="$vo.id">selected</eq>>{$vo.name}</option>
                                     </volist>
                                 </select>
                                 <input type="text" class="input length_5" name="old_category" value="{$categoryName['name']}" disabled>
@@ -195,7 +196,7 @@
 
 </script>
 <!--/选择跳转到h5页面，编辑框隐藏-->
-<!--公司搜索-->
+<!--公司和嘉宾搜索-->
 <script>
     $(function(){
         $('.cate').change(function() {
@@ -319,21 +320,20 @@
 
         //搜索查询显示函数
         function search_suggestion(search_data) {
+            var auther_type = $('select[name=auther_type]').val();
+
             input_val = search_data; //把搜索值赋给input_val，用于比较搜索值
             var search_text = $.trim(search_data.replace(/[^\x00-\xff]/g, "**")); //搜索内容首尾去空格，且每1个汉字转由两个*符号替代
 
             if(search_text.length >= 2) {
                 //搜索内容大于2个字符，提交查询
-                //判断是搜索公司还是搜索嘉宾
-                var auther_type = $('#auther_type').val();
-                if (auther_type==2){
-                    //搜索公司
-                    $.post('/SchoolGuests/getCompanyList', {'company':search_data}, function(data) {
+                if (auther_type==1 || auther_type==3){
+                    $.post('/SchoolVideo/search', {'guests':search_data}, function(data) {
 
                         if(data.state === 'success') {
                             var push_html = [];
                             $.each(data.data, function(i, o){
-                                push_html.push('<li class="item" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
+                                push_html.push('<li class="item" data-id='+ o.id +'>'+ o.title +'</li>');
                             });console.log(push_html);
                             suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
                         }else{
@@ -343,15 +343,13 @@
                         }
 
                     }, 'json');
-                }
-                if (auther_type==3 || auther_type==1){
-                    //搜索嘉宾
-                    $.post('/SchoolVideo/search', {'guests':search_data}, function(data) {
+                }else {
+                    $.post('/SchoolGuests/getCompanyList', {'company':search_data}, function(data) {
 
                         if(data.state === 'success') {
                             var push_html = [];
                             $.each(data.data, function(i, o){
-                                push_html.push('<li class="item" data-id='+ o.id +'>'+ o.title +'</li>');
+                                push_html.push('<li class="item" style="width: 290px" data-id='+ o.id +'>'+ o.region_name +' | '+ o.name +'</li>');
                             });console.log(push_html);
                             suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
                         }else{
@@ -374,4 +372,4 @@
     });
 
 </script>
-<!--公司搜索/-->
+<!--公司和嘉宾搜索/-->

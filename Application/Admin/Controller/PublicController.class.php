@@ -116,7 +116,7 @@ class PublicController extends Controller {
         $data['type'] = '';
         $data['status'] = 1;
         $data['record_id'] = $data['user_id'] = 0;
-        
+
         $id = M('Attach')->add($data);
 
         $this->ajaxReturn(array('id'=>$id,'w'=>$_POST['w'],'h'=>$_POST['h'],'key'=>$_POST['key'],'fsize'=>$_POST['fsize']));

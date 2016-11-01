@@ -240,13 +240,15 @@ class VideoController extends CommonController {
     */
     public function openCourseList(){
         $vid = I('vid');
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
         empty($vid) && $this->error('参数错误！');
         $model = M('SchoolVideo');
         //判断是不是花絮
         $count = $model->where(array('id'=>$vid,'status'=>1,'_string'=>'FIND_IN_SET(' .'4'. ',category)','course_type'=>1))->count();
         if ($count){
             $sub_videos = $model->where(array('_string'=>'FIND_IN_SET(' .'4'. ',category)','status'=>1,'course_type'=>2,'course_parent_id'=>$vid))
-                                ->field('id,title,guests_id')->select();        
+                                ->page($page,$per_page)->field('id,title,guests_id')->select();
         }else{
             $sub_videos = array();
         }
