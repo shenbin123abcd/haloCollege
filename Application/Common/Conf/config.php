@@ -6,7 +6,7 @@ return array(
 	'TMPL_TEMPLATE_SUFFIX'  => '.html',
 	'URL_HTML_SUFFIX' => 'html|json',
 	'APP_GROUP_MODE'	=>	1,
-	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin', 'Ke', 'Wechat'),
+	'MODULE_ALLOW_LIST' =>    array('Home','Api','Admin', 'Ke', 'Wechat', 'Share'),
 	'DEFAULT_MODULE'    =>    'Home',
 	
 	'LOAD_EXT_CONFIG'=>array('KE'=>'ke', 'USER'=>'user'),
@@ -28,6 +28,7 @@ return array(
 	'APP_SUB_DOMAIN_DEPLOY'   =>    1, // 开启子域名配置
 	'APP_SUB_DOMAIN_RULES'    =>    array(   
 		'koala-college'        => 'Admin',
+		'share-college'        => 'Share',
 		'ke'        => 'Ke',
 		'wechat'    => 'Wechat',
 	),
