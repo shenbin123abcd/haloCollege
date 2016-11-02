@@ -1,13 +1,11 @@
 import CommonHeader from './Common.header'
 
-
-var Detail = React.createClass({
-    componentDidMount:function(){
+class Detail extends React.Component{
+    componentDidMount(){
         const { dispatch,location } = this.props;
-    },
+    }
 
-
-    render: function() {
+    render() {
 
         return (
             <div>
@@ -16,7 +14,7 @@ var Detail = React.createClass({
             </div>
         )
     }
-});
+}
 
 function mapStateToProps(state) {
     const {}=state;
