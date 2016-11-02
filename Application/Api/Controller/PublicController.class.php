@@ -534,7 +534,7 @@ class PublicController extends CommonController {
         $union = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('unionid,wechat_id')->find();
         empty($union) && $this->error('该账号还未绑定微信,请先授权微信绑定！',$data ='');
         //获取用户信息
-        $course_reserve = M('CourseReserve')->where(array('wechat_id'=>$union['wechat_id']))->field('name,company,avatar_url')->find();
+        $course_reserve = M('CourseReserve')->where(array('wechat_id'=>$union['wechat_id'],'status'=>1))->field('name,company,avatar_url')->find();
         $course_reserve['name'] = $course_reserve['name'] ? $course_reserve['name'] : '';
         $course_reserve['company'] = $course_reserve['company'] ? $course_reserve['company'] : '';
         $course_reserve['avatar_url'] = $course_reserve['avatar_url'] ? $url.$course_reserve['avatar_url'] : '';
