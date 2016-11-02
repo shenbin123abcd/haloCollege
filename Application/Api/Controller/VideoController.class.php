@@ -236,6 +236,23 @@ class VideoController extends CommonController {
     }
 
     /**
+     * 视频详情（V2）（IOS审核使用）
+    */
+    public function videoDetailIos($id) {
+        $id = intval($id);
+        empty($id) && $this->error('参数错误');
+        $data = D('SchoolVideo')->getDetail($id,$auth=0);
+        //总是给视频地址
+        $url = D('SchoolVideo')->where(array('id'=>$id, 'status'=>1))->getField('id,url');
+        $url_encode = D('SchoolVideo')->privateDownloadUrl(C('VIDEO_URL') . $url[$id]);
+        $data['video']['url'] = $url_encode;
+        $data['video']['remark_video_type'] =1;
+
+        empty($data) ? $this->error('视频不存在') : $this->success('success', $data);
+    }
+
+
+    /**
      * 公开课视频详情页获取子视频列表
     */
     public function openCourseList(){

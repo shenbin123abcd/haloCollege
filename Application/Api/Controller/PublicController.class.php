@@ -706,7 +706,10 @@ class PublicController extends CommonController {
         $match_final = D('SchoolVideo')->getListByCate($match_final_where,1,3);
 
         $data['gold_award'] = $award_base_info;
-        $data['video_feature'] = $video_feature;
+        $data['video_feature']['id'] = $video_feature['id'];
+        $data['video_feature']['title'] = $video_feature['title'];
+        $data['video_feature']['url'] = $video_feature['url'];
+        $data['video_feature']['cover_url'] = $video_feature['cover_url'];
         $data['match_first'] = $match_first;
         $data['match_final'] = $match_final;
 
