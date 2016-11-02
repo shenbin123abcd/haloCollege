@@ -36,7 +36,7 @@ app.all('/fake2',  (req, res) => {
 
 app.use('/test', express.static(path.join(__dirname, '../test')));
 app.use('/tmp', express.static(path.join(__dirname,  '../tmp')));
-app.use('/', express.static(path.join(__dirname,   '../dist')));
+app.use('/Public/Share', express.static(path.join(__dirname,   '../dist')));
 
 
 
