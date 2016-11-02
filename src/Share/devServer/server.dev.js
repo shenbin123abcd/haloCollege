@@ -12,7 +12,7 @@ app.all('/fake1',  (req, res) => {
     res.setHeader('Access-Control-Request-Method', '*');
     var data={"iRet":1,"info":"success","data":{subject:'peter'}};
     setTimeout(()=> {
-        if (req.callback) {
+        if (req.query.callback) {
             res.jsonp(data);
         } else {
             res.json(data);
@@ -25,7 +25,7 @@ app.all('/fake2',  (req, res) => {
     res.setHeader('Access-Control-Request-Method', '*');
     var data={"iRet":-1,"info":"Access denied"};
     setTimeout(()=> {
-        if (req.callback) {
+        if (req.query.callback) {
             res.jsonp(data);
         } else {
             res.json(data);
