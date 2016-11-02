@@ -13,7 +13,7 @@ class Index extends React.Component {
     componentWillMount(){
         const { dispatch,location } = this.props;
         dispatch(fetchIndexIfNeeded({
-            id:location.query.id
+            
         }));
     }
     componentDidMount(){
@@ -43,10 +43,7 @@ class Index extends React.Component {
         }else if(indexData.data){
             return (
                 <div>
-                    <img src="http://dashboard-static.halobear.cn/cehua/20161020/5808ac469766b.jpg@1e_1c_0o_0l_345h_460w.webp" alt=""/>
-                    <img src="http://dashboard-static.halobear.cn/cehua/20161020/5808ac469766b.jpg@1e_1c_0o_0l_345h_460w.webp" alt=""/>
-                    <img src="http://dashboard-static.halobear.cn/cehua/20161020/5808ac469766b.jpg@1e_1c_0o_0l_345h_460w.webp" alt=""/>
-
+                  index
                 </div>
             )
         }else{

@@ -1,5 +1,5 @@
 import Index from './containers/Index'
-import Detail from './containers/Detail'
+import Detail from './containers/Guest.detail'
 
 import store from './store'
 
@@ -55,10 +55,8 @@ const onLeaveRoute = (prevState) => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
-
-        <Route path="/app/index"  component={Index}  onLeave={onLeaveRoute}  />
-        <Route path="/app/detail"  component={Detail}  onLeave={onLeaveRoute}  />
-
+        <Route path="/"  component={Index}  onLeave={onLeaveRoute}  />
+        <Route path="/share/guests/guest/:id"  component={Detail}  onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement
