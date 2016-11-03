@@ -468,7 +468,7 @@ class PublicController extends CommonController {
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $uid = $this->user['uid'];
-        $bind_info = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,unionid,wechat_id')->find();
+        $bind_info = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->find();
         if (!empty($bind_info)){
             if ($bind_info['wechat_id']==0){
                 $this->check_wechat_id($bind_info);
@@ -489,7 +489,7 @@ class PublicController extends CommonController {
     */
     public function check_wechat_id($bind_info){
         $wechat_id = M('WechatAuth')->where(array('unionid'=>$bind_info['unionid']))->getField('unionid,id');
-        $bind_info['wechat_id'] = !empty($wechat_id) ? $wechat_id : 0;
+        $bind_info['wechat_id'] = !empty($wechat_id[$bind_info['unionid']]) ? $wechat_id[$bind_info['unionid']] : 0;
         $result = M('CollegeWechatUnion')->save($bind_info);
     }
 
