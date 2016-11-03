@@ -199,8 +199,8 @@ var DetailTop=React.createClass({
     let m=data.next_date.split('-')[1];
     let d=data.next_date.split('-')[2];
 
-    m=m<10?'0'+m:m;
-    d=d<10?'0'+d:d;
+    //m=m<10?'0'+m:m;
+    //d=d<10?'0'+d:d;
 
     let ifShowText=()=>{
         if(data.next_date && Date.parse(new Date(data.next_date))-new Date().getTime()>0){
