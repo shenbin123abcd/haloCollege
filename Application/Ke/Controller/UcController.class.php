@@ -7,7 +7,7 @@ class UcController extends CommonController {
     /**
      * 获取微信用户信息
      */
-    protected function _getWechatUser(){
+    /*protected function _getWechatUser(){
 
         $halobear = cookie('halobear');
         $this->user = $this->wcache($halobear);
@@ -21,7 +21,7 @@ class UcController extends CommonController {
                 redirect($url);
             }
         }
-    }
+    }*/
 
     public function book() {
         $this->assign('is_address', get_address($this->user['id']) ? 1 : 0);
