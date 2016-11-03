@@ -155,8 +155,8 @@ class PayController extends CommonController {
      */
     private function _createBookOrder($type, $num){
         $model = M('wfc2016_order_case');
-        // $map = array(1=>0.01, 2=>0.02);
-        $map = array(1=>499, 2=>499);
+//         $map = array(1=>0.01, 2=>0.02);
+        $map = array(1=>399, 2=>499);
 
         //①、获取用户openid
         $openid = $this->user['openid'];
