@@ -81,12 +81,6 @@ class SchoolVideoModel extends Model{
 
         //获取公开课的和培训营课程的分类和收费信息
         $list = $this->get_course_info ($list);
-        //解析视频分类
-        foreach ($list as $key=>$value){
-            $category = $value['category'] ? explode(',',$value['category']) : array();
-            $cate_title = $value['cate_title'] ? explode(',',$value['cate_title']) : array();
-            $list[$key]['cate'] = array_combine($category,$cate_title);
-        }
 
         unset($map['is_recommend']);
         $total = $this->where($map)->count();
@@ -218,10 +212,6 @@ class SchoolVideoModel extends Model{
             //判断视频类型
             $data['video'] = $this->getVideoType($data['video'],$user['id']);
 
-            //解析视频分类名
-            $category = $data['video']['category'] ? explode(',',$data['video']['category']) : array();
-            $cate_title = $data['video']['cate_title'] ? explode(',',$data['video']['cate_title']) : array();
-            $data['video']['cate'] = array_combine($category,$cate_title);
         }else{
             $data = array();
         }
