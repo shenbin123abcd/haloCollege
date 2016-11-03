@@ -5,7 +5,7 @@
     function init(){
         inputMask();
         addAddress();
-        product_2.val(1);
+        // product_2.val(1);
         // setTimeout(function(){$('#product-2').click();}, 200);
     }
     function inputMask(){
