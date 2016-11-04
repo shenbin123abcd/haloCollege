@@ -57,8 +57,8 @@ class SchoolVideoController extends CommonController {
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
 		empty($_POST['big_cover_url']) && $this->error('请上传封面大图');
 		$this->_before_update();
-		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
-		empty($_POST['guests_id']) && $this->error('嘉宾不存在');
+		//$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
+		//empty($_POST['guests_id']) && $this->error('嘉宾不存在');
 		!empty($_POST['charge_standard']) ? $_POST['charge_standard'] : "";
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
@@ -107,7 +107,9 @@ class SchoolVideoController extends CommonController {
 		//公开课和金熊奖数据校验（根据类型，将非选中类型的数据清空）
 		$this->checkData();
 		!$this->_checkVideo($_POST['url']) && $this->error('视频不存在，请检查');
-		empty($_POST['guests_id']) && $this->error('请选择嘉宾');
+		//empty($_POST['guests_id']) && $this->error('请选择嘉宾');
+		empty($_POST['guests']) && $_POST['guests_id'] = 0;
+		empty($_POST['guests_id']) && $_POST['guests'] ='';
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);

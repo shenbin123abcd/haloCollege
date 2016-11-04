@@ -94,6 +94,9 @@ class WeddingController extends CommonController {
         $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count'])+1: 0;
         $detail['praiseCount'] = $praiseCount['count'] ? intval($praiseCount['count']) : 0;
         $detail['status_praise'] = $status_praise ? intval($status_praise['status']) : -1;
+        //获取作者信息
+        $auther_info = $this->get_auther_info($wedding_id);
+        $detail['auther_info'] = $auther_info;
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
         $source['visit_ip'] = get_client_ip();
@@ -101,6 +104,33 @@ class WeddingController extends CommonController {
         $this->countVisits($source);
         $this->success('success', $data);
 
+    }
+
+    /**
+     * 获取头条的作者信息（个人或公司）
+    */
+    public function get_auther_info($wedding_id){
+        $auther = M('SchoolWedding')->where(array('id'=>$wedding_id,'status'=>1))->getField('id,auther_type,auther_id');
+        if($auther[$wedding_id]['auther_type']==1 || $auther[$wedding_id]['auther_type']==3){
+            $guest = M('SchoolGuests')->where(array('id'=>$auther[$wedding_id]['auther_id'],'status'=>1))->field('id,title,position,avatar_url')->find();
+            $guest['avatar_url'] = $guest['avatar_url'] ? C('IMG_URL').$guest['avatar_url'] : '';
+            $guest_info['id'] = $guest['id'];
+            $guest_info['title'] = $guest['title'];
+            $guest_info['position'] = $guest['position'];
+            $guest_info['avatar_url'] = $guest['avatar_url'];
+            $data['guest'] = $guest_info;
+        }elseif ($auther[$wedding_id]['auther_type']==2){
+            $company = company_id($auther[$wedding_id]['auther_id']);
+            $company_info['id'] = $company['data']['id'];
+            $company_info['title'] = $company['data']['name'];
+            $company_info['position'] = $company['data']['description'];
+            $company_info['avatar_url'] = $company['data']['logo'][0]['file_path'] ? 'http://7ktsyl.com2.z0.glb.qiniucdn.com/'.$company['data']['logo'][0]['file_path'] : '';
+            $data['company'] = $company_info;
+        }
+        $data['guest'] =  $data['guest'] ?  $data['guest'] : null;
+        $data['company'] = $data['company'] ? $data['company'] : null;
+
+        return $data;
     }
 
     /**

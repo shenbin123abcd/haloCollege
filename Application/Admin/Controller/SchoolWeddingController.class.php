@@ -41,7 +41,7 @@ class SchoolWeddingController extends CommonController {
         $auther_type = array('0'=>'请选择','1'=>'熊小哥','2'=>'公司','3'=>'嘉宾');
         $this->assign('auther_type', $auther_type);
         $this->assign('category', $category);
-        $this->token = $this->qiniu('crmpub', 'SchoolWeddingCover');
+        $this->token = $this->qiniu('crmpub', 'SchoolWeddingCover',C('CALLBACK_URL').'/public/qiniuUploadCallback');
 
     }
 

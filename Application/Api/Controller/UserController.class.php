@@ -51,6 +51,7 @@ class UserController extends CommonController{
             $info['city_title'] = $city_title['region_name'];
             $info['region_title'] = $region_title['region_name'];
             $info['company'] = I('company');
+            $info['company_id'] = I('company_id') ? I('company_id') : $info['company_id'];
             $info['position'] = I('position');
             $info['brief'] = I('brief');
             $info['headimg'] =$headimg;
@@ -76,6 +77,7 @@ class UserController extends CommonController{
         $data['city'] = I('city');
         $data['region'] = I('region');
         $data['company'] = I('company');
+        $data['company_id'] = I('company_id') ? I('company_id') : 0;
         $data['position'] = I('position');
         $data['brief'] = I('brief');
         $data['headimg'] =$headimg;
