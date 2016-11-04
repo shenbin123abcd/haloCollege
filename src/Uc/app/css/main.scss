@@ -3304,9 +3304,14 @@ body {
   }
 
   .des-wrapper{
+    display: block;
+    color: inherit;
     margin-top: 0.3rem;
     background-color: #ffffff;
     padding-left: 0.3rem;
+    &:hover{
+      text-decoration: none;
+    }
 
   }
   .item-list-box{
