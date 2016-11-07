@@ -625,14 +625,14 @@ class PublicController extends CommonController {
 
         //热文列表
         $article_where = array('wtw_school_wedding.auther_type'=>array('in',array(1,3)),'wtw_school_wedding.auther_id'=>$guest_id);
-        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
         //视频列表
         $video_where = array('guests_id'=>$guest_id);
         $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
-        $data['guest'] = $guest;
-        $data['company'] = $company;
-        $data['articles'] = $articles;
-        $data['videos'] = $videos;
+        $data['guest'] = !empty($guest) ? $guest : null;
+        $data['company'] = !empty($company) ? $company : null;
+        $data['articles'] = !empty($articles['list']) ? $articles : null;
+        $data['videos'] = !empty($videos['list']) ? $videos : null;
 
         $this->success('success',$data);
 
@@ -660,18 +660,20 @@ class PublicController extends CommonController {
         $members = $this->get_guests($member_where);
         //热文列表
         $article_where = array('wtw_school_wedding.auther_type'=>2,'wtw_school_wedding.auther_id'=>$company_id);
-        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        $articles = A("Wedding")->wedding_list($article_where,$uid,$page,$per_page);
         //视频列表
         $video_where = array('company_id'=>$company_id);
         $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
 
         $data['company'] = $company;
         $data['members'] = $members;
-        $data['articles'] = $articles;
-        $data['videos'] = $videos;
+        $data['articles'] = !empty($articles['list']) ? $articles : null;
+        $data['videos'] = !empty($videos['list']) ? $videos : null;
 
         $this->success('success',$data);
     }
+
+    
 
     /**
      * 获取嘉宾
@@ -703,11 +705,11 @@ class PublicController extends CommonController {
         if ($type==1){
             //嘉宾主页热文
             $article_where = array('wtw_school_wedding.auther_type'=>array('in',array(1,3)),'wtw_school_wedding.auther_id'=>$home_id);
-            $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+            $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
         }elseif ($type==2){
             //公司主页热文
             $article_where = array('wtw_school_wedding.auther_type'=>2,'wtw_school_wedding.auther_id'=>$home_id);
-            $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+            $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
         }else{
             $this->error('参数错误！');
         }
@@ -771,8 +773,8 @@ class PublicController extends CommonController {
         $data['video_feature']['title'] = $video_feature['title'];
         $data['video_feature']['url'] = $video_feature['url'];
         $data['video_feature']['cover_url'] = $video_feature['cover_url'];
-        $data['match_first'] = $match_first;
-        $data['match_final'] = $match_final;
+        $data['match_first'] = !empty($match_first['list']) ? $match_first : null;
+        $data['match_final'] = !empty($match_final['list']) ? $match_final : null;
 
         $this->success('success',$data);
     }
