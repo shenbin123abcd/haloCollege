@@ -42,7 +42,7 @@ class CourseModel extends Model {
             }
 
             // 课程报名用户
-            $order_list = M('CourseOrder')->where(array('status'=>1, 'course_id'=>array('in', $course_id)))->field('wechat_id,course_id')->select();
+            $order_list = M('CourseOrder')->where(array('status'=>1, 'course_id'=>array('in', $course_id)))->field('wechat_id,course_id')->order('id desc')->select();
             $user_id = $course_record = [];
             foreach ($order_list as $item) {
                 $course_record[$item['course_id']][] = ['id'=>$item['wechat_id'], 'avatar'=>''];
@@ -152,7 +152,7 @@ class CourseModel extends Model {
         $order_list = M('CourseRecord')->where(array('course_id'=>$course_id))->getField('wechat_id,course_id');
         $user_id = array_keys($order_list);
         if (!empty($user_id)){
-            $user = M('WechatAuth')->where(array('id'=>array('in', $user_id)))->getField('id,headimgurl');
+            $user = M('WechatAuth')->where(array('id'=>array('in', $user_id)))->order('id DESC')->getField('id,headimgurl');
             $user = array_values($user);
         }
         return $user;
