@@ -24,24 +24,42 @@ export function receiveUserPosts(filter){
 function fetchUserItems(req){
     return dispatch=>{
         dispatch(requestUserPosts(req))
-        return $.ajax(`/courses/my`)
-            .then(data=>{
-                receiveDate=data.data;
-                // console.log(receiveDate)
-                if(data.iRet==-1&&Modernizr.weixin){
-                    window.location.href=data.data;
+        let params=hb.location.url("?wechat_code");
+        if(params){
+            return $.ajax({
+                url:'/courses/setLogin',
+                data:{
+                    wechat_code:params
                 }
-                let id = hb.location.url('?cate_id');
-                if(id&&id==2){
-                    return dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'));
-                }else if(id&&id==1){
-                    return dispatch(receiveUserPosts('SHOW_OPEN'));
-                }else{
-                    browserHistory.push(`/course/user?cate_id=1`);
-                    return dispatch(receiveUserPosts('SHOW_OPEN'));
-            }
+            }).then(res=>{
+                return getMyInfo()
+            })
 
-        })
+        }else{
+            return getMyInfo()
+        }
+        
+        function getMyInfo() {
+            return $.ajax(`/courses/my`)
+                .then(data=>{
+                    receiveDate=data.data;
+                    // console.log(receiveDate)
+                    if(data.iRet==-1&&Modernizr.weixin){
+                        window.location.href=data.data;
+                    }
+                    let id = hb.location.url('?cate_id');
+                    if(id&&id==2){
+                        return dispatch(receiveUserPosts('SHOW_TRAINING_CAMP'));
+                    }else if(id&&id==1){
+                        return dispatch(receiveUserPosts('SHOW_OPEN'));
+                    }else{
+                        browserHistory.push(`/course/user?cate_id=1`);
+                        return dispatch(receiveUserPosts('SHOW_OPEN'));
+                    }
+
+                })
+        }
+
     }
 }
 
