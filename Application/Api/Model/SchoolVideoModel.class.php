@@ -74,9 +74,9 @@ class SchoolVideoModel extends Model{
         $order = 'sort DESC,create_time DESC';
         if(!empty($is_recommend)){
             $map['is_recommend'] = 1;
-            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,cate_title,charge_standard')->select();
+            $list = $this->where($map)->limit(2)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard')->select();
         }else{
-            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,cate_title,charge_standard,create_time')->select();
+            $list = $this->where($map)->page($page,$per_page)->order($order)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
         }
 
         //获取公开课的和培训营课程的分类和收费信息

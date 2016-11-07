@@ -700,7 +700,17 @@ class WeddingController extends CommonController {
             $wedding_id_arr[] = $value['remark_id'];
         }
         if (!empty($wedding_id_arr)) {
-            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time,redirect_url')->select();
+            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time,redirect_url,auther_type,auther_id,auther_name')->select();
+            //&amp转换为&
+            foreach ($wedding as $key=>$value){
+                $str = preg_replace('/&amp;/','&',$value['headline']);
+                $wedding[$key]['headline'] = $str;
+                if (!empty($value['auther_name']) && $value['auther_type']==2){
+                    $wedding[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+                }
+
+            }
+
             //头条和封面绑定
             $imgs_url = $this->get_imgs($wedding_id_arr, 'cover');
             foreach ($wedding as $key_wedding => $value_wedding) {
@@ -773,12 +783,21 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding_favorites.status'] = 1;
         $where['a.status'] = 1;
         $list = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
-            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,a.redirect_url,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
+            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,a.redirect_url,a.auther_type,a.auther_id,a.auther_name,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
         $total = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
             ->where($where)->field('a.id,a.headline,a.brief,a.create_time')->count();
         if (empty($list)) {
             $data['list'] = array();
             $this->success('内容为空！', $data);
+        }
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
+
         }
         //获取头条cover
         foreach ($list as $key => $value) {

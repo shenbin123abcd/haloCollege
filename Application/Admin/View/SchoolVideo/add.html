@@ -68,7 +68,7 @@
 						<select name="course_parent_id" >
 							<option value="">请选择</option>
 							<volist name="course" id="vo">
-								<option value="{$vo.id}" >{$vo.course_city}|{$vo.course_date}|{$vo.title}</option>
+								<option value="{$vo.id}" >{$vo.course_city}|{:date('Y',$vo['course_date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -89,7 +89,7 @@
 						<select name="match_parent_id" >
 							<option value="">请选择</option>
 							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" >{$vo.course_date}|{$vo.title}</option>
+								<option value="{$vo.id}" >{:date('Y',$vo['match_date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -97,8 +97,8 @@
 						<label>分赛阶段</label>
 						<select name="match_level" >
 							<option value="">请选择</option>
-							<option value="1">初赛</option>
-							<option value="2">决赛</option>
+							<option value="1">决赛阶段</option>
+							<option value="2">总决赛</option>
 						</select>
 					</td>
 					<td style="width: 20%">
@@ -106,7 +106,7 @@
 						<select name="gold_award_id" >
 							<option value="">请选择</option>
 							<volist name="gold_awards" id="vo">
-								<option value="{$vo.id}" >{:date('Y',$vo.date)}|{$vo.title}</option>
+								<option value="{$vo.id}" >{:date('Y',$vo['match_date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
