@@ -8,7 +8,7 @@ class CoursesController extends CommonController {
         $halobear = cookie('wx_auth');
 //        $this->user = $this->wcache($halobear);
         $this->user = $this->getUser($halobear);
-        if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents'])){
+        if (!in_array(ACTION_NAME, ['index', 'detail', 'applyStatus', 'getWechat', 'getAgents', 'seatInfo'])){
             $this->_checkCode();
 //            $this->_getWechatUser();
             $this->_getWechatUserByLocal();
