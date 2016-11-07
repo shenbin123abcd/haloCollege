@@ -6,6 +6,7 @@
         inputMask();
         addAddress();
         //
+        product_2.add();
 
         // setTimeout(function(){$('#product-2').click();}, 200);
     }
