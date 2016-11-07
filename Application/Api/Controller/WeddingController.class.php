@@ -1313,6 +1313,10 @@ class WeddingController extends CommonController {
         foreach ($list as $key=>$value){
             $str = preg_replace('/&amp;/','&',$value['headline']);
             $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
+
         }
         if (empty($list)) {
             $data['list'] = array();
@@ -1371,6 +1375,9 @@ class WeddingController extends CommonController {
         foreach ($list as $key=>$value){
             $str = preg_replace('/&amp;/','&',$value['headline']);
             $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
         }
         if (empty($list)) {
             $data['list'] = array();
@@ -1412,6 +1419,16 @@ class WeddingController extends CommonController {
         }
 
         return $data;
+    }
+
+    /**
+     * 作者姓名解析
+    */
+    public function analysis_name($str){
+        $str_arr = explode('|',$str);
+        $name  = $str_arr[count($str_arr)-1];
+        $name = trim($name);
+        return $name;
     }
 
 
