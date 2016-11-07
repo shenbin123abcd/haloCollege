@@ -230,6 +230,7 @@ var CommonButtonGroup= React.createClass({
         let cate_id=this.props.cate_id
         let start_time=Date.parse(new Date(this.props.start_time));
         let original_price=this.props.original_price;
+        let end_date=this.props.end_date;
 
         let {res,showModal,data,val,d,h,m,s,}=this.props;
 
@@ -255,6 +256,7 @@ var CommonButtonGroup= React.createClass({
                 toBuySubmit={this.toBuySubmit}
                 cate_id={cate_id}
                 original_price={original_price}
+                end_date={end_date}
 
                 d={d}
                 h={h}
