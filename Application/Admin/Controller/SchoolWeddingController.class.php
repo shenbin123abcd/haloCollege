@@ -24,6 +24,24 @@ class SchoolWeddingController extends CommonController {
             $data[$key]['count']=isset($visit_count[$value['id']]) ? $visit_count[$value['id']] : 0;
         }
         method_exists($this, '_recommend') && $this->_recommend($data);
+        $data = $this->get_authers($data);
+    }
+
+    /*获取作者*/
+    public function get_authers($data){
+        foreach ($data as $key=>$value){
+            if (!empty($value['auther_type']) && !empty($value['auther_id']) && !empty($value['auther_name'])){
+                if ($value['auther_type']==2){
+                    $str_arr = explode('|',$value['auther_name']);
+                    $name  = $str_arr[count($str_arr)-1];
+                    $name = trim($name);
+                    $data[$key]['auther_name'] = $name;
+                }
+            }else{
+                $data[$key]['auther_name'] = '<b style="color: red">无</b>';
+            }
+        }
+        return $data;
     }
 
     //获取头条访问量
