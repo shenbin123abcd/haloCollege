@@ -955,11 +955,14 @@ class VideoController extends CommonController {
             ->where(array( 'wtw_video_buy_record.uid'=>$uid,'wtw_video_buy_record.status'=>1,'a.status'=>1))
             ->order('wtw_video_buy_record.create_time DESC')
             ->page($page,$per_page)
-            ->field('a.id,a.title,a.cover_url,a.guests_id,a.views,a.times,a.cate_title,a.is_vip,a.big_cover_url,a.charge_standard,wtw_video_buy_record.create_time as buy_time')
+            ->field('a.id,a.title,a.cover_url,a.guests_id,a.views,a.times,a.cate_title,a.is_vip,a.big_cover_url,a.category,a.charge_standard,a.create_time,wtw_video_buy_record.create_time as buy_time')
             ->select();
-        //$list = $model->get_course_info ($list);
+
         //获取嘉宾信息
         $data['list'] = empty($list) ? array() : $model->_format($list);
+
+        //获取公开课的和培训营课程的分类和收费信息
+        $data['list'] = $model->get_course_info ($data['list']);
         
         $this->success('success',$data);
 
