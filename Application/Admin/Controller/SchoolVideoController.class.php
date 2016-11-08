@@ -106,9 +106,7 @@ class SchoolVideoController extends CommonController {
 		//公开课和金熊奖数据校验（根据类型，将非选中类型的数据清空）
 		$this->checkData();
 		!$this->_checkVideo($_POST['url']) && $this->error('视频不存在，请检查');
-		//empty($_POST['guests_id']) && $this->error('请选择嘉宾');
-		empty($_POST['guests']) && $_POST['guests_id'] = 0;
-		empty($_POST['guests_id']) && $_POST['guests'] ='';
+		empty($_POST['guests_id']) && $this->error('请选择嘉宾');
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);

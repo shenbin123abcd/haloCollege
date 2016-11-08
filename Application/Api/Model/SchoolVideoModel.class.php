@@ -380,7 +380,7 @@ class SchoolVideoModel extends Model{
         }
         $order = 'views DESC,score DESC,id DESC';
         // 获取相关嘉宾的视频
-        $list = $this->where(array('status'=>1, 'guests_id'=>$data['guests_id']))->order($order)->limit($limit)->field('id,title,guests_id,views,cover_url,times')->select();
+       $list = $this->where(array('status'=>1, 'guests_id'=>$data['guests_id']))->order($order)->limit($limit)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
         foreach ($list as $key => $value) {
             if ($value['id'] == $vid) {
                 unset($list[$key]);
@@ -392,13 +392,14 @@ class SchoolVideoModel extends Model{
             $category = explode(',',$data['category']);
             foreach ($category as $key=>$value){
                 $sub_list = $this->where(array('status'=>1, '_string'=>'FIND_IN_SET(' . $value. ',category)','id'=>array('neq', $vid)))
-                    ->order($order)->limit($limit - $length)->field('id,title,guests_id,views,cover_url,times')->select();
+                    ->order($order)->limit($limit - $length)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
                 if(!empty($sub_list)){
                     $list = array_merge($list, $sub_list);
                 }
             }
         }
-
+        //获取公开课的和培训营课程的分类和收费信息
+        $list = $this->get_course_info ($list);
         return $this->_format($list);
     }
 
