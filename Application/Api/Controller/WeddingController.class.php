@@ -118,14 +118,23 @@ class WeddingController extends CommonController {
             $guest_info['title'] = $guest['title'];
             $guest_info['position'] = $guest['position'];
             $guest_info['avatar_url'] = $guest['avatar_url'];
-            $data['guest'] = $guest_info;
+            if (empty($guest_info['id']) && empty($guest_info['title']) && empty($guest_info['position']) && empty($guest_info['avatar_url'])){
+                $data['guest'] = array();
+            }else{
+                $data['guest'] = $guest_info;
+            }
         }elseif ($auther[$wedding_id]['auther_type']==2){
             $company = company_id($auther[$wedding_id]['auther_id']);
             $company_info['id'] = $company['data']['id'];
             $company_info['title'] = $company['data']['name'];
             $company_info['position'] = $company['data']['description'];
             $company_info['avatar_url'] = $company['data']['logo'][0]['file_path'] ? 'http://7ktsyl.com2.z0.glb.qiniucdn.com/'.$company['data']['logo'][0]['file_path'] : '';
-            $data['company'] = $company_info;
+            if (empty($company_info['id']) && empty($company_info['title']) && empty($company_info['position']) && empty($company_info['avatar_url'])){
+                $data['company'] = array();
+            }else{
+                $data['company'] = $company_info;
+            }
+
         }
         $data['guest'] =  $data['guest'] ?  $data['guest'] : null;
         $data['company'] = $data['company'] ? $data['company'] : null;
@@ -721,13 +730,14 @@ class WeddingController extends CommonController {
                     }
                 }
             }
-            //获取头条评论数、访问量
+            //获取头条评论数、访问量、头条点赞数
             $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->getField('wedding_id,count');
             $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+            $praise_count = M('SchoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id)');
             foreach ($wedding as $key=>$value){
                 $wedding[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
                 $wedding[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
-
+                $wedding[$key]['praiseCount'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
             }
             //comment和wedding绑定
             foreach ($comment as $key_comment => $value_comment) {

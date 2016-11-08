@@ -73,17 +73,16 @@ class SchoolVideoController extends CommonController {
 		empty($_POST['course_city']) && $this->error('公开课的城市不能为空！');
 		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
 		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
-		if($_POST['course_type']==2){
-			empty($_POST['course_parent_id']) && $this->error('请为该公开课的子视频选择花絮！');
-		}
+
 	}
 
 	//金熊奖表单信息验证
 	public function check_gold_award_info(){
 		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
 		empty($_POST['match_type']) && $this->error('请选择该视频是花絮还是子视频！');
+		empty($_POST['gold_award_id']) && $this->error('请选择金熊奖基本信息！');
 		if($_POST['match_type']==2){
-			empty($_POST['match_parent_id']) && $this->error('请为该金熊奖子视频选择花絮！');
+			empty($_POST['match_level']) && $this->error('请为该金熊奖子视频选择比赛阶段！');
 		}
 	}
 
