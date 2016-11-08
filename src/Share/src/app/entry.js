@@ -1,6 +1,8 @@
 import Index from './containers/Index'
 import Detail from './containers/Guest.detail'
-
+import Company from './containers/Company.detail'
+import ArticlesList from './containers/Articles.list'
+import VideosList from './containers/Videos.list'
 import store from './store'
 
 var Router=ReactRouter.Router;
@@ -57,6 +59,9 @@ ReactDOM.render(
     <Router history={browserHistory} onUpdate={onUpdateRoute}>
         <Route path="/"  component={Index}  onLeave={onLeaveRoute}  />
         <Route path="/share/guests/guest/:id"  component={Detail}  onLeave={onLeaveRoute}  />
+        <Route path="/share/companies/company/:id"  component={Company}  onLeave={onLeaveRoute}  />
+        <Route path="/share/articlesList/:id/:type"  component={ ArticlesList }  onLeave={onLeaveRoute}  />
+        <Route path="/share/videosList/:id/:type"  component={VideosList}  onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement
