@@ -39,10 +39,12 @@ var CommonButtonGroup= React.createClass({
     },
     handleSubmit(e){
         const { dispatch,idData }=this.props;
-        let data={
+        let data=hb.store.get('ke-appoint-info');
+        data={
             course_id:idData,
             phone:$.trim(e.phone),
             name:$.trim(e.name),
+            company:data.company||'',
         };
 
         
@@ -75,9 +77,11 @@ var CommonButtonGroup= React.createClass({
         //        hb.lib.weui.alert(error);
         //    }
         //})
+
+        hb.store.set('ke-appoint-info',data);
         app.ajax({url:'/courses/reserve',data:data,type:"POST"}).then((res)=>{
             if(res.iRet==1){
-                hb.store.set('ke-appoint-info',data);
+                // hb.store.set('ke-appoint-info',data);
                 dispatch(receiveStatusPosts(idData,2,false))
                 hb.lib.weui.toast(res.info);
             }else if(res.iRet==-1){
@@ -112,10 +116,10 @@ var CommonButtonGroup= React.createClass({
             hb.lib.weui.alert('请填写您的公司名');
             return false;
         }
-        //hb.store.set('ke-buy-info',data);
+        hb.store.set('ke-buy-info',data);
         app.ajax({url:'/courses/apply',data:data,type:"POST"}).then((res)=>{
             if(res.iRet==1) {
-                hb.store.set('ke-buy-info',data);
+                // hb.store.set('ke-buy-info',data);
                 dispatch(buySuccessModal(false));
                 let data2 = {
                     course_id: id,
@@ -230,6 +234,7 @@ var CommonButtonGroup= React.createClass({
         let cate_id=this.props.cate_id
         let start_time=Date.parse(new Date(this.props.start_time));
         let original_price=this.props.original_price;
+        let end_date=this.props.end_date;
 
         let {res,showModal,data,val,d,h,m,s,}=this.props;
 
@@ -255,6 +260,7 @@ var CommonButtonGroup= React.createClass({
                 toBuySubmit={this.toBuySubmit}
                 cate_id={cate_id}
                 original_price={original_price}
+                end_date={end_date}
 
                 d={d}
                 h={h}

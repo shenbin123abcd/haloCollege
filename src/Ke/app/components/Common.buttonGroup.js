@@ -9,6 +9,8 @@ export default React.createClass({
     render:function(){
         const price=this.props.priceData;
         let original_price=this.props.original_price
+        // console.log(this.props.end_date)
+        let end_date=this.props.end_date
         const handleClick=this.props.handleClick;s
         const handleSubmit=this.props.handleSubmit;
         const handleOpen=this.props.handleOpen;
@@ -155,6 +157,17 @@ export default React.createClass({
                     </div>
                 )
             }else if(status==3){
+                // console.log(new Date().getTime());
+                // console.log(end_date*1000);
+                if(new Date().getTime()>end_date*1000){
+                    return(
+                        <div className="flex-bottom-btn">
+                            <div className="choose-seat-btn f-15 grey">选座结束</div>
+                            <div className='enter-btn f-15 disable'>报名结束（￥{price} /人）</div>
+                        </div>
+                    )
+                }
+
                 const storeData=hb.store.get('ke-buy-info');
                 let buyInfo=()=>{
                     if(storeData){
@@ -292,6 +305,8 @@ export default React.createClass({
                     </div>
                 )
             }
+
+
         }
         return(
             <div>

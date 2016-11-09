@@ -22,15 +22,15 @@ app.wechat=(function(){
             });
         },
         data:{
-            title: '【抢票ing】2016中国婚礼行业高峰论坛',
-            content: '「转型破局 重振增长」2016年08月16日－18日，中国南京，国际青年文化中心，五千位中国婚礼人等你来！',
-            link: 'http://wfc.halobear.com/uc',
-            logo: 'http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/uc/images/weixin-share-purchase.png'
+            title: '2016-2017中国婚礼策划金熊奖',
+            content: '精装限量版金熊奖参赛作品集（套装共2册）',
+            link: 'http://ke.halobear.com/uc/book',
+            logo: 'http://7ktq5x.com1.z0.glb.clouddn.com/Wfc2016/uc/images/book/goldbear-book-77e9fbb422.jpg?imageView2/1/w/200/h/200'
         },
         act: function() {
             var _this = this;
             $.ajax({
-                url: '/vote/getWechat',
+                url: '/uc/getWechat',
                 type: 'get',
                 data: {
                     url: encodeURIComponent(window.location.href.split('#')[0])

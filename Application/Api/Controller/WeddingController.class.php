@@ -94,6 +94,9 @@ class WeddingController extends CommonController {
         $detail['visitCount'] = $visitCount['count'] ? intval($visitCount['count'])+1: 0;
         $detail['praiseCount'] = $praiseCount['count'] ? intval($praiseCount['count']) : 0;
         $detail['status_praise'] = $status_praise ? intval($status_praise['status']) : -1;
+        //获取作者信息
+        $auther_info = $this->get_auther_info($wedding_id);
+        $detail['auther_info'] = $auther_info;
         $data['detail'] = $detail;
         $source['wedding_id'] = $wedding_id;
         $source['visit_ip'] = get_client_ip();
@@ -101,6 +104,42 @@ class WeddingController extends CommonController {
         $this->countVisits($source);
         $this->success('success', $data);
 
+    }
+
+    /**
+     * 获取头条的作者信息（个人或公司）
+    */
+    public function get_auther_info($wedding_id){
+        $auther = M('SchoolWedding')->where(array('id'=>$wedding_id,'status'=>1))->getField('id,auther_type,auther_id');
+        if($auther[$wedding_id]['auther_type']==1 || $auther[$wedding_id]['auther_type']==3){
+            $guest = M('SchoolGuests')->where(array('id'=>$auther[$wedding_id]['auther_id'],'status'=>1))->field('id,title,position,avatar_url')->find();
+            $guest['avatar_url'] = $guest['avatar_url'] ? C('IMG_URL').$guest['avatar_url'] : '';
+            $guest_info['id'] = $guest['id'];
+            $guest_info['title'] = $guest['title'];
+            $guest_info['position'] = $guest['position'];
+            $guest_info['avatar_url'] = $guest['avatar_url'];
+            if (empty($guest_info['id']) && empty($guest_info['title']) && empty($guest_info['position']) && empty($guest_info['avatar_url'])){
+                $data['guest'] = array();
+            }else{
+                $data['guest'] = $guest_info;
+            }
+        }elseif ($auther[$wedding_id]['auther_type']==2){
+            $company = company_id($auther[$wedding_id]['auther_id']);
+            $company_info['id'] = $company['data']['id'];
+            $company_info['title'] = $company['data']['name'];
+            $company_info['position'] = $company['data']['description'];
+            $company_info['avatar_url'] = $company['data']['logo'][0]['file_path'] ? 'http://7ktsyl.com2.z0.glb.qiniucdn.com/'.$company['data']['logo'][0]['file_path'] : '';
+            if (empty($company_info['id']) && empty($company_info['title']) && empty($company_info['position']) && empty($company_info['avatar_url'])){
+                $data['company'] = array();
+            }else{
+                $data['company'] = $company_info;
+            }
+
+        }
+        $data['guest'] =  $data['guest'] ?  $data['guest'] : null;
+        $data['company'] = $data['company'] ? $data['company'] : null;
+
+        return $data;
     }
 
     /**
@@ -670,7 +709,17 @@ class WeddingController extends CommonController {
             $wedding_id_arr[] = $value['remark_id'];
         }
         if (!empty($wedding_id_arr)) {
-            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time,redirect_url')->select();
+            $wedding = M('SchoolWedding')->where(array('id' => array('in', $wedding_id_arr)))->field('id,headline,brief,create_time,redirect_url,auther_type,auther_id,auther_name')->select();
+            //&amp转换为&
+            foreach ($wedding as $key=>$value){
+                $str = preg_replace('/&amp;/','&',$value['headline']);
+                $wedding[$key]['headline'] = $str;
+                if (!empty($value['auther_name']) && $value['auther_type']==2){
+                    $wedding[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+                }
+
+            }
+
             //头条和封面绑定
             $imgs_url = $this->get_imgs($wedding_id_arr, 'cover');
             foreach ($wedding as $key_wedding => $value_wedding) {
@@ -681,13 +730,14 @@ class WeddingController extends CommonController {
                     }
                 }
             }
-            //获取头条评论数、访问量
+            //获取头条评论数、访问量、头条点赞数
             $visit_count = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->getField('wedding_id,count');
             $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id_arr),'status'=>1))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+            $praise_count = M('SchoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id_arr),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id)');
             foreach ($wedding as $key=>$value){
                 $wedding[$key]['visitCount'] = $visit_count[$value['id']] ? $visit_count[$value['id']] : 0;
                 $wedding[$key]['comment_count'] = $comment_count[$value['id']] ? $comment_count[$value['id']] : 0;
-
+                $wedding[$key]['praiseCount'] = $praise_count[$value['id']] ? $praise_count[$value['id']] : 0;
             }
             //comment和wedding绑定
             foreach ($comment as $key_comment => $value_comment) {
@@ -743,12 +793,21 @@ class WeddingController extends CommonController {
         $where['wtw_school_wedding_favorites.status'] = 1;
         $where['a.status'] = 1;
         $list = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
-            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,a.redirect_url,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
+            ->where($where)->field('a.id,a.headline,a.brief,a.create_time,a.redirect_url,a.auther_type,a.auther_id,a.auther_name,wtw_school_wedding_favorites.wsq_id')->page($page, $per_page)->order('wtw_school_wedding_favorites.update_time desc')->select();
         $total = M('SchoolWeddingFavorites')->join('left join wtw_school_wedding as a on wtw_school_wedding_favorites.wedding_id=a.id')
             ->where($where)->field('a.id,a.headline,a.brief,a.create_time')->count();
         if (empty($list)) {
             $data['list'] = array();
             $this->success('内容为空！', $data);
+        }
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
+
         }
         //获取头条cover
         foreach ($list as $key => $value) {
@@ -1283,6 +1342,10 @@ class WeddingController extends CommonController {
         foreach ($list as $key=>$value){
             $str = preg_replace('/&amp;/','&',$value['headline']);
             $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
+
         }
         if (empty($list)) {
             $data['list'] = array();
@@ -1325,6 +1388,76 @@ class WeddingController extends CommonController {
         $data['total'] = intval($total);
 
         return $data;
+    }
+
+    /**
+     * 获取头条列表
+     */
+    public function wedding_list($map,$uid,$page,$per_page){
+        $model = M('SchoolWedding');
+        $map['wtw_school_wedding.status'] = 1;
+        $list = $model->join('left join wtw_school_wedding_category on wtw_school_wedding.category_id=wtw_school_wedding_category.id')->where($map)
+            ->order("wtw_school_wedding.sort desc,wtw_school_wedding.create_time desc")
+            ->field("wtw_school_wedding.id,wtw_school_wedding_category.name,wtw_school_wedding.headline,wtw_school_wedding.brief,wtw_school_wedding.create_time,wtw_school_wedding.redirect_url,wtw_school_wedding.auther_type,wtw_school_wedding.auther_id,wtw_school_wedding.auther_name")
+            ->page($page, $per_page)->select();
+        //&amp转换为&
+        foreach ($list as $key=>$value){
+            $str = preg_replace('/&amp;/','&',$value['headline']);
+            $list[$key]['headline'] = $str;
+            if (!empty($value['auther_name']) && $value['auther_type']==2){
+                $list[$key]['auther_name'] = $this->analysis_name($value['auther_name']);
+            }
+        }
+        if (empty($list)) {
+            $data['list'] = array();
+            $data['total'] = 0;
+        }else{
+            //获取头条cover
+            foreach ($list as $key => $value) {
+                $wedding_id[] = $value['id'];
+            }
+            if (!empty($wedding_id)) {
+                $imgs_url = $this->get_imgs($wedding_id, 'cover');
+                foreach ($list as $key_list => $value_list) {
+                    $list[$key_list]['imgs'] = array();
+                    foreach ($imgs_url as $key_img => $value_img) {
+                        if ($value_list['id'] == $value_img['record_id']) {
+                            $list[$key_list]['imgs'][] = $imgs_url[$key_img];
+                        }
+                    }
+                }
+            }
+            //获取访问总数、点赞总数、点赞状态、评论总数
+            $visitCount = M('WeddingVisitcount')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->getField('wedding_id,count');
+            $praiseCount = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'status'=>1))->group('wedding_id')->getField('wedding_id,count(id) as count');
+            $status_praise = M('schoolWeddingWeddingpraise')->where(array('wedding_id'=>array('in',$wedding_id),'uid'=>$uid))->getField('wedding_id,status');
+            $comment_count = M('schoolWeddingComment')->where(array('remark_id'=>array('in',$wedding_id),'status'=>1,))->group('remark_id')->getField('remark_id as wedding_id,count(id) as count');
+            foreach ($list as $key=>$value){
+                $list[$key]['visitCount'] = intval($visitCount[$value['id']]) ? intval($visitCount[$value['id']]) : 0;
+                $list[$key]['praiseCount'] = intval($praiseCount[$value['id']]) ?  intval($praiseCount[$value['id']]) : 0;
+                $list[$key]['comment_count'] = intval($comment_count[$value['id']]) ? intval($comment_count[$value['id']]) : 0;
+                if(empty($uid)){
+                    $list[$key]['status_praise'] = -1;
+                }else{
+                    $list[$key]['status_praise'] = intval($status_praise[$value['id']]) ? intval($status_praise[$value['id']]) : 0;
+                }
+            }
+            $total = $model->where($map)->count();
+            $data['list'] = array_values($list);
+            $data['total'] = intval($total);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 作者姓名解析
+    */
+    public function analysis_name($str){
+        $str_arr = explode('|',$str);
+        $name  = $str_arr[count($str_arr)-1];
+        $name = trim($name);
+        return $name;
     }
 
 

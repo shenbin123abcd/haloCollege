@@ -81,7 +81,7 @@
         }else{
 
             let emptyStr=`
-                <div class="no-data-box">您还未购买婚礼策划样品哦,<br>请到五楼VR体验区参观自助购买哦。</div> 
+                <div class="no-data-box">您还未购买2016-2017中国婚礼策划金熊奖</div> 
             `;
 
             $("#list-wrapper").append(emptyStr);

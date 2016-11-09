@@ -21,6 +21,11 @@ var User= React.createClass({
             }
         }
     },
+    componentWillMount(){
+        if(!Modernizr.weixin){
+
+        }
+    },
   componentDidMount() {
       document.title='我的个人中心';
       if(Modernizr.weixin&&Modernizr.ios){
@@ -61,7 +66,20 @@ var User= React.createClass({
         }else if(list.length===0){
             var isEmpty =true
         }
-
+        if(!Modernizr.weixin){
+            return (
+                <div>
+                    <div className="weui-msg">
+                        <div className="weui-msg__icon-area">
+                            <i className="weui-icon-info weui-icon_msg"></i>
+                        </div>
+                        <div className="weui-msg__text-area">
+                            <h4 className="weui-msg_title">请在微信客户端打开链接</h4>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
         if (isFetching||isNull) {
             return <PageLoading key={1}/>
         }else if(isEmpty){

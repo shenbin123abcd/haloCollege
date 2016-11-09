@@ -110,6 +110,7 @@ var Detail= React.createClass({
                         cate_id={fetchData.cate_id}
 
                         start_time={start_time}
+                        end_date={fetchData.end_date}
                         original_price={fetchData.original_price}
                     >
                     </BottomBtn>
@@ -275,7 +276,7 @@ var TuiJianBlock=React.createClass({
     render(){
         let is_fx=this.props.data.is_fx;
         let res=this.props.res;
-        console.log(res);
+        // console.log(res);
         if(res.iRet==1 && is_fx==1){
             return(
                 <Link className="tel-block clearfix" to={`/course/branding`}>

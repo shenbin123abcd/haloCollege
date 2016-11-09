@@ -95,6 +95,8 @@ var Seatinfo = React.createClass({
                         cate_id={course.cate_id}
 
                         start_time={course.next_date}
+
+                        end_date={course.end_date}
                     />
                 </div>
 

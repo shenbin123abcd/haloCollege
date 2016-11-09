@@ -5,7 +5,9 @@
     function init(){
         inputMask();
         addAddress();
-        product_2.val(1);
+        //
+        product_2.add();
+
         // setTimeout(function(){$('#product-2').click();}, 200);
     }
     function inputMask(){
@@ -129,7 +131,8 @@
     function initSubmit(){
         $('#pay-bt').on('click',function(event){
             //event.preventDefault();
-            var num1=0; //product_1.val()
+            // console.log(111)
+            var num1=product_1.val();
             var num2=product_2.val();
             if(num1==0&&num2==0){
                 hb.lib.weui.alert('请选择您要购买的商品，并正确填写数量');
@@ -176,21 +179,21 @@
         var num2=product_2.val();
         var data;
         var name;
-        // if(num1>0&&num2==0){
-        //     data={
-        //         type: 1,
-        //         num:num1,
-        //     };
-        //     name='product_1-'+data.num;
-        // }else if(num2>0&&num1==0){
+        if(num1>0&&num2==0){
+            data={
+                type: 1,
+                num:num1,
+            };
+            name='product_1-'+data.num;
+        }else if(num2>0&&num1==0){
             data={
                 type: 2,
                 num:num2,
             };
             name='product_2-'+data.num;
-        // }else{
-        //     hb.lib.weui.alert('自提和快递只能选一种，请重新选择');
-        // }
+        }else{
+            hb.lib.weui.alert('自提和快递只能选一种，请重新选择');
+        }
 
         
         app.pay3.callPay(name).callpay({

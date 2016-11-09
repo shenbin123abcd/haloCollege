@@ -57,8 +57,8 @@ class SchoolVideoController extends CommonController {
 		empty($_POST['cover_url']) && $this->error('请上传封面图');
 		empty($_POST['big_cover_url']) && $this->error('请上传封面大图');
 		$this->_before_update();
-		$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
-		empty($_POST['guests_id']) && $this->error('嘉宾不存在');
+		//$_POST['guests_id'] = M('SchoolGuests')->where(array('title'=>$_POST['guests']))->getField('id');
+		//empty($_POST['guests_id']) && $this->error('嘉宾不存在');
 		!empty($_POST['charge_standard']) ? $_POST['charge_standard'] : "";
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
@@ -73,17 +73,16 @@ class SchoolVideoController extends CommonController {
 		empty($_POST['course_city']) && $this->error('公开课的城市不能为空！');
 		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
 		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
-		if($_POST['course_type']==2){
-			empty($_POST['course_parent_id']) && $this->error('请为该公开课的子视频选择花絮！');
-		}
+
 	}
 
 	//金熊奖表单信息验证
 	public function check_gold_award_info(){
 		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
 		empty($_POST['match_type']) && $this->error('请选择该视频是花絮还是子视频！');
+		empty($_POST['gold_award_id']) && $this->error('请选择金熊奖基本信息！');
 		if($_POST['match_type']==2){
-			empty($_POST['match_parent_id']) && $this->error('请为该金熊奖子视频选择花絮！');
+			empty($_POST['match_level']) && $this->error('请为该金熊奖子视频选择比赛阶段！');
 		}
 	}
 
@@ -104,8 +103,9 @@ class SchoolVideoController extends CommonController {
 	}
 
 	public function _before_update(){
+		//公开课和金熊奖数据校验（根据类型，将非选中类型的数据清空）
+		$this->checkData();
 		!$this->_checkVideo($_POST['url']) && $this->error('视频不存在，请检查');
-		//(empty($_POST['cate1']) || empty($_POST['cate2'])) && $this->error('请选择分类');
 		empty($_POST['guests_id']) && $this->error('请选择嘉宾');
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
@@ -120,7 +120,25 @@ class SchoolVideoController extends CommonController {
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['update_time'] =time();
 		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
-		//$_POST['cate3'] = empty($_POST['cate3']) ? '' : implode(',', $_POST['cate3']);
+		$_POST['course_date'] = $_POST['course_date'] ? strtotime($_POST['course_date']) : 0;
+		$_POST['match_date'] = $_POST['match_date'] ? strtotime($_POST['match_date']) : 0;
+
+	}
+
+	//公开课和金熊奖数据校验
+	public function checkData(){
+		if (in_array(3,$_POST['category'])) {
+			!empty($_POST['course_city']) &&  $_POST['course_city'] = '';
+			!empty($_POST['course_date']) &&  $_POST['course_date'] = 0;
+			!empty($_POST['course_type']) &&  $_POST['course_type'] = 0;
+			!empty($_POST['course_parent_id']) &&  $_POST['course_parent_id'] = 0;
+		}elseif (in_array(4,$_POST['category'])){
+			!empty($_POST['match_date']) &&  $_POST['match_date'] = 0;
+			!empty($_POST['match_type']) &&  $_POST['match_type'] = 0;
+			!empty($_POST['match_parent_id']) &&  $_POST['match_parent_id'] = 0;
+			!empty($_POST['match_level']) &&  $_POST['match_level'] = 0;
+			!empty($_POST['gold_award_id']) &&  $_POST['gold_award_id'] = 0;
+		}
 	}
 
 	private function _privateDownloadUrl($baseUrl, $expires = 3600){

@@ -157,10 +157,10 @@ class PublicController extends CommonController {
         } elseif ($password != $rpassword) {
             $this->error('2次密码输入不一致！');
         }
-        $user = M('SchoolAccount')->where(array('phone' => $phone, 'status' => 1))->field('id,username,phone')->find();
-        if (empty($user)) {
-            $this->error('手机号不存在');
-        }
+        //$user = M('SchoolAccount')->where(array('phone' => $phone, 'status' => 1))->field('id,username,phone')->find();
+        //if (empty($user)) {
+        //    $this->error('手机号不存在');
+        //}
 
         // 本地修改
         // $ret = $model->where(array('phone'=>$phone))->save(array('password'=>md5($password)));
@@ -468,7 +468,7 @@ class PublicController extends CommonController {
         $page = I('page') ? I('page') : 1;
         $per_page = I('per_page') ? I('per_page') : 10000;
         $uid = $this->user['uid'];
-        $bind_info = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->field('college_uid,unionid,wechat_id')->find();
+        $bind_info = M('CollegeWechatUnion')->where(array('college_uid'=>$uid))->find();
         if (!empty($bind_info)){
             if ($bind_info['wechat_id']==0){
                 $this->check_wechat_id($bind_info);
@@ -489,7 +489,7 @@ class PublicController extends CommonController {
     */
     public function check_wechat_id($bind_info){
         $wechat_id = M('WechatAuth')->where(array('unionid'=>$bind_info['unionid']))->getField('unionid,id');
-        $bind_info['wechat_id'] = !empty($wechat_id) ? $wechat_id : 0;
+        $bind_info['wechat_id'] = !empty($wechat_id[$bind_info['unionid']]) ? $wechat_id[$bind_info['unionid']] : 0;
         $result = M('CollegeWechatUnion')->save($bind_info);
     }
 
@@ -625,14 +625,14 @@ class PublicController extends CommonController {
 
         //热文列表
         $article_where = array('wtw_school_wedding.auther_type'=>array('in',array(1,3)),'wtw_school_wedding.auther_id'=>$guest_id);
-        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
         //视频列表
         $video_where = array('guests_id'=>$guest_id);
         $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
-        $data['guest'] = $guest;
-        $data['company'] = $company;
-        $data['articles'] = $articles;
-        $data['videos'] = $videos;
+        $data['guest'] = !empty($guest) ? $guest : null;
+        $data['company'] = !empty($company) ? $company : null;
+        $data['articles'] = !empty($articles['list']) ? $articles : null;
+        $data['videos'] = !empty($videos['list']) ? $videos : null;
 
         $this->success('success',$data);
 
@@ -660,18 +660,20 @@ class PublicController extends CommonController {
         $members = $this->get_guests($member_where);
         //热文列表
         $article_where = array('wtw_school_wedding.auther_type'=>2,'wtw_school_wedding.auther_id'=>$company_id);
-        $articles = A('Wedding')->get_wedding_list($article_where,$uid,$page,$per_page);
+        $articles = A("Wedding")->wedding_list($article_where,$uid,$page,$per_page);
         //视频列表
         $video_where = array('company_id'=>$company_id);
         $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
 
         $data['company'] = $company;
         $data['members'] = $members;
-        $data['articles'] = $articles;
-        $data['videos'] = $videos;
+        $data['articles'] = !empty($articles['list']) ? $articles : null;
+        $data['videos'] = !empty($videos['list']) ? $videos : null;
 
         $this->success('success',$data);
     }
+
+    
 
     /**
      * 获取嘉宾
@@ -691,6 +693,67 @@ class PublicController extends CommonController {
     }
 
     /**
+     * 公司主页、个人主页所有文章列表
+    */
+    public function homeArticlesList(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $uid = $this->user['uid'];
+        $home_id = I('home_id');
+        $type = I('type');
+        empty($home_id || $type) && $this->error('参数错误！');
+        if ($type==1){
+            //嘉宾主页热文
+            $article_where = array('wtw_school_wedding.auther_type'=>array('in',array(1,3)),'wtw_school_wedding.auther_id'=>$home_id);
+            $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
+        }elseif ($type==2){
+            //公司主页热文
+            $article_where = array('wtw_school_wedding.auther_type'=>2,'wtw_school_wedding.auther_id'=>$home_id);
+            $articles = A('Wedding')->wedding_list($article_where,$uid,$page,$per_page);
+        }else{
+            $this->error('参数错误！');
+        }
+        $data = empty($articles) ? array() : $articles;
+        $this->success('success',$data);
+
+    }
+
+    /**
+     * 公司主页、个人主页、金熊奖主页所有视频列表
+     */
+    public function homeVideosList(){
+        $page = I('page') ? I('page') : 1;
+        $per_page = I('per_page') ? I('per_page') : 10000;
+        $home_id = I('home_id');
+        $type = I('type');
+        $match_level = I('match_level');
+        empty($home_id || $type) && $this->error('参数错误！');
+        if ($type==1){
+            //嘉宾视频列表
+            $video_where = array('guests_id'=>$home_id);
+            $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
+        }elseif ($type==2){
+            //公司视频列表
+            $video_where = array('company_id'=>$home_id);
+            $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
+        }elseif ($type==3){
+            //金熊奖视频列表
+            if ($match_level==1){
+                $match_first_where = array('match_type'=>2,'match_parent_id'=>$home_id,'match_level'=>1);
+                $videos = D('SchoolVideo')->getListByCate($match_first_where,1,3);
+            }elseif ($match_level==2){
+                $match_final_where = array('match_type'=>2,'match_parent_id'=>$home_id,'match_level'=>2);
+                $videos = D('SchoolVideo')->getListByCate($match_final_where,1,3);
+            }else{
+                $this->error('参数错误！');
+            }
+        }
+        $data = empty($videos) ? array() : $videos;
+        $this->success('success',$data);
+
+    }
+
+    /**
      * 金熊奖主页
     */
     public function awardsHomePage(){
@@ -706,9 +769,12 @@ class PublicController extends CommonController {
         $match_final = D('SchoolVideo')->getListByCate($match_final_where,1,3);
 
         $data['gold_award'] = $award_base_info;
-        $data['video_feature'] = $video_feature;
-        $data['match_first'] = $match_first;
-        $data['match_final'] = $match_final;
+        $data['video_feature']['id'] = $video_feature['id'];
+        $data['video_feature']['title'] = $video_feature['title'];
+        $data['video_feature']['url'] = $video_feature['url'];
+        $data['video_feature']['cover_url'] = $video_feature['cover_url'];
+        $data['match_first'] = !empty($match_first['list']) ? $match_first : null;
+        $data['match_final'] = !empty($match_final['list']) ? $match_final : null;
 
         $this->success('success',$data);
     }

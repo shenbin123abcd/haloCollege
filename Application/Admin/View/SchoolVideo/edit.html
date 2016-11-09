@@ -84,7 +84,7 @@
 						<select name="course_parent_id" >
 							<option value="">请选择</option>
 							<volist name="course" id="vo">
-								<option value="{$vo.id}" <eq name="data.course_parent_id" value="$vo.id">selected</eq>>{$vo.course_city}|{$vo.course_date}|{$vo.title}</option>
+								<option value="{$vo.id}" <eq name="data.course_parent_id" value="$vo.id">selected</eq>>{$vo.course_city}|{:date('Y',$vo['course_date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -92,7 +92,7 @@
 
 				<tr id="gold_award_info" style="display: none">
 					<th>金熊奖信息</th>
-					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{:date('Y-m-d', $data['matchdate'])}"></td>
+					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{:date('Y-m-d', $data['match_date'])}"></td>
 					<td><label>花絮/子视频</label>
 						<select name="match_type" id="gold_award_type">
 							<option value="">请选择</option>
@@ -105,7 +105,7 @@
 						<select name="match_parent_id" >
 							<option value="">请选择</option>
 							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{:date('Y',$vo.date)}|{$vo.title}</option>
+								<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{:date('Y',$vo['date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
@@ -113,8 +113,8 @@
 						<label>分赛阶段</label>
 						<select name="match_level" >
 							<option value="">请选择</option>
-							<option value="1" <eq name="data.match_level" value="1">selected</eq>>初赛</option>
-							<option value="2" <eq name="data.match_level" value="2">selected</eq>>决赛</option>
+							<option value="1" <eq name="data.match_level" value="1">selected</eq>>决赛阶段</option>
+							<option value="2" <eq name="data.match_level" value="2">selected</eq>>总决赛</option>
 						</select>
 					</td>
 					<td>
@@ -122,7 +122,7 @@
 						<select name="gold_award_id" >
 							<option value="">请选择</option>
 							<volist name="gold_awards" id="vo">
-								<option value="{$vo.id}" <eq name="data.gold_award_id" value="$vo.id">selected</eq>>{:date('Y',$vo.date)}|{$vo.title}</option>
+								<option value="{$vo.id}" <eq name="data.gold_award_id" value="$vo.id">selected</eq>>{:date('Y',$vo['date'])}|{$vo.title}</option>
 							</volist>
 						</select>
 					</td>
