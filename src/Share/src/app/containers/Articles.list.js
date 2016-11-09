@@ -1,4 +1,5 @@
 import CommonHeader from './Common.header'
+import CommonDownload from './Common.download'
 import {fetchArticlesListIfNeeded} from '../actions/articles.list'
 
 class ArticlesList extends React.Component{
@@ -61,10 +62,12 @@ class ArticlesList extends React.Component{
                                             </section>
                                             <div className={`myLine ${(articlesListData.data.list.length==(i+1))?'lineLast':''}`} ></div>
                                         </a>
+
                                     </div>
                                 )
                             })
                         }
+                        <CommonDownload></CommonDownload>
                     </div>
                 )
         }else{

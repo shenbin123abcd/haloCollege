@@ -1,6 +1,7 @@
 import CommonHeader from './Common.header'
 import CommonArticle from './Common.article'
 import CommonVideos from './Common.videos'
+import CommonDownload from './Common.download'
 import {fetchGuestDetailIfNeeded,destroyGuestDetailData} from '../actions/guest.detail'
 let Link=ReactRouter.Link;
 class Detail extends React.Component{
@@ -93,6 +94,7 @@ class Detail extends React.Component{
                         { this.renderCompany()}
                         <CommonArticle articles={guestDetailData.data.articles} id={guestDetailData.data.guest.id} type="1"></CommonArticle>
                         <CommonVideos videos={guestDetailData.data.videos} id={guestDetailData.data.guest.id} type="1"></CommonVideos>
+                        <CommonDownload></CommonDownload>
                     </div>
                 )
             }else{
