@@ -8,8 +8,8 @@ class ArticlesList extends React.Component{
         dispatch(fetchArticlesListIfNeeded({
             home_id:routeParams.id,
             type:routeParams.type,
-            // page:routeParams.page,
-            // per_page:routeParams.per_page
+            page:1,
+            per_page:99
         }))
     }
     componentDidMount(){

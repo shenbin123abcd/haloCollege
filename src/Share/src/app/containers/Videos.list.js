@@ -8,8 +8,8 @@ class VideosList extends React.Component{
             home_id:routeParams.id,
             type:routeParams.type,
             // match_level:routeParams.match_level,
-            // page:routeParams.page,
-            // per_page:routeParams.per_page
+            page:1,
+            per_page:99
         }))
     }
     componentDidMount(){
