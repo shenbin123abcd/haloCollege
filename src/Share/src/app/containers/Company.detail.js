@@ -15,7 +15,7 @@ class Company extends React.Component{
 
     render(){
         const { dispatch,location,companyDetailData } = this.props;
-        console.log(companyDetailData);
+        // console.log(companyDetailData);
         if(companyDetailData.isFetching){
             return(
                 <div>

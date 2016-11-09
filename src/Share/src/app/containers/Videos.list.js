@@ -18,7 +18,7 @@ class VideosList extends React.Component{
 
     render(){
         const { dispatch,location,videosListData } = this.props;
-        console.log(videosListData);
+        // console.log(videosListData);
         if(videosListData.isFetching){
             return(
                 <div>
@@ -42,25 +42,25 @@ class VideosList extends React.Component{
                                                 <div className="word">{n.title}</div>
                                                 <div className="list-icon-box">
                                                     <span className="list-icon-first">
-                                                        <span className="list-icon">
-                                                                {
-                                                                    n.category.split(",").map((v,j)=>{
-                                                                        return(
-                                                                            <span key={j}>
-                                                                                <svg className="haloIcon haloIcon-common" aria-hidden="true">
-                                                                                    <use xlinkHref=
-                                                                                             {v==1? "#haloIcon-speech":(v==2?"#haloIcon-interview":(v==3?"#haloIcon-competition"
-                                                                                                 :(v==4?"#haloIcon-class":(v==5?"#haloIcon-charge":(v==6?"#haloIcon-plan":(v==7?"#haloIcon-marketing"
-                                                                                                 :(v==8?"#haloIcon-host":(v==12?"#haloIcon-train":(v==13?"#haloIcon-flower":"")))))))))}
-                                                                                    ></use>
-                                                                                </svg>
-                                                                                {n.cate_title.split(",")[j]}
-                                                                            </span>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            {/*{n.cate_title.split(",").map(c=>(c))}*/}
-                                                        </span>
+                                                        {
+                                                            n.category.split(",").map((v,j)=>{
+                                                                return(
+                                                                    <span key={j}>
+                                                                        <span className="list-icon">
+                                                                            <svg className="haloIcon haloIcon-common" aria-hidden="true">
+                                                                                <use xlinkHref=
+                                                                                         {v==1? "#haloIcon-speech":(v==2?"#haloIcon-interview":(v==3?"#haloIcon-competition"
+                                                                                             :(v==4?"#haloIcon-class":(v==5?"#haloIcon-charge":(v==6?"#haloIcon-plan":(v==7?"#haloIcon-marketing"
+                                                                                             :(v==8?"#haloIcon-host":(v==12?"#haloIcon-train":(v==13?"#haloIcon-flower":"")))))))))}
+                                                                                ></use>
+                                                                            </svg>
+                                                                            {n.cate_title.split(",")[j]}
+                                                                        </span>
+                                                                    </span>
+                                                                )
+                                                            })
+                                                        }
+                                                        {/*{n.cate_title.split(",").map(c=>(c))}*/}
                                                         <span className="list-icon">
                                                             {(n.times.split(":")[0]).replace(/\b(0+)/gi,"")}分钟
                                                         </span>
