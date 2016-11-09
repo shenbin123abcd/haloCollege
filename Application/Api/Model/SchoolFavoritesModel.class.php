@@ -32,18 +32,27 @@ class SchoolFavoritesModel extends Model{
         foreach ($list as $key => $value) {
             $vid[] = $value['vid'];
         }
-        //$guests_id = array_unique($guests_id);
-        //$guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
-        
-        $video = D('SchoolVideo')->join('wtw_school_guests AS g ON g.id = wtw_school_video.guests_id')->where(array('wtw_school_video.id'=>array('in', $vid)))->getField('wtw_school_video.id AS video_id, wtw_school_video.title AS video_title, wtw_school_video.views AS video_views, wtw_school_video.cover_url AS video_cover, wtw_school_video.times AS video_times,wtw_school_video.cate_title,wtw_school_video.is_vip,wtw_school_video.big_cover_url,wtw_school_video.category,wtw_school_video.charge_standard,wtw_school_video.create_time,g.id AS guests_id,g.title AS guests_title,g.position AS guests_position,g.avatar_url AS guests_avatar');
+        //$video = D('SchoolVideo')->join('wtw_school_guests AS g ON g.id = wtw_school_video.guests_id')->where(array('wtw_school_video.id'=>array('in', $vid)))->getField('wtw_school_video.id AS video_id, wtw_school_video.title AS video_title, wtw_school_video.views AS video_views, wtw_school_video.cover_url AS video_cover, wtw_school_video.times AS video_times,wtw_school_video.cate_title,wtw_school_video.is_vip,wtw_school_video.big_cover_url,wtw_school_video.category,wtw_school_video.charge_standard,wtw_school_video.create_time,g.id AS guests_id,g.title AS guests_title,g.position AS guests_position,g.avatar_url AS guests_avatar');
+        $video = D('SchoolVideo')->where(array('id'=>array('in', $vid)))->getField('id AS video_id,title AS video_title,views AS video_views,cover_url AS video_cover,times AS video_times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time,guests_id');
+        foreach ($video as $key=>$value){
+          $guests_id[]= $value['guests_id'];
+        }
+        $guests_id = array_unique($guests_id);
+        $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id as guests_id,title as guests_title,position as guests_position,avatar_url as guests_avatar');
+        foreach ($video as $key=>$value){
+            $video[$key]['guests_id'] = $guests[$value['guests_id']]['guests_id'];
+            $video[$key]['guests_title'] = $guests[$value['guests_id']]['guests_title'];
+            $video[$key]['guests_position'] = $guests[$value['guests_id']]['guests_position'];
+            $video[$key]['guests_avatar'] = $guests[$value['guests_id']]['guests_avatar'];
+        }
         //获取公开课的和培训营课程的分类和收费信息
         $video = D('SchoolVideo')->get_course_info ($video);
 
         $temp = array();
         foreach ($list as $key => $value) {
             $video_temp = $video[$value['vid']];
-            $video_temp['video_cover'] = C('IMG_URL') . $video_temp['video_cover'] . '!240x160';
-            $video_temp['guests_avatar'] = C('IMG_URL') . $video_temp['guests_avatar'];
+            $video_temp['video_cover'] = !empty($video_temp['video_cover']) ? C('IMG_URL') . $video_temp['video_cover'] . '!240x160' : '';
+            $video_temp['guests_avatar'] = !empty($video_temp['guests_avatar']) ? C('IMG_URL') . $video_temp['guests_avatar'] : '';
             $temp[] = $video_temp;
         }
 
