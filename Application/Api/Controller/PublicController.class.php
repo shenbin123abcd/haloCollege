@@ -226,11 +226,11 @@ class PublicController extends CommonController {
             $this->error('参数错误');
         }
 
-        $ret = M('SchoolAccount')->where(array('phone' => $to, 'status' => 1))->count();
-
-        if (!$ret) {
-            $this->error('该手机号不存在');
-        }
+        //$ret = M('SchoolAccount')->where(array('phone' => $to, 'status' => 1))->count();
+        //
+        //if (!$ret) {
+        //    $this->error('该手机号不存在');
+        //}
 
         $data = M('phone')->where(array('phone' => $to))->find();
 
@@ -633,6 +633,8 @@ class PublicController extends CommonController {
         $data['company'] = !empty($company) ? $company : null;
         $data['articles'] = !empty($articles['list']) ? $articles : null;
         $data['videos'] = !empty($videos['list']) ? $videos : null;
+        //分享页地址
+        $data['share_url'] = 'http://college-share.halobear.com/share/guests/guest/'.$guest_id;
 
         $this->success('success',$data);
 
@@ -669,6 +671,8 @@ class PublicController extends CommonController {
         $data['members'] = $members;
         $data['articles'] = !empty($articles['list']) ? $articles : null;
         $data['videos'] = !empty($videos['list']) ? $videos : null;
+        //分享页地址
+        $data['share_url'] = 'http://college-share.halobear.com/share/companies/company/'.$company_id;
 
         $this->success('success',$data);
     }
