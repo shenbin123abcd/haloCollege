@@ -31,14 +31,17 @@ body{
   display: none;
 }
 .common-header-wrapper{
-  display: flex;
-  justify-content: space-between;
+  //display: flex;
+  //justify-content: space-between;
   height:1.27rem;
   line-height: 1.27rem;
   background-color: #E74C3C;
   color:#fff;
   font-size:0.3rem;
+  position:relative;
+  text-align: center;
   .left-box{
+    position: absolute;
     .haloIcon-back{
       font-size:0.4rem;
     }
@@ -93,20 +96,26 @@ body{
       font-size:0.26rem;
       line-height: 0.39rem;
       padding-top:0.3rem;
+      margin-bottom: 0.3rem;
       //line-clamp:2;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
+      //display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+      transition: 0.4s;
     }
     .company-more{
       width:1.8rem;
       margin:0 auto;
+      margin-bottom:0.4rem;
+      text-align: center;
+      font-size:0.24rem;
+      color:$mainSecondColor;
       .company-more-word{
         font-size:0.24rem;
         color:$mainSecondColor;
-        margin:0.4rem 0.1rem 0.4rem 0;
+        margin:0.1rem 0.1rem 0rem 0;
         text-align: center;
         display: inline-block;
       }
@@ -238,20 +247,26 @@ body{
       font-size:0.26rem;
       line-height: 0.39rem;
       padding-top:0.3rem;
+      margin-bottom:0.3rem;
       //line-clamp:2;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
+      //display: -webkit-box;
+      //transition: 0.4s;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
     .guest-more{
       width:1.8rem;
       margin:0 auto;
+      text-align: center;
+      font-size:0.24rem;
+      color:$mainSecondColor;
+      margin-bottom: 0.4rem;
       .guest-more-word{
         font-size:0.24rem;
         color:$mainSecondColor;
-        margin:0.4rem 0.1rem 0.4rem 0;
+        margin:0.1rem 0.1rem 0rem 0;
         text-align: center;
         display: inline-block;
       }
@@ -448,6 +463,7 @@ body{
     top: 0;
     color:#fff;
     text-align: center;
+    opacity: 1;
     .haloIcon-times{
       font-size:0.26rem;
       font-weight: bold;
