@@ -1,6 +1,6 @@
 import {fetchVideosListIfNeeded} from '../actions/videos.list'
 import CommonHeader from './Common.header'
-
+import CommonDownload from './Common.download'
 class VideosList extends React.Component{
     componentWillMount(){
         const { dispatch,location,routeParams} = this.props;
@@ -77,6 +77,7 @@ class VideosList extends React.Component{
                             )
                         })
                     }
+                    <CommonDownload></CommonDownload>
                 </div>
             )
         }else{

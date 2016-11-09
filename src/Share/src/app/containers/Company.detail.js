@@ -1,6 +1,7 @@
 import CommonHeader from './Common.header'
 import CommonArticle from './Common.article'
 import CommonVideos from './Common.videos'
+import CommonDownload from './Common.download'
 import {fetchCompanyDetailIfNeeded} from '../actions/company.detail'
 class Company extends React.Component{
     componentWillMount(){
@@ -68,6 +69,7 @@ class Company extends React.Component{
                     </div>
                     <CommonArticle articles={companyDetailData.data.articles} id={companyDetailData.data.company.id} type="2"></CommonArticle>
                     <CommonVideos videos={companyDetailData.data.videos} id={companyDetailData.data.company.id} type="2"></CommonVideos>
+                    <CommonDownload></CommonDownload>
                 </div>
             )
         }else{
