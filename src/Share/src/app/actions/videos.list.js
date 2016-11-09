@@ -59,3 +59,11 @@ export function fetchVideosListIfNeeded(req){
         }
     }
 }
+
+
+export function destroyVideosListData(data) {
+    return{
+        type:'DESTROY_VIDEOS_LIST_DATA',
+        data
+    }
+}

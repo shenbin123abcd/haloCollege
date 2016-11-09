@@ -59,3 +59,10 @@ export function fetchArticlesListIfNeeded(req){
         }
     }
 }
+
+export function destroyArticlesListData(data) {
+    return{
+        type:'DESTROY_ARTICLES_LIST_DATA',
+        data
+    }
+}
