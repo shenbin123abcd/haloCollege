@@ -6,7 +6,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, './dist/js'),
         filename: "bundle.js",
-        publicPath: '/js/',
+        publicPath: '/Public/Share/js/',
     },
     // watch: true,
     // devtool: "source-map",

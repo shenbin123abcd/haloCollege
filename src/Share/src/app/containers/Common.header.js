@@ -15,13 +15,23 @@ class GoBack extends React.Component{
         browserHistory.goBack()
     }
     render(){
-        let {goBack}=this.props;
-        if(goBack&&history.length!=1){
+        if(history.length!=1){
             return(
-                <div className="go-back" onClick={this.handlerClick}><span className="haloIcon haloIcon-back"></span></div>
+                <div className="go-back" onClick={this.handlerClick}>
+                    <svg className="haloIcon haloIcon-back" aria-hidden="true">
+                        <use xlinkHref="#haloIcon-back"></use>
+                    </svg>
+                </div>
             )
         }else{
-            return null
+            return (
+                <div className="go-back" onClick={this.handlerClick}>
+                    <svg className="haloIcon haloIcon-back" aria-hidden="true">
+                        <use xlinkHref="#haloIcon-back"></use>
+                    </svg>
+                </div>
+            )
+
         }
     }
 
@@ -38,9 +48,14 @@ class CommonHeader extends React.Component{
     render(){
         var {title,children,goBack=true}=this.props;
         let renderLeftBtn=()=>{
-            return(
-                <GoBack goBack={goBack} />
-            )
+            if(goBack){
+                return(
+                    <GoBack goBack={goBack}/>
+                )
+            }else{
+                return null
+            }
+
         };
         return (
             <div className="common-header-wrapper">

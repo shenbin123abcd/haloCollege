@@ -24,10 +24,11 @@ function fetchData(req) {
     return dispatch => {
         dispatch(requestData('receive'));
         return  $.ajax({
-            type:'GET',
-            url:`/fake1?d=0`,
+            url:`/fake1?d=2000`,
+            // url:`http://collegeapi-test.weddingee.com/v1/public/personalHomePage`,
             data:req,
-            dataType:'json',
+            // data:{guest_id:148},
+            dataType:'jsonp',
             success: function(res) {
                 if(res.iRet==1){
                     dispatch(receiveData(res));

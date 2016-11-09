@@ -3,8 +3,6 @@ var hashHistory=ReactRouter.hashHistory;
 var browserHistory=ReactRouter.browserHistory;
 let Link=ReactRouter.Link;
 
-var CSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +11,7 @@ class Index extends React.Component {
     componentWillMount(){
         const { dispatch,location } = this.props;
         dispatch(fetchIndexIfNeeded({
-            
+            guest_id:148
         }));
     }
     componentDidMount(){
@@ -28,6 +26,7 @@ class Index extends React.Component {
     }
     render() {
         const { dispatch,location,indexData } = this.props;
+        console.log(indexData)
         if(indexData.isFetching){
             return (
                 <div>
