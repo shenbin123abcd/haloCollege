@@ -59,3 +59,10 @@ export function fetchGuestDetailIfNeeded(req){
         }
     }
 }
+
+export function destroyGuestDetailData(data) {
+    return{
+        type:'DESTROY_GUEST_DETAIL_DATA',
+        data
+    }
+}

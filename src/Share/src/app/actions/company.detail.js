@@ -59,3 +59,11 @@ export function fetchCompanyDetailIfNeeded(req){
         }
     }
 }
+
+
+export function destroyCompanyDetailData(data) {
+    return{
+        type:'DESTROY_COMPANY_DETAIL_DATA',
+        data
+    }
+}

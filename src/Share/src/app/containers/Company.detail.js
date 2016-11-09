@@ -2,8 +2,12 @@ import CommonHeader from './Common.header'
 import CommonArticle from './Common.article'
 import CommonVideos from './Common.videos'
 import CommonDownload from './Common.download'
-import {fetchCompanyDetailIfNeeded} from '../actions/company.detail'
+import {fetchCompanyDetailIfNeeded,destroyCompanyDetailData} from '../actions/company.detail'
 class Company extends React.Component{
+    constructor(props) {
+        super(props);
+        this.isWechatInit=false
+    }
     componentWillMount(){
         const { dispatch,location,routeParams} = this.props;
         dispatch(fetchCompanyDetailIfNeeded({
@@ -49,7 +53,10 @@ class Company extends React.Component{
             });
         }
     }
-
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroyCompanyDetailData());
+    }
     render(){
         const { dispatch,location,companyDetailData } = this.props;
         // console.log(companyDetailData);
@@ -60,6 +67,17 @@ class Company extends React.Component{
                 </div>
             )
         }else if(companyDetailData.data){
+
+            if(!this.isWechatInit){
+                app.wechat.init({
+                    title: `${companyDetailData.data.company.name}`,
+                    content: `${companyDetailData.data.company.description}`,
+                    logo : `${companyDetailData.data.company.logo}?imageView2/1/w/200/h/200`,
+                    link : window.location.href,
+                });
+                this.isWechatInit=true;
+            }
+
             return(
                 <div>
                     <CommonHeader title="公司主页" ></CommonHeader>

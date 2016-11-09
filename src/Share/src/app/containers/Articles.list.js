@@ -1,9 +1,12 @@
 import CommonHeader from './Common.header'
 import CommonDownload from './Common.download'
-import {fetchArticlesListIfNeeded} from '../actions/articles.list'
+import {fetchArticlesListIfNeeded,destroyArticlesListData} from '../actions/articles.list'
 
 class ArticlesList extends React.Component{
-
+    constructor(props) {
+        super(props);
+        this.isWechatInit=false
+    }
     componentWillMount(){
         const { dispatch,location,routeParams} = this.props;
         dispatch(fetchArticlesListIfNeeded({
@@ -16,6 +19,10 @@ class ArticlesList extends React.Component{
     componentDidMount(){
         const { dispatch,location,routeParams} = this.props;
     }
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroyArticlesListData());
+    }
     render(){
         const { dispatch,location,articlesListData } = this.props;
         if(articlesListData.isFetching){
@@ -25,6 +32,14 @@ class ArticlesList extends React.Component{
                 </div>
             )
         }else if(articlesListData.data){
+            if(!this.isWechatInit){
+                app.wechat.init({
+                    title: `文章列表`,
+                    content: `全国大咖精选文章`,
+                    link : window.location.href,
+                });
+                this.isWechatInit=true;
+            }
                 return (
                     <div>
                         <CommonHeader title="所有文章" ></CommonHeader>

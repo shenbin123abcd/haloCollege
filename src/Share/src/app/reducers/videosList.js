@@ -19,6 +19,12 @@ export default (state = {
                 isFetching: false,
                 errorInfo: action.data,
             });
+        case 'DESTROY_VIDEOS_LIST_DATA':
+            // console.log(action)
+            return _.assign({}, state, {
+                isFetching: false,
+                data: null,
+            });
         default:
             return state
     }

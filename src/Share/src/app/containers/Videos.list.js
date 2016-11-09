@@ -1,7 +1,11 @@
-import {fetchVideosListIfNeeded} from '../actions/videos.list'
+import {fetchVideosListIfNeeded,destroyVideosListData} from '../actions/videos.list'
 import CommonHeader from './Common.header'
 import CommonDownload from './Common.download'
 class VideosList extends React.Component{
+    constructor(props) {
+        super(props);
+        this.isWechatInit=false
+    }
     componentWillMount(){
         const { dispatch,location,routeParams} = this.props;
         dispatch(fetchVideosListIfNeeded({
@@ -15,7 +19,10 @@ class VideosList extends React.Component{
     componentDidMount(){
         const { dispatch,location,routeParams} = this.props;
     }
-
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroyVideosListData());
+    }
     render(){
         const { dispatch,location,videosListData } = this.props;
         // console.log(videosListData);
@@ -26,6 +33,14 @@ class VideosList extends React.Component{
                 </div>
             )
         }else if(videosListData.data){
+            if(!this.isWechatInit){
+                app.wechat.init({
+                    title: `视频列表`,
+                    content: `全国大咖现身演讲`,
+                    link : window.location.href,
+                });
+                this.isWechatInit=true;
+            }
             return(
                 <div>
                     <CommonHeader title="所有视频"></CommonHeader>

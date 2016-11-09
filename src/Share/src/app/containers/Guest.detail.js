@@ -2,9 +2,13 @@ import CommonHeader from './Common.header'
 import CommonArticle from './Common.article'
 import CommonVideos from './Common.videos'
 import CommonDownload from './Common.download'
-import {fetchGuestDetailIfNeeded} from '../actions/guest.detail'
+import {fetchGuestDetailIfNeeded,destroyGuestDetailData} from '../actions/guest.detail'
 let Link=ReactRouter.Link;
 class Detail extends React.Component{
+    constructor(props) {
+        super(props);
+        this.isWechatInit=false
+    }
     componentWillMount(){
         const { dispatch,location,routeParams} = this.props;
         dispatch(fetchGuestDetailIfNeeded({
@@ -50,7 +54,10 @@ class Detail extends React.Component{
             });
         }
     }
-
+    componentWillUnmount(){
+        const { dispatch ,routeParams} = this.props
+        dispatch(destroyGuestDetailData());
+    }
     renderCompany(){
         const { dispatch,location,guestDetailData } = this.props;
         if(guestDetailData.data.company){
@@ -81,6 +88,18 @@ class Detail extends React.Component{
                     </div>
                 )
             }else if(guestDetailData.data){
+                // console.log(this.isWechatInit)
+                // console.log(guestDetailData.data.guest.title,guestDetailData.data.guest.content,guestDetailData.data.guest.avatar_url)
+                if(!this.isWechatInit){
+                    app.wechat.init({
+                        title: `${guestDetailData.data.guest.title}`,
+                        content: `${guestDetailData.data.guest.content}`,
+                        logo : `${guestDetailData.data.guest.avatar_url}?imageView2/1/w/200/h/200`,
+                        link : window.location.href,
+                    });
+                    this.isWechatInit=true;
+                }
+
                 return (
                     <div>
                         <CommonHeader title="个人主页" ></CommonHeader>
