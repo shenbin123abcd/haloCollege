@@ -369,11 +369,8 @@ body{
       .word{
         height:0.88rem;
         font-size:0.3rem;
-        //line-clamp: 2;
-        //overflow:hidden;
-        ////display: box;
-        //text-overflow:ellipsis;
-        //white-space: nowrap;
+        color:$mainTextColor;
+
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -399,16 +396,39 @@ body{
             display:inline-block;
             vertical-align: middle;
             color:$mainSecondColor;
-            //position: absolute;
-            //bottom:0;
+
             .haloIcon-common{
               margin-right:0.08rem;
-              //position: absolute;
-              //bottom:0;
             }
           }
         }
 
+      }
+      .goldBearVideo-title{
+          height:0.52rem;
+          line-height: 0.52rem;
+          font-size:0.3rem;
+          color:$mainTextColor;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+      }
+      .goldBearVideo-company-name{
+          height:0.54rem;
+          line-height: 0.54rem;
+          color:$mainThirdColor;
+          font-size: 0.24rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+      }
+      .goldBear-list-icon-box{
+        height:0.52rem;
+        line-height: 0.52rem;
       }
     }
   }
@@ -419,10 +439,28 @@ body{
 .videos-list-wrapper{
   background: #fff;
 }
-//.download-block-box{
-//  background: #fff;
-//  height:1.2rem;
-//}
+
+//金熊奖
+.goldBear-desc-wrapper{
+  @extend .company-desc-wrapper
+}
+.goldBear-video-wrapper{
+  background: #fff;
+  margin:0.3rem 0;
+  padding:0 0.3rem;
+  .videos-url{
+    width:6.9rem;
+    height: 3.88rem;
+    background-color: rgba(0,0,0,0.3);
+    margin:0.3rem 0;
+  }
+  .video-title{
+    padding-bottom: 0.4rem;
+    color:$mainThirdColor;
+    font-size:0.26rem;
+  }
+}
+
 .dowload-block{
   position: fixed;
   bottom: 0;
@@ -430,15 +468,7 @@ body{
   width: 100%;
   height: 1.2rem;
   background: rgba(27,28,32,.8);
-  //display: -webkit-box;
-  //display: -webkit-flex;
-  //display: -moz-box;
-  //display: -ms-flexbox;
-  display: flex;
-  //-webkit-box-align: center;
-  //-webkit-align-items: center;
-  //-moz-box-align: center;
-  //-ms-flex-align: center;
+  display: flex;;
   align-items: center;
   .logo{
     width: 0.9rem;

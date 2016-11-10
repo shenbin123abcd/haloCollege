@@ -3,6 +3,8 @@ import Detail from './containers/Guest.detail'
 import Company from './containers/Company.detail'
 import ArticlesList from './containers/Articles.list'
 import VideosList from './containers/Videos.list'
+import GoldenBear from './containers/GoldenBear.detail'
+import GoldenBearVideosList from './containers/GoldenBearVideos.list'
 import store from './store'
 
 var Router=ReactRouter.Router;
@@ -62,6 +64,8 @@ ReactDOM.render(
         <Route path="/share/companies/company/:id"  component={Company}  onLeave={onLeaveRoute}  />
         <Route path="/share/articlesList/:id/:type"  component={ ArticlesList }  onLeave={onLeaveRoute}  />
         <Route path="/share/videosList/:id/:type"  component={VideosList}  onLeave={onLeaveRoute}  />
+        <Route path="/share/goldenBears/goldenBear/:id"  component={GoldenBear}  onLeave={onLeaveRoute}  />
+        <Route path="/share/goldBearsVideosList/:id/:type/:level"  component={GoldenBearVideosList}  onLeave={onLeaveRoute}  />
     </Router>
   </Provider>,
     reactElement
