@@ -47,7 +47,7 @@ class SchoolVideoController extends CommonController {
 		//公开课花絮列表
 		$this->course = $this->get_course_list();
 		//金熊奖花絮列表
-		$this->gold_match = $this->get_gold_award();
+		//$this->gold_match = $this->get_gold_award();
 	    //金熊奖栏目信息列表
 		$this->gold_awards = M('GoldAwards')->where(array('status'=>1))->select();
 
@@ -71,19 +71,26 @@ class SchoolVideoController extends CommonController {
 	//公开课表单信息验证
 	public function check_course_info(){
 		empty($_POST['course_city']) && $this->error('公开课的城市不能为空！');
-		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
+		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : strtotime($_POST['course_date']);
 		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
-
+		$_POST['match_date'] = 0;
+		$_POST['match_type'] = 0;
+		$_POST['gold_award_id'] = 0;
+		$_POST['match_level'] = 0;
 	}
 
 	//金熊奖表单信息验证
 	public function check_gold_award_info(){
-		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : $_POST['course_date']=strtotime($_POST['course_date']);
+		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : strtotime($_POST['course_date']);
 		empty($_POST['match_type']) && $this->error('请选择该视频是花絮还是子视频！');
 		empty($_POST['gold_award_id']) && $this->error('请选择金熊奖基本信息！');
 		if($_POST['match_type']==2){
 			empty($_POST['match_level']) && $this->error('请为该金熊奖子视频选择比赛阶段！');
 		}
+		$_POST['course_city'] = '';
+		$_POST['course_date'] = 0;
+		$_POST['course_type'] = 0;
+		$_POST['course_parent_id'] = 0;
 	}
 
 	//获取视频分类名称
@@ -106,7 +113,7 @@ class SchoolVideoController extends CommonController {
 		//公开课和金熊奖数据校验（根据类型，将非选中类型的数据清空）
 		$this->checkData();
 		!$this->_checkVideo($_POST['url']) && $this->error('视频不存在，请检查');
-		empty($_POST['guests_id']) && $this->error('请选择嘉宾');
+		//empty($_POST['guests_id']) && $this->error('请选择嘉宾');
 		$down = $this->_privateDownloadUrl('http://7o4zdo.com2.z0.glb.qiniucdn.com/' . $_POST['url'] . '?avinfo');
 		$ret = curl_get(str_replace(' ', '%20', $down));
 		$_POST['times'] = format_duration($ret['format']['duration']);
@@ -114,14 +121,15 @@ class SchoolVideoController extends CommonController {
 		in_array(4,$_POST['category']) && $this->check_course_info();
 		//金熊奖表单信息验证
 		in_array(3,$_POST['category']) && $this->check_gold_award_info();
+		(in_array(4,$_POST['category']) && in_array(3,$_POST['category'])) && $this->error('金熊奖和公开课不能同时选中！');
 		$_POST['category'] = empty($_POST['category']) ? '' : implode(',', $_POST['category']);
 		$_POST['charge_standard'] = empty($_POST['charge_standard']) ? '' : implode(',', $_POST['charge_standard']);
 		$str_cate_id = !empty($_POST['category']) ? $_POST['category'] : "";
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['update_time'] =time();
 		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
-		$_POST['course_date'] = $_POST['course_date'] ? strtotime($_POST['course_date']) : 0;
-		$_POST['match_date'] = $_POST['match_date'] ? strtotime($_POST['match_date']) : 0;
+		!empty($_POST['course_date']) ? strtotime($_POST['course_date']) : 0;
+		!empty($_POST['match_date']) ? strtotime($_POST['match_date']) : 0;
 
 	}
 
