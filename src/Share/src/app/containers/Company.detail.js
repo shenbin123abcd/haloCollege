@@ -22,7 +22,7 @@ class Company extends React.Component{
         var hh = $(profile).outerHeight();
         var moreInfo = this.refs.moreInfo;
         var moreBtn = this.refs.moreBtn;
-        if(hh<40){
+        if(hh<55){
             $(moreInfo).hide();
             $(profile).css({
                 "display":"block",
