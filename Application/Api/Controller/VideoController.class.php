@@ -88,7 +88,7 @@ class VideoController extends CommonController {
      */
     public function recommendVideoList(){
         $model = D('SchoolVideo');
-        $member_list = $model->getListByCate(array('is_vip'=>1),$page=1,$per_page=2,$is_recommend=1);
+        $member_list = $model->getListByCate(array('is_vip'=>1),$page=1,$per_page=4,$is_recommend=1);
         $member['cate_id'] = 0;
         $member['cate_title'] = '会员专享';
         $member['list'] = $member_list['list'];
@@ -99,11 +99,11 @@ class VideoController extends CommonController {
         $filter_vid[] = $member_list['list'][1]['id'];
         $cate = M('SchoolCate')->where(array('status'=>1,'type'=>1))->getField('id,title');
         foreach ($cate as $key=>$value){
-            $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)','id'=>array('not in',$filter_vid)),$page=1,$per_page=2,$is_recommend=1);
+            $data_list = $model->getListByCate(array('_string'=>'FIND_IN_SET(' . $key . ', category)','id'=>array('not in',$filter_vid)),$page=1,$per_page=4,$is_recommend=1);
 
             //保证首页列表各分类有两个视频（推荐视频不够，由非推荐视频补充）
-            $num = 2-count($data_list['list']);
-            if ($num==2 || $num==1){
+            $num = 4-count($data_list['list']);
+            if ($num==4 || $num==1){
                 $data_list = $this->add_recommend_videos($data_list,$filter_vid,$key,$num);
             }
 
@@ -782,7 +782,6 @@ class VideoController extends CommonController {
         if (empty($vids)) {
             $this->error('参数错误');
         }
-
         $ret = D('SchoolFavorites')->where(array('uid' => $uid, 'vid' => array('in', $vids)))->delete();
 
         $ret ? $this->success('操作成功') : $this->error('操作失败');

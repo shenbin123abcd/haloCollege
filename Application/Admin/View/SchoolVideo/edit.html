@@ -63,7 +63,7 @@
 					<th>分类</th>
 					<td>
 						<volist name="category" id="vo">
-							<label><input name="category[]" <if condition="in_array($vo['id'], explode(',',$data['category']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.title}</span></label>
+								<label><input name="category[]" <if condition="in_array($vo['id'], explode(',',$data['category']))" >checked</if> data-xid="J_check_6" class="J_check" type="checkbox" value="{$vo.id}"><span>{$vo.title}</span></label>
 						</volist>
 					</td>
 				</tr>
@@ -92,7 +92,7 @@
 
 				<tr id="gold_award_info" style="display: none">
 					<th>金熊奖信息</th>
-					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{:date('Y-m-d', $data['match_date'])}"></td>
+					<td><label>年份</label><input type="text" class="input length_5 J_date" name="match_date" value="{:date('Y-m-d', $data['match_date'])}" style="width: 20%"></td>
 					<td><label>花絮/子视频</label>
 						<select name="match_type" id="gold_award_type">
 							<option value="">请选择</option>
@@ -100,14 +100,18 @@
 							<option value="2" <eq name="data.match_type" value="2">selected</eq>>金熊奖分赛视频</option>
 						</select>
 					</td>
-					<td id="gold_award_sub_match" style="display: none">
-						<label>花絮</label>
-						<select name="match_parent_id" >
-							<option value="">请选择</option>
-							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{:date('Y',$vo['date'])}|{$vo.title}</option>
-							</volist>
-						</select>
+					<!--<td id="gold_award_sub_match" style="display: none">-->
+						<!--<label>花絮</label>-->
+						<!--<select name="match_parent_id" >-->
+							<!--<option value="">请选择</option>-->
+							<!--<volist name="gold_match" id="vo">-->
+								<!--<option value="{$vo.id}" <eq name="data.match_parent_id" value="$vo.id">selected</eq>>{:date('Y',$vo['date'])}|{$vo.title}</option>-->
+							<!--</volist>-->
+						<!--</select>-->
+					<!--</td>-->
+					<td id="match_case_name" >
+						<label>案例名称</label>
+						<input type="text" class="input length_5" name="match_case_name" value="{$data.match_case_name}" style="width: 40%">
 					</td>
 					<td id="match_level" style="width: 20%;display: none">
 						<label>分赛阶段</label>
@@ -211,18 +215,23 @@
 <script>
 	$(document).ready(function(){
         //根据条件判断默认唤起的窗口
-		var category = $('input[checked]').val();
-		if (category==4){
+		var obj = $('input[type=checkbox]');
+		var check_val = [];
+		for(k in obj){
+			if(obj[k].checked)
+				check_val.push(obj[k].value);
+		}
+		if (check_val.indexOf('4')>-1){
 			$('#course_info').show();
 			var type = $('#course_type').val();
 			if (type==2){
 				$('#course_sub_parent').show();
 			}
-		}else if(category==3){
+		}else if(check_val.indexOf('3')>-1){
 			$('#gold_award_info').show();
 			var type = $('#gold_award_type').val();
 			if (type==2){
-				$('#gold_award_sub_match').show();
+
 				$('#match_level').show();
 
 			}
@@ -265,10 +274,8 @@
 		$('#gold_award_type').change(function(){
 			var gold_award_type = $(this).val();
 			if (gold_award_type==2){
-				$('#gold_award_sub_match').show();
 				$('#match_level').show();
 			}else {
-				$('#gold_award_sub_match').hide();
 				$('#match_level').hide();
 			}
 

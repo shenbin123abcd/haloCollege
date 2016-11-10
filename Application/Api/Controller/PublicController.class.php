@@ -763,24 +763,48 @@ class PublicController extends CommonController {
     public function awardsHomePage(){
         $vid = I('vid');
         empty($vid) && $this->error('参数错误！');
+        //获取金熊奖基本信息
         $video = D('SchoolVideo')->getDetail($vid);
-        $video_feature = $video['video'];
-        $award_base_info = M('GoldAwards')->where(array('id'=>$video_feature['gold_award_id'],'status'=>1))->find();
+        $video = $video['video'];
+        $award_base_info = M('GoldAwards')->where(array('id'=>$video['gold_award_id'],'status'=>1))->find();
         $award_base_info['cover_url'] = $award_base_info['cover_url'] ? C('IMG_URL').$award_base_info['cover_url'] : '';
-        $match_first_where = array('match_type'=>2,'match_parent_id'=>$vid,'match_level'=>1);
+        //获取花絮视频
+        $video_feature = D('SchoolVideo')->where(array('gold_award_id'=>$video['gold_award_id'],'status'=>1,'match_type'=>1))->getField('gold_award_id,id,title,url');
+        //初赛视频
+        $match_first_where = array('match_type'=>2,'gold_award_id'=>$video['gold_award_id'],'match_level'=>1);
         $match_first = D('SchoolVideo')->getListByCate($match_first_where,1,3);
-        $match_final_where = array('match_type'=>2,'match_parent_id'=>$vid,'match_level'=>2);
+        $match_first = $this->get_companys($match_first);
+        //决赛视频
+        $match_final_where = array('match_type'=>2,'gold_award_id'=>$video['gold_award_id'],'match_level'=>2);
         $match_final = D('SchoolVideo')->getListByCate($match_final_where,1,3);
+        $match_final = $this->get_companys($match_final);
 
-        $data['gold_award'] = $award_base_info;
-        $data['video_feature']['id'] = $video_feature['id'];
-        $data['video_feature']['title'] = $video_feature['title'];
-        $data['video_feature']['url'] = $video_feature['url'];
-        $data['video_feature']['cover_url'] = $video_feature['cover_url'];
+        $data['gold_award'] = !empty($award_base_info) ? $award_base_info : null;
+        unset($video_feature[$video['gold_award_id']]['gold_award_id']);
+        $data['video_feature'] = !empty($video_feature[$video['gold_award_id']]) ? $video_feature[$video['gold_award_id']] : null;
         $data['match_first'] = !empty($match_first['list']) ? $match_first : null;
         $data['match_final'] = !empty($match_final['list']) ? $match_final : null;
 
         $this->success('success',$data);
+    }
+
+    /**
+     * 金熊奖分赛视频的公司名获取
+    */
+    public function get_companys($video){
+        $list = $video['list'];
+        foreach ($list As $key=>$value){
+            $company = company_id($value['company_id']);
+            if (!empty($company['data'])){
+                $temp['id'] =  $company['data']['id'];
+                $temp['name'] =  $company['data']['name'];
+                $list[$key]['company'] = $temp;
+            }else{
+                $list[$key]['company'] = null;
+            }
+        }
+        $video['list'] = $list;
+        return $video;
     }
 
 
