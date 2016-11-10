@@ -730,7 +730,6 @@ class PublicController extends CommonController {
         $per_page = I('per_page') ? I('per_page') : 10000;
         $home_id = I('home_id');
         $type = I('type');
-        $match_level = I('match_level');
         empty($home_id || $type) && $this->error('参数错误！');
         if ($type==1){
             //嘉宾视频列表
@@ -741,17 +740,19 @@ class PublicController extends CommonController {
             $video_where = array('company_id'=>$home_id);
             $videos = D('SchoolVideo')->getListByCate($video_where,$page,$per_page);
         }elseif ($type==3){
+            $match_level = I('match_level');
             //金熊奖视频列表
             if ($match_level==1){
-                $match_first_where = array('match_type'=>2,'match_parent_id'=>$home_id,'match_level'=>1);
+                $match_first_where = array('match_type'=>2,'gold_award_id'=>$home_id,'match_level'=>1);
                 $videos = D('SchoolVideo')->getListByCate($match_first_where,1,3);
             }elseif ($match_level==2){
-                $match_final_where = array('match_type'=>2,'match_parent_id'=>$home_id,'match_level'=>2);
+                $match_final_where = array('match_type'=>2,'gold_award_id'=>$home_id,'match_level'=>2);
                 $videos = D('SchoolVideo')->getListByCate($match_final_where,1,3);
             }else{
                 $this->error('参数错误！');
             }
         }
+        $videos = $this->get_companys($videos);
         $data = empty($videos) ? array() : $videos;
         $this->success('success',$data);
 
