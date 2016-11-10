@@ -3,7 +3,7 @@ import guestDetailData from './guestDetail'
 import companyDetailData from './companyDetail'
 import articlesListData from './articlesList'
 import videosListData from './videosList'
-
+import goldenBearDetailData from './goldenBearDetail'
 // var reduxFormReducer=ReduxForm.reducer
 
 export default Redux.combineReducers({
@@ -12,5 +12,6 @@ export default Redux.combineReducers({
     guestDetailData,
     companyDetailData,
     articlesListData,
-    videosListData
+    videosListData,
+    goldenBearDetailData
 })

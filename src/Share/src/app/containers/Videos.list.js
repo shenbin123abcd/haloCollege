@@ -25,7 +25,6 @@ class VideosList extends React.Component{
     }
     render(){
         const { dispatch,location,videosListData } = this.props;
-        // console.log(videosListData);
         if(videosListData.isFetching){
             return(
                 <div>
