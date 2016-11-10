@@ -29,6 +29,12 @@ class UcController extends CommonController {
         $this->display();
     }
 
+    // 双十一活动
+    public function eleven(){
+        $this->assign('is_address', get_address($this->user['id']) ? 1 : 0);
+        $this->display();
+    }
+
     // 案例支付成功记录
     public function caseRecord(){
         $list = M('wfc2016_order_case')->where(array('record_id'=>$this->user['id'], 'status'=>1))->field('order_no,goods_name,goods_id,goods_subtitle,goods_cover,goods_url,type,price,module,spec,num,pay_time')->order('id DESC')->select();
