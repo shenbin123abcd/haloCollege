@@ -15,7 +15,7 @@
     }
     function inputMask(){
         product_1=hb.numberBox('#product-1',{
-            max:50,
+            max:10,
             onChange:function(val){
                 if(val>0){
                     product_2.reset();
@@ -32,7 +32,7 @@
             }
         });
         product_2=hb.numberBox('#product-2',{
-            max:50,
+            max:10,
             onChange:function(val){
                 if(val>0){
                     product_1.reset();
