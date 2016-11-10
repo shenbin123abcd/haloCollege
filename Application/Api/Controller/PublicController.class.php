@@ -744,10 +744,10 @@ class PublicController extends CommonController {
             //金熊奖视频列表
             if ($match_level==1){
                 $match_first_where = array('match_type'=>2,'gold_award_id'=>$home_id,'match_level'=>1);
-                $videos = D('SchoolVideo')->getListByCate($match_first_where,1,3);
+                $videos = D('SchoolVideo')->getListByCate($match_first_where,$page,$per_page);
             }elseif ($match_level==2){
                 $match_final_where = array('match_type'=>2,'gold_award_id'=>$home_id,'match_level'=>2);
-                $videos = D('SchoolVideo')->getListByCate($match_final_where,1,3);
+                $videos = D('SchoolVideo')->getListByCate($match_final_where,$page,$per_page);
             }else{
                 $this->error('参数错误！');
             }
