@@ -84,14 +84,18 @@
 							<option value="2">金熊奖分赛视频</option>
 						</select>
 					</td>
-					<td id="gold_award_sub_match" style="display: none;width: 20%">
-						<label>花絮</label>
-						<select name="match_parent_id" >
-							<option value="">请选择</option>
-							<volist name="gold_match" id="vo">
-								<option value="{$vo.id}" >{:date('Y',$vo['match_date'])}|{$vo.title}</option>
-							</volist>
-						</select>
+					<!--<td id="gold_award_sub_match" style="display: none;width: 20%">-->
+						<!--<label>花絮</label>-->
+						<!--<select name="match_parent_id" >-->
+							<!--<option value="">请选择</option>-->
+							<!--<volist name="gold_match" id="vo">-->
+								<!--<option value="{$vo.id}" >{:date('Y',$vo['match_date'])}|{$vo.title}</option>-->
+							<!--</volist>-->
+						<!--</select>-->
+					<!--</td>-->
+					<td id="match_case_name" >
+						<label>案例名称</label>
+						<input type="text" class="input length_5" name="match_case_name" style="width: 40%">
 					</td>
 					<td id="match_level" style="width: 20%;display: none">
 						<label>分赛阶段</label>
@@ -224,10 +228,8 @@
 		$('#gold_award_type').change(function(){
 			var gold_award_type = $(this).val();
 			if (gold_award_type==2){
-				$('#gold_award_sub_match').show();
 				$('#match_level').show();
 			}else {
-				$('#gold_award_sub_match').hide();
 				$('#match_level').hide();
 			}
 
