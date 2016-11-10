@@ -154,9 +154,10 @@
         var $numberControl = $element.find('[number-control]');
         var $numberMinus = $element.find('[number-minus]');
         var $numberAdd = $element.find('[number-add]');
-        if(newVal){
+        if(newVal||newVal==0){
             _this.switchActive(newVal);
             if(newVal>=0&&newVal<=settings.max){
+
                 $numberControl.val(newVal)
             }else if(newVal>settings.max){
                 $numberControl.val(settings.max);
