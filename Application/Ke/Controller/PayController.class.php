@@ -134,10 +134,24 @@ class PayController extends CommonController {
             $this->error('参数错误！');
         }
 
-        // 活动
-        if (time() > strtotime('2016-11-11 23:59:59') && $type == 3){
-            $this->error('活动已结束！');
+        if ($type == 3){
+            // 活动
+            if (time() > strtotime('2016-11-11 23:59:59')){
+                $this->error('活动已结束！');
+            }
+
+            if ($num > 10){
+                $this->error('每个人最多只能购买10套哦！');
+            }
+
+            // 检查用户购买数量
+            $count = M('wfc2016_order_case')->where(array('openid'=>$this->user['openid'], 'module'=>'book', 'status'=>1, 'type'=>$type))->sum('num');
+            if ($count >= 10){
+                $this->error('每个人最多只能购买10套哦！');
+            }
         }
+
+
 
         $data = $this->_createBookOrder($type, $num);
 

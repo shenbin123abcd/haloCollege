@@ -100,7 +100,7 @@ class GoldenBear extends React.Component{
                     </div>
                     {
                         goldenBearDetailData.data.video_feature?<div className="goldBear-video-wrapper">
-                                <video src={`${goldenBearDetailData.data.video_feature.url}`} controls="controls" poster={`${goldenBearDetailData.data.video_feature.cover_url}`} className="videos-url"></video>
+                                <video src={`${goldenBearDetailData.data.video_feature.url}`} controls="controls" poster={`${goldenBearDetailData.data.video_feature.cover_url}?imageView2/1/w/690/h/388`} className="videos-url"></video>
                                 <div className="video-title">{goldenBearDetailData.data.video_feature.title}</div>
                             </div>:''
                     }
