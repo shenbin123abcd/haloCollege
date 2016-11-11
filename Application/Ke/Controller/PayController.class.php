@@ -130,9 +130,28 @@ class PayController extends CommonController {
     public function book(){
         $type = intval(I('type'));
         $num = intval(I('num'));
-        if (($type != 1 && $type != 2) || $num <= 0) {
+        if (($type != 1 && $type != 2 && $type != 3) || $num <= 0) {
             $this->error('参数错误！');
         }
+
+        if ($type == 3){
+            // 活动
+            if (time() > strtotime('2016-11-11 23:59:59')){
+                $this->error('活动已结束！');
+            }
+
+            if ($num > 10){
+                $this->error('每个人最多只能购买10套哦！');
+            }
+
+            // 检查用户购买数量
+            $count = M('wfc2016_order_case')->where(array('openid'=>$this->user['openid'], 'module'=>'book', 'status'=>1, 'type'=>$type))->sum('num');
+            if ($count >= 10){
+                $this->error('每个人最多只能购买10套哦！');
+            }
+        }
+
+
 
         $data = $this->_createBookOrder($type, $num);
 
@@ -156,7 +175,7 @@ class PayController extends CommonController {
     private function _createBookOrder($type, $num){
         $model = M('wfc2016_order_case');
 //         $map = array(1=>0.01, 2=>0.02);
-        $map = array(1=>399, 2=>499);
+        $map = array(1=>399, 2=>499, 3=>299);
 
         //①、获取用户openid
         $openid = $this->user['openid'];

@@ -13,7 +13,11 @@ class UcController extends CommonController {
 
         if (empty($this->user) && !in_array(ACTION_NAME, array('wechat', 'notifyn', 'booknotifyn', 'test', 'getWechat'))) {
             cookie('halobear', null, -86400);
-            $back = 'http://ke.halobear.com/uc/book';
+            if (time() < strtotime('2016-11-11 23:59:59')){
+                $back = 'http://ke.halobear.com/uc/eleven';
+            }else{
+                $back = 'http://ke.halobear.com/uc/book';
+            }
 
             $url = 'http://wechat.halobear.com/?back=' . urlencode($back); // . urlencode('http://ke.halobear.com' . $_SERVER['REQUEST_URI'])
             if (IS_AJAX) {
