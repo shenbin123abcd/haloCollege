@@ -3081,6 +3081,8 @@ body {
       a{
         text-decoration: none;
         color: inherit;
+        pointer-events: none;
+        
       }
     }
   }
@@ -3587,6 +3589,7 @@ body {
       a{
         color: inherit;
         text-decoration:none;
+        pointer-events: none;
       }
     }
     .item-box{

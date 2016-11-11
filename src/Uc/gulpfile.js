@@ -40,7 +40,12 @@ gulp.task('sass',['images'], function () {
     return gulp.src(['app/css/*.scss'])
         .pipe(sourcemaps.init())
         .pipe(plugins.sass({outputStyle: 'compact'}))
+        .pipe(plugins.autoprefixer({
+            browsers:  ['> 0%'],
+            cascade: false
+        }))
         .pipe(sourcemaps.write())
+
         .pipe(gulp.dest('app/css'));
 });
 
@@ -296,6 +301,7 @@ gulp.task("watch:dev", ['browser-sync','copy:view','sass','copy:js'], function()
         gulp.start('copy:js');
 
     });
+    gulp.watch([`app/css/**/*.scss`], ['sass']);
     
 
 });
