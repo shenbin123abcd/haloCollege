@@ -770,7 +770,11 @@ class PublicController extends CommonController {
         $award_base_info = M('GoldAwards')->where(array('id'=>$video['gold_award_id'],'status'=>1))->find();
         $award_base_info['cover_url'] = $award_base_info['cover_url'] ? C('IMG_URL').$award_base_info['cover_url'] : '';
         //获取花絮视频
-        $video_feature = D('SchoolVideo')->where(array('gold_award_id'=>$video['gold_award_id'],'status'=>1,'match_type'=>1))->getField('gold_award_id,id,title,url');
+        $video_feature = D('SchoolVideo')->where(array('gold_award_id'=>$video['gold_award_id'],'status'=>1,'match_type'=>1))->getField('gold_award_id,id,title,url,cover_url');
+        //获取花絮视频地址和封面
+        $feature = D('SchoolVideo')->getDetail($video_feature[$video['gold_award_id']]['id'],$auth=0);
+        $video_feature[$video['gold_award_id']]['url'] = $feature['video']['url'];
+        $video_feature[$video['gold_award_id']]['cover_url'] = $feature['video']['cover_url'];
         //初赛视频
         $match_first_where = array('match_type'=>2,'gold_award_id'=>$video['gold_award_id'],'match_level'=>1);
         $match_first = D('SchoolVideo')->getListByCate($match_first_where,1,3);

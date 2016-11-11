@@ -3006,12 +3006,73 @@ body {
       width: 100%;
     }
   }
+  .sale-wrapper{
+    position: relative;
+    .img{
+      width: 100%;
+    }
+    .tit{
+      color: #9b46fc;
+      width: 2.2rem;
+      font-size: 0.2rem;
+      padding-top: 2px;
+
+
+    }
+    .time-box{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .time{
+        background-color: #9b46fc;
+        padding: 1px 3px;
+        font-size: 0.24rem;
+        color: #ffffff;
+        border-radius: 2px;
+      }
+      .maohao{
+        margin: 0 2px;
+      }
+
+    }
+
+
+    .count-down{
+      text-align: center;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      height: 100%;
+
+    }
+  }
+
   .title-wrapper{
     padding: 0.36rem 0.3rem 0.6rem;
     background-color: #ffffff;
     .name{
-      font-size: 0.32rem;
+      font-size: 0.30rem;
       color: #333333;
+      display: flex;
+      align-items: center;
+      .sale{
+        margin-left: 5px;
+        display: inline-block;
+        color: #ffffff;
+        height: 14px;
+        width: 1rem;
+        text-align: center;
+        line-height: 14px;
+        border-radius: 7px;
+
+        font-size: 0.18rem;
+        background-color: #fd3f4d;
+        background-image: linear-gradient(to right, #fd4144, #fc3a69);
+      }
+      .d11{
+        font-style: italic;
+      }
     }
     .subtitle{
       margin-top: 0.1rem;
@@ -3250,6 +3311,8 @@ body {
           line-height: 0.7rem;
           .haloIcon{
             line-height: 0.7rem;
+            position: relative;
+            top: -2px;
           }
           //display: flex;
           //align-items: center;
@@ -3381,6 +3444,10 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
+    &.eleven{
+      background-color: #f45;
+      background-image: linear-gradient(to right, #ff4177, #fe4431);
+    }
     &.disabled{
       background-color: #999999;
     }
@@ -3517,6 +3584,10 @@ body {
       min-height: 4rem;
       text-align: center;
       line-height: 1.7;
+      a{
+        color: inherit;
+        text-decoration:none;
+      }
     }
     .item-box{
       color: #666666;
