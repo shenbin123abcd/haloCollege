@@ -789,7 +789,8 @@ class PublicController extends CommonController {
         $data['video_feature'] = !empty($video_feature[$video['gold_award_id']]) ? $video_feature[$video['gold_award_id']] : null;
         $data['match_first'] = !empty($match_first['list']) ? $match_first : null;
         $data['match_final'] = !empty($match_final['list']) ? $match_final : null;
-
+        //分享页地址
+        $data['share_url'] = 'http://college-share.halobear.com/share/goldenBears/goldenBear/'.$vid;
         $this->success('success',$data);
     }
 

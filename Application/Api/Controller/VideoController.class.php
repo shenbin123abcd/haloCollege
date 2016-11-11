@@ -417,7 +417,7 @@ class VideoController extends CommonController {
         $status = is_login($parent_data['uid']);
         $msg_no = date("d") . rand(10,99) . implode(explode('.', microtime(1)));
         if ($status){
-            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time(),'msg_no'=>$msg_no,'redirect_url'=>''),'type'=>2));
+            $result = $object_push->pushMsgPersonal(array('uid'=>$parent_data['uid'],'content'=>$data['content'],'extra'=>array('from_username'=>$data['username'],'detail_id'=>$parent_data['vid'],'push_time'=>time(),'msg_no'=>$msg_no,'redirect_url'=>'','category'=>$parent_data['category']),'type'=>2));
         }
         $msg['from_uid'] = $data['uid'];
         $msg['from_username'] = $data['username'];
@@ -431,6 +431,7 @@ class VideoController extends CommonController {
         $msg['remark_type'] = 0;
         $msg['msg_no'] = $msg_no;
         $msg['redirect_url'] = '';
+        $msg['category'] = $parent_data['category'];
         $push_msg = M('PushMsg')->add($msg);
 
     }
@@ -441,6 +442,8 @@ class VideoController extends CommonController {
     public function get_parent_comment($comment_id){
         $where['id'] = $comment_id;
         $parent_data = M('SchoolComment')->where($where)->field('uid,vid,content,username')->find();
+        $category = M('SchoolVideo')->where(array('id'=>$parent_data['vid']))->getField('id,category');
+        $parent_data['category'] = $category[$parent_data['vid']] ? $category[$parent_data['vid']] : '';
         return $parent_data;
     }
 
