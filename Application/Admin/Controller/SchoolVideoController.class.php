@@ -71,7 +71,7 @@ class SchoolVideoController extends CommonController {
 	//公开课表单信息验证
 	public function check_course_info(){
 		empty($_POST['course_city']) && $this->error('公开课的城市不能为空！');
-		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : strtotime($_POST['course_date']);
+		empty($_POST['course_date']) ? $this->error('公开课的开课日期不能为空！') : $_POST['course_date'] = strtotime($_POST['course_date']);
 		empty($_POST['course_type']) && $this->error('请选择该视频是花絮还是子视频！');
 		$_POST['match_date'] = 0;
 		$_POST['match_type'] = 0;
@@ -81,7 +81,7 @@ class SchoolVideoController extends CommonController {
 
 	//金熊奖表单信息验证
 	public function check_gold_award_info(){
-		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : strtotime($_POST['course_date']);
+		empty($_POST['match_date']) ? $this->error('金熊奖比赛的举办时间不能为空！') : $_POST['match_date'] = strtotime($_POST['match_date']);
 		empty($_POST['match_type']) && $this->error('请选择该视频是花絮还是子视频！');
 		empty($_POST['gold_award_id']) && $this->error('请选择金熊奖基本信息！');
 		if($_POST['match_type']==2){
@@ -128,8 +128,6 @@ class SchoolVideoController extends CommonController {
 		$_POST['cate_title'] = $this->get_cate_name($str_cate_id);
 		$_POST['update_time'] =time();
 		$_POST['status'] = $_POST['conserve']==1 ? 0 : 1;
-		!empty($_POST['course_date']) ? strtotime($_POST['course_date']) : 0;
-		!empty($_POST['match_date']) ? strtotime($_POST['match_date']) : 0;
 
 	}
 

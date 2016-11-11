@@ -70,6 +70,8 @@ class SchoolVideoModel extends Model{
      * 获取视频列表(V2)
     */
     public function getListByCate($map=array(),$page,$per_page,$is_recommend){
+        //全部视频列表过滤掉金熊奖的花絮视频
+        $map['match_type'] =array('neq',1);
         $map['status'] =1;
         $order = 'sort DESC,create_time DESC';
         if(!empty($is_recommend)){
@@ -379,8 +381,8 @@ class SchoolVideoModel extends Model{
             return array();
         }
         $order = 'views DESC,score DESC,id DESC';
-        // 获取相关嘉宾的视频
-       $list = $this->where(array('status'=>1, 'guests_id'=>$data['guests_id']))->order($order)->limit($limit)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
+        // 获取相关嘉宾的视频(过滤金熊奖视频花絮)
+       $list = $this->where(array('status'=>1, 'guests_id'=>$data['guests_id'],'match_type'=>array('neq',1)))->order($order)->limit($limit)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
         foreach ($list as $key => $value) {
             if ($value['id'] == $vid) {
                 unset($list[$key]);
@@ -391,7 +393,7 @@ class SchoolVideoModel extends Model{
         if ($length < $limit) {
             $category = explode(',',$data['category']);
             foreach ($category as $key=>$value){
-                $sub_list = $this->where(array('status'=>1, '_string'=>'FIND_IN_SET(' . $value. ',category)','id'=>array('neq', $vid)))
+                $sub_list = $this->where(array('status'=>1, '_string'=>'FIND_IN_SET(' . $value. ',category)','id'=>array('neq', $vid),'match_type'=>array('neq',1)))
                     ->order($order)->limit($limit - $length)->field('id,title,cover_url,guests_id,views,times,cate_title,is_vip,big_cover_url,category,charge_standard,create_time')->select();
                 if(!empty($sub_list)){
                     $list = array_merge($list, $sub_list);
