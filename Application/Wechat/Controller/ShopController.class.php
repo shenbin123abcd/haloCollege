@@ -28,4 +28,12 @@ class ShopController extends Controller
         }
         redirect($ret_url);
     }
+
+    public function coupon()
+    {
+        $ret_url = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : 'http://shop.halobear.cn/h5/hongbao';
+        $back = 'http://wechat.halobear.com/shop/returnClient?ret_url=' . urlencode($ret_url);
+        $url = 'http://wechat.halobear.com/?scope=snsapi_userinfo&back=' . $back;
+        redirect($url);
+    }
 }
