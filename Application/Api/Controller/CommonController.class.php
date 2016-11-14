@@ -23,6 +23,12 @@ class CommonController extends Controller {
         // 兼容jsonp
         $_GET['callback'] && $_POST = $_GET;
         $this->_auth();
+
+        $this->_checkVer();
+    }
+
+    private function _checkVer(){
+        write_log('ua', $_SERVER['HTTP_USER_AGENT']);
     }
 
     /**
