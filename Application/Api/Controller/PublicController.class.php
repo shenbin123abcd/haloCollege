@@ -657,6 +657,9 @@ class PublicController extends CommonController {
         $company['name'] = $data_company['data']['name'];
         $company['description'] = $data_company['data']['description'];
         $company['logo'] = $data_company['data']['logo'][0]['file_path'] ? $url.$data_company['data']['logo'][0]['file_path'] : '';
+        $company['micro_blog_name'] = $data_company['data']['weibo_name'] ? $data_company['data']['weibo_name'] : '';
+        $company['micro_blog_site'] = $data_company['data']['weibo_site'] ? $data_company['data']['weibo_site'] : '';
+        $company['wechat'] = $data_company['data']['wechat'] ? $data_company['data']['wechat'] : '';
         //公司成员
         $member_where = array('company_id'=>$company_id);
         $members = $this->get_guests($member_where);
@@ -695,6 +698,8 @@ class PublicController extends CommonController {
 
         return $guests;
     }
+
+
 
     /**
      * 公司主页、个人主页所有文章列表
@@ -800,7 +805,13 @@ class PublicController extends CommonController {
     public function get_companys($video){
         $list = $video['list'];
         foreach ($list As $key=>$value){
-            $company = company_id($value['company_id']);
+            $company_cache = S($value['company_id']);
+            if (empty($company_cache)){
+                $company = company_id($value['company_id']);
+                S($value['company_id'],$company);
+            }else{
+                $company = $company_cache;
+            }
             if (!empty($company['data'])){
                 $temp['id'] =  $company['data']['id'];
                 $temp['name'] =  $company['data']['name'];
