@@ -95,6 +95,7 @@ class PublicController extends CommonController {
             if($result!==false){
                 $id = M('Session')->add($add_token);
             }
+            write_log('ua', $_SERVER['HTTP_USER_AGENT'] . '|' . $phone);
             $this->success('登录成功', array('token' => $token,'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
         } else {
             $this->error('账号或密码错误');
@@ -510,6 +511,8 @@ class PublicController extends CommonController {
             foreach ($courses as $key=>$value){
                  $guests_id[] =$value['guest_id'];
                 $courses[$key]['type'] = $course_type[$value['id']];
+                //研习社课程详情页
+                $courses[$key]['course_detail_url'] = 'http://ke.halobear.com/course/detail_'.$value['id'];
             }
             $guests_id = array_unique($guests_id);
             $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
@@ -657,6 +660,9 @@ class PublicController extends CommonController {
         $company['name'] = $data_company['data']['name'];
         $company['description'] = $data_company['data']['description'];
         $company['logo'] = $data_company['data']['logo'][0]['file_path'] ? $url.$data_company['data']['logo'][0]['file_path'] : '';
+        $company['micro_blog_name'] = $data_company['data']['weibo_name'] ? $data_company['data']['weibo_name'] : '';
+        $company['micro_blog_site'] = $data_company['data']['weibo_site'] ? $data_company['data']['weibo_site'] : '';
+        $company['wechat'] = $data_company['data']['wechat'] ? $data_company['data']['wechat'] : '';
         //公司成员
         $member_where = array('company_id'=>$company_id);
         $members = $this->get_guests($member_where);
@@ -695,6 +701,8 @@ class PublicController extends CommonController {
 
         return $guests;
     }
+
+
 
     /**
      * 公司主页、个人主页所有文章列表
@@ -789,7 +797,8 @@ class PublicController extends CommonController {
         $data['video_feature'] = !empty($video_feature[$video['gold_award_id']]) ? $video_feature[$video['gold_award_id']] : null;
         $data['match_first'] = !empty($match_first['list']) ? $match_first : null;
         $data['match_final'] = !empty($match_final['list']) ? $match_final : null;
-
+        //分享页地址
+        $data['share_url'] = 'http://college-share.halobear.com/share/goldenBears/goldenBear/'.$vid;
         $this->success('success',$data);
     }
 
@@ -799,7 +808,13 @@ class PublicController extends CommonController {
     public function get_companys($video){
         $list = $video['list'];
         foreach ($list As $key=>$value){
-            $company = company_id($value['company_id']);
+            $company_cache = S($value['company_id']);
+            if (empty($company_cache)){
+                $company = company_id($value['company_id']);
+                S($value['company_id'],$company);
+            }else{
+                $company = $company_cache;
+            }
             if (!empty($company['data'])){
                 $temp['id'] =  $company['data']['id'];
                 $temp['name'] =  $company['data']['name'];

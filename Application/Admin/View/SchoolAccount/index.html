@@ -20,6 +20,8 @@
 			<input name="username" type="text" class="input length_2 mr10" value="{$Think.get.username}"/>
 			<label>phone：</label>
 			<input name="phone" type="text" class="input mr10" value="{$Think.get.phone}">
+			<label>前</label>
+			<input name="login_days" type="text" class="input mr10" value=""><label>天登录过</label>
 			<button type="submit" class="btn">搜索</button>
 		</div>
 	</form>
@@ -36,6 +38,7 @@
 				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/delete" data-subcheck="true" data-msg="你确定删除选择的这些用户吗？">删除</button>
 				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/forbid">禁用</button>
 				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/resume">恢复</button>
+				<button class="btn J_ajax_submit_btn" type="button" data-action="__URL__/sendMsg">发送短信</button>
 			</div>
 		</div>
 	</form>

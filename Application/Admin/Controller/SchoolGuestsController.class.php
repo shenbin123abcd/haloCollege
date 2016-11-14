@@ -11,7 +11,8 @@ class SchoolGuestsController extends CommonController {
 		$data = $this->is_headimg($data);
 	//获取公司logo
 		$data = $this->get_company_logo($data);
-
+    //微博地址链接
+		$data = $this->micro_blog_link($data);
 	}
 
 	public function _before_edit(){
@@ -96,6 +97,18 @@ class SchoolGuestsController extends CommonController {
 				$data[$key]['company'] = $value['company_id']==0 ? '<b'.' '.'style='.'color:red>'.$value['company'].'</b>' : $value['company'];
 			}
 
+		}
+
+		return $data;
+	}
+
+	/**
+	 * 微博地址超链接
+	*/
+	public function micro_blog_link($data){
+		foreach ($data as $key=>$value){
+			$url = $value['micro_blog_address'] ? $value['micro_blog_address'] : '';
+			$data[$key]['micro_blog_address'] = $url ? '<a href='.$url.' '.'target=_blank'.'>'.$url.'</a>' : '';
 		}
 
 		return $data;
