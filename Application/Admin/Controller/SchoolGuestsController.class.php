@@ -108,7 +108,7 @@ class SchoolGuestsController extends CommonController {
 	public function micro_blog_link($data){
 		foreach ($data as $key=>$value){
 			$url = $value['micro_blog_address'] ? $value['micro_blog_address'] : '';
-			$data[$key]['micro_blog_address'] = $url ? '<a href='.$url.'target=_blank'.'>'.$url.'</a>' : '';
+			$data[$key]['micro_blog_address'] = $url ? '<a href='.$url.' '.'target=_blank'.'>'.$url.'</a>' : '';
 		}
 
 		return $data;
