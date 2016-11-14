@@ -42,6 +42,7 @@ class SchoolGuestsController extends CommonController {
 
 		return $data;
 	}
+	
 
 	/**
 	 * 公司搜索

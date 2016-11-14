@@ -661,7 +661,7 @@ class PublicController extends CommonController {
         $company['description'] = $data_company['data']['description'];
         $company['logo'] = $data_company['data']['logo'][0]['file_path'] ? $url.$data_company['data']['logo'][0]['file_path'] : '';
         $company['micro_blog_name'] = $data_company['data']['weibo_name'] ? $data_company['data']['weibo_name'] : '';
-        $company['micro_blog_site'] = $data_company['data']['weibo_site'] ? $data_company['data']['weibo_site'] : '';
+        $company['micro_blog_address'] = $data_company['data']['weibo_site'] ? $data_company['data']['weibo_site'] : '';
         $company['wechat'] = $data_company['data']['wechat'] ? $data_company['data']['wechat'] : '';
         //公司成员
         $member_where = array('company_id'=>$company_id);
