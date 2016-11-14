@@ -24,7 +24,7 @@ class CommonController extends Controller {
         $_GET['callback'] && $_POST = $_GET;
         $this->_auth();
 
-        $this->_checkVer();
+        //$this->_checkVer();
     }
 
     private function _checkVer(){

@@ -95,6 +95,7 @@ class PublicController extends CommonController {
             if($result!==false){
                 $id = M('Session')->add($add_token);
             }
+            write_log('ua', $_SERVER['HTTP_USER_AGENT'] . '|' . $phone);
             $this->success('登录成功', array('token' => $token,'avatar_token' => $avatar_token, 'avatar_token_key' => 'avatar/' . $key, 'user' => $user));
         } else {
             $this->error('账号或密码错误');
@@ -510,6 +511,8 @@ class PublicController extends CommonController {
             foreach ($courses as $key=>$value){
                  $guests_id[] =$value['guest_id'];
                 $courses[$key]['type'] = $course_type[$value['id']];
+                //研习社课程详情页
+                $courses[$key]['course_detail_url'] = 'http://ke.halobear.com/course/detail_'.$value['id'];
             }
             $guests_id = array_unique($guests_id);
             $guests = M('SchoolGuests')->where(array('id'=>array('in', $guests_id)))->getField('id, title, position');
