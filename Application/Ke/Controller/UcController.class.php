@@ -35,6 +35,7 @@ class UcController extends CommonController {
 
     // 双十一活动
     public function eleven(){
+        redirect('http://ke.halobear.com/uc/book');
         $this->assign('is_address', get_address($this->user['id']) ? 1 : 0);
         $this->display();
     }
