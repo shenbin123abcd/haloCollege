@@ -292,7 +292,7 @@ class SchoolVideoModel extends Model{
         $video = $this->get_charge_arr($video);
 
         // 是否需要登录、会员免费、必须购买
-        if (($video['auth'] == 1 && !empty($user)) || ($video['is_vip'] == 1 && check_vip($user['id'])) || ($video['auth'] == 0 && $video['is_vip'] == 0 && !in_array('1',$video['charge_arr']) && !in_array('2',$video['charge_arr'])) || (in_array('1',$video['charge_arr']) && (is_buy($user['id'],$video['id']) || check_vip($user['id']))) || (in_array('2',$video['charge_arr']) && is_buy($user['id'],$video['id']))){
+        if (($video['auth'] == 1 && !empty($user) && $video['is_vip'] ==0 && !in_array('1',$video['charge_arr']) && !in_array('2',$video['charge_arr'])) || ($video['is_vip'] == 1 && check_vip($user['id'])) || ($video['auth'] == 0 && $video['is_vip'] == 0 && !in_array('1',$video['charge_arr']) && !in_array('2',$video['charge_arr'])) || (in_array('1',$video['charge_arr']) && (is_buy($user['id'],$video['id']) || check_vip($user['id']))) || (in_array('2',$video['charge_arr']) && is_buy($user['id'],$video['id']))){
             $url = $this->privateDownloadUrl(C('VIDEO_URL') . $video['url']);
         }
 
